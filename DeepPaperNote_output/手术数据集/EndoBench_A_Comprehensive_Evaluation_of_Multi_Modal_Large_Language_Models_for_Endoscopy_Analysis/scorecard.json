@@ -1,0 +1,73 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "972cc531badf861b444b5039e91b841e8d0bce62dc85762d1e74ee66836751dd",
+      "note_snapshot": "review_rounds/round1_EndoBench_A_Comprehensive_Evaluation_of_Multi_Modal_Large_Language_Models_for_Endoscopy_Analysis.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.2,
+      "verdict": "模型自评。原版流程保存的笔记证据链完整、数字与原文对得上，且已指出息肉计数数字与表不一致、两行数据重复、医师样本小等问题。弱项：没有核心观点速览，章节多直接给事实而不先交代要回答的问题，部分数字缺少所以呢；定位对比只有表 1 一处，D5 偏低；个别自然段把多句并成一段，超过凝练上限；检验四条讨论结论的挑战回合还不系统。",
+      "fixes": [
+        "在研究问题末尾新增核心观点速览，一屏讲清要点与结果边界",
+        "各章节开头先写它要回答的问题，章节末尾写承接下一节的原因",
+        "主要数字之后补写所以呢和不能说明什么",
+        "按洞察三遍流程补全知识点、细节问答和对五条核心主张的挑战，并把结论写进笔记",
+        "把论文未说明的缺口逐条落实到笔记",
+        "拆分过长段落，删除重复表述",
+        "补强与既有基准的定位对比",
+        "核对所有数字并为推导值登记例外说明"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "61921ae8c8b6ee2c97743069fd2d4597c8b358c6c94ca4e7a539122e41aee964",
+      "note_snapshot": "review_rounds/round2_EndoBench_A_Comprehensive_Evaluation_of_Multi_Modal_Large_Language_Models_for_Endoscopy_Analysis.md",
+      "report_sha256": "2a168304ee2ea5201789a0fbf5788e5296c1ef2cd291e9f775ba576586518087",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "模型自评，按报告评分表从头复核。D5 为 7：定位只能对照论文自己的表 1，论文没有同模型跨基准的对比，无法补强。D7 为 7：图 3 的裁剪图重裁一次仍混入图注文字，表 3 被自动质量门拒绝，两处只能保留占位，用正文表格重述；修复次数已用尽。其余维度不低于 8。较第一轮提升的原因：新增核心观点速览，章节先提问后作答，主要数字之后写所以呢，四条结论逐条给出替代解释与结论强度，论文未说明的缺口列表对应其限制的结论。",
+      "fixes": []
+    }
+  ]
+}

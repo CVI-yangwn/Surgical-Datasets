@@ -1,0 +1,45 @@
+{
+ "knowledge_points": [
+  {"term": "手术、阶段、操作三级层级", "plain": "一台手术由若干阶段组成，阶段再拆成更细的操作，三级都有起止时间。", "where": "sec:related-work", "needed_for": "理解标注设计和102个阶段、150个操作的含义"},
+  {"term": "主手术与次要手术", "plain": "一个视频只有一个主手术，可同时有多个次要手术，因此存在识别是多标签式的。", "where": "sec:related-work", "needed_for": "理解手术存在识别任务为何只评测主手术"},
+  {"term": "弱监督手术存在识别", "plain": "只用整段视频的类别标签，不给出时间边界，让模型判断视频里有哪种手术。", "where": "sec:experiments", "needed_for": "理解表2的任务"},
+  {"term": "Top-1与Top-5准确率", "plain": "预测的第一名或前五名里包含正确类别的比例。", "where": "sec:experiments", "needed_for": "读表2和表3"},
+  {"term": "交并比与平均精度均值", "plain": "预测时间段与真值重叠的比例，以及在不同重叠门槛下的检测精度。", "where": "sec:experiments", "needed_for": "读表4"},
+  {"term": "完全连接聚类", "plain": "把多位标注者的边界按最远成员距离合并，只保留多方认同的边界。", "where": "sec:related-work", "needed_for": "理解定位标注如何得到稳定边界"},
+  {"term": "Kinetics-400预训练与星号", "plain": "先在人类动作视频数据集上训练再微调；表中带星号的行用了它。", "where": "sec:experiments", "needed_for": "比较随机初始化与预训练"},
+  {"term": "X-CLIP与ViFi-CLIP", "plain": "把图文对比预训练的CLIP改造成视频模型的两种做法。", "where": "sec:experiments", "needed_for": "解释为何它们远超视频模型"},
+  {"term": "观察比例", "plain": "阶段预测时模型能看到的视频前段所占比例。", "where": "sec:experiments", "needed_for": "读表5"}
+ ],
+ "detail_questions": [
+  {"question": "为什么选YouTube做来源", "answer": "为了避开医疗数据的隐私和伦理问题，并快速得到大量待筛视频。", "evidence": ["sec:related-work"], "status": "resolved"},
+  {"question": "20倍的比较对象和口径是什么", "answer": "摘要和引言只写20倍，没有说明对象和口径；表1里与Cataract-1K相比视频数约2.3倍。", "evidence": ["sec:preamble", "sec:introduction", "sec:datasets"], "status": "not_stated"},
+  {"question": "三个划分之和为何少于2,278个视频", "answer": "1,449、205、424之和为2,078，少200个；论文没有解释。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "划分是否按视频、频道或来源隔离", "answer": "只写随机划分并保证各类别均衡，没有说明隔离方式。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "表4的平均mAP如何得到", "answer": "标题称对0.1到0.9的阈值取平均，表中只有四个阈值，平均值高于四列简单平均，论文未说明原因。", "evidence": ["sec:experiments"], "status": "partly"},
+  {"question": "CLIP类模型为何远超视频模型", "answer": "论文只报告了差距，没有消融或对照来拆分预训练数据与架构的作用。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "X-CLIP与ViFi-CLIP的训练配置", "answer": "附录只给出视频模型和两个定位模型的配置，两个CLIP模型的配置没有给出。", "evidence": ["sec:experiments", "sec:references"], "status": "not_stated"},
+  {"question": "表2的全部列为何低于各子列", "answer": "论文没有说明各列的类别数；我的推断是全部列的候选类别更多，但论文未证实。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "定位特征所用I3D的预训练来源", "answer": "第4.2节写在ImageNet上预训练，附录写在Kinetics-400上微调，两处不一致，以哪一个为准论文未说明。", "evidence": ["sec:experiments", "sec:references"], "status": "partly"},
+  {"question": "标注者间一致性是多少", "answer": "论文说用完全连接聚类合并边界，但没有给出一致性指标。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "523个定位标注视频如何选出", "answer": "只写精心选取一个子集，选取标准没有说明。", "evidence": ["sec:introduction", "sec:related-work"], "status": "not_stated"},
+  {"question": "阶段预测的输入输出如何定义", "answer": "只写按观察比例随机遮盖测试视频的阶段序列，预测目标和类别数没有说明。", "evidence": ["sec:experiments"], "status": "partly"},
+  {"question": "图4的热图如何生成", "answer": "只说是ViFi-CLIP的注意力图，生成方法没有说明。", "evidence": ["sec:experiments"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "OphNet是规模最大、类别最丰富的眼科手术数据集", "alternative": "总数被未标注的视频撑大，带阶段与操作标注的只有523个视频、51.2小时。", "separating_evidence": "按带时间标注的视频数和时长与Cataract-1K等比较。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "专家标注保证了质量", "alternative": "多人标注后聚类合并可能掩盖分歧，质量并未量化。", "separating_evidence": "标注者间一致性或抽检错误率。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "CLIP类模型是最强基线", "alternative": "优势来自大规模图文预训练，或来自同一频道的水印与风格泄漏。", "separating_evidence": "按频道划分的结果，以及相同预训练条件下的对照。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "模型关注器械与手术眼区", "alternative": "热图只是集中在画面中心的瞳孔区域。", "separating_evidence": "器械掩码上的量化评估和更多样例。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "TriDet加SwinViviT最适合阶段定位", "alternative": "单次运行的波动，加上平均值口径不明。", "separating_evidence": "多种子均值与方差。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览，写明答案、边界和三项主要出入",
+  "新增详细问题带来的论文未说明条目：20倍口径、200个视频、划分隔离、平均mAP口径、CLIP训练配置、标注者一致性、523个视频的选取标准",
+  "把全部列低于子列写成我的推断并注明论文未证实",
+  "补写阶段预测输入输出细节论文未说明",
+  "在首次出现处解释IoU、mAP、Top-5、弱监督与完全连接聚类",
+  "挑战环节后加入对CLIP领先原因、热图证据强度和标注质量的保留说明",
+  "把I3D预训练来源的两处不一致写入深度分析",
+  "拆分摘要译文的过长段落并把推导数字登记为例外"
+ ]
+}

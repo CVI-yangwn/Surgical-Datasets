@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surgical-Datasets · 论文精读</title><style>
+:root{--bg:#f6f7fb;--card:#fff;--bd:#e4e6f0;--tx:#1b1d2b;--tx2:#4b4f66;--mut:#7c8099;--ac:#4f5bd5;--ac2:#b84fa3}
+@media(prefers-color-scheme:dark){:root{--bg:#12131c;--card:#1b1d2b;--bd:#2a2d42;--tx:#eef0fb;--tx2:#c3c6dc;--mut:#8a8ea8;--ac:#8b93ff;--ac2:#f07ad0}}
+*{box-sizing:border-box}body{margin:0;font:16px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+header{padding:56px 20px 30px;text-align:center;background:linear-gradient(135deg,#4f5bd5,#8b5cf6 55%,#b84fa3);color:#fff}
+header h1{margin:0 0 8px;font-size:2.1em;letter-spacing:.5px}header p{margin:4px auto;max-width:720px;opacity:.92}
+header a{color:#fff}.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;color:inherit;text-decoration:none;transition:.18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(79,91,213,.16);border-color:var(--ac)}
+.top{display:flex;gap:8px;align-items:center;margin-bottom:10px}.chip{background:var(--ac);color:#fff;border-radius:999px;padding:1px 10px;font-size:.78em}
+.chip.ghost{background:transparent;color:var(--ac);border:1px solid var(--ac)}.score{margin-left:auto;font-weight:700;color:var(--ac2)}.score small{font-weight:400;color:var(--mut)}
+h2{font-size:1.08em;margin:0 0 6px;line-height:1.4}.sub{color:var(--ac);margin:0 0 10px;font-size:.95em}.one{color:var(--tx2);font-size:.92em;margin:0 0 14px;flex:1}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}.tag{display:inline-block;font-size:.75em;color:var(--mut);border:1px solid var(--bd);border-radius:6px;padding:0 6px;margin:2px 4px 2px 0}
+.ax{font-size:.78em;color:var(--mut);white-space:nowrap}.note{margin-top:30px;color:var(--mut);font-size:.88em;text-align:center}
+</style></head><body>
+<header><h1>🩺 Surgical-Datasets · 论文精读</h1>
+<p>手术视频与内镜数据集论文的中文图文解读：背景与动机、核心观点、数据与实验、深入分析，以及论文没有说明的地方。</p>
+<p><a href="https://github.com/CVI-yangwn/Surgical-Datasets">GitHub 仓库</a></p></header>
+<div class="wrap"><div class="grid"><a class="card" href="papers/cataract-1k.html">
+<div class="top"><span class="chip">眼科</span><span class="chip ghost">数据集论文</span><span class="score">8.1<small> / 10 自评</small></span></div>
+<h2>Cataract-1K: Cataract Surgery Dataset for Scene Segmentation, Phase Recognition, and Irregularity Detection</h2><p class="sub">一个来自单一诊所的白内障手术视频数据集:1000 个视频,三类标注各自只覆盖其中一小部分</p>
+<p class="one">Cataract-1K 用 56 个视频的阶段标注、30 个视频的像素级标注和两个异常子集支持多任务研究,基线显示器械分割和跨数据集泛化仍然困难,但标注质量和异常子集规模缺少直接证据。</p>
+<div class="foot"><div><span class="tag">白内障手术</span><span class="tag">手术视频</span><span class="tag">数据集</span><span class="tag">阶段识别</span><span class="tag">语义分割</span></div><span class="ax">arXiv:2312.06295</span></div></a><a class="card" href="papers/ophnet.html">
+<div class="top"><span class="chip">眼科</span><span class="chip ghost">数据集与基准</span><span class="score">8.5<small> / 10 自评</small></span></div>
+<h2>OphNet: A Large-Scale Video Benchmark for Ophthalmic Surgical Workflow Understanding</h2><p class="sub">一个由 YouTube 眼科手术视频搭起来的三级标注基准，规模是真的，几个数字却对不上</p>
+<p class="one">OphNet 用 2,278 个 YouTube 眼科手术视频建立手术、阶段、操作三级标注的基准并给出四项任务基线，语言图像模型明显领先，但 20 倍规模说法、划分数量和平均精度的口径论文没有说清。</p>
+<div class="foot"><div><span class="tag">眼科手术</span><span class="tag">手术工作流</span><span class="tag">视频基准</span><span class="tag">数据集</span></div><span class="ax">arXiv:2406.07471</span></div></a><a class="card" href="papers/ophclip.html">
+<div class="top"><span class="chip">眼科</span><span class="chip ghost">AI_method</span><span class="score">8.4<small> / 10 自评</small></span></div>
+<h2>OphCLIP: Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical Video-Language Pretraining</h2><p class="sub">用眼科手术视频教会模型看懂手术：数据集 OphVL 与检索增强预训练 OphCLIP</p>
+<p class="one">OphCLIP 先用 YouTube 眼科手术视频构建 OphVL，再用片段级与视频级对比学习加沉默视频检索预训练，零样本阶段识别明显提升，但提升主要来自领域数据，知识库收益不稳定。</p>
+<div class="foot"><div><span class="tag">手术视频</span><span class="tag">视觉-语言预训练</span><span class="tag">检索增强</span></div><span class="ax">arXiv:2411.15421</span></div></a><a class="card" href="papers/endobench.html">
+<div class="top"><span class="chip">内镜</span><span class="chip ghost">基准与数据集</span><span class="score">8.3<small> / 10 自评</small></span></div>
+<h2>EndoBench: A Comprehensive Evaluation of Multi-Modal Large Language Models for Endoscopy Analysis</h2><p class="sub">用 6,832 道选择题量一量大模型离内镜医师有多远</p>
+<p class="one">EndoBench 把 21 个内镜数据集改造成 6,832 道选择题评测 23 个模型，最强的 Gemini-2.5-Pro 平均 49.53%，医师为 74.12%。</p>
+<div class="foot"><div><span class="tag">内镜</span><span class="tag">多模态大模型</span><span class="tag">评测基准</span><span class="tag">手术数据集</span></div><span class="ax">arXiv:2505.23601</span></div></a></div>
+<p class="note">每篇由 DeepPaperNote 两轮流程生成：第 1 轮为原版精读，第 2 轮为多轮追问与叙事修改。页面上的分数是模型自评，不是外部评审；数字经脚本与原文逐一核对。</p></div>
+</body></html>

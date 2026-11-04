@@ -1,0 +1,205 @@
+{
+ "knowledge_points": [
+  {
+   "term": "超声乳化白内障手术",
+   "plain": "用超声探头击碎并吸出混浊晶状体,再植入人工晶状体的小切口手术,论文把它等同于白内障手术。",
+   "where": "sec:abstract",
+   "needed_for": "理解 12 个手术阶段和瞳孔收缩发生的阶段"
+  },
+  {
+   "term": "手术阶段与 idle",
+   "plain": "12 个动作阶段加上看不到器械的 idle 时段,共 13 类。",
+   "where": "sec:model",
+   "needed_for": "解读 Figure 2 的类别不均衡和 Table 5 为什么没有 idle"
+  },
+  {
+   "term": "一对多评测",
+   "plain": "每个阶段单独训练一个二分类器,目标阶段对其余阶段,其余类被下采样到等量。",
+   "where": "sec:model",
+   "needed_for": "判断 Table 5 的 Accuracy 不等于 13 类连续识别成绩"
+  },
+  {
+   "term": "CNN-RNN 与双向层",
+   "plain": "卷积网络逐帧提特征,循环网络(LSTM 或 GRU,可加双向)整合 10 帧的时序。",
+   "where": "sec:model",
+   "needed_for": "理解双向层提升的说法"
+  },
+  {
+   "term": "IoU 与 Dice",
+   "plain": "两种重叠度指标,Dice 通常高于同一预测的 IoU。",
+   "where": "sec:model-2",
+   "needed_for": "读懂 Table 6、Figure 5 和 Table 7"
+  },
+  {
+   "term": "对数 Dice 损失",
+   "plain": "交叉熵加上负的对数 Dice,权重 λ 取 0.8,σ 取 1 防止分母为零。",
+   "where": "sec:model-2",
+   "needed_for": "复现分割训练"
+  },
+  {
+   "term": "按患者五折",
+   "plain": "同一患者的帧只出现在一折里,每折 6 个视频。",
+   "where": "sec:model-2",
+   "needed_for": "判断分割结果有没有信息泄漏"
+  },
+  {
+   "term": "跨域评测",
+   "plain": "在 Cataract-1K 上训练,在另一个数据集 CaDIS 上直接测,看性能下降多少。",
+   "where": "sec:model-2",
+   "needed_for": "区分跨数据集泛化与域适应"
+  },
+  {
+   "term": "人工晶状体旋转与瞳孔收缩",
+   "plain": "两类术中异常,前者影响术后视力,后者让晶状体居中困难。",
+   "where": "sec:model",
+   "needed_for": "理解异常子集的临床动机"
+  }
+ ],
+ "detail_questions": [
+  {
+   "question": "阶段识别为什么用一对多二分类而不是十三类分类?",
+   "answer": "论文只写采用一对多并引用两篇先前工作,没有解释选择理由。",
+   "evidence": [
+    "sec:model"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "为什么合并粘弹剂与前房冲洗?",
+   "answer": "论文说因为两者视觉特征相近;合并后它仍是最难的阶段。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "阶段识别测试集有多少片段,是否类别平衡?",
+   "answer": "论文只说在其余视频的不重叠片段上测试,未给片段数,也未说是否平衡。",
+   "evidence": [],
+   "status": "not_stated"
+  },
+  {
+   "question": "Table 5 的 F1 是正类 F1 还是宏平均?",
+   "answer": "论文未定义。有三处 F1 高于 Accuracy,如 VGG16-BiLSTM 的水分离阶段(87.89 对 88.89)。",
+   "evidence": [],
+   "status": "not_stated"
+  },
+  {
+   "question": "Table 4 的平均像素数按所有帧还是按出现帧平均?",
+   "answer": "论文未定义,也未说明统计分辨率。",
+   "evidence": [],
+   "status": "not_stated"
+  },
+  {
+   "question": "56 个阶段视频与 30 个分割视频是否重叠?",
+   "answer": "论文未说明。",
+   "evidence": [],
+   "status": "not_stated"
+  },
+  {
+   "question": "两个异常子集各有多少视频,怎么标注?",
+   "answer": "论文只称为小子集并给出各一组示例,未给数量和标签形式。",
+   "evidence": [],
+   "status": "not_stated"
+  },
+  {
+   "question": "CaDIS 的器械如何二值化,测多少帧?",
+   "answer": "论文未说明。",
+   "evidence": [],
+   "status": "not_stated"
+  },
+  {
+   "question": "Table 7 的 ± 是什么?",
+   "answer": "论文未在 Table 7 处定义。Figure 5 的图注说是五折的标准差,Table 7 很可能同理,这是推断。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "Figure 5 与 Table 6 是什么关系?",
+   "answer": "Figure 5 的数字与 Table 6 四类目标的简单平均一致,例如 DeepPyramid 的 Dice 为 89.17。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "Figure 2 的总时长与平均 6.45 分钟是否吻合?",
+   "answer": "Figure 2 各段合计 21387 秒,除以 56 个视频约 6.37 分钟,与 6.45 分钟接近但不相等,论文未解释差异。",
+   "evidence": [
+    "sec:model"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "ResNet34 的 CE-Net 和 CPFNet 为什么源域就很低?",
+   "answer": "Table 7 显示源域 Dice 只有 47.29 和 56.17,论文没有讨论原因。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "为什么 λ 取 0.8、σ 取 1?",
+   "answer": "论文给出取值和 σ 的作用,没有给出选择依据或消融。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "partly"
+  }
+ ],
+ "challenges": [
+  {
+   "claim": "Cataract-1K 是最大的白内障手术视频数据集",
+   "alternative": "视频总数大,但带阶段或像素级标注的视频只占一小部分,按标注量衡量未必最大。",
+   "separating_evidence": "与既有数据集在视频数、总时长、标注视频数、标注帧数上的逐项对比。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "基线网络的表现验证了标注质量",
+   "alternative": "基线分数只说明标注与图像特征相关,系统性的标注偏差同样能得到高分。",
+   "separating_evidence": "标注者数量、标注者间一致性或抽样复核结果。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "双向循环层在所有配置下提升 Accuracy 与 F1",
+   "alternative": "平均值上升来自少数阶段,逐阶段有升有降,没有重复实验时单次波动就能造成同样结果。",
+   "separating_evidence": "多随机种子的均值与标准差,以及逐阶段显著性检验。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "DeepPyramid、AdaptNet 和 ReCal-Net 是分割最好的三个网络",
+   "alternative": "按 Figure 5 的数字,ResNet50 的 UPerNet 高于 AdaptNet 和 ReCal-Net。",
+   "separating_evidence": "Figure 5 的 IoU 与 Dice 排序。",
+   "in_paper": true,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "跨域结果说明两个数据集之间存在显著域偏移",
+   "alternative": "低分部分来自 CE-Net 和 CPFNet 在源域就训练失败,部分来自 CaDIS 与 Cataract-1K 的标注定义不同,而不是图像外观差异。",
+   "separating_evidence": "在 CaDIS 内部训练的同架构上界,以及统一标注定义后的重测。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "需要探索半监督和域适应来提升跨域器械分割",
+   "alternative": "更多源域数据、更强的数据增强或简单微调也许就能缩小差距。",
+   "separating_evidence": "与这些简单做法对照的实验。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  }
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览,并写明“最大”没有与既有数据集的数字对比",
+  "把 56 与 30 个视频是否重叠、Table 3 的 All 行、Table 4 的平均口径、异常子集规模统一写成论文未说明",
+  "在阶段识别结果中写明 F1 口径论文未说明,并列出 F1 高于 Accuracy 的三处",
+  "在跨域结果中写明 Table 7 的 ± 口径论文未说明,并把标注定义差异列为另一种解释",
+  "新增论文定位小节,逐项写出与 CaDIS、CATARACTS 的关系和论文没有给出的对比",
+  "写入 Figure 2 合计时长与 6.45 分钟的核对,并标明是笔记自算",
+  "把 Table 4 和 Figure 2 图中数字、自算平均值登记到 number-exceptions"
+ ]
+}

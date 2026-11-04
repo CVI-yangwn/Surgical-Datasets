@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "7212d9a1bbe664f2289c23c90e1bcf8d7ea9bff2937432bb7456dd1a66cb4c1c",
+      "note_snapshot": "review_rounds/round1_Cataract_1K_Cataract_Surgery_Dataset_for_Scene_Segmentation_Phase_Recognition_and_Irregularity_Detection.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "fail",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 7,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 5,
+        "D6": 7,
+        "D7": 6,
+        "D8": 7,
+        "D9": 4
+      },
+      "overall": 6.0,
+      "verdict": "模型自评。证据链和数字较完整,边界与不一致之处已点出,但各节没有以问题开头,缺少核心观点速览和节间承接,数字后的所以呢不足;positioning 只有一句话,没有逐项说明与既有数据集的差异;lint_report 在笔记模式下有 20 个未匹配数字(来自图像表格、自算平均值和脚注拼接的 2025),尚未登记来源,H3 按字面记为 fail,总分被封顶到 6.0;摘要翻译段超过段落长度上限;部分段落为通过混合语言检查被拆成单句,读起来破碎。",
+      "fixes": [
+        "在研究问题末尾加入核心观点速览小节",
+        "各节以要回答的问题开头,数字后补所以呢,节末补承接",
+        "把推导数字(平均值、差值、合计)和只存在于图像里的数字登记到 number-exceptions 并写明来源",
+        "补写与 CaDIS、CATARACTS 等既有数据集的定位,并把论文没有给出的对比写成论文未说明",
+        "合并被拆碎的单句段落,拆分过长的摘要翻译段",
+        "把 insight pass 的修订和 not_stated 缺口写进笔记,缺口一律写成论文未说明"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "3777715c497e906babb275b6c0e1d5b9ae8e35271f35db8b9fb8122874b53a77",
+      "note_snapshot": "review_rounds/round2_Cataract_1K_Cataract_Surgery_Dataset_for_Scene_Segmentation_Phase_Recognition_and_Irregularity_Detection.md",
+      "report_sha256": "a2643b2a3f62c175fd46d0224a97612937cc30b06dec8f2c51363dd915e128d7",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 8.1,
+      "verdict": "模型自评,不是独立评分。总分从第 1 轮的 6.0 升到约 8.1,主要原因是 H3 解除(推导数字和只存在于图像里的数字已登记到 number-exceptions,笔记与报告的数字核对均无未匹配项),以及 D9 叙事、D4 边界和 D3 数字更完整。仍有限制:Table 1 和 Table 6 的自动裁图不可用,只保留占位,Figure 3 的颜色图例在原文图注里;D5 定位只能定性,因为论文没有给出既有数据集的规模或类别数;D7 笔记的章节名固定,没有编号;D9 中深度分析与局限的衔接较平。这些限制无法在不引入论文以外信息的情况下修复。",
+      "fixes": []
+    }
+  ]
+}

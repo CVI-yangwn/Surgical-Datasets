@@ -1,0 +1,44 @@
+{
+  "knowledge_points": [
+    {"term": "四类内镜场景", "plain": "胃镜、结肠镜、胶囊内镜、手术内镜，成像和目的各不相同。", "where": "sec:introduction", "needed_for": "场景维度的结果和占比"},
+    {"term": "VQA 选择题与精确匹配", "plain": "每题给四个或两个选项，只有选中标准答案才算对。", "where": "sec:evaluation-3", "needed_for": "所有准确率数字的含义"},
+    {"term": "视觉提示粒度", "plain": "用框、轮廓、多框、多轮廓或坐标告诉模型看图的哪一块。", "where": "sec:analysis", "needed_for": "视觉提示维度的结论三"},
+    {"term": "BBPS 与 Mayo 评分", "plain": "两种临床量表，分别评肠道准备质量和溃疡性结肠炎严重度。", "where": "sec:limitations", "needed_for": "PA 与 LS 任务的难度判断"},
+    {"term": "DINO-V2 与 K-center 聚类", "plain": "先用视觉特征把图聚类，再从每类挑有代表性的图，避免重复图占满测试集。", "where": "sec:analysis", "needed_for": "6,832 题如何由 446,535 对抽出"},
+    {"term": "Random 基线", "plain": "按选项数随机作答的期望准确率，二分类任务为 50% 左右。", "where": "sec:experimental-results", "needed_for": "判断模型是否真优于瞎猜"},
+    {"term": "辅助评判抽取答案", "plain": "用 Qwen2.5VL-72B 从回答中提取选项字母，再与标准答案比对。", "where": "sec:evaluation-3", "needed_for": "医学专用模型分数的可信度"},
+    {"term": "零样本思维链", "plain": "不给示例，只让模型先写推理过程再给答案。", "where": "sec:limitations-2", "needed_for": "表 6 的读法"},
+    {"term": "监督微调", "plain": "用带标签的医学数据继续训练通用模型。", "where": "sec:discussion", "needed_for": "结论二的证据强度"}
+  ],
+  "detail_questions": [
+    {"question": "为什么 PA 的随机基线是 50.00%？", "answer": "PA 只保留 BBPS 0-1 与 2-3 两类，是二分类。", "evidence": ["sec:limitations"], "status": "resolved"},
+    {"question": "医师参照的样本有多大？", "answer": "255 题，每个子任务 5、10 或 15 题，2 名医师，不含坐标任务。", "evidence": ["sec:analysis"], "status": "resolved"},
+    {"question": "表 2 与表 3 的总体平均为何不同？", "answer": "论文没有给出两处平均的算法。", "evidence": ["sec:experimental-results"], "status": "not_stated"},
+    {"question": "五种视觉提示粒度如何对应表 3 的四列？", "answer": "论文只列出五种粒度和四列名称，没有对应说明。", "evidence": ["sec:analysis", "sec:experimental-results"], "status": "not_stated"},
+    {"question": "干扰框的重叠阈值是多少？", "answer": "正文只说低于指定阈值，没有给数值。", "evidence": ["sec:analysis"], "status": "not_stated"},
+    {"question": "加框计数实验用了多少样本？", "answer": "论文只给出 Gemini-2.5-Pro 的两个数字，没有样本量和其他模型的数。", "evidence": ["sec:discussion"], "status": "not_stated"},
+    {"question": "正文的 24.46% 来自哪一列？", "answer": "它与表 2 中 Gemini-2.5-Pro 的 LS 一列一致，而 LQ 一列为 41.97%，论文没有解释来源。", "evidence": ["sec:discussion", "sec:experimental-results"], "status": "partly"},
+    {"question": "为什么用被测模型 Qwen2.5VL-72B 做评判？", "answer": "原因是部分医学模型不按格式作答，但选这一模型的理由论文未说明。", "evidence": ["sec:evaluation-3"], "status": "partly"},
+    {"question": "两个 7B 模型的行为何大量相同？", "answer": "论文没有说明。", "evidence": ["sec:evaluation-3"], "status": "not_stated"},
+    {"question": "Llava-Med-7B 为何低于 Llava-v1.5-7B？", "answer": "表中数值可查，论文没有讨论这一反例。", "evidence": ["sec:experimental-results", "sec:evaluation-2"], "status": "partly"},
+    {"question": "思维链为何让 HuatuoGPT-Vision 变差？", "answer": "论文给出幻觉风险的假设，没有做验证。", "evidence": ["sec:limitations-2"], "status": "partly"},
+    {"question": "GPT-4o-mini 改写对分数有何影响？", "answer": "论文没有做对照。", "evidence": ["sec:analysis"], "status": "not_stated"},
+    {"question": "代码和数据的获取方式是什么？", "answer": "摘要称公开发布，正文没有链接。", "evidence": ["sec:abstract"], "status": "not_stated"},
+    {"question": "最大指令微调集合的说法与表 1 是否一致？", "answer": "表 1 中 EndoVQA-Instruct 为 446K+，SSG-VQA 为 960K，论文未说明限定条件。", "evidence": ["sec:introduction", "sec:limitations"], "status": "partly"}
+  ],
+  "challenges": [
+    {"claim": "EndoBench 是最全面的内镜基准", "alternative": "四类场景、十二任务、五种粒度只是分类计数，题目区分度和信度没有验证。", "separating_evidence": "同批模型在多基准上的排名一致性，以及题目信度分析。", "in_paper": false, "verdict": "partly_supported"},
+    {"claim": "专有模型整体优于其他模型但仍落后医师", "alternative": "差距有一部分来自精确匹配、答案抽取失败和只有 2 名医师的小样本参照。", "separating_evidence": "各模型的格式失败率，更多医师和题量，医师间一致性。", "in_paper": false, "verdict": "partly_supported"},
+    {"claim": "医学监督微调显著提升表现", "alternative": "差异来自模型规模、底座和训练数据与测试公开数据集重叠，而非微调本身。", "separating_evidence": "同底座微调前后的受控对比和训练数据重叠检查。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "视觉提示形式的差距说明医学知识是主要短板", "alternative": "区域选择已给出目标名称，区域识别要选类别，两类题难度本就不同。", "separating_evidence": "同一标签集、同一图像、只换提示形式的对照。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "息肉计数的瓶颈是病灶识别", "alternative": "加框后数框即可得到答案，题目已不需要识别病灶。", "separating_evidence": "给出框位置但不暗示数量的对照，以及样本量。", "in_paper": false, "verdict": "not_separated"}
+  ],
+  "revisions": [
+    "在研究问题末尾加入核心观点速览，写明结果边界",
+    "深度分析按主张、证据、替代解释、结论强度四步重写",
+    "把表 2 与表 3 平均值不一致、24.46% 对不上、两行重复写入局限和我的笔记",
+    "为每个论文未说明的缺口给出所限制的结论",
+    "补写与既有基准的定位对比，并指出表 1 中规模的反例",
+    "拆分长段落，每段只讲一件事"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "f766dfdf15cd7b65feed85580830e9ea5ead838a93405faf14024e15d600e10e",
+      "note_snapshot": "review_rounds/round1_OphNet_A_Large_Scale_Video_Benchmark_for_Ophthalmic_Surgical_Workflow_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 6,
+        "D8": 7,
+        "D9": 5
+      },
+      "overall": 7.4,
+      "verdict": "模型自评。D5为7：只用表1概括与其他数据集的对比，没有逐个说明新增了什么。D6为7：复用建议较短。D7为6：章节未编号，没有亮点与数据条，图表位置合理。D8为7：IoU、弱监督、Top-5等术语首次出现时未定义。D9为5：没有核心观点速览，各节不以问题开头，数字后缺少所以然。数字核对：note模式有4个未匹配数字，其中2,078和2.3是推导值，50.5与931来自表图像而文本抽取未带出，均已核对论文表格。摘要译文段落超过220字，属忠实翻译，后续拆段。",
+      "fixes": [
+        "在研究问题末尾加入核心观点速览，并按背景、观点、实验、深入分析的顺序重排",
+        "各节开头写出要回答的问题或张力，数字后补一句所以然，节尾加衔接句",
+        "把推断标为我的判断，未说明之处统一写论文未说明，补写阶段预测的输入输出细节论文未说明",
+        "首次出现处解释IoU、弱监督、Top-5、mAP等术语",
+        "把推导数字登记到number-exceptions并写明来源",
+        "写insight_pass.json并把三轮思考得到的修订写入笔记",
+        "拆分摘要译文的过长段落",
+        "写reading_report.md并通过lint_report"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "3327e57893bf353fe20a29df4820957553ac763e9c9caae5d793dc08ed068f23",
+      "note_snapshot": "review_rounds/round2_OphNet_A_Large_Scale_Video_Benchmark_for_Ophthalmic_Surgical_Workflow_Understanding.md",
+      "report_sha256": "eb8b0b6beb6e425283cb1d6ffd461bbec4b104e9d4382378705bf34ea81f41d7",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "模型自评，分数由同一个模型打出，不是独立评审。总分较第1轮的7.4上升，没有下降项。已知上限：表2、表4、表5的图像未能插入（表2裁剪过小，表4无候选，表5重裁后仍带表4片段），用Markdown表转录了全部数值并保留占位；D5为8，因为论文自身只用表1做对比，未逐个说明对每个数据集的新增点；D7为8，笔记的固定章节名不能编号，编号和亮点数据条在报告中；论文自身有多处数字出入（20倍、划分之和、平均mAP等），已如实标出而无法修复。推导数字已登记在number-exceptions文件，笔记与报告的数字核对均无未匹配项。",
+      "fixes": []
+    }
+  ]
+}

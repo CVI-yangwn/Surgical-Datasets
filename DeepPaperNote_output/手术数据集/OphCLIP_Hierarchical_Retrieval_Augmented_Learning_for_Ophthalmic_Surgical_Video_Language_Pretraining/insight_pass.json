@@ -1,0 +1,37 @@
+{
+ "knowledge_points": [
+  {"term": "InfoNCE 对比损失", "plain": "让匹配的视频-文本对相似度高于同批其他配对的交叉熵目标。", "where": "sec:datasets", "needed_for": "片段级与视频级预训练损失"},
+  {"term": "叙述视频与沉默视频", "plain": "人声占比达到阈值 0.2 的有解说视频，与低于阈值的无解说视频。", "where": "sec:datasets", "needed_for": "知识库为什么只用沉默视频"},
+  {"term": "CLIP*", "plain": "在 OphVL 上预训练的 CLIP，没有层级与检索设计，用来分离数据集的贡献。", "where": "sec:method", "needed_for": "区分数据增益与方法增益"},
+  {"term": "零样本提示", "plain": "把类别名写成句子，用冻结编码器的相似度分类。", "where": "sec:datasets-2", "needed_for": "表 2 到表 5 的结果解读"},
+  {"term": "FPR 与 mAP", "plain": "多标签器械识别里误报比例（越低越好）与平均精度。", "where": "sec:dataset", "needed_for": "器械识别结论"},
+  {"term": "最大内积搜索", "plain": "在记忆库的标题键里取内积最大的 top-K 条目。", "where": "sec:datasets", "needed_for": "沉默视频检索"},
+  {"term": "线性探测", "plain": "冻结视觉编码器，只训练线性 SVM 评估表示质量。", "where": "sec:experiments-2", "needed_for": "表 4"},
+  {"term": "Caption 与 Mix 提示", "plain": "描述式提示与再加上器械、药物、目标关键词的合并提示。", "where": "sec:model", "needed_for": "消融结论"}
+ ],
+ "detail_questions": [
+  {"question": "为什么用文本标题而不是视觉特征检索沉默视频？", "answer": "作者称 CLIP 对眼科视频的视觉理解有限，在文本模态内检索更准确。", "evidence": ["sec:datasets"], "status": "resolved"},
+  {"question": "训练时检索多少个沉默视频？", "answer": "表 6 的检索视频数为 1。", "evidence": ["sec:experiments-2"], "status": "resolved"},
+  {"question": "式 7 的分母是否包含批内其他视频作负样本？", "answer": "印出的分母只对同一批取回的 K 项求和，实际实现论文未说明。", "evidence": ["sec:datasets"], "status": "not_stated"},
+  {"question": "基线器械 FPR 为什么是 100%？", "answer": "表 8 中各类召回率全为 100，说明基线把所有器械都判为阳性。", "evidence": ["sec:model-2"], "status": "resolved"},
+  {"question": "表 6 的 60 个 epoch 与正文 40 加交替训练如何对应？", "answer": "论文没有给出拆分。", "evidence": ["sec:experiments-2"], "status": "not_stated"},
+  {"question": "7.5K 小时与 9363 小时是否同一口径？", "answer": "引言写 7.5K，3.4 节写 9363，论文未解释。", "evidence": ["sec:introduction", "sec:datasets"], "status": "not_stated"},
+  {"question": "记忆库何时更新？", "answer": "只说动态更新，触发时机与频率未给出。", "evidence": ["sec:datasets"], "status": "not_stated"},
+  {"question": "结果是否多次种子或有显著性检验？", "answer": "各表只给单个数字，未报告方差或检验。", "evidence": ["sec:dataset", "sec:model"], "status": "not_stated"},
+  {"question": "表 3 的正文与表是否一致？", "answer": "正文把 OphNet-O 与 P 的数字对调，并称 CaDIS 假阳性更低，但表中 OphCLIP 的 FPR 反而更高。", "evidence": ["sec:method", "sec:model"], "status": "resolved"},
+  {"question": "OphVL 的文本质量有人工核验吗？", "answer": "只描述了自动去噪与大语言模型改写，人工质检比例论文未说明。", "evidence": ["sec:datasets"], "status": "not_stated"},
+  {"question": "知识库收益是否稳定？", "answer": "Cataract-101 与 Cataract-1K 有提升，CatRelDet 的 Mix 提示下下降。", "evidence": ["sec:model", "sec:model-2"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "层级训练与检索带来了超出数据集本身的增益", "alternative": "增益主要来自 OphVL 的领域文本，OphCLIP 与 CLIP* 的差异可能来自训练时长或文本编码器不同。", "separating_evidence": "同数据同预算下只去掉层级或检索的消融，以及 CLIP* 的完整训练设置。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "沉默视频知识库有效", "alternative": "收益来自多一个视频级正样本带来的正则化，而非沉默视频的内容。", "separating_evidence": "用随机或不相关沉默视频替换检索结果的对照。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "OphCLIP 降低器械假阳性", "alternative": "基线全判阳性使 FPR 为 100%，降幅更多反映了阈值与校准而非识别能力。", "separating_evidence": "与阈值无关的指标和更多数据集，CaDIS 上的结果显示 FPR 没有降低。", "in_paper": true, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览，先给结论再给边界",
+  "各节开头先写要回答的问题，数字之后补一句意味着什么",
+  "把 7.5K 与 9363 小时、式 7 分母、表 6 的 epoch、记忆库更新写成论文未说明并说明限制",
+  "在深度分析加入对知识库收益与器械假阳性的挑战结论",
+  "在报告中单列结果没说明什么，指出沉默视频内容的对照缺失"
+ ]
+}
