@@ -15,23 +15,43 @@ GH = '<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path 
 
 # Mirrors README.md. "note" is the directory prefix under 手术数据集/, or None.
 CATALOG = [
-    ("ophthalmic", "👁️ 眼科", "Ophthalmic", [
-        dict(name="Cataract-1K", year=2023, paper="https://arxiv.org/abs/2312.06295", data="https://github.com/Negin-Ghamsarian/Cataract-1K",
-             task="阶段识别 / 分割 / 异常检测", size="1000 个视频", source="医院", slug="cataract-1k", note="Cataract_1K"),
-        dict(name="OphNet", year=2024, paper="https://arxiv.org/abs/2406.07471", data="https://minghu0830.github.io/OphNet-benchmark",
-             task="阶段、器械、操作识别", size="2278 个视频", source="YouTube", slug="ophnet", note="OphNet"),
+    ('ophthalmic', '👁️ 眼科', 'Ophthalmic', [
+        {'name': 'Cataract-1K', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.06295', 'data': 'https://github.com/Negin-Ghamsarian/Cataract-1K', 'task': '阶段识别 / 分割 / 异常检测', 'size': '1000 个视频', 'source': '医院', 'slug': 'cataract-1k', 'note': 'Cataract_1K'},
+        {'name': 'OphNet', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.07471', 'data': 'https://minghu0830.github.io/OphNet-benchmark', 'task': '阶段、器械、操作识别', 'size': '2278 个视频', 'source': 'YouTube', 'slug': 'ophnet', 'note': 'OphNet'},
+        {'name': 'CaDIS', 'year': 2019, 'paper': 'https://arxiv.org/abs/1906.11586', 'data': 'https://cataracts-semantic-segmentation2020.grand-challenge.org/', 'task': '白内障手术图像语义分割', 'size': '', 'source': '', 'slug': None, 'note': None},
     ]),
-    ("endoscopic", "🔬 内镜", "Endoscopic", [
-        dict(name="EndoBench", year=2025, paper="https://arxiv.org/abs/2505.23601", data="https://huggingface.co/datasets/Saint-lsy/EndoBench",
-             task="视觉问答", size="", source="", slug="endobench", note="EndoBench"),
+    ('endoscopic', '🔬 内镜', 'Endoscopic', [
+        {'name': 'EndoBench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2505.23601', 'data': 'https://huggingface.co/datasets/Saint-lsy/EndoBench', 'task': '多模态大模型视觉问答评测', 'size': '', 'source': '', 'slug': 'endobench', 'note': 'EndoBench'},
+        {'name': 'Kvasir-SEG', 'year': 2019, 'paper': 'https://arxiv.org/abs/1911.07069', 'data': '', 'task': '息肉分割', 'size': '', 'source': '', 'slug': None, 'note': None},
+        {'name': 'PolypGen', 'year': 2021, 'paper': 'https://arxiv.org/abs/2106.04463', 'data': 'https://doi.org/10.7303/syn26376615', 'task': '息肉检测与分割（跨中心泛化）', 'size': '超过 300 名患者', 'source': '六个中心', 'slug': None, 'note': None},
+        {'name': 'EndoSLAM', 'year': 2020, 'paper': 'https://arxiv.org/abs/2006.16670', 'data': 'https://github.com/CapsuleEndoscope/EndoSLAM', 'task': '内镜视觉里程计与深度估计', 'size': '', 'source': '', 'slug': None, 'note': None},
     ]),
-    ("laparoscopic", "🩻 腹腔镜", "Laparoscopic", [
-        dict(name="SLAM", year=2025, paper="", data="https://figshare.com/articles/dataset/SLAM_-_Surgical_LAparoscopic_Motions/28104782/3",
-             task="分类", size="~3650 个视频", source="", slug=None, note=None),
+    ('laparoscopic', '🩻 腹腔镜', 'Laparoscopic', [
+        {'name': 'SLAM', 'year': 2025, 'paper': '', 'data': 'https://figshare.com/articles/dataset/SLAM_-_Surgical_LAparoscopic_Motions/28104782/3', 'task': '动作分类', 'size': '~3650 个视频', 'source': '', 'slug': None, 'note': None},
+        {'name': 'Cholec80（EndoNet）', 'year': 2016, 'paper': 'https://arxiv.org/abs/1602.03012', 'data': '', 'task': '阶段识别 / 器械识别', 'size': '', 'source': '', 'slug': None, 'note': None},
+        {'name': 'CholecT50', 'year': 2021, 'paper': 'https://arxiv.org/abs/2109.03223', 'data': '', 'task': '手术动作三元组识别', 'size': '50 个视频', 'source': '', 'slug': None, 'note': None},
+        {'name': 'CholecSeg8k', 'year': 2020, 'paper': 'https://arxiv.org/abs/2012.12453', 'data': '', 'task': '胆囊切除语义分割', 'size': '8,080 帧（17 段视频）', 'source': 'Cholec80', 'slug': None, 'note': None},
+        {'name': 'HeiChole', 'year': 2021, 'paper': 'https://arxiv.org/abs/2109.14956', 'data': '', 'task': '工作流与技能评估', 'size': '33 个视频', 'source': '三个中心', 'slug': None, 'note': None},
+        {'name': 'AutoLaparo', 'year': 2022, 'paper': 'https://arxiv.org/abs/2208.02049', 'data': 'https://autolaparo.github.io', 'task': '子宫切除多任务（工作流、运动预测、分割）', 'size': '', 'source': '', 'slug': None, 'note': None},
+        {'name': 'Endoscapes', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.12429', 'data': 'https://github.com/CAMMA-public/Endoscapes', 'task': '分割 / 检测 / 关键安全视野评估', 'size': '201 个视频', 'source': '', 'slug': None, 'note': None},
+        {'name': 'CholecTrack20', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.07352', 'data': '', 'task': '多器械跟踪', 'size': '20 个视频', 'source': '', 'slug': None, 'note': None},
+        {'name': 'CholecInstanceSeg', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.16039', 'data': '', 'task': '器械实例分割', 'size': '41.9k 帧（85 台手术）', 'source': 'Cholec80 与 CholecT50', 'slug': None, 'note': None},
     ]),
-    ("notyet", "🕒 尚未公开", "Not yet", [
-        dict(name="OphCLIP", year=2025, paper="https://arxiv.org/abs/2411.15421", data="",
-             task="图文对齐", size="375K 图文对", source="YouTube", slug="ophclip", note="OphCLIP", tag="眼科"),
+    ('robotic', '🤖 机器人手术', 'Robotic', [
+        {'name': 'EndoVis 2017', 'year': 2019, 'paper': 'https://arxiv.org/abs/1902.06426', 'data': '', 'task': '器械分割', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': None, 'note': None},
+        {'name': 'EndoVis 2018', 'year': 2020, 'paper': 'https://arxiv.org/abs/2001.11190', 'data': '', 'task': '手术场景分割', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': None, 'note': None},
+        {'name': 'SCARED', 'year': 2021, 'paper': 'https://arxiv.org/abs/2101.01133', 'data': '', 'task': '双目匹配与三维重建', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': None, 'note': None},
+        {'name': 'PSI-AVA', 'year': 2022, 'paper': 'https://arxiv.org/abs/2212.04582', 'data': '', 'task': '阶段、步骤、器械与原子动作识别', 'size': '', 'source': '前列腺根治术', 'slug': None, 'note': None},
+        {'name': 'SAR-RARP50', 'year': 2023, 'paper': 'https://arxiv.org/abs/2401.00496', 'data': 'https://rdr.ucl.ac.uk/projects/SARRARP50_Segmentation_of_surgical_instrumentation_and_Action_Recognition_on_Robot-Assisted_Radical_Prostatectomy_Challenge/191091', 'task': '动作识别 / 器械分割', 'size': '50 段缝合视频', 'source': '前列腺根治术', 'slug': None, 'note': None},
+        {'name': 'GraSP', 'year': 2024, 'paper': 'https://arxiv.org/abs/2401.11174', 'data': '', 'task': '整体场景理解（含分割）', 'size': '', 'source': '前列腺根治术', 'slug': None, 'note': None},
+        {'name': 'SurgToolLoc / SurgVU', 'year': 2023, 'paper': 'https://arxiv.org/abs/2305.07152', 'data': '', 'task': '器械定位', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': None, 'note': None},
+    ]),
+    ('multimodal', '💬 多模态与问答', 'Multimodal', [
+        {'name': 'Surgical-VQA', 'year': 2022, 'paper': 'https://arxiv.org/abs/2206.11053', 'data': '', 'task': '手术场景视觉问答', 'size': '', 'source': 'EndoVis 2018 与 Cholec80', 'slug': None, 'note': None},
+        {'name': 'SVL（SurgVLP）', 'year': 2023, 'paper': 'https://arxiv.org/abs/2307.15220', 'data': 'https://github.com/CAMMA-public/SurgVLP', 'task': '手术视频-语言预训练', 'size': '', 'source': '手术讲解视频', 'slug': None, 'note': None},
+    ]),
+    ('notyet', '🕒 尚未公开', 'Not yet', [
+        {'name': 'OphCLIP', 'year': 2025, 'paper': 'https://arxiv.org/abs/2411.15421', 'data': '', 'task': '图文对齐', 'size': '375K 图文对', 'source': 'YouTube', 'slug': 'ophclip', 'note': 'OphCLIP', 'tag': '眼科'},
     ]),
 ]
 
@@ -68,7 +88,7 @@ def card(item: dict) -> str:
     if not item["note"]:
         return (f'<div class="card pending"><div class="top"><span class="name">{esc(item["name"])}</span>{extra}'
                 f'<span class="state">精读待补</span></div><p class="facts">{facts}</p>'
-                f'<p class="one">论文链接待补，暂未精读。</p><div class="links">{"".join(links)}</div></div>')
+                f'<p class="one">{"论文链接待补，" if not item["paper"] else ""}暂未精读。</p><div class="links">{"".join(links)}</div></div>')
     r = reading(item["note"])
     tags = "".join(f'<span class="tag">{esc(t.strip())}</span>' for t in r["tags"].strip("[]").split(",") if t.strip())
     return (f'<div class="card"><div class="top"><span class="name">{esc(item["name"])}</span>{extra}'
