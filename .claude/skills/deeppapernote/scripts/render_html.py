@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render reading_report.md (+ scorecard.json) into one self-contained HTML page."""
+"""Render reading_report.md (+ scorecard.json) into an HTML page (images linked by default; --images embed for one self-contained file)."""
 from __future__ import annotations
 
 import argparse
@@ -48,7 +48,7 @@ def parse_list(tags: str) -> list[str]:
     return [t.strip() for t in tags.strip().strip("[]").split(",") if t.strip()]
 
 
-def make_resolver(base: Path, embed: bool = True):
+def make_resolver(base: Path, embed: bool = False):
     def resolve(src: str) -> str:
         if src.startswith(("http://", "https://", "data:")):
             return src
@@ -166,7 +166,7 @@ def checks_html(lint: dict, insight: dict) -> str:
 
 
 def build(report: Path, scorecard: Path | None, note: Path | None, lint: dict | None = None,
-          insight: dict | None = None, embed: bool = True, note_href: str = "") -> str:
+          insight: dict | None = None, embed: bool = False, note_href: str = "") -> str:
     meta, body = split_front_matter(report.read_text(encoding="utf-8"))
     resolve = make_resolver(report.parent, embed)
     regular, reserved = [], {}
@@ -225,8 +225,8 @@ def main() -> int:
     ap.add_argument("--insight", default="", help="insight_pass.json")
     ap.add_argument("--output", required=True)
     ap.add_argument("--strict", action="store_true", help="refuse to render when the scorecard does not match")
-    ap.add_argument("--images", choices=("embed", "link"), default="embed",
-                    help="embed: one self-contained file; link: keep images/ paths, for publishing beside images/")
+    ap.add_argument("--images", choices=("link", "embed"), default="link",
+                    help="link (default): keep images/ paths, same as the published site; embed: one self-contained file")
     ap.add_argument("--note-href", default="", help="link target for the Markdown note (default: its file name)")
     a = ap.parse_args()
     load = lambda s: json.loads(Path(s).read_text(encoding="utf-8")) if s and Path(s).exists() else None

@@ -105,7 +105,7 @@ Round 1 ends at step 17. Record it, then continue; read `references/report-score
    - score the final note and report from scratch against the scorecard, fix whatever that scoring finds, rerun the affected lints and Formal Save, and only then run `scripts/record_round.py --stage narrative_review`; its `--fixes` must be empty and unfixable limits go in the verdict
 20. Render the page with `scripts/render_html.py --strict --lint --insight --note`. `--strict` refuses to render when the two rounds are not recorded in order or when round 2's hashes do not match the final note and report.
 
-`render_html.py` embeds images by default, giving one portable file. Pass `--images link` to keep `images/` paths instead, for a page published next to its `images/` directory. If the project has a publish step (for example `tools/publish_paper.py`), run it after this render.
+`render_html.py` links images by default: the page keeps `images/` paths and must sit next to its `images/` directory, the same layout as the published site. Pass `--images embed` only when a single self-contained file is needed. If the project has a publish step (for example `tools/publish_paper.py`), run it after this render.
 
 Say `笔记已完成` only after step 20 succeeded. State that the score is a model self-review.
 
