@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "闭集答案空间", "plain": "每个问题只能从预先列好的几个标签里选一个,不能自由作答。", "where": "sec:dataset", "needed_for": "打分可复现与 0 越界结论"},
+  {"term": "分割感知", "plain": "回答时把分割掩码作为空间线索,用于判断遮挡等与位置有关的问题。", "where": "sec:introduction", "needed_for": "判断标题中的分割感知实际覆盖哪些题"},
+  {"term": "Macro-F1", "plain": "对每个类别分别算 F1 再等权平均,少数类答错会明显拉低分数。", "where": "sec:dataset", "needed_for": "多数类基线准确率高而 Macro-F1 低的结论"},
+  {"term": "元组精确匹配", "plain": "Q4 的出血、烟雾、遮挡三位全部答对才算对。", "where": "sec:dataset", "needed_for": "Q4 主指标"},
+  {"term": "覆盖率与条件准确率", "plain": "覆盖率是没答 Unknown 的比例,条件准确率只在这部分上算准确率。", "where": "sec:dataset", "needed_for": "Q6-Q8 的评测"},
+  {"term": "跨模型一致性", "plain": "把另一模型的答案与参照模型的答案比较,衡量像不像,不衡量对不对。", "where": "sec:model", "needed_for": "正确解读表 4"},
+  {"term": "多数类基线", "plain": "永远回答训练集最常见类别的预测器,用来检查题目是否被先验主导。", "where": "sec:model", "needed_for": "准确率被先验抬高的结论"}
+ ],
+ "detail_questions": [
+  {"question": "实际用了 Table 1 的哪些来源", "answer": "只有 EndoVis17 和 EndoVis18,共 11,480 帧。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "主标注模型是哪一个", "answer": "正文只说 VLM 标注员,表 4 以 GPT-4o-mini 为参照,但没有明说它就是主标注模型。", "evidence": ["sec:dataset", "sec:model"], "status": "not_stated"},
+  {"question": "三个站点与两个来源如何对应,帧数如何达到 11,480", "answer": "论文未说明;表 1 两个来源约 3.0k 与 5.7k,合计少于 11,480。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "抽检后的修正比例是多少", "answer": "15% 抽检帧中 4.8% 修正、8.7% 重询、2.3% 丢弃,三者互斥。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "三名审核者之间的一致性多高", "answer": "论文未报告任何审核者间一致性指标。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "Q1 与 Q2 在猪组织帧上依据什么判定", "answer": "由模型看图判定,掩码不含器官;是否经外科医生核验论文未说明。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "有无模型在人工真值上的成绩", "answer": "没有;表 4 明确是与参照的一致性。", "evidence": ["sec:model"], "status": "resolved"},
+  {"question": "Q9 在测试集上能否区分模型", "answer": "多数类基线 Q9 准确率 1.0000,说明测试集全为 none,无法区分。", "evidence": ["sec:model"], "status": "resolved"},
+  {"question": "Figure 3 与正文的百分比是否一致", "answer": "饼图图例把 14.9% 与 1.9% 对应的类别和正文相反,Q3 图中 99.0% 而正文 98.82%。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "数据何时发布", "answer": "清单写明录用后发布,具体时间与许可论文未说明。", "evidence": ["sec:dataset", "sec:introduction"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "约束式标注加抽检得到可靠标签", "alternative": "格式零错误只反映 JSON 约束生效;未抽检的 85% 帧可能保留与抽检相近比例的语义错误", "separating_evidence": "一个独立人工全标的子集,并报告标注模型在其上的准确率", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "基准可以评测多模态模型的手术理解", "alternative": "分数衡量的是与标注模型的相似度,与标注模型同族或同偏好的模型会占优", "separating_evidence": "同一批帧上人工真值与模型标签分别评测,看排名是否一致", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "这是分割感知的问答基准", "alternative": "掩码只含器械,大多数题与掩码无关,所谓分割感知只覆盖中心遮挡等少数题", "separating_evidence": "有无掩码输入两种条件下的标注或模型成绩对比", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "准确率被先验抬高,应以 Macro-F1 为主", "alternative": "无", "separating_evidence": "多数类基线准确率与 Macro-F1 的对照", "in_paper": true, "verdict": "supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览,先说结论边界:标签是模型生成的,评测的是一致性",
+  "把主标注模型身份、站点对应、审核者一致性、数据发布时间统一写成 论文未说明 并说明限制",
+  "在深度分析中补充无掩码对照缺失,说明分割感知是否有效无法检验",
+  "在多数类基线后说明 Q9 为常数会让总分中的一项失去区分度",
+  "15.8% 合计与六分之一外推标为推导值并登记数字例外"
+ ]
+}

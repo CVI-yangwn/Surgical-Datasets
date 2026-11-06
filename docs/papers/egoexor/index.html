@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EgoExOR: An Ego-Exo-Centric Operating Room Dataset for Surgical Activity Understanding</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>让手术室里的每个人戴上眼镜：自我视角加天花板视角的同步数据集与场景图基准</h1>
+<div class="sub">EgoExOR: An Ego-Exo-Centric Operating Room Dataset for Surgical Activity Understanding</div>
+<div class="meta">Ege Özsoy、Arda Mamur 等，慕尼黑工业大学与慕尼黑机器学习中心 | arXiv 2505.24287，v1，预印本，2025-05-30</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术室感知</span><span class="tag">自我视角</span><span class="tag">多模态</span><span class="tag">场景图生成</span><span class="tag">模拟手术</span></div>
+<div class="one">EgoExOR 在一间模拟手术室录了 94 分钟、两种脊柱手术，同步多人眼镜视角（含注视与手部）与天花板深度相机，逐帧标注 568,235 个场景图三元组；基准显示只用外部视角总体宏平均 F1 为 0.42，只用自我视角为 0.68，两者合用为 0.72。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2505.24287" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/egoexor/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术室里最关键的动作，天花板相机往往看不见。</strong> 主刀、助手、护士、麻醉师围在手术台边，针头和手常被身体挡住，而且固定相机拿不到"谁在看哪里"。</p>
+<p>已有数据集各缺一块。MVOR、4D-OR、MM-OR 只有天花板外部视角；EgoSurgery 只有主刀一路头戴视频，没有场景图；Ego-Exo4D、Assembly101 有自我加外部视角，但不在手术室。</p>
+<p>作者的判断是：智能眼镜贴近无菌区、能记录注视与手部，又不需要改造手术室，是补上这块缺口的现实办法。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口：手术室里没有同时具备多人自我视角、外部视角和密集场景图的数据</span><span class="i">回答：EgoExOR，模拟手术室里的同步多模态录制</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案有三步：在 4D-OR 的同一模拟中心，让四名角色和显微镜或手术灯都戴上 Project Aria 眼镜，天花板装深度相机；逐帧标注场景图；再用一个把自我视角和外部视角分开处理的双分支模型做基准。</p>
+<p><strong>结果的形状很清楚：</strong> 自我视角是主要信号。只用外部视角总体 0.42，只用自我视角 0.68，合用 0.72。双分支模型相对最强基线 MM2SG 从 0.67 提到 0.72，提升几乎都在超声引导注射上。</p>
+<p><strong>边界同样清楚：</strong> 只有一个模拟中心、41 个 take、7 个测试 take，结果没有方差；只评测了场景图生成一个任务。</p><div class="strip d"><span class="t">数据</span><span class="i">94 分钟，84,553 帧，15 fps，41 个 take</span><span class="i">36 类实体，22 类关系，568,235 个三元组</span><span class="i">总体宏平均 F1：ORacle 0.63，MM2SG 0.67，EgoExOR 0.72</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><figure class="fig"><img src="images/page_002_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。一个时间点上的全部同步模态：自我视角、注视与手部、超声屏幕、外部 RGB-D、点云、音频和场景图。</figcaption></figure>
+<p>外推范围取决于录制条件。录制地点是一所大学附属的手术模拟中心，没有真实患者。团队由经过训练的生物医学工程师扮演，角色轮换。<strong>参与者人数论文未说明</strong>，所以无法判断角色轮换能覆盖多少种个人习惯。</p>
+<p>两种术式都与腰椎间盘突出相关：超声引导注射（UI）和微创脊柱手术（MISS）。所有 take 事先写好脚本并排练，每个阶段还演出了并发症，例如掉落纱布、注射器卡住。这增加了少见动作的样本，但不代表真实意外的频率。</p>
+<p>同步靠每个 take 开头的打板和人工对齐。作者称没有观察到漂移，但没有给出对齐误差。</p><div class="strip h"><span class="t">亮点</span><span class="i">单一模拟中心，工程师扮演团队，脚本化流程</span><span class="i">同步精度只有定性描述</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>每帧有什么</h3><figure class="fig"><img src="images/page_007_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。两种术式的 take 数、时长和帧数。</figcaption></figure>
+<p><strong>UI 占约四分之三的帧</strong>（62,547 对 22,006），总体分数主要由 UI 决定。按 take 划分为训练 26、验证 8、测试 7；测试集中两种术式各几个，论文未说明。</p>
+<p>发布的数据做了大幅压缩：所有图像降到 336×336，点云 2,500 点，手部 16 个关键点，音频提供整段和每帧 1 秒片段，全部存为 HDF5，共 195 GB。眼镜原始画面是 1440×1440，<strong>引言强调的针头细节在发布数据里分辨率已缩小约 4.3 倍</strong>。</p>
+<p>缺失值有固定编码：RGB 补零，注视为 (-1, -1)，手部 NaN，点云为空。加载时必须先过滤。</p><div class="strip d"><span class="t">数据</span><span class="i">划分 26 / 8 / 7 个 take</span><span class="i">336×336 图像，2,500 点点云，16 个手部关键点</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>场景图标注</h3><p>每帧一张场景图，写成（主体，谓词，客体）三元组，每帧平均 6.8 ± 2.5 个。每帧一人标注、一人复核，<strong>标注一致性论文未说明</strong>，标签噪声对低分谓词的影响无法估计。</p>
+<figure class="fig"><img src="images/page_016_fig_table_7_review_repair1.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。全部实体与关系类别的出现次数。</figcaption></figure>
+<p>关系分布是长尾：closeTo 有 174,044 次，约占 31%；preparing 只有 243 次。<strong>高频关系多是空间关系，低频关系多是具体动作</strong>，宏平均 F1 能否提高主要看少见动作。</p></div><div class="card" id="s6"><h3><span class="num">6</span>基准怎样评测</h3><p>任务是给定一个时间点的多模态输入，生成全部三元组。指标按谓词计算 F1 再取宏平均，每个谓词权重相同。主体和客体是否参与匹配，论文未说明。</p>
+<figure class="fig"><img src="images/page_008_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。双分支 EgoExOR 模型结构。</figcaption></figure>
+<p>三个模型都以 LLaVA-7B 为底座，语言模型用 LoRA 微调，图像编码器调最后 12 层，训练 4 个 epoch。ORacle 只用图像；MM2SG 加点云、超声和音频；双分支模型再加注视与手部，并把自我视角和外部视角分到两个分支各用 2 层 Transformer 融合。学习率和批大小论文未说明。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>模型</th><th>UI</th><th>MISS</th><th>总体</th></tr></thead><tbody><tr><td>ORacle</td><td>0.65</td><td>0.66</td><td>0.63</td></tr><tr><td>MM2SG</td><td>0.72</td><td>0.66</td><td>0.67</td></tr><tr><td>EgoExOR</td><td>0.79</td><td>0.68</td><td>0.72</td></tr><tr><td>仅自我视角</td><td>0.71</td><td>0.67</td><td>0.68</td></tr><tr><td>仅外部视角</td><td>0.45</td><td>0.41</td><td>0.42</td></tr></tbody></table></div>
+<p><strong>提升几乎全部在 UI 上</strong>：MISS 上三个模型差距不超过 0.02，测试集只有 7 个 take，这样的差距不足以排序。ORacle 总体 0.63 低于两个分项，总体分数的计算口径论文未说明。</p>
+<figure class="fig"><img src="images/page_014_fig_table_5_review_repair1.png" alt="Table 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 5。双分支模型在 18 个谓词上的 F1。</figcaption></figure>
+<p>逐谓词看，lyingon 0.99、closeto 0.96，而 anaesthetising 只有 0.02、cutting 0.30。附录文字有几处与表不一致：称最佳模型宏平均 0.79（表中是 0.72），称 injecting 在 0.87 以上（表中 0.77），称 cutting 低于 0.21（表中 0.30）。引用时以表为准。</p><div class="strip d"><span class="t">数据</span><span class="i">仅外部视角比仅自我视角低 0.26</span><span class="i">两种视角合用比仅自我视角高 0.04</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>自我视角的优势能这样归因吗</h3><p>消融里的两个变体模态不对称：仅自我视角带注视与手部、没有点云；仅外部视角带点云、没有注视与手部。所以 0.68 对 0.42 至少混了三件事：</p>
+<ol><li>视角本身：眼镜靠近无菌区，少遮挡。这是作者的解释。</li><li>模态：注视和手部本身就是动作的强线索。</li><li>分辨率：336×336 下，天花板画面里的针只剩几个像素。</li></ol>
+<p><strong>论文没有"自我 RGB 去掉注视与手部"或高分辨率外部视角的对照，三者分不开。</strong> 双分支相对 MM2SG 的提升同理：结构和新模态是同时加入的。</p>
+<figure class="fig"><img src="images/page_009_fig_figure_3_review_repair1.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。两组定性样例，绿色为预测正确，白色为错误；MISS 样例漏掉了主刀持手术刀。</figcaption></figure></div><div class="card" id="s9"><h3><span class="num">9</span>相对已有数据集新在哪里</h3><div class="tbl"><table><thead><tr><th>对比对象</th><th>EgoExOR 新增</th><th>没有超过的地方</th></tr></thead><tbody><tr><td>4D-OR</td><td>多路自我视角、注视、手部、超声屏幕、音频</td><td>同样是模拟中心</td></tr><tr><td>MM-OR</td><td>自我视角与注视、手部</td><td>没有全景分割</td></tr><tr><td>EgoSurgery</td><td>多人自我视角、外部视角、场景图</td><td>EgoSurgery 是真实手术</td></tr><tr><td>Ego-Exo4D</td><td>手术室场景与手术场景图</td><td>规模小几个数量级</td></tr></tbody></table></div>
+<p><strong>独有的是在手术室里把多人眼镜视角、注视、手部和场景图放在一起。</strong> 84,553 个时间点比 MM-OR 的 25,277 多，但它们是 15 fps 的连续帧，独立场景只有 41 个 take。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现与比较前要核对什么</h3><ul><li>缺失值编码先过滤，否则模型会把补零帧当信号。</li><li>分术式报告 UI、MISS 和逐谓词 F1，避免 UI 掩盖 MISS 和低频谓词。</li><li>写明总体宏平均的计算方式，以及是否检查主体和客体。</li><li>多次随机种子或多次划分，测试集 7 个 take 的波动未知。</li></ul>
+<figure class="fig"><img src="images/page_017_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。两种术式各阶段的代表帧，左为自我视角、右为外部视角。</figcaption></figure></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>EgoExOR 是第一个在手术室里同步多人自我视角、外部视角、注视、手部与场景图的数据集</div><div>自我视角输入让场景图宏平均 F1 从 0.42 升到 0.68，但这个差距混有模态和分辨率因素</div><div>提升集中在超声引导注射，微创脊柱手术上模型几乎区分不出</div><div>低频动作（麻醉、切割）仍然失败</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>模态最全，传感器、同步、缺失编码和文件结构交代清楚</li><li>场景图范式与 4D-OR、MM-OR 一致，已有方法可以直接迁移</li><li>给出逐谓词结果，难点可见</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单一模拟中心、扮演团队、脚本化流程，与真实手术差距未量化</li><li>只有一个基准任务，结果无方差，测试集只有 7 个 take</li><li>消融模态不对称，附录文字与表格数字有多处不一致</li><li>参与者人数、标注一致性、超参数、总体分数口径均论文未说明</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>去掉注视与手部后，自我视角 RGB 还剩多少优势？</li><li>用原始 1440×1440 画面，外部视角能否追上？</li><li>在真实手术数据上，从模拟数据学到的表示能迁移多少？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 9b78be70</span><span class="s">7.6 分</span></div><p>第 1 轮原版流程笔记（模型自评）。证据链完整，主结果、消融、逐谓词表都在。D5=6：定位只有 Table 1 对照，没有逐项说明相对 4D-OR/MM-OR、EgoSurgery、Ego-Exo4D 新在哪里、没超过哪里。D6=7：我的笔记可复用但缺少应避免的做法。D7=7：Table 3/4 只能保留占位。D9=7：部分小节开头没有本节要回答的问题，数据来源与参与者小节结尾缺过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>用 lint_report.py --mode note 做数字核对，并登记推导值（占比、倍数）</li><li>深度分析增加相对已有数据集的逐项定位表，写明新增与没有超过的地方</li><li>Insight Pass 挑战轮：核对 ORacle 总体低于两分项的反常、Table 4 模态不对称、336×336 降采样的影响</li><li>各小节开头补本节要回答的问题，数字后补一句意义，小节结尾补过渡</li><li>把参与者人数、标注一致性、测试集术式构成、超参数、总体分数口径统一写成 论文未说明 并说明影响</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 b274170c · 文稿 41096964</span><span class="s">8.3 分</span></div><p>第 2 轮自评（模型自我评审，非独立评分）。Insight Pass 三轮完成，6 条修订和 6 个论文未说明缺口已写入笔记与报告；笔记与报告数字核对无未匹配项，表格图像值与推导值登记在 number_exceptions.json。新增逐项定位表、消融模态不对称与三个混杂因素分析、附录与 Table 5 的数字不一致。无法修复的限制：Table 3、Table 4 没有裁剪候选，保留占位并以 Markdown 表重排；参与者人数、标注一致性、测试集术式构成、学习率与批大小、总体分数口径、指标是否检查主体客体均为论文未说明。D2 未到 9：双分支模型的分支池化细节论文本身描述有限。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

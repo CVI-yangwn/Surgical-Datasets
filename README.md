@@ -4,8 +4,8 @@
 
 **手术视频与内镜公开数据集整理 · 附中文论文精读**
 
-[![Papers](https://img.shields.io/badge/精读论文-31-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
-[![Datasets](https://img.shields.io/badge/数据集-31-8b5cf6)](#-数据集总览)
+[![Papers](https://img.shields.io/badge/精读论文-37-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
+[![Datasets](https://img.shields.io/badge/数据集-37-8b5cf6)](#-数据集总览)
 [![Reading](https://img.shields.io/badge/在线阅读-GitHub%20Pages-b84fa3)](https://cvi-yangwn.github.io/Surgical-Datasets/)
 
 [📚 在线阅读全部精读](https://cvi-yangwn.github.io/Surgical-Datasets/) · [📊 数据集总览](#-数据集总览) · [🔍 精读是怎么做的](#-精读是怎么做的)
@@ -62,7 +62,7 @@
 </details>
 
 <details open>
-<summary><b>🤖 机器人手术 Robotic</b>（7 篇）</summary>
+<summary><b>🤖 机器人手术 Robotic</b>（8 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
@@ -73,27 +73,41 @@
 | **SAR-RARP50** | 前列腺根治术缝合视频上的动作识别与器械分割挑战赛：SAR-RARP50 数据集与 12 支队伍的结果 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sar-rarp50/) · [📝 笔记](docs/papers/sar-rarp50/note.md) |
 | **GraSP** | 在 13 台机器人前列腺根治术上同时标注阶段、步骤、器械实例分割和原子动作，并用统一基线检验各层能否互相帮助 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/grasp/) · [📝 笔记](docs/papers/grasp/note.md) |
 | **SurgToolLoc / SurgVU** | 只给“装了哪些器械”的标签,能不能学会在手术画面里框出器械?四年挑战赛的答案 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgtoolloc/) · [📝 笔记](docs/papers/surgtoolloc/note.md) |
+| **SurgVU** | 用达芬奇系统日志给上千小时猪模型培训录像打上噪声标签，再配一个人工框标注的验证集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvu/) · [📝 笔记](docs/papers/surgvu/note.md) |
 
 </details>
 
 <details open>
-<summary><b>💬 多模态与问答 Multimodal</b>（3 篇）</summary>
+<summary><b>💬 多模态与问答 Multimodal</b>（5 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
 | **Surgical-VQA** | 把手术标注改写成问答，用 Transformer 回答手术画面的问题 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgical-vqa/) · [📝 笔记](docs/papers/surgical-vqa/note.md) |
 | **SVL（SurgVLP）** | 让模型看手术讲座学会手术：两路语音转写当监督的视觉-语言预训练 SurgVLP | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/svl/) · [📝 笔记](docs/papers/svl/note.md) |
 | **SurgBench** | 把 16 个手术视频来源统一切片,做成预训练集加 72 个标签的分类评测集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgbench/) · [📝 笔记](docs/papers/surgbench/note.md) |
+| **SurgAtlas** | 从 YouTube 收集 15,291 个开放与微创手术视频，自动生成四层文本标注，并首次给开放手术建立推理评测 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgatlas/) · [📝 笔记](docs/papers/surgatlas/note.md) |
+| **LEMON（Surg-3M）** | 把 18K 个 YouTube 手术视频清洗成 938 小时的预训练库，再训练一个手术基础模型 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/lemon/) · [📝 笔记](docs/papers/lemon/note.md) |
 
 </details>
 
 <details open>
-<summary><b>🕒 尚未公开 Not yet</b>（2 篇）</summary>
+<summary><b>🏥 手术室 Operating room</b>（1 篇）</summary>
+
+| 数据集 | 一句话 | 阅读 |
+| :-- | :-- | :-- |
+| **EgoExOR** | 让手术室里的每个人戴上眼镜：自我视角加天花板视角的同步数据集与场景图基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egoexor/) · [📝 笔记](docs/papers/egoexor/note.md) |
+
+</details>
+
+<details open>
+<summary><b>🕒 尚未公开 Not yet</b>（4 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
 | **OphCLIP** | 用眼科手术视频教会模型看懂手术：数据集 OphVL 与检索增强预训练 OphCLIP | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ophclip/) · [📝 笔记](docs/papers/ophclip/note.md) |
 | **SurgPub-Video** | 用期刊论文附带的手术视频做视频问答数据:3,538 个视频、48,520 个问答、一个 3B 模型 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgpub-video/) · [📝 笔记](docs/papers/surgpub-video/note.md) |
+| **NeuroABench** | 让多模态大模型认神经外科术中解剖:1079 道五选一题,最好的模型只有 40.87% | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/neuroabench/) · [📝 笔记](docs/papers/neuroabench/note.md) |
+| **RoboSurg-VQA** | 让视觉语言模型替 EndoVis17/18 的 11,480 帧回答九个固定问题,再抽检 15% 帧把关 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/robosurg-vqa/) · [📝 笔记](docs/papers/robosurg-vqa/note.md) |
 
 </details>
 
@@ -150,6 +164,7 @@
 | SAR-RARP50 | 2023 | [arXiv](https://arxiv.org/abs/2401.00496) | [链接](https://rdr.ucl.ac.uk/projects/SARRARP50_Segmentation_of_surgical_instrumentation_and_Action_Recognition_on_Robot-Assisted_Radical_Prostatectomy_Challenge/191091) | 动作识别 / 器械分割 | 50 段缝合视频 | 前列腺根治术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sar-rarp50/) |
 | GraSP | 2024 | [arXiv](https://arxiv.org/abs/2401.11174) |  | 整体场景理解（含分割） |  | 前列腺根治术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/grasp/) |
 | SurgToolLoc / SurgVU | 2023 | [arXiv](https://arxiv.org/abs/2305.07152) |  | 器械定位 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgtoolloc/) |
+| SurgVU | 2025 | [arXiv](https://arxiv.org/abs/2501.09209) | [链接](https://storage.googleapis.com/isi-surgvu/surgvu24_videos_only.zip) | 器械识别与弱监督检测 / 步骤识别 / 视觉问答 | 840+ 小时（280 个片段） | 达芬奇培训录像（猪模型） | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvu/) |
 
 ### 💬 多模态与问答 Multimodal
 
@@ -158,6 +173,14 @@
 | Surgical-VQA | 2022 | [arXiv](https://arxiv.org/abs/2206.11053) |  | 手术场景视觉问答 |  | EndoVis 2018 与 Cholec80 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgical-vqa/) |
 | SVL（SurgVLP） | 2023 | [arXiv](https://arxiv.org/abs/2307.15220) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/CAMMA-public/SurgVLP) | 手术视频-语言预训练 |  | 手术讲解视频 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/svl/) |
 | SurgBench | 2025 | [arXiv](https://arxiv.org/abs/2506.07603) |  | 手术视频基础模型预训练与多任务评测 | 5300 万帧（22 种术式） | 16 个来源整合 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgbench/) |
+| SurgAtlas | 2026 | [arXiv](https://arxiv.org/abs/2606.25905) | [🤗](https://huggingface.co/datasets/filbel/SurgAtlas) | 手术视频-语言预训练与推理问答 | 15,291 个视频（2,391 小时） | YouTube | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgatlas/) |
+| LEMON（Surg-3M） | 2025 | [arXiv](https://arxiv.org/abs/2503.19740) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/visurg-ai/LEMON) | 手术视频自监督预训练 / 术式分类 | 4K+ 视频（938 小时） | YouTube | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/lemon/) |
+
+### 🏥 手术室 Operating room
+
+| 数据集 | 年份 | 论文 | 数据 | 任务 | 规模 | 来源 | 精读 |
+| :-- | :--: | :--: | :--: | :-- | :-- | :-- | :--: |
+| EgoExOR | 2025 | [arXiv](https://arxiv.org/abs/2505.24287) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/ardamamur/EgoExOR) | 手术室场景图生成（第一人称 + 外部视角） | 94 分钟（84,553 帧） | 模拟脊柱手术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egoexor/) |
 
 ### 🕒 尚未公开 Not yet
 
@@ -165,6 +188,8 @@
 | :-- | :--: | :--: | :-- | :-- | :-- | :--: |
 | OphCLIP（眼科） | 2025 | [arXiv](https://arxiv.org/abs/2411.15421) | 图文对齐 | 375K 图文对 | YouTube | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ophclip/) |
 | SurgPub-Video（多模态） | 2025 | [arXiv](https://arxiv.org/abs/2508.10054) | 手术视频视觉问答 | 3000 多个视频 | 医学期刊附带视频 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgpub-video/) |
+| NeuroABench（神经外科） | 2025 | [arXiv](https://arxiv.org/abs/2512.06921) | 神经外科解剖识别（多模态大模型评测） | 9 小时视频（1079 道题） | Neurosurgical Atlas | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/neuroabench/) |
+| RoboSurg-VQA（机器人手术） | 2026 | [arXiv](https://arxiv.org/abs/2605.23068) | 分割感知的手术视觉问答 | 11,480 帧 | EndoVis 2017 与 2018 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/robosurg-vqa/) |
 
 ---
 

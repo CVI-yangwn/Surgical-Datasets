@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "9b78be70cd3035053c414b0848d26b3b0d1f83c7e989519cba1739ca666c96db",
+      "note_snapshot": "review_rounds/round1_EgoExOR_An_Ego_Exo_Centric_Operating_Room_Dataset_for_Surgical_Activity_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮原版流程笔记（模型自评）。证据链完整，主结果、消融、逐谓词表都在。D5=6：定位只有 Table 1 对照，没有逐项说明相对 4D-OR/MM-OR、EgoSurgery、Ego-Exo4D 新在哪里、没超过哪里。D6=7：我的笔记可复用但缺少应避免的做法。D7=7：Table 3/4 只能保留占位。D9=7：部分小节开头没有本节要回答的问题，数据来源与参与者小节结尾缺过渡。H3 未做数字核对。",
+      "fixes": [
+        "用 lint_report.py --mode note 做数字核对，并登记推导值（占比、倍数）",
+        "深度分析增加相对已有数据集的逐项定位表，写明新增与没有超过的地方",
+        "Insight Pass 挑战轮：核对 ORacle 总体低于两分项的反常、Table 4 模态不对称、336×336 降采样的影响",
+        "各小节开头补本节要回答的问题，数字后补一句意义，小节结尾补过渡",
+        "把参与者人数、标注一致性、测试集术式构成、超参数、总体分数口径统一写成 论文未说明 并说明影响"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "b274170cedce883ff3d5f11de0dcf1910caf43c55ca04a777c10f7a99d01aae3",
+      "note_snapshot": "review_rounds/round2_EgoExOR_An_Ego_Exo_Centric_Operating_Room_Dataset_for_Surgical_Activity_Understanding.md",
+      "report_sha256": "41096964243810331d1d6eaca794be99a18fa90e4cf924bb2bd7243a9e2bb728",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评（模型自我评审，非独立评分）。Insight Pass 三轮完成，6 条修订和 6 个论文未说明缺口已写入笔记与报告；笔记与报告数字核对无未匹配项，表格图像值与推导值登记在 number_exceptions.json。新增逐项定位表、消融模态不对称与三个混杂因素分析、附录与 Table 5 的数字不一致。无法修复的限制：Table 3、Table 4 没有裁剪候选，保留占位并以 Markdown 表重排；参与者人数、标注一致性、测试集术式构成、学习率与批大小、总体分数口径、指标是否检查主体客体均为论文未说明。D2 未到 9：双分支模型的分支池化细节论文本身描述有限。",
+      "fixes": []
+    }
+  ]
+}

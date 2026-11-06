@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "9fc30c1ffc7d79d20c0aebd29ba4d2386bb7593098e89945b87b598c56e3b452",
+      "note_snapshot": "review_rounds/round1_LEMON_A_Large_Endoscopic_MONocular_Dataset_and_Foundation_Model_for_Perception_in_Surgical_Settings.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 7
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮原版流程笔记(自评)。证据链完整,整理流程、增广蒸馏与下游协议都有输入、操作、输出。D5=7:定位表有,但没有逐项说明与 SurgeNetXL 在同协议下的差异来源。D6=7:我的笔记缺少要避免的做法。D7=7:多张表以占位保留,图位置基本贴近正文。D8=7:部分术语首次出现未解释(Jaccard 口径、典型性)。D9=7:多数小节有开场问题,但数据与任务、深度分析各小节缺少过渡句。H3 未做数字核对。",
+      "fixes": [
+        "按 Insight Pass 补充知识点、细节问题与对中心论断的挑战",
+        "把论文未说明的内容统一写成 论文未说明 并说明影响(召回率、术式平衡采样、下架率、上传者分布)",
+        "补写 50% 标注版本在 AutoLaparo 准确率上与正文说法不符之处的影响",
+        "深度分析补充未对齐数据量与跨数据集同协议对照缺失的替代解释",
+        "各节结尾补过渡句,数字后补一句意义",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "f6bfcf93960f36e07f4de24827024f36a15d5472a101c2ff61e96d5ade3797ea",
+      "note_snapshot": "review_rounds/round2_LEMON_A_Large_Endoscopic_MONocular_Dataset_and_Foundation_Model_for_Perception_in_Surgical_Settings.md",
+      "report_sha256": "d3a81a7eb6f37dd3125deb19c5983f653dd92901d386f6bccb306ef63e298ca0",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮(自评)。Insight Pass 补出 6 处论文未说明的信息并写入局限,挑战轮指出数据贡献与骨干、目标函数未分离,深度分析和报告都已写明。修正了 50% 标注版本与正文说法不符之处。数字核对无未匹配项,推导值登记在 number_exceptions.json。剩余限制:Table 4/5/6/7/11/12 只能以占位加转录呈现;论文缺少同方法跨数据集对照,这一点无法在笔记中补足。D2=8:Figure 4 无可用裁图,增广池只能文字描述。",
+      "fixes": []
+    }
+  ]
+}

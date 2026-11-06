@@ -1,0 +1,182 @@
+{
+ "knowledge_points": [
+  {
+   "term": "场景图三元组",
+   "plain": "把一帧画面写成若干条（主体，谓词，客体），例如（主刀，控制，超声探头）。",
+   "where": "sec:datasets",
+   "needed_for": "理解标注规模 568,235 和基准任务"
+  },
+  {
+   "term": "按谓词的宏平均 F1",
+   "plain": "每个谓词单独算 F1 再求平均，罕见谓词与常见谓词权重相同。",
+   "where": "sec:model",
+   "needed_for": "解释为何低频谓词拖低总分"
+  },
+  {
+   "term": "自我视角与外部视角",
+   "plain": "自我视角是佩戴者眼镜看到的画面，外部视角是房间里固定相机看到的画面。",
+   "where": "sec:introduction",
+   "needed_for": "理解消融 0.68 对 0.42"
+  },
+  {
+   "term": "take",
+   "plain": "按临床阶段边界从连续录制中切出的片段，是划分训练与测试的单位。",
+   "where": "sec:supplementary-material",
+   "needed_for": "理解 41 个 take 与 26/8/7 划分"
+  },
+  {
+   "term": "ORacle 与 MM2SG",
+   "plain": "同一团队此前为 4D-OR、MM-OR 设计的两个大视觉语言模型场景图方法，后者多了点云、超声和音频。",
+   "where": "sec:model",
+   "needed_for": "理解基线对比"
+  },
+  {
+   "term": "LoRA",
+   "plain": "只训练插入的低秩矩阵来微调大模型，冻结大部分参数。",
+   "where": "sec:model",
+   "needed_for": "复现实现细节"
+  },
+  {
+   "term": "UI 与 MISS",
+   "plain": "超声引导注射与微创脊柱手术，两种模拟术式。",
+   "where": "sec:related-work",
+   "needed_for": "理解分术式结果"
+  }
+ ],
+ "detail_questions": [
+  {
+   "question": "ORacle 总体 0.63 为何低于 UI 0.65 和 MISS 0.66？",
+   "answer": "论文没有解释总体分数的计算方式；合并测试集重算宏平均可以产生这种结果。",
+   "evidence": [
+    "sec:model"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "Table 4 两个变体的模态是否对称？",
+   "answer": "不对称：仅自我视角带注视与手部、无点云；仅外部视角带点云、无注视与手部。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "附录称最佳模型宏平均 0.79，与表一致吗？",
+   "answer": "不一致，Table 5 宏平均为 0.72，0.79 是 UI 分数。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "cutting 是否低于 0.21？",
+   "answer": "Table 5 中 cutting 为 0.30，只有 anaesthetising 0.02 低于 0.21。",
+   "evidence": [
+    "sec:model-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "发布图像的分辨率是多少？",
+   "answer": "自我视角、外部视角和超声画面都降到 336×336，原始眼镜画面为 1440×1440。",
+   "evidence": [
+    "sec:related-work"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "参与者有多少人？",
+   "answer": "论文只说是经过训练的生物医学工程师并轮换角色。",
+   "evidence": [
+    "sec:related-work"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "标注者间一致性如何？",
+   "answer": "只说一人标注一人复核，没有一致性数字。",
+   "evidence": [
+    "sec:related-work"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "测试集 7 个 take 中两种术式各几个？",
+   "answer": "只给出 26/8/7 的 take 数。",
+   "evidence": [
+    "sec:related-work"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "学习率与批大小是多少？",
+   "answer": "只给出 4 个 epoch、LoRA、调最后 12 层、N=576。",
+   "evidence": [
+    "sec:model"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "指标是否检查主体与客体？",
+   "answer": "只说按谓词计算宏平均 F1。",
+   "evidence": [
+    "sec:model"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "同步精度如何？",
+   "answer": "靠打板人工对齐，称未观察到漂移，没有量化误差。",
+   "evidence": [
+    "sec:related-work"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "UI 与 MISS 帧数差多少？",
+   "answer": "UI 62,547 帧，MISS 22,006 帧，约 2.8 倍。",
+   "evidence": [
+    "sec:related-work"
+   ],
+   "status": "resolved"
+  }
+ ],
+ "challenges": [
+  {
+   "claim": "自我视角远比外部视角有用",
+   "alternative": "差距来自注视与手部两类模态和 336×336 降采样对天花板画面的损害，而非视角本身",
+   "separating_evidence": "去掉注视与手部的自我 RGB 变体；高分辨率外部视角变体",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "双分支结构带来提升",
+   "alternative": "提升来自新增的注视与手部输入，单流模型加入这两类 token 也能达到",
+   "separating_evidence": "单流模型加注视与手部的对照",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "EgoExOR 模型优于基线",
+   "alternative": "差距在单次运行和 7 个测试 take 的波动内，尤其 MISS 只差 0.02",
+   "separating_evidence": "多次随机种子或多次划分的方差",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "数据集是第一个结合自我与外部多视角的手术室数据集",
+   "alternative": "无",
+   "separating_evidence": "Table 1 对比",
+   "in_paper": true,
+   "verdict": "supported"
+  }
+ ],
+ "revisions": [
+  "关键结果补写 ORacle 总体低于分项的反常，并标为论文未说明的计算口径",
+  "消融小节写明两个变体模态不对称",
+  "逐谓词小节列出附录文字与 Table 5 的不一致",
+  "深度分析写出自我视角优势的三个混杂因素与缺失对照",
+  "深度分析新增相对已有数据集的逐项定位表",
+  "局限统一列出参与者人数、标注一致性、测试集构成、超参数、指标口径为论文未说明"
+ ]
+}

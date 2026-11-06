@@ -1,0 +1,30 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/NeuroABench_A_Multimodal_Evaluation_Benchmark_for_Neurosurgical_Anatomy_Identification/reading_report.md",
+  "mode": "report",
+  "report_sha256": "d41a0c0cfa4e326bf3a5bf4a4aeed3c328b8ad52b5a684d7e7889f8c0cc4078e",
+  "number_exceptions": {
+    "106": "表 I(第 2 页)VQA-RAD 解剖题数;提取文本中缺失,pdftotext -layout 可见",
+    "507": "表 I(第 2 页)SLAKE 解剖题数;提取文本中缺失",
+    "2098": "表 I(第 2 页)GMAI-MMBench 解剖题数;提取文本中缺失",
+    "16448": "表 I(第 2 页)OmniMedVQA 解剖题数;提取文本中缺失",
+    "10.5": "推导值:住院医师平均 46.5 减 Gemini 子集 36,即论文的 -10.50%",
+    "27.28": "推导值:三个医学模型准确率 15.01、30.31、36.52 的平均",
+    "29.01": "推导值:7 个开源通用模型准确率的平均 29.009",
+    "7.51": "推导值:36.52 减 29.01",
+    "3.2": "推导值:9 小时 × 3600 秒 × 每秒一帧约 3.24 万帧",
+    "3.33": "推导值:Qwen2.5-VL 72B 37.44 减 7B 34.11",
+    "7.14": "推导值:Claude-3.5-Sonnet 40.41 减 Claude-3.7-Sonnet 33.27",
+    "40": "约数:准确率约 40% 时的标准误估算前提",
+    "797": "推导值:886 个检索视频减 89 个保留视频",
+    "1.5": "推导值:sqrt(0.4×0.6/1079) 约 0.0149,即约 1.5 个点"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

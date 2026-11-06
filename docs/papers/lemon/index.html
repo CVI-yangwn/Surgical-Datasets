@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>LEMON: A Large Endoscopic MONocular Dataset and Foundation Model for Perception in Surgical Settings</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>把 18K 个 YouTube 手术视频清洗成 938 小时的预训练库，再训练一个手术基础模型</h1>
+<div class="sub">LEMON: A Large Endoscopic MONocular Dataset and Foundation Model for Perception in Surgical Settings</div>
+<div class="meta">Chengan Che、Chao Wang、Tom Vercauteren、Sophia Tsoka、Luis C. Garcia-Peraza-Herrera，伦敦国王学院 | arXiv 2503.19740，v4，预印本，2026-03-20（v1 于 2025-03-25，早期题为 Surg-3M）</div>
+<div><span class="chip">数据集论文</span><span class="tag">微创手术</span><span class="tag">自监督预训练</span><span class="tag">网络视频数据</span><span class="tag">基础模型</span><span class="tag">数据清洗</span></div>
+<div class="one">LEMON 用三个过滤模型加人工复核把 YouTube 视频清洗成 4194 个、938 小时的微创手术视频，在它上面用增广 DINO 训练的 LemonFM 在六个下游数据集上都领先，但数据本身的贡献只有消融表能单独证明。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2503.19740" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/lemon/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术模型缺数据，而公开手术数据集普遍很小。</strong> 典型数据集少于 100 个视频、不足 30 小时，隐私和法规又让新数据难以收集。</p>
+<p>自监督预训练可以绕开标注，但需要大量无标签视频。已有路线有两个问题：Endo-FM 等依赖私有数据，无法复现；GenSurgery 和 SurgeNetXL 直接用网络视频，片头幻灯片、字幕、器械名称栏和水印都留在帧里。</p>
+<p>这些非手术内容在同一视频内几乎不变，<strong>自监督模型可能靠它们区分视频，而不去学解剖结构</strong>。论文因此问：公开网络视频经过清洗后，能否支撑一个最好的手术基础模型。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口一：公开手术数据集小</span><span class="i">缺口二：网络视频数据集没有清洗</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文分三步回答。</p>
+<ol><li>清洗：故事板分类筛视频，帧分类裁片头片尾，区域检测抹掉界面文字，再全部人工复核。</li><li>预训练：在 DINO 上加一组额外视图，取同术式其他视频的近邻帧和相邻帧，用 ConvNeXt-L 训练 LemonFM。</li><li>验证：四类任务、六个公开数据集、线性探测和全量微调两种协议。</li></ol>
+<p><strong>结果：</strong> LemonFM 在所有下游列都最高，全量微调 Cholec80 Jaccard 85.1，次优的 SurgeNetXL 为 72.0。</p>
+<p><strong>边界：</strong> 能单独归给数据的证据只有消融表前四行；与其他基础模型的比较同时改变了数据、骨干和目标函数。</p><div class="strip d"><span class="t">数据</span><span class="i">4194 个视频，938 小时，35 个术式</span><span class="i">线性探测 AutoLaparo F1：LemonFM 66.9，SurgeNetXL 57.0</span><span class="i">CholecSeg8k mDice：LemonFM 81.3，EndoViT 71.0</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>作者按 Mayo Clinic 的微创手术列表定下 35 个术式，每个术式在 YouTube 搜索机器人与腹腔镜两种查询，直到各收集 500 个视频，共约 18K 个。</p>
+<p>清洗后留下 4194 个视频、938 小时、8,500 万帧，94% 是 1280×720。按 Table 1，它比 GenSurgery 多约 32% 的视频、多 258 小时，术式多 7 个。<strong>差距在倍数以内，与下游数据集比才是数量级的差距</strong>：1 fps 下 340 万帧约为 Cholec80 的 18.6 倍。</p>
+<figure class="fig"><img src="images/page_002_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。与已有公开手术数据集的规模对比。</figcaption></figure>
+<p>术式分布不均：结肠切除超过 25 万帧，阴道切除和盲肠切除不到 1 万帧。预训练是否做了术式平衡采样，论文未说明，所以高频术式可能主导表征。</p>
+<figure class="fig"><img src="images/page_010_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。术式示例、各术式帧数分布和术中场景示例。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">约 18K 原始视频，分类后 6617 个</span><span class="i">去除 66 小时非手术内容</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>清洗流程怎样运作</h3><figure class="fig"><img src="images/page_002_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。五阶段数据整理流程。</figcaption></figure>
+<p>三个过滤模型各有分工：</p>
+<div class="tbl"><table><thead><tr><th>模型</th><th>作用</th><th>五折平均</th></tr></thead><tbody><tr><td>故事板分类器</td><td>判断视频是否以手术画面为主</td><td>F1 94.75</td></tr><tr><td>帧分类器</td><td>找首尾连续三个手术帧作起止点，丢弃非手术帧超过 10% 的视频</td><td>F1 95.64</td></tr><tr><td>区域检测器</td><td>遮挡字幕、器械名称栏、标志</td><td>mAP50 79.29</td></tr></tbody></table></div>
+<p>单模型只有约 95% 的 F1，但五模型集成、70% 置信阈值和全量人工复核叠加后，作者报告视频级 100%、帧级超过 99.9% 的精度。<strong>召回率论文未说明</strong>，所以无法判断清洗是否系统性地丢掉了某些术式。</p>
+<p>术式标签来自标题匹配，匹配不上时用 ChatGPT-4 判断，再人工复核。两位作者独立复核 500 个视频，术式 Kappa 0.97。人工投入共约 106 小时，<strong>这个流程换到别的视频源成本可控</strong>。</p>
+<figure class="fig"><img src="images/page_003_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。与两个网络视频数据集的整理差异，以及新增术式示例。</figcaption></figure></div><div class="card" id="s5"><h3><span class="num">5</span>增广蒸馏加了什么</h3><p>LemonFM 沿用 DINO：学生网络拟合教师网络在不同增广视图上的输出分布，教师是学生的指数滑动平均。新增的是一组额外视图 $W_i$。</p>
+<p>$W_i$ 来自一个容量为 4 的池子：先找同术式、其他视频里的近邻帧，只有距离小于输入帧与前一帧距离的 3 倍时才放入；不够时用相邻帧补。<strong>3 倍阈值把跨病人的外观差异限制在相邻帧变化的量级内</strong>，避免把不同解剖位置当作正样本。</p>
+<p>阈值在 1.5、3、6 倍下的 AutoLaparo 准确率为 72.9、73.4、72.6，差距不到 1 个点，更准确的说法是这个超参数不敏感。</p><div class="strip h"><span class="t">亮点</span><span class="i">近邻帧提供跨病人外观不变性</span><span class="i">相邻帧提供对小运动的不变性</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_005_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。线性探测结果。</figcaption></figure>
+<p>线性探测下 LemonFM 每列都最高，AutoLaparo F1 比 SurgeNetXL 高 9.9。<strong>但同在 LEMON 上预训练的 MAE 只有 32.0</strong>，比 LemonFM 低 34.9，说明大部分优势来自判别式目标和骨干。</p>
+<figure class="fig"><img src="images/page_006_fig_table_3_review_repair1.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。全量微调结果。</figcaption></figure>
+<p>全量微调下 Jaccard 领先 8 到 10 个点，准确率却在 AutoLaparo 上只比 SurgeNetXL 高 0.5。Jaccard 让短阶段与长阶段权重相同，<strong>所以 LemonFM 的优势集中在短阶段和阶段边界上</strong>。</p>
+<p>50% 标注版本几乎全面超过其他基础模型，唯一例外是 AutoLaparo 准确率 84.9 低于 SurgeNetXL 的 85.0，与正文的说法不符。</p>
+<figure class="fig"><img src="images/page_001_fig_figure_1_review_repair1.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。与其他手术基础模型的十项指标雷达图。</figcaption></figure></div><div class="card" id="s7"><h3><span class="num">7</span>消融能把多少归给数据</h3><div class="tbl"><table><thead><tr><th>对照</th><th>AutoLaparo F1 变化</th><th>CholecSeg8k mDice 变化</th></tr></thead><tbody><tr><td>ImageNet 换成 LEMON（无增广）</td><td>+12.9</td><td>+4.3</td></tr><tr><td>未整理换成整理</td><td>+4.5</td><td>+1.3</td></tr><tr><td>加增广蒸馏</td><td>+1.0</td><td>+3.2</td></tr><tr><td>ViT-L 换成 ConvNeXt-L</td><td>+0.8</td><td>+10.7</td></tr></tbody></table></div>
+<p><strong>数据规模和多样性贡献最大，整理次之。</strong> 单术式的 Cholec80 预训练（F1 46.9）甚至不如 ImageNet（53.0），说明术式多样性比领域内数据更重要。</p>
+<p>增广在阶段识别上只有 +1.0，小于五折交叉验证的标准差 2.6，是否显著无法判断。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li>没有同一方法、同一骨干在 GenSurgery 或 SurgeNetXL 上预训练的对照，所以不能说 LEMON 优于这两个数据集。</li><li>未整理版本的帧数没有对齐，整理收益里混有数据量变化。</li><li>下游几乎都是胆囊切除和子宫切除，其余 30 多个术式没有帧级验证。</li><li>视频下架率论文未说明，长期可得的规模无法预估。</li><li>ViT-L 是否单独调参论文未说明，ConvNeXt 的 10.7 点优势可能部分来自调参。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现与比较前要核对什么</h3><ul><li>优先申请 LMDB 版本；只用 YouTube 链接重下，得到的视频会少于 4194 个。</li><li>引用阶段识别结果时同时写准确率和 Jaccard。</li><li>比较基础模型时先看 MAE 和 VideoMAEv2 两行，它们与 LemonFM 用同一份数据。</li><li>分割表中四个已有基础模型的数字取自原论文，不在统一协议下。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>网络手术视频必须先去除字幕、片头和界面区域，清洗带来 +4.5 F1</div><div>LemonFM 的领先主要来自数据、判别式目标和 ConvNeXt 骨干的组合</div><div>数据本身的价值只有消融表前四行能单独证明</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>清洗流程每一步都有模型性能和人工投入数字，容易复用</li><li>下游验证同时有线性探测、全量微调、50% 标注和五折交叉验证</li><li>数据和模型以知识共享署名 4.0 协议公开</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>缺少同方法跨数据集的预训练对照</li><li>消融和基线都只有单次运行</li><li>清洗流程只报告精度，没有召回率</li><li>标签复核由作者本人完成</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>按帧数对齐后整理的收益还剩多少？</li><li>LemonFM 在胆囊切除以外术式上的帧级表现如何？</li><li>预训练若按术式平衡采样，低频术式的表征会不会更好？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 9fc30c1f</span><span class="s">7.6 分</span></div><p>第 1 轮原版流程笔记(自评)。证据链完整,整理流程、增广蒸馏与下游协议都有输入、操作、输出。D5=7:定位表有,但没有逐项说明与 SurgeNetXL 在同协议下的差异来源。D6=7:我的笔记缺少要避免的做法。D7=7:多张表以占位保留,图位置基本贴近正文。D8=7:部分术语首次出现未解释(Jaccard 口径、典型性)。D9=7:多数小节有开场问题,但数据与任务、深度分析各小节缺少过渡句。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 Insight Pass 补充知识点、细节问题与对中心论断的挑战</li><li>把论文未说明的内容统一写成 论文未说明 并说明影响(召回率、术式平衡采样、下架率、上传者分布)</li><li>补写 50% 标注版本在 AutoLaparo 准确率上与正文说法不符之处的影响</li><li>深度分析补充未对齐数据量与跨数据集同协议对照缺失的替代解释</li><li>各节结尾补过渡句,数字后补一句意义</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 f6bfcf93 · 文稿 d3a81a7e</span><span class="s">8.5 分</span></div><p>第 2 轮(自评)。Insight Pass 补出 6 处论文未说明的信息并写入局限,挑战轮指出数据贡献与骨干、目标函数未分离,深度分析和报告都已写明。修正了 50% 标注版本与正文说法不符之处。数字核对无未匹配项,推导值登记在 number_exceptions.json。剩余限制:Table 4/5/6/7/11/12 只能以占位加转录呈现;论文缺少同方法跨数据集对照,这一点无法在笔记中补足。D2=8:Figure 4 无可用裁图,增广池只能文字描述。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

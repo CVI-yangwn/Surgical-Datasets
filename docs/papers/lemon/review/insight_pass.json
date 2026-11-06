@@ -1,0 +1,37 @@
+{
+ "knowledge_points": [
+  {"term": "线性探测", "plain": "冻结预训练骨干，只训练一层线性分类头，用来直接衡量特征质量。", "where": "sec:experiments", "needed_for": "判断 Table 2 中的差距来自特征而非微调"},
+  {"term": "视频级 Jaccard", "plain": "每个视频内按阶段算交并比再平均，然后跨阶段平均，短阶段权重与长阶段相同。", "where": "sec:method-5", "needed_for": "解释为什么 Jaccard 差距远大于准确率差距"},
+  {"term": "DINO 自蒸馏", "plain": "学生网络拟合由自身指数滑动平均得到的教师网络在不同增广视图上的输出分布。", "where": "sec:method", "needed_for": "理解增广视图 W_i 加在哪里"},
+  {"term": "增广池与 3 倍阈值", "plain": "同术式跨视频近邻只有在距离小于相邻帧距离 3 倍时才作为正样本，不够时用相邻帧补齐。", "where": "sec:related-work", "needed_for": "判断跨病人正样本是否可能语义错配"},
+  {"term": "故事板", "plain": "把一个视频的 16 个关键帧拼成 4×4 单张图，便于快速判断视频是否以手术画面为主。", "where": "sec:related-work", "needed_for": "理解第一阶段整理的成本为何很低"},
+  {"term": "典型性", "plain": "一帧与其 20 个近邻平均余弦距离的倒数，越像多数帧权重越大。", "where": "sec:method-2", "needed_for": "理解 LemonFM-Vid 为何能压低离群帧"},
+  {"term": "10 秒宽松边界", "plain": "阶段切换前后 10 秒内的错误不计，Cholec80 与 M2CAI16 的全量微调结果按此计算。", "where": "sec:method", "needed_for": "比较与专科模型数字时口径是否一致"}
+ ],
+ "detail_questions": [
+  {"question": "整理流程的召回率是多少，误删了多少合格视频？", "answer": "只报告视频级 100% 与帧级 >99.9% 的精度，没有召回率。", "evidence": ["sec:supplementary-material"], "status": "not_stated"},
+  {"question": "未整理版本与整理版本的帧数是否对齐？", "answer": "消融只说未整理版本是原始 YouTube 手术视频，没有给出帧数，也没有对齐。", "evidence": ["sec:dataset-2"], "status": "not_stated"},
+  {"question": "预训练是否按术式做平衡采样？", "answer": "只说按 1 fps 从 4194 个视频抽帧，没有提到平衡采样，而术式帧数从不到 1 万到 25 万以上。", "evidence": ["sec:method", "sec:supplementary-material"], "status": "not_stated"},
+  {"question": "YouTube 视频下架率是多少？", "answer": "只说下架视频会自动从集合中移除，没有给出比例。", "evidence": ["sec:model-2", "sec:method"], "status": "not_stated"},
+  {"question": "50% 标注版本是否在全部列上超过其他基础模型？", "answer": "AutoLaparo 准确率 84.9 略低于 SurgeNetXL 的 85.0，其余列都更高；正文说法与表格有一处不符。", "evidence": ["sec:method-2", "sec:dataset-2"], "status": "resolved"},
+  {"question": "基线是否在同一协议下重新训练？", "answer": "作者说有官方结果时直接引用，否则用统一协议；分割表中四个基础模型都标为引用原论文。", "evidence": ["sec:experiments", "sec:method-3"], "status": "resolved"},
+  {"question": "标签复核者是否独立于作者？", "answer": "500 个视频的一致性复核由两位作者完成，Kappa 0.97。", "evidence": ["sec:supplementary-material"], "status": "resolved"},
+  {"question": "各术式中机器人与非机器人视频比例如何？", "answer": "论文只给术式帧数分布，没有给手术类型比例。", "evidence": ["sec:supplementary-material"], "status": "not_stated"},
+  {"question": "上传者的地域与机构分布如何？", "answer": "只说目标是医疗机构和外科医生上传的视频，没有统计。", "evidence": ["sec:method"], "status": "not_stated"},
+  {"question": "阈值实验为何不用最终骨干？", "answer": "作者为节省计算用 ConvNeXt-S，三档阈值差距在 1 个点以内。", "evidence": ["sec:model"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "LEMON 数据是 LemonFM 领先的主要原因", "alternative": "领先主要来自判别式目标和 ConvNeXt-L 骨干；同在 LEMON 上预训练的 MAE 与 VideoMAEv2 远落后。", "separating_evidence": "同一方法和骨干分别在 GenSurgery、SurgeNetXL 与 LEMON 上预训练后的下游对比。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "整理流程带来 +4.5 F1", "alternative": "收益来自数据量或术式分布的变化，而非去除伪特征。", "separating_evidence": "按帧数和术式分布对齐的未整理对照。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "增广蒸馏优于原始 DINO", "alternative": "阶段识别上 +1.0 F1 可能在种子波动范围内；五折标准差为 2.6。", "separating_evidence": "多种子或多折下两种方法的均值与方差。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "ConvNeXt 优于 ViT 是因为保留局部细节", "alternative": "ViT-L 的超参数沿用卷积网络设置，未针对 ViT 调优。", "separating_evidence": "为 ViT 单独调参后的分割结果。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在关键结果中写明 50% 标注版本在 AutoLaparo 准确率上低于 SurgeNetXL，与正文说法不符",
+  "在局限中把召回率、帧数对齐、平衡采样、下架率、手术类型比例、上传者分布写成 论文未说明 并说明影响",
+  "在深度分析中加入同方法跨数据集对照缺失的替代解释，并标出这是判断数据集价值最直接的实验",
+  "在增广蒸馏的边界中把 +1.0 F1 与五折标准差 2.6 对照",
+  "在适用边界中补充 ViT 未单独调参这一替代解释",
+  "在下游评测协议中说明 10 秒宽松边界只用于 Cholec80 与 M2CAI16"
+ ]
+}

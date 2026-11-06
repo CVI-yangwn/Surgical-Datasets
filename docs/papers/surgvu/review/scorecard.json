@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "256e8ee56e7295de3186acb6ddd47e0293ef2d68d5875e42d17f19934c52250e",
+      "note_snapshot": "review_rounds/round1_Surgical_Visual_Understanding_SurgVU_Dataset.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 7,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮原版流程笔记（自评）。论文本身没有实验，证据链靠图 3 到图 5 和 csv 格式说明支撑。D2=7：构建链路有四步，但步骤标签的产生方式只能写论文未说明。D3=7：图 3、图 4 的读数是从图上估的，没有标明是估读；规模矛盾的换算没有给出算式。D5=7：定位表的其他数据集规模来自外部知识，没有说明依据。D6=7：复用建议有，但没有说明 case part 与 case time 如何拼成全局时间。D7=7：表 1 占位与转述放在同一小节，图 6 放在数据节而计划放在深度分析。D9=7：方法主线和关键结果末尾缺过渡。H3 未做数字核对。",
+      "fixes": [
+        "对图 3、图 4 的估读数字标注为估读并写入数字例外",
+        "规模矛盾表补上换算算式",
+        "定位表注明外部数据集规模的来源，或删去论文未给出的数字",
+        "方法主线、关键结果末尾补过渡句",
+        "根据 Insight Pass 补充界面泄漏、包级标签和划分泄漏的细节问题"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "e0bd7bd2daf4e177e2df4d4b22e58fd37ba28276a049f6957c36479c2943c378",
+      "note_snapshot": "review_rounds/round2_Surgical_Visual_Understanding_SurgVU_Dataset.md",
+      "report_sha256": "a9871ec64ff57a7907919da8d8197a525dc1887c88cd3825c7626fbfb11f5944",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮（自评）。Insight Pass 三轮完成，6 条修订全部写入笔记与报告；数字核对无未匹配项，图 3、图 4 的估读值和派生换算列入数字例外。不可修复的限制：论文本身没有划分、指标和基线，关键结果只能整理分布图与规模矛盾，D1、D3 因此停在 8；定位表中其他数据集的规模来自其原论文，SurgVU 论文未给对比表；图上数字为估读，精度有限。",
+      "fixes": []
+    }
+  ]
+}

@@ -49,15 +49,23 @@ CATALOG = [
         {'name': 'SAR-RARP50', 'year': 2023, 'paper': 'https://arxiv.org/abs/2401.00496', 'data': 'https://rdr.ucl.ac.uk/projects/SARRARP50_Segmentation_of_surgical_instrumentation_and_Action_Recognition_on_Robot-Assisted_Radical_Prostatectomy_Challenge/191091', 'task': '动作识别 / 器械分割', 'size': '50 段缝合视频', 'source': '前列腺根治术', 'slug': 'sar-rarp50', 'note': 'SAR_RARP50'},
         {'name': 'GraSP', 'year': 2024, 'paper': 'https://arxiv.org/abs/2401.11174', 'data': '', 'task': '整体场景理解（含分割）', 'size': '', 'source': '前列腺根治术', 'slug': 'grasp', 'note': 'Pixel_Wise'},
         {'name': 'SurgToolLoc / SurgVU', 'year': 2023, 'paper': 'https://arxiv.org/abs/2305.07152', 'data': '', 'task': '器械定位', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': 'surgtoolloc', 'note': 'Intuitive'},
+        {'name': 'SurgVU', 'year': 2025, 'paper': 'https://arxiv.org/abs/2501.09209', 'data': 'https://storage.googleapis.com/isi-surgvu/surgvu24_videos_only.zip', 'task': '器械识别与弱监督检测 / 步骤识别 / 视觉问答', 'size': '840+ 小时（280 个片段）', 'source': '达芬奇培训录像（猪模型）', 'slug': 'surgvu', 'note': 'Surgical_Visual_Understanding'},
     ]),
     ('multimodal', '💬 多模态与问答', 'Multimodal', [
         {'name': 'Surgical-VQA', 'year': 2022, 'paper': 'https://arxiv.org/abs/2206.11053', 'data': '', 'task': '手术场景视觉问答', 'size': '', 'source': 'EndoVis 2018 与 Cholec80', 'slug': 'surgical-vqa', 'note': 'Surgical_VQA'},
         {'name': 'SVL（SurgVLP）', 'year': 2023, 'paper': 'https://arxiv.org/abs/2307.15220', 'data': 'https://github.com/CAMMA-public/SurgVLP', 'task': '手术视频-语言预训练', 'size': '', 'source': '手术讲解视频', 'slug': 'svl', 'note': 'Learning_Multi'},
         {'name': 'SurgBench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2506.07603', 'data': '', 'task': '手术视频基础模型预训练与多任务评测', 'size': '5300 万帧（22 种术式）', 'source': '16 个来源整合', 'slug': 'surgbench', 'note': 'SurgBench'},
+        {'name': 'SurgAtlas', 'year': 2026, 'paper': 'https://arxiv.org/abs/2606.25905', 'data': 'https://huggingface.co/datasets/filbel/SurgAtlas', 'task': '手术视频-语言预训练与推理问答', 'size': '15,291 个视频（2,391 小时）', 'source': 'YouTube', 'slug': 'surgatlas', 'note': 'SurgAtlas'},
+        {'name': 'LEMON（Surg-3M）', 'year': 2025, 'paper': 'https://arxiv.org/abs/2503.19740', 'data': 'https://github.com/visurg-ai/LEMON', 'task': '手术视频自监督预训练 / 术式分类', 'size': '4K+ 视频（938 小时）', 'source': 'YouTube', 'slug': 'lemon', 'note': 'LEMON'},
+    ]),
+    ('or', '🏥 手术室', 'Operating room', [
+        {'name': 'EgoExOR', 'year': 2025, 'paper': 'https://arxiv.org/abs/2505.24287', 'data': 'https://github.com/ardamamur/EgoExOR', 'task': '手术室场景图生成（第一人称 + 外部视角）', 'size': '94 分钟（84,553 帧）', 'source': '模拟脊柱手术', 'slug': 'egoexor', 'note': 'EgoExOR'},
     ]),
     ('notyet', '🕒 尚未公开', 'Not yet', [
         {'name': 'OphCLIP', 'year': 2025, 'paper': 'https://arxiv.org/abs/2411.15421', 'data': '', 'task': '图文对齐', 'size': '375K 图文对', 'source': 'YouTube', 'slug': 'ophclip', 'note': 'OphCLIP', 'tag': '眼科'},
         {'name': 'SurgPub-Video', 'year': 2025, 'paper': 'https://arxiv.org/abs/2508.10054', 'data': '', 'task': '手术视频视觉问答', 'size': '3000 多个视频', 'source': '医学期刊附带视频', 'slug': 'surgpub-video', 'note': 'SurgPub_Video', 'tag': '多模态'},
+        {'name': 'NeuroABench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2512.06921', 'data': '', 'task': '神经外科解剖识别（多模态大模型评测）', 'size': '9 小时视频（1079 道题）', 'source': 'Neurosurgical Atlas', 'slug': 'neuroabench', 'note': 'NeuroABench', 'tag': '神经外科'},
+        {'name': 'RoboSurg-VQA', 'year': 2026, 'paper': 'https://arxiv.org/abs/2605.23068', 'data': '', 'task': '分割感知的手术视觉问答', 'size': '11,480 帧', 'source': 'EndoVis 2017 与 2018', 'slug': 'robosurg-vqa', 'note': 'RoboSurg_VQA', 'tag': '机器人手术'},
     ]),
 ]
 

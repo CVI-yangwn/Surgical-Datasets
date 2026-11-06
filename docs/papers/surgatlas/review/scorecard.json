@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "0263de49203fec35171aa2a38b1aaac720afda9c515401ffe11b8744e7b587d5",
+      "note_snapshot": "review_rounds/round1_SurgAtlas_A_Large_Scale_Surgical_Video_Language_Dataset_with_2391_Hours_of_Open_and_Minimally_Invasive_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.8,
+      "verdict": "第一轮笔记结构完整，证据链、机制和关键数字齐全，边界与局限写得较充分。不足：尚未做数字核对（H3 unknown）；部分派生数字（平均时长、约 81% 通过率、19 个点提升）未登记来源；方法主线与深度分析开头缺少本节要回答的问题；可复用要点偏短，缺少要避免的做法；若干未说明项写成论文未说明但未全部集中；Insight Pass 尚未做，核心论断的挑战未逐条写入。",
+      "fixes": [
+        "做 Insight Pass 三轮并把挑战结论写回笔记",
+        "方法主线和深度分析开头补上本节回答的问题与过渡句",
+        "用 lint_report --mode note 核对全部数字，派生数字登记 number_exceptions",
+        "我的笔记补充要避免的做法与检查项",
+        "核对正文 47.8 与表 43.8 等不一致处的表述",
+        "撰写 reading_report.md 并通过 lint_report"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "04bea48237a1eea11ae1219186283b43b99bb7ac8e11d8e008d521d57c32cfc6",
+      "note_snapshot": "review_rounds/round2_SurgAtlas_A_Large_Scale_Surgical_Video_Language_Dataset_with_2391_Hours_of_Open_and_Minimally_Invasive_Surgery.md",
+      "report_sha256": "9dd2cfe468ac47e2bf3d65f1e9badac0828cadb8044181d800a201f331d52aa3",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮完成 Insight Pass 三轮并把四条挑战结论写回笔记与报告；数字核对无未匹配项，派生数字登记在 number_exceptions.json。各节开头补了本节回答的问题和过渡句，未说明项统一写为论文未说明。不可修复的限制：论文未公开判分模型、各步大模型与阈值，Table 2、Table 3、Table 4 裁图不可用，只能保留占位并用表格重写数值；D2 受限于论文对问答生成参数的描述不足。分数为模型自评。",
+      "fixes": []
+    }
+  ]
+}

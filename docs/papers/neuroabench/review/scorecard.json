@@ -1,0 +1,73 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "c3fcb8fa765f664909392a376ccec1d4220293d4a402303fb554952bd84655b8",
+      "note_snapshot": "review_rounds/round1_NeuroABench_A_Multimodal_Evaluation_Benchmark_for_Neurosurgical_Anatomy_Identification.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 7,
+        "D2": 7,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 6.9,
+      "verdict": "第 1 轮原版流程笔记(自评)。表 I、表 II、表 III 与构建流程都在。D1=7:深度分析对标注偏置只有推断,没有回到表 II 的 Gemini 排名做对照。D2=7:医生审核删去比例、抽帧总数与 1079 的关系没有交代。D4=7:局限列了未说明项,但多数没写对结论的影响。D5=7:定位表缺 EndoBench 等手术多模态基准的具体比较。D6=6:我的笔记偏短,没有不要做的事项。D7=7:Fig 1 放在深度分析而非题型处。D9=5:研究问题没有核心观点速览,各节开头未点出要回答的问题,小节结尾无过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头写本节要回答的问题,数字后补一句意义,小节末尾加过渡",
+        "核对 +7.52、-10.50、40.87 precision 的口径并写清",
+        "说明子集上 Gemini 36% 与全集 40.87% 的差异含义",
+        "把审核删除比例、抽帧总数、E 答案占比写成 论文未说明 并说明影响",
+        "深度分析加入随机基线 F1=1.68 的口径问题与五选一题型的上限分析",
+        "我的笔记补上不要做的事项",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "9b60cf4607345958811ab77417f908f5ec6fc6df15bbbd138cc1910efe7d5367",
+      "note_snapshot": "review_rounds/round2_NeuroABench_A_Multimodal_Evaluation_Benchmark_for_Neurosurgical_Anatomy_Identification.md",
+      "report_sha256": "d41a0c0cfa4e326bf3a5bf4a4aeed3c328b8ad52b5a684d7e7889f8c0cc4078e",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.1,
+      "verdict": "第 2 轮(自评)。按 Insight Pass 补了核心观点速览、各节开场问题与过渡、40.87 是准确率而非 precision、+7.52 与 -10.50 的推算、约 1.5 个点的标准误、随机基线 F1=1.68 的口径矛盾、标注模型与被测模型重叠、格式失败与基座差异两种替代解释,以及子集题数、审核删除量、E 题占比、提示词等 论文未说明 项及其影响。数字核对无未匹配项,推导值登记在 number_exceptions.json。D5=7:论文只与表 I 的四个放射影像为主的基准比较,笔记无法从论文中给出与内镜、腹腔镜术中基准的定量对比,这是论文本身的限制。论文篇幅短,模型与人类对比的细节缺失无法由笔记补全。",
+      "fixes": []
+    }
+  ]
+}

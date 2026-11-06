@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>RoboSurg-VQA: A Multimodal Benchmark for Surgical Segmentation-Aware Visual Question Answering</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>让视觉语言模型替 EndoVis17/18 的 11,480 帧回答九个固定问题,再抽检 15% 帧把关</h1>
+<div class="sub">RoboSurg-VQA: A Multimodal Benchmark for Surgical Segmentation-Aware Visual Question Answering</div>
+<div class="meta">Chengyi Zhang、Zi Ye、Ziyang Wang,Swansea University、Maynooth University、Aston University | arXiv 2605.23068,v1,预印本,2026-05-21</div>
+<div><span class="chip">基准与数据集论文</span><span class="tag">手术视觉问答</span><span class="tag">机器人手术</span><span class="tag">视觉语言模型</span><span class="tag">闭集评测</span><span class="tag">EndoVis</span></div>
+<div class="one">RoboSurg-VQA 把两个猪组织机器人手术分割数据集的 11,480 帧配上九个闭集问题,答案由视觉语言模型在 JSON 约束下生成并抽检 15% 帧;论文报告格式质检、标签分布、与 GPT-4o-mini 参照的跨模型一致性和多数类基线,没有任何模型在人工真值上的成绩。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.4</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2605.23068" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/robosurg-vqa/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">8 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>分割排行榜只回答“像素属于哪一类”,医生在术中更常问的是语境、可见性和伪影。</strong> 内镜画面视野受限,还常有高光、烟雾、遮挡,EndoVis 2017/2018 等分割挑战赛测不到这些问题。</p>
+<p>已有手术问答工作有 Surgical-VQA、Surgical-VQLA,以及 SurgicalGPT、EndoChat 等对话模型。作者认为它们来源和标签空间有限,或以对话为目标,没有对齐到画质、伪影、遮挡这类与分割相关的评测。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口:没有一个标准化、闭集、面向画质伪影可见性的手术问答基准</span><span class="i">思路:把公开分割数据里已有的监督改造成问答</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的做法是让视觉语言模型在严格约束下替分割帧回答九个固定问题,再用规则和人工抽检把关。</p>
+<p><strong>它报告的结果全部关于标签本身:</strong>格式是否合规、人工改了多少、不同模型答得像不像、先验有多强。没有任何模型在人工真值上的成绩。</p>
+<p><strong>边界有三条:</strong>标签主要由模型生成;来源只有两个猪组织机器人数据集;烟雾和模态两类题在当前数据上几乎是常数。</p><div class="strip d"><span class="t">数据</span><span class="i">11,480 帧,8,745 训练 / 2,735 测试,每帧 9 问</span><span class="i">15% 帧人工抽检,其中 4.8% 修正、8.7% 重询、2.3% 丢弃</span><span class="i">四个模型与参照的一致性 Macro-F1 在 0.494 到 0.599 之间</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><figure class="fig"><img src="images/page_004_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。8 个公开手术分割来源。当前版本实际只用了前两个。</figcaption></figure>
+<p>Table 1 列出 8 个候选来源,但实例化的基准只用了 EndoVis17 和 EndoVis18。两者都是猪组织上的机器人手术,掩码只有器械。</p>
+<p>数据分布在三个站点:2,400、3,232、5,848 帧。站点与来源的对应论文未说明;表中两个来源约 3.0k 与 5.7k,合计少于 11,480,差额从何而来论文也未说明。<strong>所以复现前必须等清单发布,才能确认样本构成。</strong></p></div><div class="card" id="s4"><h3><span class="num">4</span>九问问什么</h3><p>九个问题都有固定答案空间:语境 3 类、解剖 4 类、模态 4 类、伪影 3 位多属性、画质 5 类、高光、对比度、中心遮挡各 3 类(含 Unknown)、烟雾区域 5 类空间。语境和解剖不允许 Unknown,看不清时模型也必须选一个。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。各问题的答案分布。图例与正文百分比的类别对应不一致,以正文为准。</figcaption></figure>
+<p><strong>标签严重偏斜:</strong>模态题 98.82% 是机器人摄像头,烟雾为否占 99.72%,语境题 83.22% 是其他腹部手术。EndoVis17 本是猪肾切除数据,语境却八成以上被判成其他腹部手术,说明语境标签来自模型看图判断。</p><div class="strip h"><span class="t">亮点</span><span class="i">掩码只含器械,解剖和语境题与掩码无关</span><span class="i">偏斜让准确率失去区分度</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>标签怎样生成和把关</h3><figure class="fig"><img src="images/page_003_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。构建流程:数据准备、模型辅助标注与人工审核、质检与发布。</figcaption></figure>
+<p>标注模型同时看 RGB 帧和伪彩器械掩码,以温度 0 只输出 JSON,每问给取值和置信度。语境和解剖答案经别名映射与置信度截断;规则“烟雾为否则烟雾区域为无”强制跨题一致。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 4。标注提示与三组示例输出。</figcaption></figure>
+<p>之后按视频分层抽 15% 帧,由三名独立审核者核对,选择修正、重询或丢弃。<strong>主标注模型是哪一个,论文未说明</strong>,这决定了后面跨模型比较的含义。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>格式上全部合规:0 解析错误、0 缺失、0 越界,一致性规则 0 违规。<strong>这只证明约束生效,不证明答案正确。</strong></p>
+<p>抽检中合计约 15.8% 的帧被动过。我的推断:若同样比例适用于其余 85% 未抽检帧,大约每六帧就有一帧标签需要复查。</p>
+<figure class="fig"><img src="images/page_008_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。以 GPT-4o-mini 为参照的跨模型一致性。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>模型</th><th>平均 Macro-F1</th><th>Unknown 率</th></tr></thead><tbody><tr><td>Gemini 2.5 Flash-Lite</td><td>0.599</td><td>0.0</td></tr><tr><td>Claude Haiku 4.5</td><td>0.583</td><td>0.0</td></tr><tr><td>GPT-4.1-nano</td><td>0.569</td><td>5.8</td></tr><tr><td>Qwen-VL-Plus</td><td>0.494</td><td>0.0</td></tr></tbody></table></div>
+<p>多数类基线在测试集上准确率很高(模态 0.9810、烟雾区域 1.0000),但语境和解剖的 Macro-F1 只有约 0.30 和 0.20。<strong>所以只看准确率会严重高估模型,作者因此把 Macro-F1 定为主指标。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">模态题多数类准确率 0.9810,烟雾区域 1.0000</span><span class="i">语境题 Macro-F1 约 0.30,解剖题约 0.20</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li>没有人工真值,分数高可能只是像标注模型。表 4 明确是一致性,不是准确率。</li><li>没有有掩码与无掩码的对照,分割感知是否有用无法检验;实际与掩码相关的主要是中心遮挡题。</li><li>烟雾区域在测试集上恒为无,这一题在总分中无法区分模型。</li><li>三名审核者之间的一致性论文未说明,人工修正的可靠度无法量化。</li></ul></div><div class="card" id="s8"><h3><span class="num">8</span>使用前要核对什么</h3><p>数据清单写明录用后发布,具体时间和许可论文未说明;代码地址为 github.com/ziyangwang007/Robosurg-VQA。若要拿它评模型,建议先自建一个纯人工标注的测试子集,并把模态、烟雾这类近常数题单列。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>闭集问题加 JSON 约束是把分割数据转成可评分问答的低成本做法</div><div>当前分数衡量的是与模型标签的一致性</div><div>报 Macro-F1,近常数题单列</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>问题体系和答案空间定义清楚,打分可复现</li><li>标注约束、一致性规则和抽检比例交代具体</li><li>用多数类基线主动揭示准确率陷阱</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>标签主要由模型生成,没有人工真值评测</li><li>只用两个猪组织机器人数据集,分布严重偏斜</li><li>主标注模型身份未说明,图 3 图例与正文不一致</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>主标注模型是否就是 GPT-4o-mini,它在人工修正子集上准确率多少?</li><li>猪组织帧上的语境和解剖标签有无外科医生核验?</li><li>加入 Table 1 其余来源后偏斜能否缓解?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 529bb59e</span><span class="s">7.4 分</span></div><p>第一轮笔记覆盖来源、九问、标注流程、质检、跨模型一致性与多数类基线,并指出无人工真值、仅用两个猪组织数据集。D2 机制流程的输入输出清楚但缺少每步对结果的映射;D5 对已有工作的定位只来自作者陈述;D9 各节开头缺张力句,数字后缺少“所以”,研究问题末尾没有核心观点速览;H3 尚未跑数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入 ### 核心观点速览</li><li>各节开头补一句该节要回答的问题,并在节末加过渡</li><li>为抽检比例、跨模型一致性等数字补上含义说明</li><li>把 Insight Pass 的未说明项统一写成 论文未说明 并说明限制</li><li>核对 15.8% 等推导数字,登记到数字例外文件</li><li>补充 Q9 在测试集为常数对总分的影响</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 eccb05f9 · 文稿 f1be6b72</span><span class="s">8.4 分</span></div><p>第二轮按 Insight Pass 补入核心观点速览、各节开头的问题与节末过渡、数字后的含义,把主标注模型身份、站点对应、审核者一致性、数据发布时间、有无掩码对照写成论文未说明并说明限制;笔记与报告数字核对无未匹配项,15.8% 与 85 为登记的推导值。D5 仍为 7:与 Surgical-VQA 等工作的定位只能依据作者陈述,论文没有在相同帧上做问题集重叠或难度比较,这是论文本身的限制。分数为模型自评。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

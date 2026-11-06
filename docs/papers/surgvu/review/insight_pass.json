@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "器械存在标签", "plain": "只说明某段时间里某个机械臂装着某件器械，不给位置，也不保证可见。", "where": "sec:dataset", "needed_for": "理解为什么训练集只能支撑弱监督检测"},
+  {"term": "case part 与 case time", "plain": "一次培训被切成多个片段，标签用“第几个片段加片段内时间”记录区间起止。", "where": "sec:dataset", "needed_for": "把 csv 区间转成逐帧标签"},
+  {"term": "夹钳关节（clevis）", "plain": "夹持或切割部件根部的旋转腕关节，验证集的框以它为中心。", "where": "sec:dataset", "needed_for": "对齐检测框定义"},
+  {"term": "荧光成像", "plain": "注射显影剂后用近红外激发，画面整体呈绿色。", "where": "sec:dataset", "needed_for": "理解数据中存在单独的视觉域"},
+  {"term": "多示例学习", "plain": "只知道一组样本里至少有一个正例，不知道是哪一个。", "where": "sec:dataset", "needed_for": "设计适合装卸区间标签的训练目标"},
+  {"term": "猪模型培训", "plain": "在活体或离体猪组织上做的标准化训练，组织无病理变化。", "where": "sec:dataset", "needed_for": "判断外推到真实患者的边界"},
+  {"term": "SurgVU25 第 2 类", "plain": "2025 年挑战赛的手术视觉问答赛道。", "where": "sec:dataset", "needed_for": "理解问答样例集的用途"}
+ ],
+ "detail_questions": [
+  {"question": "840 小时与约 1800 万帧为何对不上？", "answer": "60 帧每秒下 840 小时约 1.8 亿帧，1800 万帧只对应约 83 小时。论文没有解释口径。", "evidence": ["sec:dataset", "sec:discussion"], "status": "not_stated"},
+  {"question": "图 3 的器械出现时长合计是多少？", "answer": "按图估读约 18 万秒，约 51 小时，远小于 840 小时；即使器械存在区间应覆盖大部分视频。差距原因论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "存在标签的噪声比例是多少？", "answer": "论文只说标签有噪声，没有给比例。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "步骤标签由多少专家标注、一致性如何？", "answer": "只写临床专家标注，人数、规则和一致性都没有。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "matched description 是逐片段撰写还是按步骤共享？", "answer": "列名和示例都指向按步骤名匹配的标准描述，论文没有明说。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "问答评测怎样打分？", "answer": "每题 5 个参考答案，打分方法留给挑战赛，本文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "验证集来自哪些培训，是否与训练视频重叠？", "answer": "只说来自配套挑战赛的工具检测问题，片段数和来源论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "训练视频的界面区域是否遮挡？", "answer": "只说验证集样例的界面被模糊，训练视频是否处理论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "吸引冲洗器为何出现在框标注规则里？", "answer": "它不在 12 种器械列表中，论文没有解释。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "是否给出官方划分与基线？", "answer": "都没有，讨论部分只列潜在方向。", "evidence": ["sec:dataset", "sec:discussion"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "SurgVU 是最大的公开手术视频数据集", "alternative": "按带标签的有效时长或帧数计，它可能只有约 83 到 173 小时，与其他数据集差距没有宣称那么大。", "separating_evidence": "逐片段的时长、帧数和标签覆盖统计", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "系统装卸记录可低成本给出可用的存在标签", "alternative": "标签可能大量包含不可见时段，噪声高到只适合预训练而不适合直接监督。", "separating_evidence": "在验证集帧上对比存在标签与人工框的可见性", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "数据集足够通用，可支撑分割、跟踪、技能评估和视频语言研究", "alternative": "除弱监督检测和步骤识别外，其他任务缺少对应标签，只是潜在用途。", "separating_evidence": "任一任务的基线实验或对应标注", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "关键结果的规模矛盾表补充图 3 器械时长合计约 51 小时这一行并给出换算算式",
+  "图 3、图 4 的读数标注为按图估读",
+  "深度分析补充划分泄漏风险：同一次培训的片段应同属训练或测试",
+  "定位表注明其他数据集规模来自各自原论文",
+  "方法主线与关键结果末尾补过渡句",
+  "局限补充存在标签时长合计与总时长差距的原因论文未说明"
+ ]
+}

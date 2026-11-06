@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "开放手术与微创手术", "plain": "开放手术直接切开暴露术野，微创手术经腔镜或机器人在小切口内操作，画面差异很大。", "where": "sec:introduction", "needed_for": "跨术式消融与分区评测"},
+  {"term": "三档路由", "plain": "按视频有无旁白、有无屏幕文字，把视频送入不同的标注分支。", "where": "sec:evaluation", "needed_for": "理解四层标注覆盖不均"},
+  {"term": "Whisper 词级时间戳", "plain": "语音识别模型给出每个词的起止时间，可用来重组完整句子。", "where": "sec:evaluation", "needed_for": "片段字幕的时间对齐"},
+  {"term": "知识库扩展与回退", "plain": "屏幕短标签对上标准步骤就换成长描述，对不上就保留原标签。", "where": "sec:supplementary-material", "needed_for": "判断步骤描述的信息量"},
+  {"term": "规划-生成-校验", "plain": "三个大模型依次选类别、写问答、按五维打分筛选。", "where": "sec:evaluation", "needed_for": "问答质量与同源偏差"},
+  {"term": "LLM 判分准确率", "plain": "用大模型判断开放式答案是否正确，再算准确率。", "where": "sec:results", "needed_for": "专家子集结果的可信度"},
+  {"term": "宏 F1", "plain": "每个类别算 F1 再平均，短阶段和长阶段权重相同。", "where": "sec:results", "needed_for": "Table 1 的读法"},
+  {"term": "EgoSurgery-Phase", "plain": "头戴相机拍的开放手术阶段数据集，画面含整个手术室。", "where": "sec:ablation", "needed_for": "域外迁移结论"}
+ ],
+ "detail_questions": [
+  {"question": "通过筛选的比例是多少，三个过滤各剔除多少", "answer": "18,855 留下 15,291；各过滤的剔除数未给。", "evidence": ["sec:related-work", "sec:evaluation"], "status": "partly"},
+  {"question": "杰卡德阈值、相似度阈值、问答接受阈值取多少", "answer": "论文只给符号，未给取值。", "evidence": ["sec:related-work", "sec:evaluation"], "status": "not_stated"},
+  {"question": "精修、规划、生成、校验用的是哪个大模型", "answer": "只说明知识库由 gpt-5.4-mini 生成，其余未说明。", "evidence": ["sec:supplementary-material"], "status": "partly"},
+  {"question": "LLM 判分用哪个模型、与人工是否一致", "answer": "论文未说明。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "字幕、步骤、摘要有没有人工准确率", "answer": "没有，人工审核只针对问答。", "evidence": ["sec:evaluation"], "status": "not_stated"},
+  {"question": "专家子集 97.6% 是全量问答的错误率吗", "answer": "不是，审核对象是已通过自动校验的候选。", "evidence": ["sec:evaluation"], "status": "resolved"},
+  {"question": "标准基准成绩里公开转换数据贡献多少", "answer": "论文只在专家子集上比较两个变体，标准基准没有这一消融。", "evidence": ["sec:results", "sec:method"], "status": "not_stated"},
+  {"question": "底座在 EgoSurgery 上是 47.8 还是 43.8", "answer": "正文写 47.8，表 4 写 43.8，原因未说明。", "evidence": ["sec:ablation", "sec:model"], "status": "partly"},
+  {"question": "SurgAtlas-VLM 推理时输入多少帧", "answer": "只说明 GPT 与 Gemini 用 4 帧，自身未说明。", "evidence": ["sec:method-2"], "status": "not_stated"},
+  {"question": "发布的是视频文件还是 YouTube 编号，许可如何", "answer": "只给出 Hugging Face 地址，未说明。", "evidence": ["sec:abstract"], "status": "not_stated"},
+  {"question": "开放与微创训练子集规模是否对齐", "answer": "时长 739 对 1,653 小时，消融未对齐。", "evidence": ["sec:supplementary-material", "sec:ablation"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "在专家子集上超过通用大模型说明手术推理更强", "alternative": "问题与训练集同源，领先部分来自题型与措辞适应，且 LLM 判分可能偏向同风格答案。", "separating_evidence": "用非同源问答集或人工判分评测。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "SurgAtlas 语料让 8B 模型在标准基准上达到最优", "alternative": "这些基准的训练集已转换进指令数据，提升主要来自公开转换数据。", "separating_evidence": "去掉公开转换数据后在标准基准上的成绩。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "开放与微创视觉分布不同，需单列", "alternative": "迁移差可能部分源于两个子集规模不同。", "separating_evidence": "按时长或样本数对齐后重做消融。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "LLM 只纠错不编造，标注可靠", "alternative": "Tier 3 摘要和知识库扩展描述可能写出画面没有的内容。", "separating_evidence": "对字幕、步骤、摘要抽样做人工核对。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "深度分析新增同源与判分偏差的挑战结论，并标为未分离",
+  "关键结果在标准基准处写明公开转换数据贡献论文未说明",
+  "局限集中列出论文未说明的阈值、模型、判分、帧数与发布形式",
+  "数据与任务定义写明三个过滤的剔除数论文未说明",
+  "跨术式结论标为部分支持，并写明子集规模未对齐"
+ ]
+}

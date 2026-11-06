@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgAtlas: A Large-Scale Surgical Video-Language Dataset with 2,391 Hours of Open and Minimally Invasive Surgery</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>从 YouTube 收集 15,291 个开放与微创手术视频，自动生成四层文本标注，并首次给开放手术建立推理评测</h1>
+<div class="sub">SurgAtlas: A Large-Scale Surgical Video-Language Dataset with 2,391 Hours of Open and Minimally Invasive Surgery</div>
+<div class="meta">Filippos Bellos、Jason J. Corso 等，密歇根大学、罗切斯特大学、范德堡大学医学中心等 | arXiv 2606.25905 v2，预印本，2026</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术视频-语言</span><span class="tag">开放手术</span><span class="tag">视觉问答</span><span class="tag">大模型标注管线</span><span class="tag">跨术式迁移</span></div>
+<div class="one">SurgAtlas 从 YouTube 收集 15,291 个手术视频，按旁白、屏幕文字、元数据三档自动生成四层文本标注和 400K 条推理问答；微调后的 8B 模型在多个手术基准上有竞争力，开放与微创之间迁移很差，但标注质量和评测公平性只有部分证据。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2606.25905" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgatlas/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术视觉-语言模型缺的是原生的、带语言的手术视频。</strong> 已有的大规模系统多数靠把公开数据集的阶段、器械标签改写成对话，标签来自封闭词表，说不出一个动作为什么做。</p>
+<p>另一条路线从讲解视频的旁白里提取监督，但公开视频池只有两三千个，而且讲解者只讲教学要点，常规步骤很少说。</p>
+<p><strong>开放手术几乎缺席。</strong> 现有公开资源基本是腔镜或机器人画面；开放手术的 AVOS 只有 47 小时带标注，EgoSurgery 只有 20 个视频，都没有语言监督。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口一：监督来源窄，靠标签改写或讲解旁白</span><span class="i">缺口二：公开手术视频池小</span><span class="i">缺口三：没有带语言的开放手术数据</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是 SurgAtlas：从 YouTube 检索和高产频道收集 18,855 个候选，筛出 15,291 个视频、2,391 小时，开放 6,182 个、微创 9,109 个。</p>
+<p>每个视频按可用信号分档：有旁白的转写成字幕、步骤和摘要；有屏幕文字的规范成步骤描述；都没有的只用标题生成摘要。再从字幕生成 400K 条推理问答，并由两名住院医师审出一个 2,890 对的评测子集。</p>
+<p><strong>最有信息量的结果是跨术式消融。</strong> 只用微创训练的模型在开放分区上只有 29.1，在第一人称开放手术 EgoSurgery 上只有 24.8，比未微调的底座还低。</p>
+<p><strong>边界同样清楚：</strong> 字幕和摘要没有人工准确率，评测用大模型判分且问题与训练集同源，标准基准的领先没有排除公开转换数据的贡献。</p><div class="strip d"><span class="t">数据</span><span class="i">15,291 个视频，2,391 小时，18 个专科</span><span class="i">四层标注：300K 字幕、81K 步骤、12.2K 摘要、400K 问答</span><span class="i">专家子集：开放 1,462 对、微创 1,428 对</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>视频从哪里来</h3><p>收集分两条线：按标准术式词表检索，标题与术式按词元集合的杰卡德相似度匹配；以及挖掘大学外科、学会等高产频道。</p>
+<p>筛选有一个巧妙的信号：<strong>YouTube 会把真实术中画面标为年龄限制，作者把它当作正向信号。</strong> 之后用大模型读标题和描述排除纯讲座，最后由 17 名标注者人工核验并标出手术起止时间。</p>
+<figure class="fig"><img src="images/page_011_fig_figure_4_review_repair1.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。18 个专科的视频数与时长，按开放和微创分解。</figcaption></figure>
+<p>专科分布很不均衡：心胸、结直肠、普外、胃肠、神经外科五个专科占约 70%，眼科只有 95 个视频。三个过滤各剔除了多少视频，论文未说明。</p><div class="strip d"><span class="t">数据</span><span class="i">18,855 个候选，保留 15,291 个</span><span class="i">开放 739 小时，微创 1,653 小时</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>四层标注怎样做出来</h3><p><strong>核心思路是按信号分档，而不是把所有视频套进一个模板。</strong></p>
+<div class="tbl"><table><thead><tr><th>档</th><th>条件</th><th>视频数</th><th>产出</th></tr></thead><tbody><tr><td>Tier 1</td><td>有旁白</td><td>约 9,360</td><td>字幕、步骤、摘要、问答</td></tr><tr><td>Tier 2</td><td>有屏幕文字</td><td>约 4,460</td><td>步骤/阶段描述</td></tr><tr><td>Tier 3</td><td>仅元数据</td><td>约 2,778</td><td>摘要</td></tr></tbody></table></div>
+<p>旁白分支丢弃 Whisper 的原生分段，按词级时间戳重组完整句子，再由大模型精修、分组、摘要。屏幕文字分支先清洗、合并，再和大模型生成的标准步骤表对齐；<strong>对不上就保留原短语，这种回退占了 64.9%。</strong></p>
+<figure class="fig"><img src="images/page_004_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。七阶段构建管线：收集筛选、分档、抽取、裁剪、问答生成、专家验证、公开数据转换。</figcaption></figure>
+<p>问答由规划器、生成器、校验器三个大模型依次产生，校验器在依据性、时间对齐、可回答性、非平凡性、幻觉风险五维打分，拒绝 7%。各步所用的模型和阈值，论文未说明。</p><div class="strip h"><span class="t">亮点</span><span class="i">只有 Tier 1 的视频有问答</span><span class="i">除筛选与专家审核外，所有文本都由大模型生成或改写</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>训练与评测协议</h3><p>验证模型 SurgAtlas-VLM 基于 Qwen3-VL-8B：先三步字幕预训练，逐步解冻投影层、语言模型和视觉编码器；再用 SurgAtlas 问答加 18 个公开数据集的转换问答做指令微调。</p>
+<p>评测分三类：已有手术基准（阶段、动作、三元组、关键安全视野），基线数字引自原论文；专家子集和自动测试集，用大模型判分；跨术式消融，加 EgoSurgery 零样本。</p>
+<p><strong>判分模型与提示，以及 SurgAtlas-VLM 推理时的帧数，论文都未说明。</strong></p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>已有基准上，宏 F1 在 Cholec80 阶段为 68.2（SureonVLM 63.0），HeiChole 阶段 54.5（41.0），MultiBypass140 持平 40.0。</p>
+<figure class="fig"><img src="images/page_007_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。四个识别基准上的宏 F1。</figcaption></figure>
+<p>专家子集上，总体微创 42.9、开放 39.3，比最强通用模型高 2.5 和 1.7 个点，比未微调底座高约 19 个点。<strong>但操作推理落后 GPT-5 系列约 10 个点，微创分区的操作理由细类差距超过 20 个点。</strong></p>
+<div class="tbl"><table><thead><tr><th>模型</th><th>专家微创</th><th>专家开放</th><th>EgoSurgery</th></tr></thead><tbody><tr><td>Qwen3-VL-8B</td><td>24.0</td><td>19.9</td><td>43.8</td></tr><tr><td>GPT-5.1</td><td>40.4</td><td>37.0</td><td>55.9</td></tr><tr><td>仅微创</td><td>40.1</td><td>29.1</td><td>24.8</td></tr><tr><td>仅开放</td><td>32.2</td><td>38.9</td><td>62.5</td></tr><tr><td>合并</td><td>42.5</td><td>39.0</td><td>56.1</td></tr></tbody></table></div>
+<p><strong>单一术式训练在另一术式上掉约 10 个点，仅开放模型在第一人称手术室画面上最好。</strong> 这说明开放手术的视角、光照和人员信息可以迁移，腔镜画面不行。</p><div class="strip d"><span class="t">数据</span><span class="i">三元组 mAP 5.5，所有模型都在 2.4 到 5.5 之间</span><span class="i">Cholec80 准确率 66.9，低于 SurgVLM-72B 的 76.4</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li><strong>领先未必是能力。</strong> 专家子集的问题和训练集出自同一条生成管线，措辞和选项风格一致，判分也是大模型。格式适应与能力提升在论文里没有被分离。</li><li><strong>标准基准的领先未必来自新语料。</strong> 这些基准的训练集已转换进指令数据，论文没有去掉它们的消融。</li><li><strong>质量只有部分证据。</strong> 97.6% 是对已通过自动校验的 2,960 对的人工通过率；300K 字幕、81K 步骤、12.2K 摘要的准确率论文未说明。</li><li><strong>跨术式结论没有对齐规模。</strong> 开放 739 小时、微创 1,653 小时，消融未控制数据量。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">三个核心论断中只有跨术式结论有直接实验支持，且仍有规模混杂</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>相对已有路线新在哪里</h3><div class="tbl"><table><thead><tr><th>路线</th><th>代表</th><th>短板</th><th>SurgAtlas 的差异</th></tr></thead><tbody><tr><td>旁白中心</td><td>SurgLaVi、SUREON</td><td>依赖讲解视频</td><td>加入屏幕文字与元数据两档</td></tr><tr><td>标签改写</td><td>SurgVLM、SurgΣ</td><td>封闭词表，独立视频少</td><td>规模来自原生收集</td></tr><tr><td>纯视觉</td><td>LEMON</td><td>无语言</td><td>带四层语言标注</td></tr><tr><td>开放手术</td><td>AVOS、EgoSurgery</td><td>无语言，规模小</td><td>6,182 个开放视频与分区评测</td></tr></tbody></table></div>
+<p><strong>最独特的是开放手术部分和对应的分区评测。</strong></p></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>视频来自 YouTube，可能下架；发布内容是视频还是链接、许可如何，论文未说明。</li><li>阈值和各步大模型选型没有公开，管线本身难以独立复现。</li><li>正文与表 4 中底座在 EgoSurgery 上的分数不一致（47.8 对 43.8）。</li><li>用它评测时，应分开报告开放与微创，并补一个非同源的问答集。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>规模来自原生 YouTube 收集，开放手术 6,182 个视频是最独特的部分</div><div>四层标注几乎全由大模型生成，只有问答有人工抽检</div><div>开放与微创之间迁移很差，开放数据对手术室场景更有用</div><div>专家子集上的领先需要警惕同源与大模型判分的偏差</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>年龄限制信号、词级时间戳重组句子等收集技巧简单可复用</li><li>按信号分档，不丢弃无讲解的视频</li><li>专家子集按开放与微创分区，并有严格的双人一致通过标准</li><li>跨术式消融加域外零样本，证据方向一致</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>字幕、步骤、摘要没有人工准确率</li><li>评测依赖大模型判分，判分模型未公开</li><li>基线数字引自原论文，标准基准没有排除公开转换数据的消融</li><li>单次运行，无方差；关键阈值与模型选型未公开</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>大模型判分与人工判分的一致性如何</li><li>去掉公开转换数据后，标准基准成绩还剩多少</li><li>按时长对齐开放与微创子集后，跨术式差距是否仍在</li><li>视频下架后数据集如何保证可复现</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 0263de49</span><span class="s">7.8 分</span></div><p>第一轮笔记结构完整，证据链、机制和关键数字齐全，边界与局限写得较充分。不足：尚未做数字核对（H3 unknown）；部分派生数字（平均时长、约 81% 通过率、19 个点提升）未登记来源；方法主线与深度分析开头缺少本节要回答的问题；可复用要点偏短，缺少要避免的做法；若干未说明项写成论文未说明但未全部集中；Insight Pass 尚未做，核心论断的挑战未逐条写入。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>做 Insight Pass 三轮并把挑战结论写回笔记</li><li>方法主线和深度分析开头补上本节回答的问题与过渡句</li><li>用 lint_report --mode note 核对全部数字，派生数字登记 number_exceptions</li><li>我的笔记补充要避免的做法与检查项</li><li>核对正文 47.8 与表 43.8 等不一致处的表述</li><li>撰写 reading_report.md 并通过 lint_report</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 04bea482 · 文稿 9dd2cfe4</span><span class="s">8.5 分</span></div><p>第二轮完成 Insight Pass 三轮并把四条挑战结论写回笔记与报告；数字核对无未匹配项，派生数字登记在 number_exceptions.json。各节开头补了本节回答的问题和过渡句，未说明项统一写为论文未说明。不可修复的限制：论文未公开判分模型、各步大模型与阈值，Table 2、Table 3、Table 4 裁图不可用，只能保留占位并用表格重写数值；D2 受限于论文对问答生成参数的描述不足。分数为模型自评。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

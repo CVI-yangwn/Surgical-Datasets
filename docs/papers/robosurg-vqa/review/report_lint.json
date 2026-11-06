@@ -1,0 +1,18 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/RoboSurg_VQA_A_Multimodal_Benchmark_for_Surgical_Segmentation_Aware_Visual_Question_Answering/reading_report.md",
+  "mode": "report",
+  "report_sha256": "f1be6b729e3e1ae14fbccfd0b4323d21a4d97a85bf51ea0325eb65f7c285a6f4",
+  "number_exceptions": {
+    "15.8": "推导值:抽检子集中修正 4.8%、重询 8.7%、丢弃 2.3% 三者互斥之和",
+    "85": "推导值:未抽检帧比例 100% 减去抽检比例 15%"
+  },
+  "section_count": 8,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

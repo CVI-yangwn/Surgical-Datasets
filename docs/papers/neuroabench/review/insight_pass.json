@@ -1,0 +1,42 @@
+{
+ "knowledge_points": [
+  {"term": "入路视频", "plain": "神经外科从切皮到暴露病灶的路径操作录像,解剖结构按层次依次出现。", "where": "sec:dataset", "needed_for": "理解为何题目多是皮肤、颅骨、硬膜等层次结构"},
+  {"term": "五选一与 E 兜底", "plain": "A 到 D 为解剖名,E 为以上都不是,正确位置各占 20%。", "where": "sec:dataset", "needed_for": "随机基线 19.48 与最好 40.87 的比较"},
+  {"term": "实例级指标", "plain": "在全部图像上平均,常见结构权重大。", "where": "sec:experiment", "needed_for": "表 II 前四列"},
+  {"term": "解剖级指标", "plain": "先按每类解剖计算再在类间平均,少见结构与常见结构权重相同。", "where": "sec:experiment", "needed_for": "解剖级 F1 普遍低 10 点以上的解读"},
+  {"term": "宏平均 F1", "plain": "每个类别的 F1 等权平均,不按样本数加权。", "where": "sec:experiment", "needed_for": "随机 F1=1.68 的口径问题"},
+  {"term": "零样本", "plain": "提示里不给示例,模型不在本数据上训练。", "where": "sec:experiment", "needed_for": "结果只代表开箱能力"},
+  {"term": "数据泄漏", "plain": "测试题来自模型可能训练过的旧数据集。", "where": "sec:models", "needed_for": "论文与 GMAI-MMBench 的区分"},
+  {"term": "住院医师子集测试", "plain": "四名神经外科专科培训医师做部分题目,作为人类参照。", "where": "sec:results", "needed_for": "人机差距结论"}
+ ],
+ "detail_questions": [
+  {"question": "人类测试子集有多少题、怎样抽样?", "answer": "论文只说抽取一个子集,题数与抽样方式未给出;Gemini 在子集上 36% 低于全集 40.87%。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "住院医师年资如何?", "answer": "只称神经外科专科培训医师,年资和培训年限未给出。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "+7.52% 如何计算?", "answer": "论文未给口径;34B 的 36.52 减去 7 个开源通用模型平均约 29.01 得约 7.51,最接近。", "evidence": ["sec:results", "sec:model"], "status": "partly"},
+  {"question": "-10.50% 如何计算?", "answer": "四人平均 46.5 减 Gemini 子集 36 得 10.5。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "正文 40.87% precision 是否准确?", "answer": "表 II 中 40.87 是准确率,实例级 Precision 为 46.61,正文用词有误。", "evidence": ["sec:results", "sec:model"], "status": "resolved"},
+  {"question": "抽帧总数与审核删除比例是多少?", "answer": "论文只说每秒抽帧并删除三类坏例,数量未给出;9 小时按每秒一帧约 3.2 万帧,最终 1079 题。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "正确答案为 E 的题占多少,题目如何构造 E?", "answer": "只说各选项 20% 概率,E 为正确时干扰项怎样选未说明。", "evidence": ["sec:dataset", "sec:model"], "status": "not_stated"},
+  {"question": "随机基线解剖级 F1 为何只有 1.68?", "answer": "Precision 16.86、Recall 12.10 时 F1 不可能是 1.68,计算口径论文未说明。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "数据集是否公开?", "answer": "正文没有下载链接或许可说明,只有 Atlas 网址。", "evidence": ["sec:dataset", "sec:conclusion"], "status": "not_stated"},
+  {"question": "提示词与解码参数?", "answer": "只说零样本无示例,原文提示与温度未给出。", "evidence": ["sec:experiment"], "status": "not_stated"},
+  {"question": "40.87 与 40.41 的差距是否可靠?", "answer": "1079 题时准确率标准误约 1.5 个点,两者无法区分;论文未报告置信区间。", "evidence": ["sec:model"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "MLLM 解剖识别能力很弱", "alternative": "部分低分来自不按格式作答被计错,而不是不认识解剖", "separating_evidence": "报告格式失败率或用解析器重算", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "最好模型落后住院医师", "alternative": "子集偏难或题数过少,差距来自抽样", "separating_evidence": "子集题数与 Gemini 全集、子集成绩对照及置信区间", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "Gemini-2.0-Flash 最好", "alternative": "标注由 Gemini-1.5-Pro 生成,保留的题偏向 Gemini 能认的帧", "separating_evidence": "医生独立标注的子集上重新排名", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "医学训练数据缺少术中解剖", "alternative": "医学模型基座较旧较小,差距来自基座而非数据", "separating_evidence": "同基座通用版与医学版对照", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "术中形变导致识别失败", "alternative": "第二帧遮挡或视野不同,与形变无关", "separating_evidence": "按阶段或形变程度分组的准确率统计", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览",
+  "写明 40.87 是准确率而非正文所说 precision",
+  "补 +7.52 与 -10.50 的推算与口径",
+  "加入 1079 题下约 1.5 个点的标准误,说明前两名无法区分",
+  "写明子集题数、住院医师年资、E 答案占比、审核删除比例、提示词 论文未说明",
+  "指出随机基线 F1=1.68 的口径矛盾",
+  "深度分析加入格式失败、标注偏置、基座差异三种替代解释",
+  "Fig 1 移到题型一节"
+ ]
+}

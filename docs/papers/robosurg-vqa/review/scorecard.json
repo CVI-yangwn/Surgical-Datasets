@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "529bb59edca9168739801ecc7454d834bfa7e1a92884a97612f89c22917fca25",
+      "note_snapshot": "review_rounds/round1_RoboSurg_VQA_A_Multimodal_Benchmark_for_Surgical_Segmentation_Aware_Visual_Question_Answering.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第一轮笔记覆盖来源、九问、标注流程、质检、跨模型一致性与多数类基线,并指出无人工真值、仅用两个猪组织数据集。D2 机制流程的输入输出清楚但缺少每步对结果的映射;D5 对已有工作的定位只来自作者陈述;D9 各节开头缺张力句,数字后缺少“所以”,研究问题末尾没有核心观点速览;H3 尚未跑数字核对。",
+      "fixes": [
+        "在研究问题末尾加入 ### 核心观点速览",
+        "各节开头补一句该节要回答的问题,并在节末加过渡",
+        "为抽检比例、跨模型一致性等数字补上含义说明",
+        "把 Insight Pass 的未说明项统一写成 论文未说明 并说明限制",
+        "核对 15.8% 等推导数字,登记到数字例外文件",
+        "补充 Q9 在测试集为常数对总分的影响"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "eccb05f90dd381051a6a84ac5b49df24f0c183120cd139063522affefa08e2e4",
+      "note_snapshot": "review_rounds/round2_RoboSurg_VQA_A_Multimodal_Benchmark_for_Surgical_Segmentation_Aware_Visual_Question_Answering.md",
+      "report_sha256": "f1be6b729e3e1ae14fbccfd0b4323d21a4d97a85bf51ea0325eb65f7c285a6f4",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.4,
+      "verdict": "第二轮按 Insight Pass 补入核心观点速览、各节开头的问题与节末过渡、数字后的含义,把主标注模型身份、站点对应、审核者一致性、数据发布时间、有无掩码对照写成论文未说明并说明限制;笔记与报告数字核对无未匹配项,15.8% 与 85 为登记的推导值。D5 仍为 7:与 Surgical-VQA 等工作的定位只能依据作者陈述,论文没有在相同帧上做问题集重叠或难度比较,这是论文本身的限制。分数为模型自评。",
+      "fixes": []
+    }
+  ]
+}

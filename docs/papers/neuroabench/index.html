@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>NeuroABench: A Multimodal Evaluation Benchmark for Neurosurgical Anatomy Identification</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>让多模态大模型认神经外科术中解剖:1079 道五选一题,最好的模型只有 40.87%</h1>
+<div class="sub">NeuroABench: A Multimodal Evaluation Benchmark for Neurosurgical Anatomy Identification</div>
+<div class="meta">Ziyang Song、Zelin Zang 等,香港科学创新研究院、香港大学深圳医院、香港中文大学 | arXiv 2512.06921,v1,已被 IEEE ICIA 2025 接收,2025-12-07</div>
+<div><span class="chip">基准论文</span><span class="tag">神经外科</span><span class="tag">解剖识别</span><span class="tag">多模态大模型</span><span class="tag">基准</span><span class="tag">视觉问答</span></div>
+<div class="one">NeuroABench 用 Gemini-1.5-Pro 标注 89 个神经外科入路教学视频、医生删去坏帧,做出 1079 道覆盖 68 类解剖的五选一题;16 个模型零样本最好 40.87%(随机 19.48%),子集上低于四名住院医师平均 46.5%,但标注模型与被测模型重叠、子集大小未说明。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 7 条论文未说明</span><span class="tag">反向检验 5 条</span></div>
+<div><div class="score"><span class="v">8.1</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2512.06921" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/neuroabench/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术多模态大模型的研究大多问器械、阶段和动作,很少问"这是哪种解剖结构"。</strong> 神经外科医生看视频主要靠认解剖,所以这个缺口在神经外科最明显。</p>
+<p>已有医学问答基准补不上它。VQA-RAD、SLAKE、OmniMedVQA 的解剖题多来自断层影像,只到器官级;GMAI-MMBench 有临床场景,但重标旧数据集,可能有数据泄漏。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口:没有专测术中神经外科解剖识别的多模态基准</span><span class="i">已有医学基准以放射影像为主,类别粗</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是从教学视频里自己做题,每道题只问一帧里是哪种解剖。</p>
+<ul><li>数据:Neurosurgical Atlas 的 886 个视频筛到 89 个入路视频,约 9 小时,另有 32 本教学手册。</li><li>构建:OpenAI-o1 读手册,Gemini-1.5-Pro 读画面和讲解标解剖,医生删去坏帧,得到 1079 道五选一题、68 类解剖。</li><li>结果:16 个模型零样本,最好的 Gemini-2.0-Flash 为 40.87%,随机为 19.48%;子集上它得 36%,住院医师平均 46.5%。</li></ul>
+<p><strong>边界:标注由 Gemini 完成,子集题数与数据开放都论文未说明,前两名差距在误差之内。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">1079 道题,68 类解剖,32 种入路</span><span class="i">最好 40.87%,随机 19.48%</span><span class="i">住院医师 28% 到 56%,平均 46.5%</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>题目长什么样</h3><p>每道题是一帧术中画面加五个选项:A 到 D 是解剖名,E 是"以上都不是"。正确答案在五个位置各占 20%,随机猜对的期望就是 20%。</p>
+<p><strong>入路视频决定了题目构成。</strong> 入路从切皮到暴露病灶,画面依次出现皮肤、颅骨、硬膜,再到深部血管。所以题目里既有大脑前动脉、内听道,也有正确答案是皮肤的体位照片。</p>
+<figure class="fig"><img src="images/page_002_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。六道示例题,绿色为正确答案。放在这里是因为它显示题目难度跨度很大。</figcaption></figure>
+<p>各难度层的题数、E 题的占比,论文未说明,所以总分里有多少来自送分题、多少被 E 题拉低,都无法估计。</p>
+<div class="tbl"><table><thead><tr><th>基准</th><th>解剖题数</th><th>解剖类别数</th></tr></thead><tbody><tr><td>VQA-RAD</td><td>106</td><td>31</td></tr><tr><td>SLAKE</td><td>507</td><td>21</td></tr><tr><td>GMAI-MMBench</td><td>2098</td><td>18</td></tr><tr><td>OmniMedVQA</td><td>16448</td><td>48</td></tr><tr><td>NeuroABench</td><td>1079</td><td>68</td></tr></tbody></table></div>
+<p>类别最多,题数不多。按 68 类平均每类约 16 题,解剖级指标里单类分数会很不稳定。</p><div class="strip h"><span class="t">亮点</span><span class="i">单帧、单解剖、五选一</span><span class="i">类别最细,题数中等</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>标签从哪里来</h3><p>标签的来源决定了题目可信到什么程度。流程分三步:</p>
+<ol><li>从 Atlas 筛出 89 个入路视频和 32 本手册。</li><li>OpenAI-o1 把手册总结成以解剖为线索的流程,专家校正;Gemini-1.5-Pro 读画面和讲解,为每个视频输出步骤、关键解剖和时间段,再统一缩写和同义词。</li><li>每秒抽一帧并对齐标签,医生多轮审核,删去标签与画面矛盾、画面模糊、一帧多解剖三类样本,剩下的配上题干和选项。</li></ol>
+<figure class="fig"><img src="images/page_003_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。数据收集、视频标注、问答生成三个面板。放在这里是因为它显示 Gemini-1.5-Pro 位于标注中心。</figcaption></figure>
+<p><strong>医生只删不改,标签始终来自 Gemini。</strong> 9 小时按每秒一帧约 3.2 万帧,最后留下 1079 题;删了多少论文未说明,剩余标签的错误率无法估计。</p><div class="strip h"><span class="t">亮点</span><span class="i">LLM 标注,医生删除式审核</span><span class="i">一帧只留一种解剖,答案唯一但场景简化</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>怎么评测</h3><p>16 个模型分三组:开源通用 7 个、闭源接口 6 个、医学专用 3 个,全部零样本,提示里不给示例。输出里没有明确选项字母的计为错误。</p>
+<p>指标分两层。实例级在全部图像上平均,常见结构权重大;解剖级先按每类算再在类间平均,少见结构与常见结构同权。</p>
+<p>提示词原文、解码参数、各模型格式失败的比例,论文未说明。所以低分模型有多少是"不会",有多少是"不按格式答",分不开。</p>
+<p>另请四名神经外科住院医师做一个子集,与 Gemini-2.0-Flash 比较。子集题数、抽样方式和住院医师年资论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>模型</th><th>准确率</th><th>实例级 F1</th><th>解剖级 F1</th></tr></thead><tbody><tr><td>随机</td><td>19.48</td><td>19.96</td><td>1.68</td></tr><tr><td>Gemini-2.0-Flash</td><td>40.87</td><td>38.56</td><td>25.52</td></tr><tr><td>Claude-3.5-Sonnet</td><td>40.41</td><td>38.12</td><td>24.52</td></tr><tr><td>Gemini-1.5-Pro</td><td>38.83</td><td>35.88</td><td>20.57</td></tr><tr><td>Qwen2.5-VL 72B</td><td>37.44</td><td>37.52</td><td>20.17</td></tr><tr><td>HuatuoGPT-Vision 34B</td><td>36.52</td><td>32.71</td><td>21.49</td></tr><tr><td>GPT-4o</td><td>30.21</td><td>29.93</td><td>19.56</td></tr><tr><td>Qwen-VL-MAX</td><td>18.26</td><td>18.31</td><td>9.29</td></tr><tr><td>LLaVA-Med-v1.5</td><td>15.01</td><td>7.66</td><td>10.79</td></tr></tbody></table></div>
+<p>最好的模型约为随机的两倍。正文把 40.87 写成 precision,表中它是准确率,实例级 Precision 是 46.61。</p>
+<p><strong>前两名分不出高下。</strong> 1079 题、准确率约 40% 时标准误约 1.5 个点,40.87 与 40.41 无法区分,论文只跑一次。</p>
+<p>规模和版本都不保证提升:LLaVA-NeXT 72B 的 27.53 低于 7B 的 28.82,Claude-3.7-Sonnet 比 3.5 低 7.14 个点。两个模型低于随机。</p>
+<p>随机基线的解剖级 F1 只有 1.68,却有 16.86 的 Precision 和 12.10 的 Recall,口径论文未说明,这一列的绝对值要谨慎。</p><div class="strip d"><span class="t">数据</span><span class="i">40.87 对 40.41,差距小于标准误</span><span class="i">LLaVA-NeXT:72B 为 27.53,7B 为 28.82</span><span class="i">随机解剖级 F1 为 1.68</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>和人比差多少</h3><div class="tbl"><table><thead><tr><th>参与者</th><th>准确率</th></tr></thead><tbody><tr><td>住院医师 1</td><td>0.48</td></tr><tr><td>住院医师 2</td><td>0.28</td></tr><tr><td>住院医师 3</td><td>0.56</td></tr><tr><td>住院医师 4</td><td>0.54</td></tr><tr><td>Gemini-2.0-Flash</td><td>0.36</td></tr></tbody></table></div>
+<p>四人平均 46.5%,Gemini 为 36%,低 10.5 个点,只高于最差的那位。</p>
+<p><strong>Gemini 在子集上的 36% 低于全集的 40.87%。</strong> 子集可能偏难,也可能题太少、分数波动大;子集题数未给出,两种解释分不开。人类之间相差 28 个点,4 个人的平均本身不确定性很大。</p>
+<p>医学专用模型方面,论文称平均高 7.52 个点。按表计算,只有 HuatuoGPT-Vision 34B 的 36.52 比开源通用平均 29.01 高约 7.51;三个医学模型平均 27.28,反而更低。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>排名与标注模型分不开。</strong> Gemini-1.5-Pro 标注、医生只删不改,题目偏向 Gemini 能认的帧;Gemini 系列排第一和第三。医生独立标注子集上的重排没有做。</li><li><strong>形变解释只有一个案例。</strong> Fig 3 一对相近帧中,Claude-3.5-Sonnet 在暴露期答对、牵拉后答错;第二帧还有遮挡和视野变化,按阶段分组的统计没有给出。</li><li><strong>医学数据缺失只是推测。</strong> 医学模型基座较旧,同基座通用版与医学版的对照没有做。</li><li><strong>不能外推到临床使用。</strong> 只测单帧、有选项的识别,没有时间上下文、讲解和多结构同框。</li></ul>
+<figure class="fig"><img src="images/page_005_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。Claude-3.5-Sonnet 对两帧相近画面的回答,上方正确、下方错误。放在这里是因为它是形变影响的唯一证据。</figcaption></figure></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用要注意什么</h3><ul><li>数据是否公开、Atlas 视频的许可论文未说明,先确认能否拿到数据。</li><li>拿到后先统计每类题数、E 题占比和格式失败率。</li><li>至少跑三次或报告置信区间,不要用一两个点的差距排名。</li><li>单独报告 Gemini 系列,注意标注偏置。</li><li>先确认解剖级 F1 的计算口径再引用。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>第一个专测神经外科术中解剖识别的基准,68 类、1079 题</div><div>最好 40.87%,约为随机两倍,但前两名差距在误差之内</div><div>人机差距 10.5 个点来自一个大小未知的子集和 4 个人</div><div>标注由 Gemini 完成,排名可能有偏</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>评测对象新:术中神经外科解剖,类别细</li><li>选项位置均匀,随机基线清楚</li><li>同时报告实例级与解剖级,并有人类参照</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>子集题数、审核删除量、E 题占比、提示词等多项论文未说明</li><li>只跑一次,没有置信区间</li><li>正文表述与表格不符,如把准确率写成 precision</li><li>随机基线解剖级 F1 的口径可疑</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>在医生独立标注的子集上,模型排名是否改变?</li><li>按手术阶段分组时,形变阶段的准确率掉多少?</li><li>加入相邻帧或讲解文本后,模型能提升多少?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 c3fcb8fa</span><span class="s">6.9 分</span></div><p>第 1 轮原版流程笔记(自评)。表 I、表 II、表 III 与构建流程都在。D1=7:深度分析对标注偏置只有推断,没有回到表 II 的 Gemini 排名做对照。D2=7:医生审核删去比例、抽帧总数与 1079 的关系没有交代。D4=7:局限列了未说明项,但多数没写对结论的影响。D5=7:定位表缺 EndoBench 等手术多模态基准的具体比较。D6=6:我的笔记偏短,没有不要做的事项。D7=7:Fig 1 放在深度分析而非题型处。D9=5:研究问题没有核心观点速览,各节开头未点出要回答的问题,小节结尾无过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>7</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各节开头写本节要回答的问题,数字后补一句意义,小节末尾加过渡</li><li>核对 +7.52、-10.50、40.87 precision 的口径并写清</li><li>说明子集上 Gemini 36% 与全集 40.87% 的差异含义</li><li>把审核删除比例、抽帧总数、E 答案占比写成 论文未说明 并说明影响</li><li>深度分析加入随机基线 F1=1.68 的口径问题与五选一题型的上限分析</li><li>我的笔记补上不要做的事项</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 9b60cf46 · 文稿 d41a0c0c</span><span class="s">8.1 分</span></div><p>第 2 轮(自评)。按 Insight Pass 补了核心观点速览、各节开场问题与过渡、40.87 是准确率而非 precision、+7.52 与 -10.50 的推算、约 1.5 个点的标准误、随机基线 F1=1.68 的口径矛盾、标注模型与被测模型重叠、格式失败与基座差异两种替代解释,以及子集题数、审核删除量、E 题占比、提示词等 论文未说明 项及其影响。数字核对无未匹配项,推导值登记在 number_exceptions.json。D5=7:论文只与表 I 的四个放射影像为主的基准比较,笔记无法从论文中给出与内镜、腹腔镜术中基准的定量对比,这是论文本身的限制。论文篇幅短,模型与人类对比的细节缺失无法由笔记补全。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>
