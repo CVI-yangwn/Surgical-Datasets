@@ -1,0 +1,35 @@
+{
+ "knowledge_points": [
+  {"term": "语义分割", "plain": "给图像中每个像素分配一个类别标签。", "where": "sec:introduction", "needed_for": "理解数据集的任务形式"},
+  {"term": "SLAM", "plain": "同时定位与建图：一边构建环境地图，一边估计相机在地图中的位置。", "where": "sec:introduction", "needed_for": "理解论文动机为什么要识别器官"},
+  {"term": "Cholec80", "plain": "CAMMA 发布的 80 台胆囊切除术视频，带器械和手术阶段标注，没有像素级标注。", "where": "sec:introduction", "needed_for": "理解本文补的是哪一层标注"},
+  {"term": "分水岭掩码", "plain": "三个颜色通道都存类别 ID 的 PNG，可直接读成标签图。", "where": "sec:introduction", "needed_for": "正确读取训练标签"},
+  {"term": "像素占比", "plain": "某类像素数占全部标注像素的比例，反映类别不平衡。", "where": "sec:introduction", "needed_for": "理解图 3 与稀有类风险"},
+  {"term": "宽类合并", "plain": "把多个解剖结构合成一个类别，例如胃肠道类和肝韧带类。", "where": "sec:introduction", "needed_for": "判断数据能否做细粒度解剖识别"},
+  {"term": "CC BY-NC-SA 4.0", "plain": "署名、非商业、相同方式共享的许可。", "where": "sec:preamble", "needed_for": "判断能否商用"}
+ ],
+ "detail_questions": [
+  {"question": "17 个视频是哪几个，按什么标准挑选？", "answer": "论文只说选了一部分高度相关的视频，没有列出编号和标准；图 2 只露出 video01、video09、video12。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "每段 80 帧的起始帧如何确定？", "answer": "论文未说明，只说跳过了准备和结束阶段。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "标注者是谁，有无医生复核和一致性评估？", "answer": "论文未说明，只给出了标注工具 PixelAnnotationTool。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "有没有训练、验证、测试划分和评测指标？", "answer": "没有，论文没有任何划分、指标和基线实验。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "101 个目录在 17 个视频间如何分布？", "answer": "论文未说明；图 2 中 video12 下列出 8 个目录。", "evidence": ["sec:introduction"], "status": "partly"},
+  {"question": "图 3 的两组是按 1% 阈值划分的吗？", "answer": "正文这样说，但图 3(b) 中抓钳 3.317%、电钩 1.824% 都高于 1%，图 3(a) 的胃肠道 2.557% 反而更低，所以图与正文不符，真实划分依据论文未说明。", "evidence": ["sec:introduction"], "status": "partly"},
+  {"question": "像素占比是否包含黑色背景？", "answer": "图 3 只有 12 类，背景不在图中，分母是否排除背景论文未说明。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "图 6 中电钩的类别 ID 是多少？", "answer": "正文写成 10，但表 I 中电钩是 9、胆囊是 10，图 6 掩码器械区域标的是 9，正文为笔误。", "evidence": ["sec:introduction", "sec:datasets"], "status": "resolved"},
+  {"question": "图 1 的区域编号是否对应类别 ID？", "answer": "图 1(b) 编号 1 到 6，配色也与图 5 到图 7 不同，论文没有解释其含义。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "模糊边缘如何处理？", "answer": "视野边缘光线暗、难以判断的区域保持原样，因为数据集的目标是分割器官。", "evidence": ["sec:introduction"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "8,080 帧标注可用于训练胆囊切除术的分割模型", "alternative": "80 帧连续片段内帧高度冗余，有效独立样本远少于 8,080，只够在 17 个视频的外观上过拟合。", "separating_evidence": "按视频划分的基线结果，或跨视频的泛化测试。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "类别不平衡会导致训练效果差", "alternative": "加权损失或重采样可能足以缓解，不平衡未必是主要瓶颈；稀有类难也可能来自标注质量。", "separating_evidence": "不同损失下的每类交并比对比。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "语义分割是内镜 SLAM 检索参考数据的前提", "alternative": "基于特征点或深度估计的 SLAM 可以不依赖器官语义完成定位。", "separating_evidence": "有无分割信息时的定位精度对比。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览，点明这是没有划分和基线的数据说明",
+  "在局限和我的笔记中逐项写明论文未说明：视频选择、起始帧、标注者与一致性、目录分布、背景是否计入分母、图 1 编号含义",
+  "在深度分析中加入有效样本数远少于 8,080 的推断，并标为我的判断",
+  "在深度分析中说明论文没有用实验区分 SLAM 动机与替代路线",
+  "复现注意点增加不要按帧随机划分、不要用颜色掩码当标签"
+ ]
+}

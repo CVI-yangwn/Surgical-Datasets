@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EndoNet: A Deep Architecture for Recognition Tasks on Laparoscopic Videos</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>EndoNet 与 Cholec80：只看画面识别胆囊切除术的阶段和器械</h1>
+<div class="sub">EndoNet: A Deep Architecture for Recognition Tasks on Laparoscopic Videos</div>
+<div class="meta">Andru P. Twinanda、Sherif Shehata、Didier Mutter、Jacques Marescaux、Michel de Mathelin、Nicolas Padoy（斯特拉斯堡大学 ICube、IRCAD、IHU Strasbourg） | arXiv:1602.03012（第 2 版，2016）</div>
+<div><span class="chip">AI 方法论文，附带数据集</span><span class="tag">手术阶段识别</span><span class="tag">器械存在检测</span><span class="tag">Cholec80</span><span class="tag">多任务学习</span><span class="tag">腹腔镜视频</span></div>
+<div class="one">论文构建 80 个胆囊切除术视频的 Cholec80，用一个同时做器械存在检测和阶段识别的 AlexNet 扩展网络提取特征，再接 SVM 和分层隐马尔可夫模型，离线阶段识别准确率达到 92.0%，但收益主要来自微调和时序模型，多任务只多出约 2 到 3 个百分点。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.4</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/1602.03012" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cholec80/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术阶段识别需要知道"现在做到哪一步了"，但以往方法要么靠人工输入，要么靠手工特征。</strong> 器械使用信号对识别很有用，可它通常来自人工标注或额外设备，测试时拿不到。视觉特征则多是像素、梯度、颜色纹理这类手工设计，可能丢掉关键信息。</p>
+<p>腹腔镜视频本身也难。镜头一直在动，画面模糊、场景变化大；镜头还常被血液沾染。论文引用的前作中，Blum 等用 <code>CCA</code> 降维手工特征得到 <code>76%</code> 准确率，但只测了 10 个视频；Lalys 等在白内障手术上达到 <code>91%</code>，可白内障镜头静止、器械不带关节。</p>
+<p>所以论文要回答：只看画面、自动学出来的特征能不能做好胆囊切除术的阶段识别？把器械检测当作第二个任务一起训练，能不能让特征更好？下一节先给出答案的全貌。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>论文的答案是：用多任务微调的卷积网络做特征提取，再接分类器和时序模型，只看画面就能做好两项任务。</strong> 它分四步实现。</p>
+<ol><li><strong>建数据。</strong> Cholec80 有 80 个视频、13 名外科医生，逐帧标 7 个阶段和 7 种器械。</li><li><strong>一个网络两项任务。</strong> 在 <code>AlexNet</code> 后接 7 维器械输出，再把它拼进阶段识别的特征。</li><li><strong>时序平滑。</strong> 逐帧 <code>SVM</code> 置信度送入两级分层隐马尔可夫模型（<code>HHMM</code>）。</li><li><strong>全面对比。</strong> 与人工器械信号、手工特征、未微调网络、单任务网络比较，并在另一数据集 <code>EndoVis</code> 上检验。</li></ol>
+<p>主结果：离线阶段识别准确率 <code>92.0%</code>，在线 <code>81.7%</code>，器械平均 <code>AP</code> 为 <code>81.0</code>。<strong>但收益的大头来自在手术数据上微调和时序模型，多任务本身只多出约 2 到 3 个百分点，没有显著性检验。</strong> 下面从数据讲起，因为每个数字都依赖它的划分。</p><div class="strip h"><span class="t">亮点</span><span class="i">只用画面输入，测试时不需要任何人工器械标注</span><span class="i">器械置信度被拼进阶段特征，是"多任务"的具体落点</span><span class="i">时序模型对准确率的贡献大于多任务</span></div><div class="strip d"><span class="t">数据</span><span class="i">离线阶段识别准确率 92.0%，在线 81.7%</span><span class="i">器械存在检测平均 AP 81.0</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>Cholec80：数据从哪里来、怎么标</h3><p><strong>这一节回答：结果是在什么数据、什么规则下测出来的。</strong> Cholec80 来自斯特拉斯堡大学医院，80 个胆囊切除术视频，<code>25 fps</code> 录制、降到 <code>1 fps</code> 处理。阶段由一名资深外科医生定义；至少一半器械尖端可见才算器械存在。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。Cholec80 定义的七种器械：抓钳、双极电凝、电钩、施夹钳、剪刀、冲洗器、标本袋。</figcaption></figure>
+<p>数据分成两半。前 40 个视频是微调子集，约 86K 张图，其中 10 个视频另标了器械框，供部件模型 <code>DPM</code> 训练；后 40 个视频是评估子集。7 个阶段时长差异很大：Calot 三角分离 954±538 秒，胆囊取出只有 83±56 秒。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_4_review_repair1.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 4。上图为各器械的图像或框数，下图为各阶段的图像数，分评估子集和微调子集。</figcaption></figure>
+<p><strong>类别极不均衡，这直接决定了后面的失败模式。</strong> 评估子集中电钩有 54678 张，施夹钳只有 1630 张。准确率按帧计算，两个长阶段占了大部分帧，整体准确率高不代表短阶段识别得好。标注者人数和标注一致性论文未说明，因此无法估计标签噪声。</p>
+<p><code>EndoVis</code> 是另一家医院的 7 个视频，阶段定义不同：多了放置套管针阶段，准备阶段并入了 Calot 三角分离。论文只在它上面做阶段识别。数据清楚了，接下来看网络怎么从画面里取特征。</p><div class="strip d"><span class="t">数据</span><span class="i">80 个视频，13 名外科医生，40/40 划分</span><span class="i">微调子集约 86K 张图</span><span class="i">EndoVis 只有 7 个视频</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>EndoNet：一个网络做两件事</h3><p><strong>问题是：怎样让器械信息进入阶段识别，又不需要人工标注？</strong> 论文的做法是让网络自己先检测器械，再把检测结果当特征用。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。EndoNet 结构：青色框内与 AlexNet 相同；fc7 接出 7 维器械层，再与 fc7 拼接成 4103 维的 fc8，最后接 7 维阶段层。</figcaption></figure>
+<p>主干就是 <code>AlexNet</code> 的五个卷积层和两个全连接层。<code>fc7</code> 后分两路：一路接 7 节点的器械层，每个节点是一种器械的存在置信度；另一路把 <code>fc7</code> 的 4096 维和器械层的 7 维拼成 <code>fc8</code>，再接 7 节点的阶段层。</p>
+<p>训练用两个交叉熵损失之和。器械检测是 7 个二分类，阶段识别是 7 类多分类：</p>
+<div class="math">$$\mathcal{L} = a\cdot\mathcal{L}_T + b\cdot\mathcal{L}_P$$</div>
+<p>论文取两个系数都为 1，理由是调整它们没有带来提升，但试过哪些值论文未说明。系数取 0 就退化成单任务的 <code>ToolNet</code> 或 <code>PhaseNet</code>，这两个网络是后面的对照组。</p>
+<p>微调设置：从 <code>ImageNet</code> 预训练权重出发，50K 次迭代，每批 50 张图；新层学习率 $10^{-2}$，其余 $10^{-3}$，每 20K 次迭代降十倍。单个网络在一张 <code>Titan X</code> 上训练约 11 小时。网络只给出逐帧判断，下一步要处理时间顺序。</p></div><div class="card" id="s5"><h3><span class="num">5</span>时序模型：让逐帧判断符合手术流程</h3><p><strong>逐帧分类不知道前后帧，会在阶段之间乱跳。</strong> 论文用 <code>fc8</code> 特征训练一对多线性 <code>SVM</code>，得到每帧 7 维置信度，再送入两级 <code>HHMM</code>：顶层状态是阶段，底层状态刻画阶段内部变化。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_1_review_repair1.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。整体流程：微调 EndoNet 后，一路直接做器械检测，一路提取特征，经 SVM 和分层 HMM 得到阶段。</figcaption></figure>
+<p>离线模式能看整段视频，用 Viterbi 求最可能路径；在线模式只能看到当前帧为止，用前向算法。为什么不直接用阶段层输出？论文说两者差别很小，接 <code>SVM</code> 是为了让所有特征走同一流程，并能在阶段定义不同的 <code>EndoVis</code> 上评估。</p>
+<p><code>HHMM</code> 底层状态数由数据决定，具体做法只引用了作者前作，论文未说明细节。流程搭好后，关键是看对比实验能证明什么。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>结论先行：学到的特征远好于旧特征，微调和时序平滑贡献最大，多任务锦上添花。</strong> 器械检测上，两个网络平均 <code>AP</code> 都在 81 左右，远高于部件模型的 58.4。</p>
+<div class="tbl"><table><thead><tr><th>器械</th><th>DPM</th><th>ToolNet</th><th>EndoNet</th></tr></thead><tbody><tr><td>双极电凝</td><td>60.6</td><td>85.9</td><td>86.9</td></tr><tr><td>剪刀</td><td>23.4</td><td>60.9</td><td>58.6</td></tr><tr><td>平均</td><td>58.4</td><td>80.9</td><td>81.0</td></tr></tbody></table></div>
+<p>为排除数据量差异，网络只用部件模型的 10 个训练视频时，平均 <code>AP</code> 仍为 65.9 和 62.0，高于 58.4。<strong>这说明只用"有或没有"的二值标签就足以训练器械检测。</strong> 剪刀最差，样本少且外形像抓钳。</p>
+<p>阶段识别的对比是全文核心（Cholec80 评估子集，准确率）：</p>
+<div class="tbl"><table><thead><tr><th>特征</th><th>逐帧</th><th>离线平滑</th><th>在线平滑</th></tr></thead><tbody><tr><td>人工器械信号</td><td>48.2</td><td>69.2</td><td>47.5</td></tr><tr><td>手工特征</td><td>44.0</td><td>36.7</td><td>32.6</td></tr><tr><td>未微调 AlexNet</td><td>59.2</td><td>76.2</td><td>67.2</td></tr><tr><td>PhaseNet</td><td>73.0</td><td>89.1</td><td>78.8</td></tr><tr><td>EndoNet</td><td>75.2</td><td>92.0</td><td>81.7</td></tr></tbody></table></div>
+<p><strong>未微调的网络已经超过人工器械信号，说明问题首先出在旧特征的表达力上。</strong> 微调把逐帧准确率从 59.2 推到 73.0，时序平滑再把 <code>EndoNet</code> 从 75.2 推到 92.0，多任务只在这之间多出约 2 个百分点。</p>
+<figure class="fig"><img src="images/page_008_fig_fig_9_review_repair1.png" alt="Fig 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 9。一次运行中最好和最差各 5 个视频的识别色带，每对上为预测、下为真值。</figcaption></figure>
+<p>离线最好的 5 个视频准确率超过 <code>98%</code>；最差视频的错误集中在胆囊装袋与清洁凝血两阶段之间来回跳。在线模式没有未来帧纠错，跳变更多，前 5 个视频仍高于 <code>92%</code>。</p><div class="strip d"><span class="t">数据</span><span class="i">器械平均 AP：DPM 58.4，ToolNet 80.9，EndoNet 81.0</span><span class="i">逐帧准确率：PhaseNet 73.0，EndoNet 75.2</span><span class="i">离线准确率：PhaseNet 89.1，EndoNet 92.0</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>两个对照：真值器械信号和数据量</h3><p><strong>如果把自动器械置信度换成真值，会更好吗？</strong> <code>EndoNet-GTbin</code> 把真值器械标签拼进主干特征，离线准确率 92.2，只比 <code>EndoNet</code> 高约 0.1 到 0.2 个百分点。<strong>自动检测的器械信号已经提供了器械能提供的大部分阶段线索。</strong></p>
+<p>数据量实验（图 10）微调 10、20、30、40 个视频。阶段识别上 <code>EndoNet</code> 每档都不低于 <code>PhaseNet</code>；器械检测上 10 和 20 个视频时 <code>EndoNet</code> 反而较低（62 对 65.9），30 个视频后才反超。论文据此说多任务更能利用大数据，但这只是四个点的一条曲线，没有误差条。</p>
+<p>图 10 的准确率是平滑前还是后，论文未说明；40 个视频处的 75.2 和表 III 一致，应是平滑前。</p><div class="strip h"><span class="t">亮点</span><span class="i">真值器械信号几乎不带来额外收益</span><span class="i">小数据下多任务对器械检测是负担</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>迁移到 EndoVis 与两个应用</h3><p><strong>特征换一家医院还管用吗？</strong> 在 <code>EndoVis</code> 的 7 个视频上，<code>EndoNet</code> 特征在所有设置中最好，离线准确率 86.0，高于 <code>PhaseNet</code> 的 79.7。但分类器和时序模型都在该数据上重新训练，<strong>证明的是特征可迁移，不是整个系统可以直接搬过去。</strong></p>
+<p>视频索引应用中，<code>89%</code> 的阶段边界误差在 30 秒以内，只有 <code>6%</code> 超过 2 分钟。器械出现块检测中，双极电凝的块全部检出，其中 114 个在 5 秒内，误报率 3.8%；施夹钳误报率 8.3%，<code>80%</code> 的块在 5 秒内检出。这些来自单次运行，不是多次平均。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><p>第一，<strong>多任务是否真的改善了表征，论文没有分清。</strong> <code>EndoNet</code> 用 <code>fc8</code>，<code>PhaseNet</code> 用 <code>fc7</code>，差异混合了多任务损失和多拼的 7 维器械置信度。用 <code>EndoNet</code> 的 <code>fc7</code> 单独测试就能分开，论文未报告。</p>
+<p>第二，多任务收益没有显著性检验。逐帧平均精确率 70.0 对 67.0 的差距，小于两者各自的标准差（8.4 和 9.3）。</p>
+<p>第三，数据全部来自一家医院，论文自己承认可能过拟合；4 折交叉验证的视频分组论文未说明。第四，特征学习与时序模型分开训练，网络特征不含时间信息，论文把端到端时序模型留作未来工作。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><ul><li>协议：后 40 个视频评估，4 折交叉验证，5 次运行平均，离线和在线分开报。</li><li>两项任务的训练范围不同：器械检测只用微调子集训练网络；阶段识别的分类器和时序模型在评估子集内交叉验证训练。</li><li>时序模型细节：顶层 7 个状态，每个特征用 5 个高斯混合建模，对角协方差；底层状态数怎么定要查作者前作。</li><li>应用实验和色带图来自单次随机运行。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>Cholec80 的价值大于 EndoNet 结构本身：80 个视频、逐帧阶段与器械标注、40/40 划分。</div><div>收益排序是：在手术数据上微调 &gt; 时序平滑 &gt; 多任务。</div><div>只用二值存在标签就能训练出平均 AP 81.0 的器械检测。</div><div>引用"多任务有效"时要说明幅度只有约 2 到 3 个百分点，且未分离 fc8 拼接的作用。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>在同一流程下系统比较六类特征，离线与在线都报。</li><li>EndoNet-GTbin 对照设计巧妙，直接检验了自动器械信号是否够用。</li><li>用边界时间误差和器械块延迟把精度翻译成应用指标。</li><li>承诺在发表后公开完整标注数据和训练好的网络。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单一医院、单一术式，泛化只在 7 个视频上验证。</li><li>多任务收益小且无显著性检验，两个因素未分离。</li><li>标注者人数、一致性和交叉验证分组论文未说明。</li><li>特征与时序模型分开训练，非端到端。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>去掉 fc8 中 7 维器械置信度后，EndoNet 相对 PhaseNet 还剩多少优势？</li><li>在多中心数据上冻结整个系统，准确率会下降多少？</li><li>端到端时序模型能否消除胆囊装袋与清洁凝血之间的跳变？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 c8442ffe</span><span class="s">7.4 分</span></div><p>第 1 轮自评：证据链、机制和数字齐全，表 II 到表 VII 均已转录。D4 7：边界分散在深度分析和局限两节，没有逐条对应中心主张。D5 7：与 Blum、Lalys、Klank 的定位只在研究问题里一句带过，没有说清各自新在哪里。D6 7：复用建议偏笼统。D7 7：缺少核心观点速览，Fig. 7 占位放在方法主线而非原计划的深度分析。D9 6：多数小节直接摆数字，开头没有交代问题，结尾没有过渡。H3 未跑数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>按叙事顺序重写各节开头，先交代该节要回答的问题</li><li>数字后补一句含义，尤其是 HHMM 贡献与多任务收益的大小对比</li><li>把每个中心主张的不能证明之处逐条写清</li><li>补 insight pass 的细节问答与挑战轮修订，原文没有的写论文未说明</li><li>运行 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 b395ea63 · 文稿 061fe47c</span><span class="s">8.4 分</span></div><p>第 2 轮自评（模型自评）：加入核心观点速览，各节开头先给问题；主张边界逐条写明（多任务与 fc8 拼接未分离、无显著性检验、EndoVis 重训分类器、单中心）；数字核对在笔记和报告上均无未匹配项，图内数字与推导值登记在 number_exceptions.json。D5 7：与前作的定位只能依据论文相关工作的简述，论文没有在同一协议下复现 Blum、Lalys 的方法，无法补强。D2 8：HHMM 底层状态数和训练细节论文只引用前作，无法展开。保留 Fig. 5、Fig. 7、Fig. 10 三个占位（前两个裁剪混入相邻内容，Fig. 10 无图像候选，数值已转录为表格）。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

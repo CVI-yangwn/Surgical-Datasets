@@ -1,0 +1,35 @@
+{
+ "knowledge_points": [
+  {"term": "阶段与步骤", "plain": "阶段是主要手术事件,由多个步骤组成;步骤是完成一个手术目标,二者都是逐帧标签。", "where": "sec:data", "needed_for": "理解长期任务为何有两个时间尺度"},
+  {"term": "原子动作", "plain": "借鉴 AVA,不可再拆、与术式和被作用对象无关的器械动作,每框最多 3 个。", "where": "sec:dataset", "needed_for": "理解为何动作是多标签且与 CholecT50 三元组不同"},
+  {"term": "mAP@0.5IoU", "plain": "预测框与真值框交并比至少 0.5 才算命中,再按类别求平均精度。", "where": "sec:dataset", "needed_for": "读懂器械与动作结果"},
+  {"term": "两折交叉验证", "plain": "8 台手术分两折各 4 台,每台只在一折,结果报告两折均值与标准差。", "where": "sec:dataset", "needed_for": "判断标准差和泛化结论的可信度"},
+  {"term": "MViT", "plain": "多尺度视觉 Transformer,用池化注意力逐级降低时空分辨率、扩大通道。", "where": "sec:method", "needed_for": "理解 TAPIR 的视频特征"},
+  {"term": "Deformable DETR", "plain": "用多尺度可变形注意力的端到端检测器,带迭代框修正。", "where": "sec:method", "needed_for": "理解框特征来源与 Table 4"},
+  {"term": "框分类头", "plain": "均值池化的帧特征与框特征拼接后接线性层,输出器械类别或动作。", "where": "sec:method", "needed_for": "理解多层信息如何融合"}
+ ],
+ "detail_questions": [
+  {"question": "步骤到底是 20 还是 21 类?", "answer": "正文写 11 阶段、20 步骤且都含 Idle;Fig. 1 写 21 步骤,差异原因论文未给出。", "evidence": ["sec:dataset", "sec:introduction"], "status": "not_stated"},
+  {"question": "短期任务的关键帧是 2238 还是 2.224 千?", "answer": "正文 2238 个关键帧候选,Fig. 1 写 2.224;论文未解释差 14 帧的原因。", "evidence": ["sec:dataset", "sec:data"], "status": "not_stated"},
+  {"question": "阶段步骤标注是否有一致性评估?", "answer": "只说由两位泌尿科专家标注,未说明是否重复标注或一致性指标。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "众包修正框的质控方式?", "answer": "只说要求框完整包住器械并选一个类别,没有质控流程或复核比例。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "为什么短期任务每 35 秒取一帧?", "answer": "论文只说因为器械与动作标注更细粒度,没有说明为何选 35 秒。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "TAPIR 是否在所有任务都优于 TAPIR-VST?", "answer": "不是。器械检测 TAPIR-VST 81.14 高于 TAPIR 80.85;TAPIR FLOPs 70.80 也高于 65.76,只有参数量更低。", "evidence": ["sec:method-2", "sec:experiments"], "status": "resolved"},
+  {"question": "步骤标准差 0.004 是否合理?", "answer": "与其他项量级差别很大,论文没有解释。", "evidence": ["sec:method-2"], "status": "not_stated"},
+  {"question": "Table 3 的 81.19 与 Table 2 的 80.85 为何不同?", "answer": "论文没有说明两表的检测指标是检测器原始输出还是经框分类头重分类后的结果。", "evidence": ["sec:method-3", "sec:method-4"], "status": "not_stated"},
+  {"question": "短期任务的 MViT 如何初始化?", "answer": "使用已在步骤识别上训练的 MViT 再优化,长期任务用 Kinetics-400 预训练。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "按术者或按手术的泛化如何?", "answer": "3 位术者,但没有按术者划分的实验。", "evidence": ["sec:dataset"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "多层标注互补,框特征提升短期任务", "alternative": "无框特征时所有框共享同一全局特征,无法区分框,下降只说明框级分类需要框级外观,与长期标注无关。", "separating_evidence": "比较 Kinetics 初始化与步骤任务初始化的 MViT,或做多任务联合训练。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "方法排序跨数据集一致,证明 PSI-AVA 适合作测试平台", "alternative": "只有两个方法,强模型在哪个集合都更强,排序一致几乎必然,不能说明基准测量了什么。", "separating_evidence": "更多方法在多个数据集上的排序相关系数。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "TAPIR 是强基线,优于其他方法", "alternative": "增益可能来自 MViT 预训练与训练设置差异(如学习率、轮数不同),而不是架构本身。", "separating_evidence": "统一训练设置下的对比。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "深度分析写入框特征消融的替代解释,区分框级特征与长期标注的贡献",
+  "深度分析写明跨数据集验证只有两种方法,排序一致的证据弱",
+  "关键结果写明 TAPIR 只在参数量上成本更低,器械检测不如 TAPIR-VST",
+  "论文未说明之处统一写为论文未说明:步骤数与关键帧数冲突、标注一致性、众包质控、0.004 标准差、两表检测数不一致、按术者泛化",
+  "补充 SlowFast 与 TAPIR 训练设置不一致可能造成的混杂"
+ ]
+}

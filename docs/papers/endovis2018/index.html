@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>2018 Robotic Scene Segmentation Challenge</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>从只分割器械到分割整个手术画面:EndoVis 2018 猪肾手术场景分割挑战</h1>
+<div class="sub">2018 Robotic Scene Segmentation Challenge</div>
+<div class="meta">Max Allan、Satoshi Kondo 等,Intuitive、NCT、Digital Surgery、UCL、DKFZ 及各参赛队 | arXiv 2001.11190,v3,预印本,MICCAI 2018 EndoVis 子挑战总结</div>
+<div><span class="chip">挑战赛数据集</span><span class="tag">机器人手术</span><span class="tag">语义分割</span><span class="tag">挑战赛</span><span class="tag">数据集</span><span class="tag">肾脏</span></div>
+<div class="one">EndoVis 2018 在 19 段猪肾机器人手术双目序列上标注器械部件、其他器械和三类解剖结构,18 个提交显示大面积器械容易而缝针、被覆盖肾脏很难,但测试只有 4 段、无显著性检验,且结果表与正文有多处不一致。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.4</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2001.11190" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/endovis2018/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">11 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>机器人手术想把术前影像叠加到内镜画面上,前提是知道画面里每个像素是什么。</strong> 论文的出发点是增强外科医生的感知:比如把术前 CT 里分割出的血管叠加到视野中,只在有用时显示。这需要像素级语义分割,而手术领域缺少高质量标注。</p>
+<p>组织方此前办过两届。2015 年用离体组织和运动学自动标注,背景单一,说明不了真实手术。2017 年改用真实猪手术视频,10 支队伍参加,多数队伍的器械二值和部件分割超过 0.7 mIoU。</p>
+<p>作者据此判断器械分割已有基础,可以扩展类别。下一节说 2018 年给出的答案。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>整场景分割可以做,但只有大面积、边界清楚的目标做得好。</strong></p>
+<ul><li>数据:19 段猪手术序列,15 段训练、4 段测试,每段 300 帧,只标左目。</li><li>类别:器械杆部、腕部、钳口,超声探头、缝针、缝线、吸引冲洗器、夹子,肾实质、被覆盖肾脏、小肠,其余为背景。</li><li>结果:总表杆部平均 0.738,缝针 0.003,被覆盖肾脏 0.224。</li><li>排名:OTH Regensburg 总分 0.621,UNC 0.607,NCT 2 0.585。</li><li>边界:猪数据、4 个测试序列、无显著性检验、无标注一致性。</li></ul>
+<p>接下来逐项看数据、标签和评测口径。</p><div class="strip h"><span class="t">亮点</span><span class="i">2018 年把分割对象从器械扩展到整场景</span><span class="i">难度主要由目标大小和是否被遮挡决定</span></div><div class="strip d"><span class="t">数据</span><span class="i">19 段序列,15 训练 4 测试</span><span class="i">总榜第一 0.621,全体平均 0.478</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p><strong>第一个问题是场景够不够真实。</strong> 数据来自猪训练手术,在 da Vinci X 或 Xi 上录制。组织方挑出相机运动明显或有组织交互的片段,1 Hz 抽帧,手工删相似帧到每段 300 帧。</p>
+<p>每帧是 1280×1024 的双目图像对,附带出厂内外参标定,但只标注左目。作者选猪是因为猪缺少遮挡器官的脂肪,比人体简单得多,这同时也是外推到人体的最大限制。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。训练集第 1、4、5、7、9、12、13、14 段的示例帧,视角、器械和组织覆盖程度差别很大。</figcaption></figure></div><div class="card" id="s4"><h3><span class="num">4</span>标了哪些类别,怎么标</h3><p><strong>类别设计决定了挑战能测什么。</strong> 器械沿用 2017 年的杆部、腕部、钳口划分;新增超声探头之外的全部非生物物体,以及肾实质、被覆盖肾脏、小肠。被覆盖肾脏指肾筋膜与肾周脂肪连同其下的肾,是一个复合标签。</p>
+<figure class="fig"><img src="images/page_002_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。待分割类别示意,包括器械、肾脏解剖、探头、缝线、小肠和夹子。</figcaption></figure>
+<p>标注由 Intuitive 的受训技术员画多边形,兽医质控。作者坦白了解剖标注的难点:筋膜被拉起时被覆盖肾脏的边界很难统一描述;很多结构单看一帧认不出,需要看序列,而常用标注工具逐帧处理。</p>
+<p>标注者间一致性和训练集类别像素占比,论文未说明。因此后面任何类别的低分,都无法区分是模型问题还是标签问题。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_5_review.png" alt="Fig 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 5。与 Fig 3 对应的标注。橙色为肾实质,深蓝为被覆盖肾脏,橄榄绿为小肠(颜色含义为本页推断,论文未给图例)。</figcaption></figure></div><div class="card" id="s5"><h3><span class="num">5</span>分数怎么算</h3><p><strong>评测口径要先讲清楚,否则稀有类分数没法读。</strong> 单类交并比为</p>
+<div class="math">$$\mathrm{IoU} = \frac{TP}{TP + FP + FN}$$</div>
+<p>每帧只对出现的类别取平均,类别都不出现的帧剔除;再对帧平均得到测试集分数,最后按数据集大小加权得到总分。</p>
+<p>两处细节论文未说明:类别“出现”按真值还是预测判断;四个测试集各有多少帧。本页核对发现,表 V 与四段的等权平均一致。</p>
+<p>下面看参赛者拿什么方法来比。</p></div><div class="card" id="s6"><h3><span class="num">6</span>参赛方法</h3><p><strong>方法高度同质,差异主要在训练细节。</strong> 多数队伍用 ImageNet 预训练的编码器-解码器:U-Net、DeepLab V3+、PSPNet、全局卷积网络,外加集成、焦点损失、条件随机场后处理等。</p>
+<div class="tbl"><table><thead><tr><th>队伍</th><th>关键设计</th></tr></thead><tbody><tr><td>OTH Regensburg</td><td>DeepLab V3+,先用 2017 数据训练 40 轮,再在 2018 数据训练</td></tr><tr><td>Digital Surgery</td><td>DeepLab V3+,同时预测 10 类与 5 个合并类,边界加权损失,1 FPS</td></tr><tr><td>NTNU</td><td>双编码器,输入左右两帧,是唯一的双目方法</td></tr><tr><td>NCT(方法 8)</td><td>每个类别一个 U-Net</td></tr><tr><td>JHU</td><td>用生成对抗式图像翻译做分割,测试时增强投票</td></tr></tbody></table></div>
+<p>表中第二名 UNC 和 Fan Voyage 在方法章节里没有条目,论文未说明其方法;两个 NCT 提交对应哪个方法也论文未说明。没有任何队伍利用时间信息。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><p><strong>总榜前几名差距很小,而类别之间差距很大。</strong></p>
+<div class="tbl"><table><thead><tr><th>队伍</th><th>肾实质</th><th>被覆盖肾脏</th><th>杆部</th><th>缝针</th><th>探头</th><th>夹子</th><th>总分</th></tr></thead><tbody><tr><td>OTH Regensburg</td><td>0.654</td><td>0.282</td><td>0.845</td><td>0.014</td><td>0.282</td><td>0.849</td><td>0.621</td></tr><tr><td>UNC</td><td>0.614</td><td>0.363</td><td>0.839</td><td>0.000</td><td>0.305</td><td>0.771</td><td>0.607</td></tr><tr><td>NCT 2</td><td>0.618</td><td>0.293</td><td>0.777</td><td>0.019</td><td>0.335</td><td>0.729</td><td>0.585</td></tr><tr><td>平均</td><td>0.479</td><td>0.224</td><td>0.738</td><td>0.003</td><td>0.128</td><td>0.536</td><td>0.478</td></tr></tbody></table></div>
+<p>OTH 赢下 6 个类别,和它先用 2017 器械数据预训练一致,但没有消融,无法确认因果。第一与第三只差 0.036,没有显著性检验,先后不能当结论。</p><div class="strip d"><span class="t">数据</span><span class="i">杆部平均 0.738,缝针平均 0.003</span><span class="i">被覆盖肾脏平均 0.224,探头平均 0.128</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>场景比方法更能决定分数</h3><p><strong>同一批方法在四个测试集上的平均总分从 0.279 到 0.658。</strong></p>
+<div class="tbl"><table><thead><tr><th>测试集</th><th>场景</th><th>平均总分</th><th>平均肾实质</th></tr></thead><tbody><tr><td>1</td><td>远景到暴露的肾实质,切除并缝合</td><td>0.500</td><td>0.674</td></tr><tr><td>2</td><td>近景,肾被筋膜和脂肪覆盖并逐渐剥离</td><td>0.478</td><td>0.449</td></tr><tr><td>3</td><td>近景,已暴露的肾实质</td><td>0.658</td><td>0.698</td></tr><tr><td>4</td><td>远景,肾被覆盖,大量小肠,超声探头扫描</td><td>0.279</td><td>0.091</td></tr></tbody></table></div>
+<p>测试集 2 中肾实质平均是被覆盖肾脏的两倍多,定性图显示被覆盖肾脏常被判为背景。</p>
+<figure class="fig"><img src="images/page_007_fig_fig_7_review.png" alt="Fig 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 7。测试集 2 的第 6、90、160、200 帧,依次为原图、真值和两支队伍的预测,被覆盖肾脏(深蓝)在预测中大面积缺失。</figcaption></figure>
+<p>测试集 1 的定性图还显示反向错误:暴露的肾实质被判为被覆盖肾脏。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_6_review.png" alt="Fig 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 6。测试集 1 的第 6、76、122、276 帧,第 76 和 122 帧可见肾实质被误判为被覆盖肾脏。</figcaption></figure>
+<figure class="fig"><img src="images/page_008_fig_fig_8_review.png" alt="Fig 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 8。测试集 3 的第 17、100、126、177 帧,暴露肾实质多数队伍分得较好。</figcaption></figure></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><p><strong>低分有三种解释,论文都没有分开。</strong></p>
+<ul><li>缝针几乎零分:可能是目标太细,也可能是训练集太少或标注不稳。训练集类别分布论文未说明。</li><li>被覆盖肾脏低分:可能是标签歧义,也可能是模型不够强。需要人类重标的分数上限来区分,论文未提供。</li><li>OTH 第一:0.621 对 0.607 的差距可能在抽样噪声内,论文没有置信区间。</li></ul>
+<p>另外,吸引冲洗器列在类别里却没有任何结果,原因论文未说明。</p></div><div class="card" id="s10"><h3><span class="num">10</span>表格自身的问题</h3><p><strong>用这些表做逐类排名前,要知道表格本身有错。</strong></p>
+<ul><li>表 I 图注说 NCT 赢 2 类,按加粗值 NCT 2 赢了 3 类。</li><li>表 III 加粗的杆部 0.922 低于 IRCAD 的 0.927;加粗的肾实质 0.888 低于 Fan Voyage 的 0.912;加粗的小肠 0.763 低于 Kondo 的 0.828。</li><li>测试集 3 正文说分数差、肾被严重覆盖,表 III 却是四段中最高,且没有被覆盖肾脏一列。</li><li>Fig 6 图注写第 176 帧,图中是第 276 帧。</li></ul>
+<p>这些错误不改变“器械易、细小类和遮挡解剖难”的结论,但引用逐类冠军时要以数字为准。</p></div><div class="card" id="s11"><h3><span class="num">11</span>复现与使用要注意什么</h3><p><strong>先补齐论文没给的统计,再报告结果。</strong></p>
+<ul><li>自己统计训练集各类像素占比和出现帧数。</li><li>单独报告缝针、缝线、探头,不要只给平均分。</li><li>写清楚类别出现按真值还是预测判断,测试集等权还是按帧数加权。</li><li>被覆盖肾脏适合尝试时序或多视角方法,2018 年没有队伍这样做。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>EndoVis 2018 把机器人手术分割从器械扩展到整场景,数据是 19 段猪肾手术双目序列</div><div>杆部容易(平均 0.738),缝针和被覆盖肾脏很难(0.003、0.224)</div><div>测试场景对分数的影响大于方法差异</div><div>表格加粗、图注和正文有多处错误,使用前自行核对</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>公开双目、带标定的真实机器人手术序列,支持双目和时序方法</li><li>第一次在机器人手术公开挑战中同时标注器械部件、其他器械和解剖结构</li><li>坦白记录了被覆盖肾脏的标注难题</li><li>给出逐测试集、逐类别的完整结果表</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>只有猪数据,作者承认比人体简单得多</li><li>测试只有 4 段,都围绕肾脏</li><li>没有显著性检验、标注一致性和类别分布</li><li>第二名 UNC 等队伍没有方法描述,吸引冲洗器类没有结果</li><li>表格与正文多处矛盾</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>四个测试集各有多少帧,总分到底如何加权</li><li>被覆盖肾脏的人类重标一致性是多少</li><li>利用时序或双目信息能否显著改善被覆盖肾脏</li><li>吸引冲洗器类为何没有进入评测</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 b3c61df9</span><span class="s">7.3 分</span></div><p>第 1 轮自评：证据链完整，表 V 与四个测试集都有表格，表格与正文的不一致已逐项列出。D2 7：评测协议有四步流程，但参赛方法只是列表，没有说明各类设计选择对应哪些结果。D5 6：只与 2015、2017 两届对比，没有和同期其他手术分割数据集定位。D7/D8 7：仍有 shaft、covered kidney 等英文类名混用，术语首次出现未统一定义。D9 6：多数小节直接罗列，没有先写问题再写数字含义，也没有小节之间的过渡。H2、H3 未跑数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:unknown H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>研究问题末尾的核心观点速览改为先给答案再列要点，并加过渡句</li><li>各小节开头加一句该节要回答的问题，数字后补一句含义</li><li>统一类别中文名并在首次出现时给出英文原名</li><li>补充与同期数据集或 2017 挑战结果的数字对比定位</li><li>把评测协议对稀有类的影响写成可检验的推断并标明论文未说明</li><li>所有 not_stated 缺口统一写成论文未说明</li><li>运行 lint_report --mode note，推导数字登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 b39fb850 · 文稿 b3421879</span><span class="s">8.4 分</span></div><p>第 2 轮自评(模型自评,非独立评分):笔记与报告均从头重读并对照原文。数字核对与报告 lint 无未匹配数字,3 个推导值已登记。D5 仍为 7:论文本身只与 2015、2017 两届对比,没有同期其他手术场景数据集的数字可用于定位,笔记不补论文外信息。D2 为 8:评测协议四步流程清楚,但参赛方法多为单段描述,设计与结果的因果因无消融只能写成推断。无法修复的限制:测试集帧数、类别分布、标注一致性、UNC 与 Fan Voyage 方法、吸引冲洗器结果均为论文未说明;Fig 4 与 Fig 9 自动裁图被拒,保留占位。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

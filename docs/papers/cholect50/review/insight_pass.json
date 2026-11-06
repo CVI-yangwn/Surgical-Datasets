@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "动作三元组", "plain": "一帧里“哪件器械、做什么、作用在哪个组织”的组合标签。", "where": "sec:introduction", "needed_for": "理解为什么要同时做三个分量识别和配对"},
+  {"term": "类激活图（CAM）", "plain": "分类网络最后一层每个类别的空间响应图，只靠类别标签训练就能粗略显示物体位置。", "where": "sec:methodology", "needed_for": "CAGAM 用器械 CAM 引导动作和目标"},
+  {"term": "通道注意力与位置注意力", "plain": "前者在类别维度上算相关性，后者在像素维度上算相关性。", "where": "sec:methodology", "needed_for": "表 4 的交叉模式"},
+  {"term": "交叉注意力", "plain": "查询来自一组特征，键和值来自另一组特征。", "where": "sec:methodology", "needed_for": "表 5 的自注意力与交叉注意力对比"},
+  {"term": "AP_IV / AP_IT / AP_IVT", "plain": "只有所关注的分量全部正确才算命中的组合 AP。", "where": "sec:experiments-2", "needed_for": "看懂主结果表"},
+  {"term": "逐视频 mAP", "plain": "每个视频内逐类算 AP 再对视频取平均。", "where": "sec:experiments-2", "needed_for": "与他人结果对比"},
+  {"term": "不确定性加权多任务损失", "plain": "给每个任务一个可学习的权重，自动平衡损失尺度。", "where": "sec:experiments", "needed_for": "复现训练"},
+  {"term": "Wilcoxon 符号秩检验", "plain": "对成对差值做的非参数检验，不假设正态分布。", "where": "sec:method-3", "needed_for": "判断显著性主张"}
+ ],
+ "detail_questions": [
+  {"question": "CholecT50 的视频从哪来？", "answer": "45 个来自 Cholec80，5 个来自院内同术式数据。", "evidence": ["sec:related-work"], "status": "resolved"},
+  {"question": "100 类是怎么从约 300 种观测组合中选出来的？", "answer": "先语义归并，再由三名临床医生按 1-5 分评可能性与有用性，结合出现次数排序取前若干；具体截断分数未给出。", "evidence": ["sec:related-work"], "status": "partly"},
+  {"question": "两名标注医生之间的一致性有多高？", "answer": "论文未说明，只说第三名医生在分歧时仲裁。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "表 4 的提升值与表格相减是否一致？", "answer": "正文说通道注意力使目标提升 3.5、双注意力使动作提升 12.4，按表算是 3.3 和 12.7，出入原因论文未说明。", "evidence": ["sec:experiments-2"], "status": "not_stated"},
+  {"question": "表 6 中 2 层 AP_IT 为 41.1 而 8 层为 36.9，是否真实？", "answer": "附录表 B.18 中 2 层类别图模型的 AP_IT 是 34.1，其余两列与表 6 一致，41.1 疑似排版错误，论文未说明。", "evidence": ["sec:model", "sec:model-2"], "status": "not_stated"},
+  {"question": "表 B.19 的“有辅助损失”对应几层模型？", "answer": "AP_IV、AP_IT 与 2 层相同，AP_IVT 与 8 层相同，层数论文未说明。", "evidence": ["sec:model-3"], "status": "not_stated"},
+  {"question": "类别权重 W_c 怎么算？", "answer": "论文未说明。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "摘要的“提高 9% 以上”指什么？", "answer": "AP_IVT 从 20.0 到 29.9，是 9.9 个百分点的绝对提升。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "显著性检验的样本是什么？", "answer": "30 个随机批次，每批 100 个连续帧；批次是否来自不同视频未说明。", "evidence": ["sec:method-3"], "status": "partly"},
+  {"question": "为什么 TCN 比 CNN 还差？", "answer": "作者推测 CNN 特征本身不够有代表性，时序精化无从发挥，没有实验验证。", "evidence": ["sec:method"], "status": "partly"},
+  {"question": "数据集许可和下载条件？", "answer": "论文只说将在 CAMMA 网站公开并用于 2021 EndoVis 挑战，许可条款未说明。", "evidence": ["sec:introduction", "sec:conclusion"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "RDV 比 Tripnet 好 9.9 个 AP_IVT", "alternative": "单一 10 视频测试集上的波动，或调参预算不同造成", "separating_evidence": "多划分或多种子的均值与方差，以及对基线同等调参", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "动作看器械类型、目标看器械位置", "alternative": "位置注意力只是容量更大（1792×1792），对任何需要定位的分量都有利", "separating_evidence": "控制参数量的对比，或注意力图与目标区域的定量重合度", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "交叉注意力是关联提升的关键", "alternative": "主要收益来自把分量类别图作为额外输入，而不是注意力方式", "separating_evidence": "表 5 中多重自注意力（同样四路输入）为 26.1，交叉注意力为 29.9", "in_paper": true, "verdict": "supported"},
+  {"claim": "显著性检验支持提升", "alternative": "连续帧批次彼此相关，p 值偏小", "separating_evidence": "以视频为单位做检验", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "数据与任务定义新增“这个数据集能拿来做什么”小节，写明标注一致性、截断标准、许可均为论文未说明",
+  "主对比处说明摘要的 9% 是 9.9 个百分点的绝对提升",
+  "深度分析区分“四路输入”与“交叉注意力”两部分贡献，并标明交叉注意力结论有表 5 支撑",
+  "评测协议一节写明显著性检验以连续帧批次为单位、未按视频检验",
+  "关键结果补 Fig. 11 注意力可视化只做了定性展示",
+  "各节补开篇问题与收尾过渡"
+ ]
+}

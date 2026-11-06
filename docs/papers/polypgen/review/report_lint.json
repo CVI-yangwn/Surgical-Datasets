@@ -1,0 +1,30 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "332222f9161c2f019fe4ac45693bd7126a59b1844d38ac1302bce31746beca80",
+  "number_exceptions": {
+    "0.02": "推导值：表 5 中相邻模型 DSC 之差（如 0.82 与 0.81、0.80）",
+    "0.06": "推导值：表 7 中 DSC 最大 0.82 减最小 0.76",
+    "4.7": "推导值：表 7 中 dAHD 4.70 到 4.88 的约数",
+    "130": "原文 'About 1.3 million new cases'（sec:background）的中文写法 130 万",
+    "01981": "DOI 10.1038/s41597-023-01981-y 的组成部分（元数据）",
+    "023": "DOI 10.1038/s41597-023-01981-y 的组成部分（元数据）",
+    "223": "Fig. 2a 阴性样本环形图标注（第 5 页图像内文字，未进入文本层）",
+    "1566": "Fig. 2a 阴性样本环形图标注（第 5 页图像内文字）",
+    "731": "Fig. 2a 阴性样本环形图标注（第 5 页图像内文字）",
+    "1755": "Fig. 2a 阴性样本环形图标注（第 5 页图像内文字）",
+    "706": "Fig. 2b 柱状图 C2 大息肉数量标注（第 5 页图像内文字）",
+    "455": "Fig. 6 C1 Total 条形标注（第 11 页图像内文字）",
+    "199": "Fig. 6 C1 Rejected 条形标注（第 11 页图像内文字）",
+    "501": "Fig. 6 C3 Total 条形标注（第 11 页图像内文字）"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

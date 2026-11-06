@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "阶段与步骤", "plain": "阶段是只出现一次的大环节，步骤是可重复的具体操作，若干步骤组成一个阶段。", "where": "sec:data-2", "needed_for": "长时任务层级与多任务训练"},
+  {"term": "原子动作", "plain": "器械在某一时刻不可再分的状态，如握持、静止、移动，一个器械最多同时做 3 个。", "where": "sec:supplementary-material", "needed_for": "动作检测为何是多标签任务"},
+  {"term": "关键帧", "plain": "每 35 秒取一帧，只在这些帧上做分割和动作标注。", "where": "sec:supplementary-material", "needed_for": "短时任务的覆盖范围"},
+  {"term": "mAP@0.5IoU", "plain": "预测与真值交并比超过 0.5 才算命中，再对各类平均精度取均值。", "where": "sec:analysis", "needed_for": "分割与动作结果的读法"},
+  {"term": "视频级 F1", "plain": "每段视频单独算 F1 再平均，比逐帧 mAP 更受连续性影响。", "where": "sec:analysis", "needed_for": "阶段 mAP 与 F1 的差异"},
+  {"term": "区域提议", "plain": "分割模型给出的候选器械区域及其嵌入，供后续分类头使用。", "where": "sec:appendix-c-of-the-supplementary-material-this-section-pro", "needed_for": "表 12 的比较"},
+  {"term": "交叉注意力区域分类头", "plain": "用区域嵌入作查询，去视频时空特征里取相关信息再分类。", "where": "sec:appendix-c-of-the-supplementary-material-this-section-pro", "needed_for": "表 13 的消融"}
+ ],
+ "detail_questions": [
+  {"question": "测试集成绩是怎么得到的？", "answer": "调参在两折上做，测试前在两折合并数据上重训最佳模型。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "为什么 TAPIS-VST 分割略好？", "answer": "作者归因于其更细的空间处理和更多参数，没有消融支撑。", "evidence": ["sec:method"], "status": "partly"},
+  {"question": "长时损失权重如何选？", "answer": "只给了最终值 1 与 0.5，并说权重影响很大；搜索范围未给。", "evidence": ["sec:data-3"], "status": "partly"},
+  {"question": "原子动作的标注者间一致系数是多少？", "answer": "只给了需复核实例比例 2.18% 与 5.4%，一致系数论文未说明。", "evidence": ["sec:supplementary-material"], "status": "not_stated"},
+  {"question": "图 1 实例数与每帧平均 2.23 为何对不上？", "answer": "9031 除以 3498 约为 2.58，与 2.23 口径不同，论文未说明原因。", "evidence": ["sec:data", "sec:analysis"], "status": "not_stated"},
+  {"question": "TAPIR 成绩为何低于原报告？", "answer": "作者归因于整理去偏和补标细小器械。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "多任务训练是否全面有益？", "answer": "步骤 mAP 与 F1 上升，阶段 mAP 从 72.31 降到 71.36。", "evidence": ["sec:model-3"], "status": "resolved"},
+  {"question": "区域分类头为何降低实例 mAP？", "answer": "作者说它会误分短暂出现的小区域。", "evidence": ["sec:model-5"], "status": "resolved"},
+  {"question": "是否做过显著性检验？", "answer": "只报告了两折标准差，显著性检验论文未说明。", "evidence": ["sec:model-3", "sec:model-7"], "status": "not_stated"},
+  {"question": "跨中心泛化如何？", "answer": "全部数据来自一家医院，论文未说明跨中心表现。", "evidence": ["sec:data-2"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "分割标注提升动作检测", "alternative": "收益来自 Mask2Former 结构或其 COCO 预训练，而非掩码监督。", "separating_evidence": "同一模型分别用框监督和掩码监督训练后比较动作检测。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "长时预训练提升动作检测", "alternative": "1.4 个点的差异来自随机波动。", "separating_evidence": "多次运行或显著性检验。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "外部基准排序一致说明 GraSP 可靠", "alternative": "排序一致只反映方法强弱，不检验标注质量。", "separating_evidence": "标注者间一致性或重复标注实验。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "交叉注意力头优于池化与 MLP", "alternative": "优势来自参数量。", "separating_evidence": "表 13 中交叉注意力参数少于 Time MLP 仍更好。", "in_paper": true, "verdict": "supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览",
+  "深度分析写入四条挑战的结论与缺失的对照实验",
+  "局限中写明动作一致系数、显著性检验、跨中心泛化均为论文未说明",
+  "关键结果补充 TAPIS-VST 分割优势仅为作者归因",
+  "复现注意点写明损失权重搜索范围论文未说明"
+ ]
+}

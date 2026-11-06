@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "1f16b7418f06fe2c3310883470cd03d9adae1321cb37ae71df18d3400c3b3cce",
+      "note_snapshot": "review_rounds/round1_Pixel_Wise_Recognition_for_Holistic_Surgical_Scene_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮按原流程保存的笔记：四层任务、标注协议、TAPIS 机制与主要表格齐全。D4 7：边界列出但未逐条对照核心主张做挑战；D5 7：与 PSI-AVA、SAR-RARP50 等的定位分散在不同章节；D6 7：复用建议缺少‘要避免什么’；D7 7：研究问题末尾没有核心观点速览；D9 6：多数小节直接列数字，缺少开头的问题和数字后的含义。H3 未知：尚未对笔记跑数字核对。",
+      "fixes": [
+        "在研究问题末尾加入 ### 核心观点速览",
+        "按 insight pass 对四个核心主张逐条做挑战并把结论写回深度分析",
+        "对笔记跑 lint_report --mode note，推导值登记 number_exceptions",
+        "各小节开头补上要回答的问题，关键数字后补一句含义",
+        "我的笔记补充需要避免的做法",
+        "把原文未回答的问题统一写成论文未说明"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "a42a61896a818341431b8bbc9f5927980cc3b68d641c235a49145e5d3a890684",
+      "note_snapshot": "review_rounds/round2_Pixel_Wise_Recognition_for_Holistic_Surgical_Scene_Understanding.md",
+      "report_sha256": "bfb458a87d4b216d9c2b56b4326a9ea193c3001bb29ba8e117d8638768c72753",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.9,
+      "verdict": "第 2 轮（自评）：加入核心观点速览，四个核心主张逐条挑战并写回深度分析与报告第 8 节；未说明之处统一写为论文未说明；笔记与报告数字核对无未匹配项，5 个值登记在 number_exceptions.json（2 个推导值、2 个千位分隔写法、1 个抽取丢失的表格值）。D9 7：报告各节开头有问题、结尾有过渡，但笔记关键结果部分仍以表格加解释为主，叙事较弱。不可修复的限制：表 1、4、6、7、11、12、13 无可用裁剪，保留占位，其中 4、7、11、13 的数值以 Markdown 表转录；论文本身未给动作一致系数、显著性检验与跨中心结果。",
+      "fixes": []
+    }
+  ]
+}

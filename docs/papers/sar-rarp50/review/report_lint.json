@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "a050e5731f693f3f113ad1a22129e0a1e1bf8899bd0870621e5206591047c2c1",
+  "number_exceptions": {
+    "0.008": "推导值：Table 10 分割最终分 Uniandes 0.847 减 SummerLab-AI 0.839",
+    "0.024": "推导值：Table 6 动作最终分 SummerLab-AI 0.828 减 Uniandes 0.804",
+    "0.3": "推导值：Table 2 中夹子、导尿管、针持三类的训练/测试平均覆盖率最大为 0.27%，均低于 0.3%"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

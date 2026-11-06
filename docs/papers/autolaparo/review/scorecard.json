@@ -1,0 +1,73 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "2a5c2a63fa2b0070d17ec9943e66db5f8db03940d32d1032e291d48b63e7f1bd",
+      "note_snapshot": "review_rounds/round1_AutoLaparo_A_New_Dataset_of_Integrated_Multi_tasks_for_Image_guided_Surgical_Automation_in_Laparoscopic_Hysterectomy.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 8,
+        "D5": 6,
+        "D6": 8,
+        "D7": 6,
+        "D8": 7,
+        "D9": 5
+      },
+      "overall": 7.5,
+      "verdict": "模型自评，非独立评审。H3 为 unknown：note 模式数字核对有 58 个未匹配值，绝大多数来自表 2 表体（文本抽取丢失表体，需对照页面图像登记），另有 1.37、1.75、2.39、21.9、26.3、1177 等推导值未登记。D5 为 6：只在背景里定性提到已有数据集，没有逐个说明与 Cholec80、GLENDA、LapGyn4、SurgAI 的差别。D7 为 6：章节未编号，没有亮点与数据条。D8 为 7：AC/PR/RE/JA、AP、IoU、把手与杆部等术语首次出现时定义不全。D9 为 5：没有核心观点速览，各节不以问题开头，部分数字后没有所以然。摘要译文为一段 323 字，超出段落长度建议。",
+      "fixes": [
+        "在研究问题末尾加入核心观点速览，并按背景、观点、实验、深入分析的顺序组织",
+        "各节开头写出要回答的问题，数字后补所以然，节尾加衔接句",
+        "首次出现处解释 AC/PR/RE/JA、AP、IoU、多数类基线等术语",
+        "补写与 Cholec80、GLENDA、LapGyn4、SurgAI 等数据集的逐项定位",
+        "把表 2 表体数值与推导值登记到 number-exceptions 并写明来源",
+        "写 insight_pass.json 并把三轮思考的修订写入笔记",
+        "拆分摘要译文过长段落",
+        "写 reading_report.md 并通过 lint_report"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "49f1791092b66433c41ae59ac8b9315ef5ac5c89c8759942147c462d6a541e4b",
+      "note_snapshot": "review_rounds/round2_AutoLaparo_A_New_Dataset_of_Integrated_Multi_tasks_for_Image_guided_Surgical_Automation_in_Laparoscopic_Hysterectomy.md",
+      "report_sha256": "b152c88a7fb68d52b2a64b60067cf22e615524ea9a75851e88208addcbdae205",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "模型自评，分数由同一模型打出，不是独立评审。总分较第 1 轮上升，没有下降项。H3 由 unknown 变为 pass：表 2 表体 52 个数值因 full_text 抽取丢失表体，已对照第 5 页 PDF 文本层与页面图像核对并登记；1177、21.9、26.3 为推导值，来源写在 number-exceptions 文件。已知上限：Fig. 1 重裁后面板字母被截、Table 2 裁图与 Table 1 相同、Table 3/5 无候选、Table 4 裁图无表体，均保留占位，表格数值已用 Markdown 转录；D5 为 8，论文只做定性对比，没有对方数据集的规模数字；D7 为 8，笔记固定章节名不能编号，编号与亮点数据条在报告中；多数类基线为本笔记据表 1 推算，已标为我的判断。",
+      "fixes": []
+    }
+  ]
+}

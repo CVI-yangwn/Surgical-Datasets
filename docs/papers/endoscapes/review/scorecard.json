@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "8e3d85e767e20194bf077172c76c285075e8c977e0b62bec6ec4756ffeec7a32",
+      "note_snapshot": "review_rounds/round1_The_Endoscapes_Dataset_for_Surgical_Scene_Segmentation_Object_Detection_and_Critical_View_of_Safety_Assessment_Official_Splits_and_Benchmark.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "fail",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 5,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 5
+      },
+      "overall": 6.0,
+      "verdict": "模型自评。证据链完整,四个子集、划分、kappa、Table 2 到 Table 8 的数值都在;论文自身的 422/493 不一致已指出。不足:lint_report 笔记模式下有 8 个未匹配数字(DOI 与期刊信息、自算差值 15.1/5.7、以及“上限不会接近 100”这一无依据的说法),尚未登记来源,H3 按字面记 fail,总分封顶 6.0;定位只列了 DeepCVS,对 Cholec80-CVS 只在后续问题里提到;研究问题没有以 CVS 的临床意义和读者要回答的问题开头,各节缺少“所以呢”和节间承接;部分段落为过混合语言检查改写得较生硬(第一项/第二项替代 C1/C2)。",
+      "fixes": [
+        "登记推导数字(15.1、4.4 到 5.7 的差值)和元数据数字到 number-exceptions,删去无原文依据的“不会接近 100”",
+        "研究问题开头补背景和动机,核心观点速览放在研究问题末尾并与结论对应",
+        "每组结果数字后补一句含义,节末补承接",
+        "补写与 DeepCVS、Cholec80-CVS 的定位,原文未比较之处写成论文未说明",
+        "把 insight pass 的挑战轮结论写进深度分析与局限,所有 not_stated 缺口写成论文未说明",
+        "恢复 C1/C2/C3 记号的可读性,在首次出现处定义"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "98d307500fbb5629713891297270af9bc282f153adf01719ba2efc20bb87d5ff",
+      "note_snapshot": "review_rounds/round2_The_Endoscapes_Dataset_for_Surgical_Scene_Segmentation_Object_Detection_and_Critical_View_of_Safety_Assessment_Official_Splits_and_Benchmark.md",
+      "report_sha256": "72c46e7b285123d412df2f4a3ac88c51bf6e9e8dd3591e983b94cd54aabde42f",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "模型自评。笔记与报告数字全部在原文中找到或已登记为推导值(DOI/期刊信息与 15.1、4.4、5.7 三个差值),删除了无依据的“上限不会接近 100”。研究问题以难点和前作缺陷开头,核心观点速览放在研究问题末尾,各结果后补了含义与承接;挑战轮的三条结论和 11 个细节问题中的 not_stated 项都写成了论文未说明。D5 记 7:论文本身没有和 Cholec80-CVS 等数据集比较,笔记只能如实写论文未说明,无法补足。剩余限制:Table 1 与 Table 4、Table 8 保留占位(Table 1 裁剪修复一次后仍有污染,另两张无候选),数值已用 Markdown 表转录;422/493 帧矛盾只能指出,无法判定。",
+      "fixes": []
+    }
+  ]
+}

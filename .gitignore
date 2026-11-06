@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+# skill working output; published copies live in docs/papers/
+DeepPaperNote_output/

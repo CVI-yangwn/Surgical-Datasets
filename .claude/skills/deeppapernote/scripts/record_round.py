@@ -27,6 +27,20 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+SAVE_LOG = "save_log.jsonl"
+
+
+def first_saved_sha256(note: Path) -> str | None:
+    log = note.parent / SAVE_LOG
+    if not log.is_file():
+        return None
+    for line in log.read_text(encoding="utf-8").splitlines():
+        entry = json.loads(line)
+        if entry.get("note") == note.name:
+            return entry.get("note_sha256")
+    return None
+
+
 def overall(dims: dict[str, float], gates: dict[str, str]) -> float:
     score = round(sum(WEIGHTS[k] * float(v) for k, v in dims.items()) + 1e-9, 1)
     return min(score, 6.0) if any(v == "fail" for v in gates.values()) else score
@@ -75,6 +89,13 @@ def main() -> int:
         sys.exit(f"round {n} must be stage={expected_stage(n)}, got {a.stage}")
     if n == 1 and report:
         sys.exit("round 1 scores the original note only; write reading_report.md in round 2")
+    if n == 1:
+        first = first_saved_sha256(note)
+        if first is None:
+            sys.exit(f"no {SAVE_LOG} next to the note; round 1 must score a note written by Formal Save")
+        if first != sha256(note):
+            sys.exit("the note changed after its first Formal Save; round 1 must score the original "
+                     "flow's note as first saved. Restore that version, or record the change as a round-1 fix")
     if n >= 2 and not (report and report.exists()):
         sys.exit("from round 2 on, --report must point to an existing reading_report.md")
     if n == 1 and not fixes:

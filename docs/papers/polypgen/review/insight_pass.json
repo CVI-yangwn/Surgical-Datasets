@@ -1,0 +1,198 @@
+{
+ "knowledge_points": [
+  {
+   "term": "域偏移",
+   "plain": "训练数据和测试数据来自不同医院、人群或设备，图像统计特性不同，模型性能会下降。",
+   "where": "sec:background",
+   "needed_for": "理解为什么要按中心留出测试"
+  },
+  {
+   "term": "单帧与序列帧",
+   "plain": "单帧是从视频中挑出的、多为清晰息肉的静态图；序列帧是小间隔连续抽取的帧，可包含无息肉画面。",
+   "where": "sec:findings",
+   "needed_for": "解释序列 DSC 为何低于单帧"
+  },
+  {
+   "term": "阴性序列",
+   "plain": "来自无息肉患者的连续帧，只有原图没有掩码，用来测误报。",
+   "where": "sec:findings",
+   "needed_for": "判断数据能否用于检测误报评测"
+  },
+  {
+   "term": "二值专家审核",
+   "plain": "专家只给接受或拒绝两种判定，不给打分或修改量。",
+   "where": "sec:findings",
+   "needed_for": "理解 30.5% 拒收率的含义"
+  },
+  {
+   "term": "DSC 与 JI",
+   "plain": "两者都衡量预测与真值掩码的重叠，DSC 是 F1，JI 是交并比，同一结果 DSC 总高于 JI。",
+   "where": "sec:findings",
+   "needed_for": "识别正文把 JI 0.65 写成 DSC 的错误"
+  },
+  {
+   "term": "NSD",
+   "plain": "预测边界中离真值边界不超过阈值的那部分所占比例，本文阈值为 10。",
+   "where": "sec:findings",
+   "needed_for": "读懂表 5/6 的边界指标"
+  },
+  {
+   "term": "按像素定义的息肉尺寸",
+   "plain": "小、中、大以外接框是否超过 100×100 或 200×200 像素划分，与毫米无固定换算。",
+   "where": "sec:findings",
+   "needed_for": "解读小息肉 DSC 0.46"
+  },
+  {
+   "term": "留一中心验证",
+   "plain": "每次拿一个中心做验证、其余中心训练，用来看验证集选择的影响。",
+   "where": "sec:method-3",
+   "needed_for": "读懂表 7"
+  }
+ ],
+ "detail_questions": [
+  {
+   "question": "C5 和 C6 的阳性帧数到底是多少？",
+   "answer": "正文写 C5 458、C6 520；Fig. 2a 标 C5 520、C6 484，两者矛盾，论文未解释。",
+   "evidence": [
+    "sec:study-design",
+    "sec:findings"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "阴性帧来自哪几个中心？",
+   "answer": "正文说四家医院；Fig. 2a 中 1755 一段颜色是 C6 却标为 C5，归属论文未说明。",
+   "evidence": [
+    "sec:background",
+    "sec:findings"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "序列上最好的 DSC 是 0.65 还是 0.71？",
+   "answer": "表 6 为 0.71（DeepLabV3+ ResNet101），0.65 是 JI；验证总结段写错。",
+   "evidence": [
+    "sec:method-2",
+    "sec:findings"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "首轮被拒的 676 帧去哪了？",
+   "answer": "论文只说模糊批次被重标再审，没说被拒帧是否修正后发布。",
+   "evidence": [
+    "sec:findings"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "标注者之间的一致性有多高？",
+   "answer": "没有重复标注或一致性指标。",
+   "evidence": [
+    "sec:method-3"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "为什么用 C6 做外部测试？",
+   "answer": "C6 来自埃及，人群和内镜型号与其他中心不同，作者称其为完全不同的人群与设备。",
+   "evidence": [
+    "sec:findings"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "表 7 的指标是在验证中心还是 C6 上算的？",
+   "answer": "标题写测试在 C6，但 dAHD 约 4.7，与表 5 同一模型 9.95 差一倍，论文未说明。",
+   "evidence": [
+    "sec:method-3"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "小、中、大息肉 DSC 的完整表在哪？",
+   "answer": "只在正文给出 DeepLabV3+ ResNet101 的 0.46/0.84/0.87，其余模型只有定性描述。",
+   "evidence": [
+    "sec:method-2"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "多次运行的方差是多少？",
+   "answer": "没有报告随机种子或重复训练的方差。",
+   "evidence": [
+    "sec:findings"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "所有中心都用 Olympus 吗？",
+   "answer": "表 2 列出的系统全部是 Olympus 型号，C5 写作 GIF-H260Z、EVIS Lucera CV260、Olympus Medical Systems。",
+   "evidence": [
+    "sec:study-design",
+    "sec:findings"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "有没有检测基线？",
+   "answer": "技术验证只有分割；检测评测代码只以 GitHub 链接提供。",
+   "evidence": [
+    "sec:method-3"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "表中 ± 是什么？",
+   "answer": "论文没有定义 ± 的含义。",
+   "evidence": [
+    "sec:method"
+   ],
+   "status": "not_stated"
+  }
+ ],
+ "challenges": [
+  {
+   "claim": "C6 上性能下降反映了现有方法跨中心泛化能力不足。",
+   "alternative": "C6 本身更难（画面更暗、序列含无息肉帧），即使在 C6 内部训练分数也不高。",
+   "separating_evidence": "C6 域内训练或 C1-C5 域内测试的分数作为上界。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "残差骨干与 ASPP 提升了泛化。",
+   "alternative": "更深的骨干只是整体容量更大，域内同样更强，与泛化无关。",
+   "separating_evidence": "同一模型的域内与域外分数差。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "序列更难是因为帧数多、图像质量不一。",
+   "alternative": "序列中无息肉帧上的误报把 DSC 拉低，与图像质量无关。",
+   "separating_evidence": "分开报告有息肉帧 DSC 和无息肉帧误报率。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "验证中心的选择对性能影响很大。",
+   "alternative": "DSC 0.76 到 0.82 的差异在单次训练的随机波动范围内。",
+   "separating_evidence": "每种验证中心多次训练的方差。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "标注经过严格专家质控。",
+   "alternative": "拒收率 30.5% 也说明首轮标注质量不稳，留下的样本偏向容易病例。",
+   "separating_evidence": "标注一致性指标和被拒帧的病例特征。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  }
+ ],
+ "revisions": [
+  "在关键结果中指出序列 DSC 混合了分割质量与误报，并建议分开报告",
+  "把表 7 的 dAHD 量级矛盾和计算对象写成论文未说明",
+  "在深度分析中补充：没有域内上界，下降量无法归因于域偏移",
+  "把阴性帧中心归属、被拒帧去向、± 含义、多次运行方差写成论文未说明",
+  "在研究问题后增加与 Kvasir-SEG、CVC-ClinicDB 等数据集的逐项对比"
+ ]
+}

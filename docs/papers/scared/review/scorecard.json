@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "01ec65ce5b2da3c6400543800e632c9e572f6cae90dfa6a42559465e5e79fd30",
+      "note_snapshot": "review_rounds/round1_Stereo_Correspondence_and_Reconstruction_of_Endoscopic_Data_Challenge.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮自评（模型自评）：证据链、主结果表、数据缺陷与局限基本齐全。D2=7：结构光解码、多投影位置拼接和运动学重投影的具体步骤论文只给一句话，笔记没有逐项标出哪些是论文未说明。D5=7：与 Middlebury、KITTI 及既有手术数据集的对比只有一句，缺少规模层面的说明且论文未给出。D6=7：复用建议偏概括。D7=7：小节未编号，图 3 到图 6 连放四张。D9=6：各节直接罗列事实，缺少开头的问题和数字后的含义，研究问题末尾缺 核心观点速览。H3 未做数字核对，记为 unknown。",
+      "fixes": [
+        "按 insight pass 三轮补充知识点、细节问答和对中心论断的质疑，并写回笔记",
+        "在研究问题末尾加 ### 核心观点速览，按叙事顺序改写各节开头",
+        "把真值精度、总帧数、分辨率、合并排名方式、数据许可等缺口统一写成 论文未说明 并说明影响",
+        "核对“丢弃不足 10% 的帧”这句的歧义与图 5 两子图相同的问题，在局限中写清",
+        "用 lint_report.py --mode note 做数字核对，推导值 3.54、3.75、0.58 登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "d2c5af800fa54bedc0e18df23fc9adcbc1412961a275c7b8e6c62c45b6e9ca35",
+      "note_snapshot": "review_rounds/round2_Stereo_Correspondence_and_Reconstruction_of_Endoscopic_Data_Challenge.md",
+      "report_sha256": "140e71b675b31649bd53d6ae7e77a13ebf5d5032dc79fbf11ae7a2fcbb646439",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评（模型自评）：完成 insight pass 三轮（8 个知识点、11 个细节问答、4 个质疑），研究问题末尾补了核心观点速览，各节开头交代问题，主结果后补了含义。真值精度、总帧数、分辨率、许可、合并排名方式、赛后方法是否接触测试真值、数据集 8、9 与测试集对应、图例与表格对应等均写为论文未说明；数字核对无未匹配项，推导值 3.54、3.75、0.58、13、9 已登记。重新打分时发现图 6 图注把归零段写成确定事实，已改为推断并重新校验和保存。D5=7 未能提高：论文对 Middlebury、KITTI 和既有手术数据集只有一句定性对比，没有规模数字，属于原文限制。D2=8：结构光解码和多投影拼接的细节原文只有一句话。",
+      "fixes": []
+    }
+  ]
+}

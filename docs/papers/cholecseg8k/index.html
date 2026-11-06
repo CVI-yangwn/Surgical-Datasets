@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>CholecSeg8k: A Semantic Segmentation Dataset for Laparoscopic Cholecystectomy Based on Cholec80</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>给胆囊切除术视频补一层像素级标注：CholecSeg8k 数据集说明</h1>
+<div class="sub">CholecSeg8k: A Semantic Segmentation Dataset for Laparoscopic Cholecystectomy Based on Cholec80</div>
+<div class="meta">W.-Y. Hong, C.-L. Kao, Y.-H. Kuo, J.-R. Wang, W.-L. Chang, C.-S. Shih（台湾大学） | arXiv:2012.12453 预印本</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">语义分割</span><span class="tag">腹腔镜胆囊切除术</span><span class="tag">Cholec80</span></div>
+<div class="one">CholecSeg8k 从 Cholec80 的 17 个视频中取出 101 段、每段 80 帧连续画面，共 8,080 帧并标注 13 类像素标签，是一份没有划分、没有基线的数据发布说明。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 6 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.0</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2012.12453" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cholecseg8k/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>内镜手术需要知道镜头在哪，现有外部传感器做不到足够准。</strong> 论文举例说，Hu 等人的磁定位系统要用 16 个传感器才达到 5.6 mm 的精度，亚厘米级定位并不现实。</p>
+<p>作者设想用基于图像的 <code>SLAM</code>（同时定位与建图）代替外部传感器：把实时画面和事先采集的参考数据比对来定位。户外可以靠卫星定位挑出要比对的参考数据，体内不行，于是作者提出先识别画面里的器官，再用识别结果去检索参考数据。</p>
+<p>识别器官要靠语义分割（给每个像素分配类别）或目标检测，两者都需要大量标注好的内镜图像，而这类公开数据很少。这就是论文要补的缺口。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份数据发布说明：没有模型、没有划分、没有基线。</strong> 它只做一件事，在 <code>Cholec80</code> 已有视频上补像素级标注。</p>
+<ul><li>来源：<code>Cholec80</code> 的 17 个视频，取 101 段、每段 80 帧连续画面，共 8,080 帧，分辨率 854×480。</li><li>标注：13 个类别，以肝脏和胆囊为中心；胃肠道和肝韧带是有意合并的宽类。</li><li>发布：每帧一张原图加三种 PNG 掩码，总计 3GB，Kaggle 上以 CC BY-NC-SA 4.0 发布。</li><li>风险：类别极不平衡，视频选择标准、标注者与一致性，论文未说明。</li></ul>
+<p>接下来按“数据怎么组织、怎么构建、统计说明了什么”的顺序展开。</p><div class="strip h"><span class="t">亮点</span><span class="i">8,080 帧来自 101 段连续片段，不是 8,080 个独立样本</span><span class="i">论文没有任何训练测试划分和基线结果</span></div><div class="strip d"><span class="t">数据</span><span class="i">8,080 帧 / 17 个视频 / 101 个目录</span><span class="i">13 个类别，854×480，3GB</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来，补了哪一层</h3><p><code>Cholec80</code> 是 <code>CAMMA</code> 研究组与斯特拉斯堡大学医院等机构合作发布的数据，含 13 名外科医生完成的 80 台胆囊切除术视频，帧率 25 fps，只有器械和手术阶段标注。</p>
+<p>本文从中选出“高度相关”的 17 个视频，跳过准备阶段和结束阶段，在抽出的帧上做像素标注。<strong>具体选了哪些视频、按什么标准选，论文未说明</strong>，这让使用者无法判断数据偏向哪些术者或哪些手术难度。</p>
+<p>论文没有与其他手术分割数据集作比较，新意只能相对 <code>Cholec80</code> 来说：同一批视频，从阶段级标注细化到像素级。</p></div><div class="card" id="s4"><h3><span class="num">4</span>一个样本长什么样</h3><p>数据按两级目录存放。第一级以视频命名，例如 <code>video12</code>；第二级以“视频名_起始帧号”命名，每个目录存 80 帧连续画面，例如 <code>video12_15750</code> 存第 15750 到 15829 帧。</p>
+<p><strong>连续 80 帧意味着目录内画面几乎相同。</strong> 按 25 fps 推算，一个目录只覆盖约 3.2 秒。每帧有四个 PNG：原图、颜色掩码、标注工具掩码和分水岭掩码；读标签要用分水岭掩码，它三个通道都存类别 ID。</p>
+<figure class="fig"><img src="images/page_003_fig_figure_4_review_repair1.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。<code>video01_00080</code> 目录下的文件，每帧对应原图和三种掩码。</figcaption></figure>
+<p>每段起始帧怎么选，101 个目录在 17 个视频间如何分布，论文都未说明。</p></div><div class="card" id="s5"><h3><span class="num">5</span>13 个类别能回答什么问题</h3><p>类别包括黑色背景、腹壁、肝脏、胃肠道、脂肪、抓钳、结缔组织、血液、胆囊管、电钩、胆囊、肝静脉和肝韧带，ID 依次为 0 到 12。</p>
+<p>两个类别有意做宽：胃肠道类包括胃、小肠和附近组织；肝韧带类包括冠状韧带、三角韧带、镰状韧带、肝圆韧带、静脉韧带和小网膜。<strong>所以这份数据适合回答“肝脏、胆囊、器械在哪”，不适合细粒度解剖识别。</strong></p>
+<p>唯一写明的标注规则是：视野边缘光线暗、人也难判断的区域保持原样，因为目标是分割器官。器械边界的误差因此部分来自标注本身。标注者是谁、有无医生复核、一致性如何，论文未说明。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_6_review.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 6。肝脏居中、胆囊在上方、两种器械同时出现的复杂样例。</figcaption></figure></div><div class="card" id="s6"><h3><span class="num">6</span>像素占比说明了什么</h3><p>论文唯一的定量结果是图 3 的像素占比。腹壁 29.46%、肝脏 29.393%、脂肪 20.23% 三类占了大部分像素；胆囊 8.893%；稀有类中胆囊管只有 0.05%，肝静脉只有 0.018%。</p>
+<p><strong>含义是平均指标会掩盖稀有类的失败。</strong> 胆囊管是手术中最需要辨认的结构之一，却几乎没有像素。论文提醒了不平衡，但没有给出每类出现的帧数，也没有实验验证其影响。</p>
+<p>图中只有 12 类，黑色背景不在其中，分母是否排除背景论文未说明。</p><div class="strip d"><span class="t">数据</span><span class="i">腹壁 29.46%，肝脏 29.393%，脂肪 20.23%</span><span class="i">胆囊管 0.05%，肝静脉 0.018%</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>论文数字自洽吗</h3><p>正文与图表有几处对不上：</p>
+<ul><li>正文说图 3(b) 是占比低于 1% 的类，并说抓钳和电钩低于 1%，但图中分别是 3.317% 和 1.824%。</li><li>图 3(a) 含胃肠道 2.557%，比图 3(b) 的抓钳还低，两组划分依据论文未说明。</li><li>正文把肝脏和腹壁写成约 30%、胆囊写成 10%，是取整后的数。</li><li>图 6 的描述把电钩写成 class ID 10，表 I 中电钩是 9，掩码上也标的是 9。</li></ul>
+<p><strong>使用者应以图表或自行重算为准。</strong> 图 1 的区域编号和配色与类别表对不上，论文没有解释。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_7_review.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。含 7 号血液和 8 号胆囊管的样例，类别 ID 与表 I 一致。</figcaption></figure></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>没说这些标注够训练出好模型。</strong> 没有基线，就无法知道 8,080 帧能支撑什么精度。</li><li><strong>没说分割对定位有用。</strong> 论文的动机是 <code>SLAM</code>，但没有任何定位实验；基于特征点的 <code>SLAM</code> 也许不需要器官语义，论文没有区分。</li><li><strong>没说不平衡是主要瓶颈。</strong> 加权损失或重采样也许足以缓解，论文没有对比。</li></ul>
+<p>我的判断：由于片段内帧高度冗余，有效的独立样本远少于 8,080，规模更接近一百段左右的场景。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>按视频或至少按目录划分，不要按帧随机划分。</li><li>用分水岭掩码读类别 ID，不要把颜色掩码当标签。</li><li>报告每类交并比，单独看胆囊管、肝静脉和血液。</li><li>类别权重按图中数字或自行重算，不要用正文取整的数字。</li><li>许可是非商业、相同方式共享，商业用途不可直接使用。</li></ul>
+<figure class="fig"><img src="images/page_006_fig_figure_8_review.png" alt="Figure 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 8。Kaggle 数据集页面，可见许可和下载大小。</figcaption></figure></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>这是数据说明，不是 benchmark：没有划分、指标和基线</div><div>8,080 帧来自 101 段连续片段，划分必须以视频或目录为单位</div><div>稀有类（胆囊管、肝静脉）像素极少，必须单独评测</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>在常用的 <code>Cholec80</code> 上补了公开的像素级标注，可直接下载</li><li>类别表、目录结构和文件格式写得清楚，分水岭掩码便于编程读取</li><li>公开了像素占比，提前提示类别不平衡</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>视频选择、起始帧、标注者和一致性都未说明</li><li>正文与图 3、图 6 的数字和类别 ID 不一致</li><li>动机中的 <code>SLAM</code> 与数据集之间没有实验连接</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>17 个视频与 <code>Cholec80</code> 官方的训练测试划分是否重叠？</li><li>80 帧片段是否偏向某些手术阶段？</li><li>有医生复核时，器械和稀有类的边界标注会差多少？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 5e552253</span><span class="s">7.1 分</span></div><p>模型自评。D2为7：构建流程四步写清了输入和输出，但视频选择、起始帧选择两步只能写论文未说明。D5为5：除 Cholec80 外没有说明与其他手术分割数据集的关系，论文本身也没有比较。D6为7：复现建议有，但没有说明不该做什么。D7为6：章节未编号，没有亮点与数据条，Fig. 2、Fig. 3、Fig. 5 三处保留占位。D9为5：没有核心观点速览，多数小节不以问题开头，像素占比表后缺少所以然的归纳。数字核对：note 模式有13个未匹配数字，其中12个是图3柱状图上的百分比标签（文本抽取未带出，已打开第3页预览核对），3.2 是 80 帧除以 25 fps 的推导值。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>5</b></span><span>D6 <b>7</b></span><span>D7 <b>6</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入核心观点速览，并按背景、观点、实验、深入分析的顺序调整</li><li>各小节以要回答的问题开头，数字后补一句含义</li><li>把图3百分比与3.2秒登记到 number-exceptions 文件并注明来源</li><li>把 insight pass 中的论文未说明项写进笔记</li><li>补充与 Cholec80 原有标注的定位关系，说明本文没有与其他分割数据集比较</li><li>复现注意点增加应避免的做法</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 d9102942 · 文稿 638a2415</span><span class="s">8.0 分</span></div><p>模型自评。笔记与报告重新从头打分。D5为6：论文本身只与 Cholec80 对照，没有与其他手术分割数据集比较，笔记和报告如实写明这一点，无法从原文补足。Fig. 2、Fig. 3、Fig. 5 保留占位（自动裁剪图号与内容不符或无候选），图3数值已整理为表格。数字核对：note 与 report 模式均无未匹配数字；图3的12个百分比来自柱状图标签、3.2 秒为推导值，已登记在 number_exceptions.json。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>9</b></span><span>D5 <b>6</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

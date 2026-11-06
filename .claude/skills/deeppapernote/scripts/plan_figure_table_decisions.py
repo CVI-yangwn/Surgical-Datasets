@@ -39,6 +39,14 @@ def parser() -> argparse.ArgumentParser:
         default="",
         help="Existing decision JSON whose requested bounded repairs should be applied.",
     )
+    p.add_argument("--record-review", default="", metavar="SOURCE_ID",
+                   help="With --review-decisions: record a visual review for this Figure/Table id.")
+    p.add_argument("--status", default="", choices=("", "pass", "fail", "repair_requested"))
+    p.add_argument("--notes", default="")
+    p.add_argument("--preserved", default="[]", help="JSON list of scientific elements kept in the crop.")
+    p.add_argument("--omitted", default="[]", help="JSON list of scientific elements missing from the crop.")
+    p.add_argument("--failure-reason", default="")
+    p.add_argument("--revised-bbox", default="[]", help="JSON [x0,y0,x1,y1] page-relative, for repair_requested.")
     p.add_argument(
         "--asset-subdir",
         default="images",
@@ -198,12 +206,19 @@ def should_review(caption: dict[str, Any], plan_item: dict[str, Any], status: st
     return bool(path and Path(path).expanduser().is_file())
 
 
-def matched_figure_asset(assets_wrapper: dict[str, Any], label: str) -> dict[str, Any]:
+def matched_figure_asset(
+    assets_wrapper: dict[str, Any], label: str, pages: list[int] | None = None
+) -> dict[str, Any]:
     target = normalize_label(label)
-    for asset in assets_wrapper.get("figure_assets", []) or []:
-        if isinstance(asset, dict) and normalize_label(str(asset.get("label", ""))) == target:
+    matches = [
+        asset for asset in assets_wrapper.get("figure_assets", []) or []
+        if isinstance(asset, dict) and normalize_label(str(asset.get("label", ""))) == target
+    ]
+    wanted = {int(p) for p in pages or [] if str(p).isdigit()}
+    for asset in matches:
+        if int(asset.get("page_number", 0) or 0) in wanted:
             return asset
-    return {}
+    return matches[0] if matches else {}
 
 
 def normalized_bbox(page_rect, bbox: list[float]) -> list[float]:
@@ -224,7 +239,13 @@ def prepare_review_candidate(
 ) -> dict[str, Any]:
     image_path = source_image_path(plan_item)
     filename = source_image_filename(plan_item)
-    asset = matched_figure_asset(assets_wrapper, str(caption.get("label", "")))
+    asset = matched_figure_asset(
+        assets_wrapper, str(caption.get("label", "")), caption.get("pages") or []
+    )
+    if asset.get("path"):
+        # Name the review crop after the asset actually used, not the plan's first match.
+        image_path = str(asset["path"])
+        filename = str(asset.get("filename") or Path(image_path).name)
     pdf_path = Path(str(assets_wrapper.get("pdf_path", ""))).expanduser()
     bbox = asset.get("bbox_pt", []) if isinstance(asset.get("bbox_pt"), list) else []
     page_number = int(asset.get("page_number", 0) or 0)
@@ -489,6 +510,104 @@ def build_decisions(
     return decisions
 
 
+def decision_summary(decisions: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "total_items": len(decisions),
+        "by_decision": {
+            value: sum(1 for item in decisions if item.get("decision") == value)
+            for value in sorted(DECISION_VALUES)
+        },
+    }
+
+
+def flag_suspect_candidates(decisions: list[dict[str, Any]]) -> None:
+    """Warn the reviewer about crops that cannot belong to their label."""
+    by_sha: dict[str, list[dict[str, Any]]] = {}
+    for item in decisions:
+        sha = str(item.get("source_image_sha256", ""))
+        if item.get("decision") == "review_pending" and sha:
+            by_sha.setdefault(sha, []).append(item)
+    for group in by_sha.values():
+        if len({g.get("source_id") for g in group}) > 1:
+            for item in group:
+                others = sorted(str(g.get("source_id")) for g in group if g is not item)
+                item.setdefault("auto_warnings", []).append(f"same_crop_as:{','.join(others)}")
+    def box(item: dict[str, Any]) -> tuple[int, list[float]]:
+        ev = item.get("review_evidence") or {}
+        return int(ev.get("source_page", 0) or 0), list(ev.get("bbox_pt") or [])
+
+    def iou(a: list[float], b: list[float]) -> float:
+        ix = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
+        iy = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
+        inter = ix * iy
+        union = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter
+        return inter / union if union > 0 else 0.0
+
+    pending = [i for i in decisions if i.get("decision") == "review_pending"]
+    for x in pending:
+        px, bx = box(x)
+        for y in pending:
+            py, by = box(y)
+            if y is x or px != py or len(bx) != 4 or len(by) != 4:
+                continue
+            if iou(bx, by) > 0.6:
+                x.setdefault("auto_warnings", []).append(f"crop_overlaps:{y.get('source_id')}")
+    for item in decisions:
+        evidence = item.get("review_evidence") or {}
+        page = int(evidence.get("source_page", 0) or 0) if isinstance(evidence, dict) else 0
+        pages = [int(p) for p in item.get("pages") or [] if str(p).isdigit()]
+        if item.get("decision") == "review_pending" and page and pages and page not in pages:
+            item.setdefault("auto_warnings", []).append(f"crop_page_{page}_not_caption_page_{pages}")
+
+
+def record_review(wrapper: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+    """Write one visual review into its decision entry, bound to the asset's current SHA-256."""
+    from lint_grounding import visual_review_is_valid
+    import json
+
+    items = [
+        item for item in wrapper.get("decisions", [])
+        if isinstance(item, dict) and normalize_label(str(item.get("source_id", ""))) == normalize_label(args.record_review)
+    ]
+    if len(items) != 1:
+        raise SystemExit(f"--record-review {args.record_review!r} matched {len(items)} decisions; expected 1.")
+    item = items[0]
+    if not args.status:
+        raise SystemExit("--record-review requires --status.")
+    source = str(item.get("source_image_path", ""))
+    current = file_sha256(source)
+    if not current:
+        raise SystemExit(f"No candidate image to review for {args.record_review}: {source!r}")
+    review = dict(item.get("visual_review") or {})
+    review.update({
+        "status": args.status,
+        "reviewed_asset_sha256": current,
+        "preserved_scientific_elements": json.loads(args.preserved),
+        "omitted_scientific_elements": json.loads(args.omitted),
+        "notes": args.notes,
+        "failure_reason": args.failure_reason,
+        "repair_attempts": int(review.get("repair_attempts", 0) or 0),
+        "revised_bbox": json.loads(args.revised_bbox) or list(review.get("revised_bbox") or []),
+    })
+    if not visual_review_is_valid(review):
+        raise SystemExit(
+            "Review does not satisfy the visual review contract: pass needs no omitted elements "
+            "and no failure reason; fail and repair_requested need a contract failure reason; "
+            "repair_requested also needs --revised-bbox."
+        )
+    item["visual_review"] = review
+    item["source_image_sha256"] = current
+    if args.status == "pass":
+        item["decision"] = "insert"
+        item["skip_reason"] = ""
+    elif args.status == "fail":
+        item["decision"] = "visual_defect"
+        item["skip_reason"] = args.failure_reason
+    else:
+        item["decision"] = "review_pending"
+    return wrapper
+
+
 def checked_asset_subdir(value: str) -> str:
     if not isinstance(value, str) or not re.fullmatch(r"images(?:/[0-9a-f]{64})?", value):
         raise SystemExit("Asset directory must be images or images/<source-sha256> from preflight.")
@@ -503,7 +622,8 @@ def main() -> None:
     if args.review_decisions:
         payload = load_record(args.review_decisions)
         require_artifact_output_language(payload, "Figure/Table Decisions", language)
-        payload = apply_requested_repairs(payload)
+        payload = record_review(payload, args) if args.record_review else apply_requested_repairs(payload)
+        payload["summary"] = decision_summary(payload.get("decisions", []))
         payload["status"] = "ok"
         payload["script"] = "plan_figure_table_decisions.py"
         emit(payload, args.output)
@@ -524,6 +644,7 @@ def main() -> None:
         assets,
         checked_asset_subdir(args.asset_subdir),
     )
+    flag_suspect_candidates(decisions)
     payload = {
         "status": "ok",
         "script": "plan_figure_table_decisions.py",
@@ -531,13 +652,7 @@ def main() -> None:
         "paper_id": args.paper_id or source_manifest.get("paper_id", ""),
         "asset_subdir": args.asset_subdir,
         "decisions": decisions,
-        "summary": {
-            "total_items": len(decisions),
-            "by_decision": {
-                value: sum(1 for item in decisions if item.get("decision") == value)
-                for value in sorted(DECISION_VALUES)
-            },
-        },
+        "summary": decision_summary(decisions),
     }
     emit(payload, args.output)
 

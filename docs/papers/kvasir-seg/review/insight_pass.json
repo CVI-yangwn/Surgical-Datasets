@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "Kvasir", "plain": "8 类各 1000 张的胃肠道内镜分类数据集,只有帧级标签。", "where": "sec:related-work", "needed_for": "理解 Kvasir-SEG 的 1000 张图从哪来、为什么原来不能做分割"},
+  {"term": "二值掩码", "plain": "与原图同尺寸的 1-bit 图,白色是息肉像素,黑色是其余。", "where": "sec:related-work", "needed_for": "理解任务是二分类像素分割"},
+  {"term": "由掩码导出的边界框", "plain": "用掩码中每块前景的范围算出外接框,存进 JSON,不是另行标注。", "where": "sec:related-work", "needed_for": "判断检测评测是否独立于分割标签"},
+  {"term": "Dice 系数", "plain": "2 倍重叠像素数除以预测与真值像素数之和。", "where": "sec:related-work", "needed_for": "读懂表 1 和损失函数"},
+  {"term": "IoU", "plain": "重叠像素数除以并集像素数;同一预测下不高于 Dice。", "where": "sec:related-work", "needed_for": "发现 FCM 的 mIoU 高于 Dice 这一反常"},
+  {"term": "FCM", "plain": "模糊 C 均值聚类,按像素灰度把像素软分组,没有可学习参数。", "where": "sec:evaluation", "needed_for": "理解 FCM 基线为何差"},
+  {"term": "ResUNet", "plain": "带残差块的 U-Net 编码器-解码器分割网络。", "where": "sec:evaluation", "needed_for": "理解主基线结构"},
+  {"term": "按验证集选模型", "plain": "训练 150 个 epoch,取验证 Dice 最高的第 91 个 epoch 的权重去测试。", "where": "sec:background", "needed_for": "解释测试分数略低于验证分数"}
+ ],
+ "detail_questions": [
+  {"question": "1000 张图来自多少名患者?", "answer": "论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "图像分辨率是多少?", "answer": "论文未说明原图分辨率,只说 ResUNet 训练前缩放到 320×320。", "evidence": ["sec:evaluation"], "status": "partly"},
+  {"question": "谁做标注,是否有一致性评估?", "answer": "正文说一名工程师和一名医生组成的小组勾画,经验丰富的消化科医生复核;摘要只说一名医生标注。一致性指标和复核修改比例论文未说明。", "evidence": ["sec:preamble", "sec:related-work"], "status": "partly"},
+  {"question": "划分是否按患者,划分文件是否公开?", "answer": "只说 80/10/10,是否按患者、随机种子、划分文件论文未说明。", "evidence": ["sec:evaluation"], "status": "partly"},
+  {"question": "FCM 用了几个聚类中心、阈值取多少?", "answer": "论文未说明聚类数、边缘阈值和膨胀核大小。", "evidence": [], "status": "not_stated"},
+  {"question": "mIoU 怎么算?", "answer": "公式 (2) 提到阈值 t 和逐阈值算精度,但取哪些阈值、逐图还是全局平均、是否含背景类,论文未说明;ResUNet 只用 t=0.5 二值化。", "evidence": ["sec:related-work", "sec:evaluation"], "status": "partly"},
+  {"question": "为什么 FCM 的 mIoU 0.314187 高于 Dice 0.239002?", "answer": "论文未解释。同一口径下 Dice 不低于 IoU,说明两个指标口径可能不同。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "表 1 的损失与 Dice 是什么关系?", "answer": "每行损失与 Dice 之和约为 1,与用 Dice 作损失一致。", "evidence": ["sec:evaluation"], "status": "resolved"},
+  {"question": "ResUNet 每个卷积块的通道数是多少?", "answer": "只说编码器和解码器各 5 个卷积块,通道数论文未说明。", "evidence": ["sec:evaluation"], "status": "partly"},
+  {"question": "13 张替换图为什么换、换成什么?", "answer": "只说为提升质量,由 Vestre Viken 的消化科医生采集核验;具体是哪些图论文未说明。", "evidence": ["sec:related-work"], "status": "partly"},
+  {"question": "是否包含无息肉图像?", "answer": "没有,数据集只取 Kvasir 的息肉类。", "evidence": ["sec:related-work"], "status": "resolved"},
+  {"question": "与 Kang 和 Pozdeev 的比较是否同数据集?", "answer": "不是,作者也承认没有直接可比的论文。", "evidence": ["sec:background"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "Kvasir-SEG 的标注质量可靠,可作公平比较的基准", "alternative": "标注主要由一组人完成,复核流程无量化记录,边界误差可能与模型误差同量级", "separating_evidence": "多名标注者独立标注的一致性 Dice,或复核修改比例", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "ResUNet 测试 Dice 0.787763 是可靠基线", "alternative": "单次随机划分下,同一患者的相似图可能同时进入训练和测试,分数偏高;或测试集只占 10%,波动大", "separating_evidence": "按患者划分、多次划分的均值与方差", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "ResUNet 明显优于 FCM", "alternative": "差距部分来自 FCM 未调参、口径不同的指标", "separating_evidence": "同口径指标和调过参的 FCM", "in_paper": false, "verdict": "supported"},
+  {"claim": "结果与已有工作相当或更好", "alternative": "数据集和协议不同,数值无法比较", "separating_evidence": "在同一测试集上复现 Kang 或 Pozdeev 的方法", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "在方法主线写明 FCM 聚类数、阈值和 ResUNet 通道数 论文未说明",
+  "在数据与任务定义写明患者数和原图分辨率 论文未说明",
+  "在局限写明摘要与正文对标注人员的表述不一致",
+  "在深度分析加入按患者划分泄漏的风险,并标为推断",
+  "把外部比较改写为不可比,只说明量级"
+ ]
+}

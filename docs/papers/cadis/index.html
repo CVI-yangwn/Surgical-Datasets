@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>CaDIS: Cataract Dataset for Image Segmentation</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>给白内障手术视频补上整场景像素级标注:4670 帧、36 类、三种类别粒度</h1>
+<div class="sub">CaDIS: Cataract Dataset for Image Segmentation</div>
+<div class="meta">Maria Grammatikopoulou、Evangello Flouty 等,Digital Surgery LTD 与 Inserm | arXiv 1906.11586,v7,预印本,2022-02-22</div>
+<div><span class="chip">数据集论文</span><span class="tag">白内障手术</span><span class="tag">语义分割</span><span class="tag">数据集</span><span class="tag">手术器械</span><span class="tag">类别不均衡</span></div>
+<div class="one">CaDIS 在 CATARACTS 的 25 个白内障手术视频上标注 4670 帧、36 类整场景掩码,三种类别粒度的基线显示解剖结构容易而细粒度器械困难,但单次训练、测试只有 3 个视频且没有标注一致性数据。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 5 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.0</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/1906.11586" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cadis/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>白内障手术视频不少,但缺一份同时标出眼睛和器械的像素级数据。</strong> 计算机辅助介入要先知道画面里哪里是解剖结构、哪里是器械,这需要语义分割,而分割模型依赖带标签的数据。</p>
+<p>已有数据集都差一步。EndoVis 2017 和 2019 只标机器人器械;EndoVis 2018 有整场景标签,但来自内镜下的机器人肾切除;CATARACTS 有 50 个白内障显微手术视频,只给帧级的器械存在和阶段标签。</p>
+<p>论文用临床数字说明动机:2010 年记录的白内障病例超过 20 million 例,住院医生的后囊破裂率为 0.8%−8.9%。这些数字只是背景,论文没有把分割结果和临床指标联系起来。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口:白内障显微手术没有公开的整场景像素级标注</span><span class="i">论文的回答:CaDIS,在 CATARACTS 视频上补标</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是 CaDIS:从 CATARACTS 训练集的 25 个视频中抽 4670 帧,标 36 类,再按 8、17、25 类三种粒度训练四个分割网络。</p>
+<p><strong>结果的形状很清楚:</strong> 解剖结构的交并比在三个任务中都在 85 左右,器械类从任务一的 73.8 到 77 降到任务三的 52 到 63。类别越细,网络之间的差距越大。</p>
+<p><strong>边界同样清楚:</strong> 每个结果只训练一次,验证和测试各只有 3 个视频,标注一致性没有数字。网络间 1 到 2 个点的差距不能当作结论。</p><div class="strip d"><span class="t">数据</span><span class="i">4670 帧,36 类(29 器械 + 4 解剖 + 3 其他)</span><span class="i">训练 3550 / 验证 534 / 测试 586 帧</span><span class="i">测试 mIoU:任务一 82.6 到 84.9,任务三 59.2 到 66.8</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>数据集能外推多远,取决于视频的来源。全部视频来自 Brest 大学医院 2015 年的手术,由三名医生完成(专家、中级、实习各一名),病人平均 61 岁,每个视频对应一位病人。</p>
+<p><strong>这是单中心数据。</strong> 设备、术式和病人构成都固定,跨医院的表现没有证据。</p>
+<p>抽帧依据 CATARACTS 已有的器械和阶段真值:每个阶段随机选 10 到 20 帧,帧间至少隔 3 秒,图像从 1920 × 1080 缩小到 960 × 540。按阶段抽帧保证每个阶段都有样本,但不反映真实时长比例,对类别分布的影响论文未说明。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。数据集中全部 21 种器械的示例。几种套管外观非常接近,这是器械分类难的直接原因。</figcaption></figure></div><div class="card" id="s4"><h3><span class="num">4</span>标签与不均衡</h3><p>36 类中,解剖类几乎出现在每一帧。按表 II,角膜每帧平均 253631 像素,粘弹剂套管只有 3697 像素,前者约为后者的 69 倍(本报告自算)。</p>
+<p>多数器械只在少数视频出现,持针器只出现在 1 个视频的 12 帧。<strong>这种不均衡是后面器械交并比偏低的背景。</strong> 论文称 17 类器械出现在不到一半的视频中,按表 II 核对是 15 类,两者不一致。</p>
+<p>标注由四名描线师完成,每帧一人标注、一人复核,分歧由医学官员裁决,另有程序化轮廓检查。<strong>标注者间一致性论文未说明</strong>,所以标签噪声对低分类别的贡献无法估计。</p><div class="strip h"><span class="t">亮点</span><span class="i">解剖类面积大、出现频繁,器械类稀少</span><span class="i">标注质量只有流程描述,没有一致性数字</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>三个任务怎样切分难度</h3><p>36 类里很多器械样本太少,直接训练意义不大。论文在同一批帧上用三种合并方式定义任务:</p>
+<div class="tbl"><table><thead><tr><th>任务</th><th>类别数</th><th>器械怎样处理</th></tr></thead><tbody><tr><td>任务一</td><td>8</td><td>全部器械合成 1 类</td></tr><tr><td>任务二</td><td>17</td><td>相似器械合并,尖端与把手合并,忽略 7 类</td></tr><tr><td>任务三</td><td>25</td><td>尖端与把手分开,忽略 11 类</td></tr></tbody></table></div>
+<p>被忽略的类别在计算指标时也不计入。<strong>这个设计让人能在同一批帧上看到类别粒度怎样影响难度。</strong> 划分按视频进行,避免相邻帧泄漏,代价是验证和测试各只有 3 个视频。</p>
+<p>下一节看四个网络在这三套标签上的表现。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>测试集 mIoU(表 IV、VI、VIII):</p>
+<div class="tbl"><table><thead><tr><th>模型</th><th>任务一</th><th>任务二</th><th>任务三</th></tr></thead><tbody><tr><td>UNet</td><td>83.7</td><td>70.6</td><td>59.2</td></tr><tr><td>DeepLabV3+</td><td>82.6</td><td>72.3</td><td>63.2</td></tr><tr><td>UPerNet</td><td>84</td><td>73.8</td><td>66.8</td></tr><tr><td>HRNetV2</td><td>84.9</td><td>76.1</td><td>66.6</td></tr></tbody></table></div>
+<p>模型间差距从任务一的 2.3 个点扩大到任务三的 7.6 个点。拆开看,解剖类三个任务都在 84 到 86 之间,<strong>下降几乎全部来自器械</strong>。像素准确率一直在 93.5 到 94.6 之间,被解剖类主导,不能用来比较器械分割。</p>
+<p>最难的类别:任务二中撕囊镊交并比只有 22.9 到 28.9;任务三中晶状体推注器把手四个模型全为 0。</p>
+<figure class="fig"><img src="images/page_009_fig_fig_6_review_repair1.png" alt="Fig 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 6。HRNetV2 在任务二测试集上的混淆矩阵。撕囊镊有 35.8 被判为组织镊,只有 32.6 判对。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">任务三器械 mIoU:UNet 52,UPerNet 63</span><span class="i">任务三验证比测试高 5.4 到 7.4 个点</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么器械难</h3><p>论文的解释是类别不均衡。混淆矩阵显示两种错误:细小器械的边界像素被判成瞳孔或角膜,以及撕囊镊与组织镊互判。</p>
+<p><strong>两种错误的原因不同。</strong> 前者与像素少有关;后者更像外观相似,因为撕囊镊在 12 个视频中出现、有 129 帧,并不是最稀少的类。论文没有做加权损失或重采样的对照,两个原因各占多少无法区分。</p>
+<figure class="fig"><img src="images/page_007_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 4。任务二的示例帧、真值与四个模型的预测。第三行可见撕囊镊在各模型中被预测成组织镊的颜色。</figcaption></figure></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>哪个架构更好。</strong> 论文说 UPerNet 和 HRNetV2 感受野更大、更能分割细节。但 HRNetV2 有 66M 参数并用 ImageNet 预训练,UNet 只有 14M 且初始化未说明,比较的是整套配置。</li><li><strong>差距是否可靠。</strong> 每个结果只训练一次,没有种子或方差。验证与测试的稳定差距被归因于测试视频的类别分布,论文没有给出分布对比。</li><li><strong>视频上的表现。</strong> 数据是静态帧,模型在整段视频上的表现和时间一致性没有评估。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现与比较前要核对什么</h3><p>评测口径有三处需要先对齐:</p>
+<ul><li>逐类准确率的公式按预测归一,实际是精确率的平均,实现口径论文未说明。</li><li>任务三的器械 mIoU(UNet 为 52)按 17 个器械类平均,没有计入 0 分的晶状体推注器把手;全类 mIoU 却计入了它。</li><li>批大小、UNet 初始化和模型选择规则论文未说明,数据许可条款也未说明。</li></ul>
+<p><strong>和其他论文比较前,先确认忽略类和汇总口径一致。</strong></p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>CaDIS 是白内障显微手术的整场景像素级数据集,4670 帧、36 类,来自单中心 25 个视频</div><div>有区分度的是任务二、任务三的器械 mIoU,任务一和像素准确率基本饱和</div><div>器械低分混合了样本少和外观相似两个原因,论文没有把它们分开</div><div>网络比较混杂了参数量和预训练来源,单次训练的小差距不可靠</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>整场景标注,解剖、器械和其他物体都有类别,尖端与把手分开</li><li>三种类别粒度在同一批帧上定义,能直接看到难度梯度</li><li>按视频划分,避免相邻帧泄漏;表 II 给出完整的逐类统计</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>没有标注者间一致性或重复标注</li><li>单次训练,验证和测试各只有 3 个视频</li><li>四个基线的参数量和预训练来源不同,训练细节不全</li><li>汇总指标的类别集合不一致,正文与表 II 有一处数字不符</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>标注者间一致性是多少,复核改动了多少帧?</li><li>加权损失或按类重采样能把把手类交并比提高多少?</li><li>撕囊镊与组织镊合并后,任务二器械 mIoU 会提高多少?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 11045c2e</span><span class="s">7.0 分</span></div><p>第 1 轮原版流程笔记(自评)。证据链完整,三任务主结果与逐类低分都有表。D2=7:构建流程有,但抽帧与类别合并规则没有逐条说明对结果的作用。D4=7:局限列了单次训练与测试视频少,但没有逐条写出会怎样影响结论。D5=6:定位只有一段,没有逐项说明相对 EndoVis 2018 与 CATARACTS 新在哪里。D6=6:我的笔记偏短。D9=5:研究问题没有核心观点速览,多处数字后没有说明意味着什么,小节结尾没有过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>6</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各节开头先写本节要回答的问题,数字后补一句意义</li><li>把论文未说明的内容(标注一致性、批大小、UNet 初始化、许可、Fig 6 行列含义、PAC 口径)统一写成 论文未说明 并说明限制</li><li>补写正文与 Table V 数字不一致处(HRNetV2 解剖 85 对 86.3 的类比)以及 Task III 器械 mIoU 实际按 17 类计算</li><li>深度分析加入不均衡与外观相似的替代解释与缺失对照</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 2b408318 · 文稿 a48fe520</span><span class="s">8.0 分</span></div><p>第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成并写入笔记与报告;笔记与报告数字核对无未匹配项,19 个表格图像值与推导值登记在 number_exceptions.json。无法修复的限制:Fig 1 裁图混入摘要正文,保留占位;表 II 数值不在 PDF 提取文本中,只能从页面图像核对;标注一致性、批大小、UNet 初始化、方差、许可、Fig 6 行列含义均为论文未说明。D3 未到 9:表 II 仅摘录 6 类,未列全部 36 类。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

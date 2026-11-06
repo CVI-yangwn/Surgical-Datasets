@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>The Endoscapes Dataset for Surgical Scene Segmentation, Object Detection, and Critical View of Safety Assessment: Official Splits and Benchmark</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>一个面向胆囊切除术关键安全视野的分层标注数据集:201 个视频,CVS 标签多、框少、掩码更少</h1>
+<div class="sub">The Endoscapes Dataset for Surgical Scene Segmentation, Object Detection, and Critical View of Safety Assessment: Official Splits and Benchmark</div>
+<div class="meta">Aditya Murali、Deepak Alapatt、Pietro Mascagni 等,斯特拉斯堡大学 ICube、IHU Strasbourg、IRCAD、罗马 Gemelli 医院 | arXiv 2312.12429,v3 技术报告,2024-10-25;后续发表于 Sci Data(2025)</div>
+<div><span class="chip">数据集与基准论文</span><span class="tag">腹腔镜胆囊切除术</span><span class="tag">关键安全视野</span><span class="tag">手术数据集</span><span class="tag">目标检测</span><span class="tag">实例分割</span></div>
+<div class="one">Endoscapes2023 在 201 个胆囊切除术视频上提供嵌套的 CVS、边界框和分割标注并固定官方划分,基线显示关键解剖结构难以识别、借助框的图方法优于纯分类器,但专家一致性偏低,增益来源也没有消融。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 8 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2312.12429" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/endoscapes/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>关键安全视野(CVS)的自动判断难在要看清很小、很模糊的解剖结构。</strong> CVS 由三项准则组成:C1 两结构、C2 肝胆三角清理、C3 胆囊板。论文认为它比阶段识别、器械检测更难,因为它依赖对细粒度解剖结构的准确识别。</p>
+<p><strong>作者的前作 DeepCVS 卡在数据上。</strong> 它从 201 个视频里手选了 2854 张“可评估”图像,带有选择偏差;CVS 测试集只有 571 张,分割测试集只有 80 张,模型之间的差异很难分辨。</p>
+<p>所以这份技术报告要解决的是:在同一批视频上,不经人工挑帧,构建一个规模足够、标注层次丰富的数据集,并给出固定划分和可比较的基线。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是 Endoscapes2023,四个子集按同一视频划分严格嵌套:</p>
+<div class="tbl"><table><thead><tr><th>子集</th><th>视频</th><th>标注帧</th><th>标注频率</th></tr></thead><tbody><tr><td>CVS201</td><td>201</td><td>11090 帧 CVS(三位专家)</td><td>每 5 秒 1 帧</td></tr><tr><td>BBox201</td><td>201</td><td>1933 帧边界框</td><td>每 30 秒 1 帧</td></tr><tr><td>Seg201(私有)</td><td>201</td><td>1933 帧掩码</td><td>每 30 秒 1 帧</td></tr><tr><td>Seg50(公开)</td><td>50</td><td>493 帧掩码(摘要写 422)</td><td>每 30 秒 1 帧</td></tr></tbody></table></div>
+<p>全部 58813 帧来自 CVS 可评估区间,按 1fps 抽取。<strong>基线的结论是:胆囊板和肝胆三角最难识别,借助框的图方法明显优于只用 CVS 标签的分类器,但专家之间的一致性本身就不高。</strong></p>
+<p>接下来先看数据怎么来的,再看评测协议。</p><div class="strip h"><span class="t">亮点</span><span class="i">子集嵌套共用划分,一个测试集同时服务全监督、混合监督和低标签实验</span><span class="i">422 帧与 493 帧的矛盾论文未解释</span></div><div class="strip d"><span class="t">数据</span><span class="i">201 个视频,120/41/40 划分</span><span class="i">58813 帧,11090 帧 CVS,1933 帧框</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据怎么来的</h3><p><strong>关键改动是把“挑帧”换成“定频抽帧”。</strong> 抽帧区间从任一准则可评估开始,到第一次上夹结束,区间内按 1fps 抽帧。CVS 每 5 秒标 1 帧,分割每 30 秒标 1 帧,边界框从掩码自动导出,所以框和掩码天然一致。</p>
+<figure class="fig"><img src="images/page_002_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。一段视频中的标注频率示意:每隔若干帧有 CVS 标签,少数帧同时带框和掩码,其余帧无标注。</figcaption></figure>
+<p>去掉手选后,标注员会遇到大量难判断的帧,作者为此制定了更严格的标注协议并多轮复核。视频划分以视频级 CVS 达成为分层变量,按患者切分。Seg50 再从三折中分层抽出 30/10/10 个视频。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。Endoscapes2023 的组成与各子集的标注频率。注意图中 Seg50 写的是 422 帧。</figcaption></figure>
+<p>视频来自几个中心、什么设备、患者信息和伦理审批,论文未说明,这限制了对跨中心泛化的判断。</p></div><div class="card" id="s4"><h3><span class="num">4</span>标签有多可靠</h3><p><strong>三位专家独立标注 CVS,真值是多数投票,但他们之间的一致性只有一般到中等。</strong> 各准则的 <code>Cohen's kappa</code> 为两结构 <code>0.33</code>、肝胆三角 <code>0.53</code>、胆囊板 <code>0.44</code>,总体 <code>0.38</code>。kappa 是在全部帧还是子集上算的,论文未说明。</p>
+<p>我的判断:真值本身带噪声,模型分数的上限会被压低,但压低多少论文未说明,也没有用单个专家标签训练的对照。</p>
+<p><strong>正样本极少。</strong> 帧级总体 CVS 达成率在训练、验证、测试集上只有 <code>5.3%</code>、<code>7.3%</code>、<code>7.7%</code>,视频级则是 <code>28.3%</code>、<code>36.6%</code>、<code>35.0%</code>。视频级只要求每项在某一帧达成过,所以高得多。测试集帧级比率普遍高于训练集,例如两结构 <code>24.0%</code> 对 <code>15.6%</code>,其影响论文未说明。</p>
+<p>这么不平衡的标签决定了评测协议的选择。</p><div class="strip d"><span class="t">数据</span><span class="i">kappa 总体 0.38</span><span class="i">帧级总体达成率 5.3% 到 7.7%</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>评测协议</h3><p><strong>CVS 预测用平均精度和平衡准确率,不用准确率。</strong> 全输出 0 的分类器在这种不平衡下准确率会很高,在平衡准确率上每个准则只能拿到一半。指标在测试集全部帧上逐准则计算,再对三项取平均。</p>
+<p>$$\mathrm{mAP}_{\mathrm{CVS}}=\frac{1}{3}\sum_{c\in\{C1,C2,C3\}}\mathrm{AP}_c$$</p>
+<p>检测和分割用 COCO 风格的 <code>mAP@[0.5:0.95]</code>。CVS 预测分三种训练标签:只用 CVS、加框、加公开掩码,另列私有掩码结果作为天花板。前两种结果引自作者前作 [9][8],第三种由作者重跑。</p>
+<p>训练用 <code>mmdetection</code>,CVS 模型用按逆频率加权的二值交叉熵。判定阈值、学习率、批大小、输入分辨率,论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>检测与分割结果</h3><figure class="fig"><img src="images/page_004_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。三种检测器在 BBox201 测试集上的逐类与总体 mAP@[0.5:0.95]。</figcaption></figure>
+<p><strong>差距在类别之间,而不在模型之间。</strong> 总体最好的 <code>Deformable-DETR</code> 为 <code>32.7</code>。胆囊和器械在 <code>61.5</code> 到 <code>69.6</code>,胆囊板只有 <code>7.5</code> 到 <code>9.3</code>,肝胆三角 <code>18.4</code> 到 <code>19.9</code>。所以总分主要由容易的大目标撑起,不能代表对 CVS 关键结构的识别能力。</p>
+<figure class="fig"><img src="images/page_004_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。实例分割模型分别用公开掩码与私有掩码训练后的框与掩码 mAP。</figcaption></figure>
+<p>训练掩码从 1212 帧降到 343 帧后,掩码平均精度下降 <code>4.4</code> 到 <code>5.7</code> 个点(自算)。逐类看,胆囊板掩码平均精度只有 <code>1.7</code> 到 <code>6.5</code>。Seg50 测试集里肝胆三角只出现在 <code>9.5%</code> 的帧中,这类分数很可能落在噪声内。</p><div class="strip h"><span class="t">亮点</span><span class="i">胆囊板、肝胆三角是最难的两类,也是 CVS 最依赖的结构</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>CVS 预测结果</h3><figure class="fig"><img src="images/page_006_fig_table_7_review.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。四种训练标签设置下各方法的逐准则与平均 mAP、bAcc。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>方法</th><th>仅 CVS</th><th>加框</th><th>加公开掩码</th><th>加私有掩码</th></tr></thead><tbody><tr><td>ResNet50</td><td>51.5</td><td>—</td><td>—</td><td>—</td></tr><tr><td>ResNet50-MoCov2</td><td>57.4</td><td>—</td><td>—</td><td>—</td></tr><tr><td>LayoutCVS</td><td>—</td><td>48.2</td><td>57.1</td><td>56.9</td></tr><tr><td>LG-CVS</td><td>—</td><td>63.3</td><td>63.2</td><td>67.3</td></tr><tr><td>SV2LSTG*</td><td>—</td><td>65.3</td><td>64.3</td><td>69.7</td></tr></tbody></table></div>
+<p>(平均 mAP,星号为时空方法。)</p>
+<p><strong>对象级图方法领先。</strong> 有框时 <code>LG-CVS</code> 和 <code>SV2LSTG</code> 达到 <code>63.3</code> 和 <code>65.3</code>,只把布局图交给卷积网络的 <code>LayoutCVS</code> 反而低于纯 <code>ResNet50</code>。换成公开掩码后,布局类方法明显提升,图方法基本持平,原因论文未说明。用私有掩码时 <code>SV2LSTG</code> 平均精度 <code>69.7</code>、平衡准确率 <code>82.4</code>。</p>
+<p><strong>低标签时选哪些视频很重要。</strong> 只用 25% 训练视频时,<code>ResNet50</code> 平均精度 <code>40.5 ± 7.0</code>,<code>MoCov2</code> 初始化为 <code>48.8 ± 3.2</code>;12.5% 时分别为 <code>33.8 ± 4.1</code> 与 <code>38.9 ± 5.6</code>。这是全文唯一带方差的结果。</p>
+<p>这些数字看起来支持论文的主张,下一节检查它们没有证明什么。</p><div class="strip d"><span class="t">数据</span><span class="i">SV2LSTG 加框 65.3,加私有掩码 69.7</span><span class="i">25% 标签 MoCov2 48.8 ± 3.2</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没有证明什么</h3><p><strong>无选择偏差只部分成立。</strong> 抽帧不再人工挑选,但区间的起止点仍由人判定,偏差可能只是从挑帧移到了挑区间。区间判定的一致性和新旧测试集上的对比,论文未说明。</p>
+<p><strong>图方法的增益来源没有分开。</strong> <code>LG-CVS</code> 比 <code>LayoutCVS</code> 高 <code>15.1</code> 个点(自算),但用检测器骨干初始化的 <code>ResNet50-DetInit</code> 已有 <code>60.2</code>,增益可能主要来自更好的视觉特征。去掉图中边的消融论文未说明。</p>
+<p><strong>天花板差距没有排除方差。</strong> 私有掩码与公开掩码的差距可能部分来自单次运行和小测试集。除低标签外,所有结果的方差论文未说明。</p>
+<p><strong>分层标注模拟真实成本只是定性说法。</strong> 标注时长或成本数字论文未说明。</p></div><div class="card" id="s9"><h3><span class="num">9</span>和其他数据集的关系</h3><p>相对 DeepCVS,同样的 201 个视频,CVS 帧从 2854 张变为 11090 帧,掩码从 402 张变为 1933 帧(公开 493 帧),并去掉了手选。引用中列出了 Cholec80-CVS 等同领域工作,但正文没有比较规模或结果,优劣论文未说明。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><ul><li>用官方 120/41/40 划分和公开的低标签三组划分;Seg50 的 30 个训练视频等于 25% 子集的第三折。</li><li>以仓库实际文件确认 Seg50 是 422 帧还是 493 帧。</li><li>CVS 指标按逐准则在全部测试帧上计算再平均,训练时按逆频率加权。</li><li>检测和分割的总体分数按表 2 核算是 6 类算术平均(自算),汇报时同时给逐类结果。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>Endoscapes2023 是有固定划分、嵌套子集和统一指标的 CVS 基准,四个子集共用 120/41/40 视频划分</div><div>不平衡多标签任务用平均精度和平衡准确率,不用准确率</div><div>关键解剖结构(胆囊板、肝胆三角)的识别是主要瓶颈</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>定频抽帧去掉了手选帧,标注节奏清楚</li><li>三位专家独立标注并公开一致性</li><li>框从掩码导出,子集严格嵌套,低标签划分随数据集公开</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>摘要与正文的掩码帧数不一致(422 对 493),论文未解释</li><li>私有 Seg201 的天花板结果外部无法复现</li><li>基线几乎都来自作者团队前作,没有消融,除低标签外没有方差</li><li>采集中心、设备、患者信息论文未说明</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>用单个专家标签或投票比例作软标签训练,结果会怎样?</li><li>去掉 LG-CVS 中的关系边,增益还剩多少?</li><li>在 Cholec80-CVS 上测试 Endoscapes 训练的模型,差距有多大?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 8e3d85e7</span><span class="s">6.0 分</span></div><p>模型自评。证据链完整,四个子集、划分、kappa、Table 2 到 Table 8 的数值都在;论文自身的 422/493 不一致已指出。不足:lint_report 笔记模式下有 8 个未匹配数字(DOI 与期刊信息、自算差值 15.1/5.7、以及“上限不会接近 100”这一无依据的说法),尚未登记来源,H3 按字面记 fail,总分封顶 6.0;定位只列了 DeepCVS,对 Cholec80-CVS 只在后续问题里提到;研究问题没有以 CVS 的临床意义和读者要回答的问题开头,各节缺少“所以呢”和节间承接;部分段落为过混合语言检查改写得较生硬(第一项/第二项替代 C1/C2)。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>5</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:fail H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>登记推导数字(15.1、4.4 到 5.7 的差值)和元数据数字到 number-exceptions,删去无原文依据的“不会接近 100”</li><li>研究问题开头补背景和动机,核心观点速览放在研究问题末尾并与结论对应</li><li>每组结果数字后补一句含义,节末补承接</li><li>补写与 DeepCVS、Cholec80-CVS 的定位,原文未比较之处写成论文未说明</li><li>把 insight pass 的挑战轮结论写进深度分析与局限,所有 not_stated 缺口写成论文未说明</li><li>恢复 C1/C2/C3 记号的可读性,在首次出现处定义</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 98d30750 · 文稿 72c46e7b</span><span class="s">8.2 分</span></div><p>模型自评。笔记与报告数字全部在原文中找到或已登记为推导值(DOI/期刊信息与 15.1、4.4、5.7 三个差值),删除了无依据的“上限不会接近 100”。研究问题以难点和前作缺陷开头,核心观点速览放在研究问题末尾,各结果后补了含义与承接;挑战轮的三条结论和 11 个细节问题中的 not_stated 项都写成了论文未说明。D5 记 7:论文本身没有和 Cholec80-CVS 等数据集比较,笔记只能如实写论文未说明,无法补足。剩余限制:Table 1 与 Table 4、Table 8 保留占位(Table 1 裁剪修复一次后仍有污染,另两张无候选),数值已用 Markdown 表转录;422/493 帧矛盾只能指出,无法判定。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

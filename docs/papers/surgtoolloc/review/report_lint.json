@@ -1,0 +1,15 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "b580c7d3f7bc578df8c59b67579db8cf3fe6bfa4229ca1a29c46efbd10a89af0",
+  "number_exceptions": {},
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

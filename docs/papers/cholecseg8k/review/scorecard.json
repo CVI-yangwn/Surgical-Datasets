@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "5e5522539d8b4ae65a00b347333996aa9c924f5bb110ef8c7252cad1401ad0e7",
+      "note_snapshot": "review_rounds/round1_CholecSeg8k_A_Semantic_Segmentation_Dataset_for_Laparoscopic_Cholecystectomy_Based_on_Cholec80.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 5,
+        "D6": 7,
+        "D7": 6,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.1,
+      "verdict": "模型自评。D2为7：构建流程四步写清了输入和输出，但视频选择、起始帧选择两步只能写论文未说明。D5为5：除 Cholec80 外没有说明与其他手术分割数据集的关系，论文本身也没有比较。D6为7：复现建议有，但没有说明不该做什么。D7为6：章节未编号，没有亮点与数据条，Fig. 2、Fig. 3、Fig. 5 三处保留占位。D9为5：没有核心观点速览，多数小节不以问题开头，像素占比表后缺少所以然的归纳。数字核对：note 模式有13个未匹配数字，其中12个是图3柱状图上的百分比标签（文本抽取未带出，已打开第3页预览核对），3.2 是 80 帧除以 25 fps 的推导值。",
+      "fixes": [
+        "在研究问题末尾加入核心观点速览，并按背景、观点、实验、深入分析的顺序调整",
+        "各小节以要回答的问题开头，数字后补一句含义",
+        "把图3百分比与3.2秒登记到 number-exceptions 文件并注明来源",
+        "把 insight pass 中的论文未说明项写进笔记",
+        "补充与 Cholec80 原有标注的定位关系，说明本文没有与其他分割数据集比较",
+        "复现注意点增加应避免的做法"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "d910294208c94fcb1172c450894f67e8c0ae1cb9819a8d220e3c54daa856558b",
+      "note_snapshot": "review_rounds/round2_CholecSeg8k_A_Semantic_Segmentation_Dataset_for_Laparoscopic_Cholecystectomy_Based_on_Cholec80.md",
+      "report_sha256": "638a241571ca0d5f952e72f5fa3db2de7f1d0d6cdfe4428cb18e992e7c4e2866",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 6,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.0,
+      "verdict": "模型自评。笔记与报告重新从头打分。D5为6：论文本身只与 Cholec80 对照，没有与其他手术分割数据集比较，笔记和报告如实写明这一点，无法从原文补足。Fig. 2、Fig. 3、Fig. 5 保留占位（自动裁剪图号与内容不符或无候选），图3数值已整理为表格。数字核对：note 与 report 模式均无未匹配数字；图3的12个百分比来自柱状图标签、3.2 秒为推导值，已登记在 number_exceptions.json。",
+      "fixes": []
+    }
+  ]
+}

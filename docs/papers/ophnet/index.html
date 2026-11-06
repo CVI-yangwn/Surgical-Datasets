@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>OphNet: A Large-Scale Video Benchmark for Ophthalmic Surgical Workflow Understanding</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>一个由 YouTube 眼科手术视频搭起来的三级标注基准，规模是真的，几个数字却对不上</h1>
+<div class="sub">OphNet: A Large-Scale Video Benchmark for Ophthalmic Surgical Workflow Understanding</div>
+<div class="meta">Ming Hu, Peng Xia, Lin Wang 等（莫纳什大学、Airdoc-Monash 研究中心、温州医科大学附属眼科医院等） | arXiv:2406.07471（预印本，第 4 版）</div>
+<div><span class="chip">数据集与基准</span><span class="tag">眼科手术</span><span class="tag">手术工作流</span><span class="tag">视频基准</span><span class="tag">数据集</span></div>
+<div class="one">OphNet 用 2,278 个 YouTube 眼科手术视频建立手术、阶段、操作三级标注的基准并给出四项任务基线，语言图像模型明显领先，但 20 倍规模说法、划分数量和平均精度的口径论文没有说清。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 13 条，其中 9 条论文未说明</span><span class="tag">反向检验 5 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2406.07471" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/ophnet/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">11 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机：瓶颈在数据</h3><p>让系统看懂手术视频，要回答两个问题：手术进行到哪个阶段，正在做什么操作。这是手术记录、教学和机器人自动化的基础。</p>
+<p><strong>问题是现有的眼科视频数据太小太单一。</strong> 论文列出五个短板：规模小、类别少、动作定义粗、只标指定阶段、画质统一。例子很具体：<code>CATARACTS</code> 只有 50 个视频，<code>CatRelDet</code> 只有 21 个视频和 4 种阶段标签。</p>
+<p>模型想学得好，需要足够多的视频。论文引用的研究显示，<code>I3D</code> 用 100 个视频训练时准确率已超过 80%，样本超过 700 后仍在提升。数据不够，后面的一切都无从谈起，所以论文先去造数据。下一节先把它的答案摆出来。</p><div class="strip h"><span class="t">亮点</span><span class="i">现有眼科视频数据集的短板是规模、类别、标注粒度和来源单一</span><span class="i">论文没有提出新模型，价值取决于数据质量和基线是否可信</span></div><div class="strip d"><span class="t">数据</span><span class="i">CATARACTS 的 50 个视频</span><span class="i">CatRelDet 的 21 个视频、4 种阶段标签</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>答案。</strong> OphNet 收集 2,278 个 YouTube 眼科手术视频，共 284.8 小时，分成白内障、青光眼、角膜三大类 66 种手术，其中 523 个视频带有手术、阶段、操作三级时间边界。</p>
+<p><strong>头条结果。</strong> 手术存在识别全部 Top-1（预测第一名恰为正确类别的比例）最高为 58.9%，阶段分类最高为 68.4%，操作分类最高为 65.0%，都来自语言图像模型。阶段定位最好的平均精度均值为 50.4%，阶段预测最好为 48.2%。</p>
+<p><strong>边界。</strong> 20 倍的比较口径、手术存在识别划分少了 200 个视频、划分是否按来源隔离、平均精度均值的算法，论文都未说明。所有基线只有单次结果。</p><div class="strip h"><span class="t">亮点</span><span class="i">做法四步：YouTube 检索与筛选、主手术与次要手术分类、三级时间标注、四项任务基线</span><span class="i">语言图像模型远高于视频模型，但原因没有被拆开</span></div><div class="strip d"><span class="t">数据</span><span class="i">2,278 个视频，284.8 小时，66 种手术</span><span class="i">102 个阶段，150 个操作，523 个视频有定位标注</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来，怎样筛</h3><p>医疗视频涉及隐私，不好批量拿到。论文选了 YouTube，理由是能绕开隐私和伦理顾虑，也能快速得到大量待筛视频。检索靠手术名称的标题搜索，并加入同义词和缩写。</p>
+<p>筛选分两层：正文去掉低分辨率、黑白、动画和非人眼视频；附录再去掉没有显微视角、字幕或水印占大块画面、含断层扫描窗口的视频。初筛 5 人，复核 6 名主治医师。</p>
+<figure class="fig"><img src="images/page_022_fig_fig_6_review_repair1.png" alt="Fig 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 6。被过滤掉的视频示例，包括会议幻灯片、含 OCT 窗口的画面、灰度画面等。</figcaption></figure>
+<p><strong>筛掉了多少、最初检索到多少，论文未说明</strong>，所以没法评估筛选带来的偏差有多大。视频筛好之后，下一步是标注。</p><div class="strip h"><span class="t">亮点</span><span class="i">来源是 YouTube，理由是隐私与速度</span><span class="i">保留少量文字和水印；双目视频只留左眼</span></div><div class="strip d"><span class="t">数据</span><span class="i">初筛 5 人，复核 6 名主治医师</span><span class="i">超过 77% 的视频不低于 1280×720</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>三级标注怎么做</h3><p>一台手术常同时处理几种疾病，单标签不够用。论文因此分两步标。第一步，8 名眼科医师给每个视频标一个主手术和若干次要手术。第二步，15 名眼科医师在手术、阶段、操作三个粒度上标出起止时间。</p>
+<p>多名标注者的边界不会完全一致，论文用完全连接聚类合并：把距离合起来看最远成员，只保留获得多方认同的边界。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。两个合并手术视频的三级标注示例：手术、阶段、操作三层色带对齐在同一条时间轴上。</figcaption></figure>
+<p><strong>质量如何，论文没有给数。</strong> 标注者间一致性和抽检错误率论文未说明；带定位标注的 523 个视频怎么选出的，只写“精心选取”。标注做完，接着看最终规模。</p><div class="strip h"><span class="t">亮点</span><span class="i">分类标注区分主手术与次要手术，表达多种疾病同台手术</span><span class="i">边界用完全连接聚类合并</span></div><div class="strip d"><span class="t">数据</span><span class="i">分类标注 8 名医师，定位标注 15 名医师</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>最终有多大</h3><p>标注完成后的规模决定数据集能支撑多少训练和评测。</p>
+<p><strong>有定位标注的只是一部分。</strong> 2,278 个视频里，523 个有阶段和操作边界，裁剪后得到 7,320 个阶段实例和 9,795 个操作实例，共 51.2 小时。操作的样本数分布明显长尾。</p>
+<figure class="fig"><img src="images/page_008_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。裁剪后视频在阶段和操作两个层级上的数量、平均时长和总时长统计，操作一侧样本数的下降最明显。</figcaption></figure>
+<p>表 1 把 OphNet 与 12 个现有数据集比较：眼科里最大的 <code>Cataract-1K</code> 有 1,000 个视频、118.7 小时，OphNet 的视频数约为其 2.3 倍，时长约为 2.4 倍。</p>
+<figure class="fig"><img src="images/page_007_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。构成环形图、与其他数据集在视频数和动作类别数上的气泡对比，以及八个阶段示例。</figcaption></figure>
+<p><strong>这支持“最大”，却支持不了摘要里的 20 倍。</strong> 20 倍的比较对象论文未说明。有了数据，就要用任务来检验它。</p><div class="strip h"><span class="t">亮点</span><span class="i">规模优势成立，但倍数约为 2 倍多，不是 20 倍</span><span class="i">只有 523 个视频带阶段与操作边界</span></div><div class="strip d"><span class="t">数据</span><span class="i">7,320 个阶段实例，9,795 个操作实例，共 51.2 小时</span><span class="i">裁剪后平均 32 秒，未裁剪平均 337 秒</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>四项任务与基线怎么设</h3><p>数据集要证明自己有用，就得跑任务。论文设了四项。</p>
+<ul><li>手术存在识别：整段视频只用视频级标签，判断主手术，属于弱监督。</li><li>阶段与操作识别：对裁剪片段分类。</li><li>阶段定位：在整段视频里找每个阶段的起止。</li><li>阶段预测：只看前一部分，预测后续阶段。输出形式论文未说明。</li></ul>
+<p>基线分三类：从头训练的视频模型，<code>Kinetics-400</code> 预训练的视频模型，以及语言图像模型 <code>X-CLIP</code> 与 <code>ViFi-CLIP</code>。视频模型训练 150 或 200 轮，定位模型训练 30 或 20 轮，全部实验用 4 张显卡。<strong>两个语言图像模型的训练配置论文未说明。</strong></p>
+<p>手术存在识别的划分是 70%、10%、20%，对应 1,449、205、424 个视频。基线跑完，接下来看结果。</p><div class="strip h"><span class="t">亮点</span><span class="i">三类基线可以看出预训练的作用，但没有拆开架构与数据</span><span class="i">阶段预测的输入输出细节论文未说明</span></div><div class="strip d"><span class="t">数据</span><span class="i">划分：1,449 训练、205 验证、424 测试</span><span class="i">定位特征 2048 维，100 个定长特征</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><p>先看四项任务各自最好的数字（全部手术列）。其中 Top-1 是预测第一名恰为正确类别的比例，mAP 是平均精度均值。</p>
+<div class="tbl"><table><thead><tr><th>任务</th><th>最好结果</th><th>来自</th></tr></thead><tbody><tr><td>手术存在识别，Top-1</td><td>58.9%</td><td>X-CLIP32 与 ViFi-CLIP16 并列</td></tr><tr><td>阶段分类，Top-1</td><td>68.4%</td><td>ViFi-CLIP32</td></tr><tr><td>操作分类，Top-1</td><td>65.0%</td><td>ViFi-CLIP16</td></tr><tr><td>阶段定位，平均 mAP</td><td>50.4%</td><td>TriDet 加 SwinViviT</td></tr><tr><td>阶段预测，平均 Top-1</td><td>48.2%</td><td>MViT V2*</td></tr></tbody></table></div>
+<p><strong>识别任务上差距最大。</strong> 四个视频模型的阶段分类全部 Top-1 只有 25.7% 到 27.0%，预训练后为 28.3% 到 33.5%，语言图像模型则达到 62.7% 到 68.4%。所以这个基准能把两类模型拉开，但拉开的原因是预训练还是架构，要靠对照实验回答，论文没有做。</p>
+<figure class="fig"><img src="images/page_011_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。阶段分类与操作分类的 Top-1 和 Top-5 准确率，带星号的是 Kinetics-400 预训练，加粗为每列最优。</figcaption></figure>
+<p>定位任务上，重叠门槛越严精度越低：最好组合从阈值 0.1 的 61.0% 降到阈值 0.7 的 33.1%。这说明模型能大致找到阶段，边界还不够准。</p>
+<figure class="fig"><img src="images/page_013_fig_fig_5_review_repair1.png" alt="Fig 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 5。TriDet 阶段定位可视化，GT 为真值，Loc. 为模型预测，大块区域基本对应，边界处有偏移。</figcaption></figure>
+<p>预测任务上，六个模型的平均 Top-1 都在 47.2% 到 48.2% 之间，差距太小，不足以说明预训练有效。数字好看不等于结论成立，下一节看结果没有证明什么。</p><div class="strip h"><span class="t">亮点</span><span class="i">语言图像模型在识别上远高于视频模型</span><span class="i">定位在严格重叠门槛下明显下降</span><span class="i">预测任务各模型差距很小</span></div><div class="strip d"><span class="t">数据</span><span class="i">阶段分类：视频模型 25.7% 到 27.0%，语言图像模型 62.7% 到 68.4%</span><span class="i">定位：阈值 0.1 为 61.0%，阈值 0.7 为 33.1%</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><p><strong>热图只能算示意。</strong> 论文用 <code>ViFi-CLIP</code> 的注意力热图说明模型关注器械和手术眼区。四个样例里，多数落在瞳孔和器械附近，右下一例较分散。热图怎么生成论文未说明，也没有量化评估。</p>
+<figure class="fig"><img src="images/page_012_fig_fig_4_review_repair1.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 4。ViFi-CLIP 在测试集四个样例上的注意力热图，上行为原图，下行为热图。</figcaption></figure>
+<p>下面三件事，结果都没有证明：</p>
+<ul><li>语言图像模型领先是因为预训练还是架构：没有对照。</li><li>优势能否推广到新来源的视频：划分是否按来源隔离论文未说明。</li><li>模型差异是否真实：没有方差，也没有多次运行。</li></ul>
+<p>除了这些缺口，论文自己的数字也有出入，下一节逐条列出。</p><div class="strip h"><span class="t">亮点</span><span class="i">热图只有四个样例，没有量化</span><span class="i">领先原因、泛化、显著性三点都没有证据</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>论文自己对不上的数字</h3><p>阅读时发现下列出入，论文都没有解释。</p>
+<ol><li>手术存在识别的划分 1,449、205、424 相加为 2,078，比总数 2,278 少 200 个。</li><li>表 4 的平均值高于四个阈值列的简单平均：最好组合四列平均约 49.6，表中为 50.4。</li><li>论文说 <code>ViFi-CLIP</code> 在所有操作类别上最优，表 3 里青光眼的两项最优值属于 <code>X-CLIP32</code>。</li><li>图 2 标 <code>CholecT50</code> 为 94.5 小时，表 1 为 44.7 小时。</li><li>284.8 小时除以 2,278 个视频约 450 秒，文中未裁剪视频平均 337 秒。</li><li>特征提取所用 <code>I3D</code> 的预训练来源，正文写 <code>ImageNet</code>，附录写 <code>Kinetics-400</code>。</li></ol>
+<p><strong>我的判断：</strong> 这些更像整理疏漏，未必改变结论方向，但在复核前不应引用 20 倍和平均 mAP。数字有出入，所以要逐个检验核心说法。</p><div class="strip h"><span class="t">亮点</span><span class="i">划分之和、平均值、文字与表格、图与表之间都有出入</span></div><div class="strip d"><span class="t">数据</span><span class="i">划分之和 2,078，比总数少 200</span><span class="i">四列平均约 49.6，表中为 50.4</span></div></div><div class="card" id="s10"><h3><span class="num">10</span>核心说法站得住吗</h3><p>对每个核心说法找最强的另一种解释，看论文有没有证据把两者分开。</p>
+<div class="tbl"><table><thead><tr><th>说法</th><th>另一种解释</th><th>论文有证据吗</th><th>判断</th></tr></thead><tbody><tr><td>最大、最丰富</td><td>总数被没有时间标注的视频撑大</td><td>表 1 支持规模，倍数不是 20 倍</td><td>部分成立</td></tr><tr><td>专家标注保证质量</td><td>合并掩盖了分歧</td><td>没有一致性数字</td><td>未被区分</td></tr><tr><td>语言图像模型最强</td><td>预训练规模或频道风格泄漏</td><td>没有对照和按来源划分</td><td>未被区分</td></tr><tr><td>模型关注器械与眼区</td><td>热图集中在画面中心</td><td>没有量化</td><td>未被区分</td></tr><tr><td>TriDet 加 SwinViviT 最好</td><td>单次运行的波动</td><td>没有方差</td><td>部分成立</td></tr></tbody></table></div>
+<p><strong>读法：</strong> 数据集的存在和规模是确定的，对质量与基线含义的结论都要打折。最后看复现和使用时怎么用。</p></div><div class="card" id="s11"><h3><span class="num">11</span>复现与使用要注意什么</h3><p><strong>可以直接复用：</strong> 视频模型和两个定位模型的轮数、批大小、学习率论文都给了；三级层级加多手术共存的标注设计值得借鉴。</p>
+<p><strong>使用前要检查：</strong></p>
+<ul><li>划分是否让同一视频或同一频道同时出现在训练和测试中。</li><li>平均 mAP 能否按各阈值复算。</li><li>表 1 的规模对比是否换成自己的口径。</li></ul>
+<p><strong>需要补齐，论文未说明：</strong> 两个语言图像模型的训练配置、划分文件、各列的类别数、标注者间一致性、523 个视频的选取标准、数据许可。</p>
+<p><strong>要避免：</strong> 直接引用 20 倍和 50.4% 而不复核。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>OphNet 的确是眼科里规模最大的三级标注视频基准，但倍数约为 2 倍多，不是 20 倍。</div><div>只有 523 个视频带阶段和操作边界，使用时要区分总数和可用标注数。</div><div>语言图像模型领先很多，原因没有被拆开。</div><div>划分之和、平均 mAP、文字与表格之间有出入，引用前要复核。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>三级层级标注和主手术、次要手术的设计贴近真实手术。</li><li>来源多样，附录交代了筛选标准和保留边界。</li><li>四项任务各有基线，训练超参数大多给出。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>没有标注者间一致性或质量数字。</li><li>划分是否按来源隔离论文未说明，存在捷径风险。</li><li>所有基线只有单次结果，多处数字对不上。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>按频道划分后，语言图像模型的优势还在吗？</li><li>表 4 的平均 mAP 到底怎么算？</li><li>少掉的 200 个视频去了哪里？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 f766dfdf</span><span class="s">7.4 分</span></div><p>模型自评。D5为7：只用表1概括与其他数据集的对比，没有逐个说明新增了什么。D6为7：复用建议较短。D7为6：章节未编号，没有亮点与数据条，图表位置合理。D8为7：IoU、弱监督、Top-5等术语首次出现时未定义。D9为5：没有核心观点速览，各节不以问题开头，数字后缺少所以然。数字核对：note模式有4个未匹配数字，其中2,078和2.3是推导值，50.5与931来自表图像而文本抽取未带出，均已核对论文表格。摘要译文段落超过220字，属忠实翻译，后续拆段。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>6</b></span><span>D8 <b>7</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入核心观点速览，并按背景、观点、实验、深入分析的顺序重排</li><li>各节开头写出要回答的问题或张力，数字后补一句所以然，节尾加衔接句</li><li>把推断标为我的判断，未说明之处统一写论文未说明，补写阶段预测的输入输出细节论文未说明</li><li>首次出现处解释IoU、弱监督、Top-5、mAP等术语</li><li>把推导数字登记到number-exceptions并写明来源</li><li>写insight_pass.json并把三轮思考得到的修订写入笔记</li><li>拆分摘要译文的过长段落</li><li>写reading_report.md并通过lint_report</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 3327e578 · 文稿 eb8b0b6b</span><span class="s">8.5 分</span></div><p>模型自评，分数由同一个模型打出，不是独立评审。总分较第1轮的7.4上升，没有下降项。已知上限：表2、表4、表5的图像未能插入（表2裁剪过小，表4无候选，表5重裁后仍带表4片段），用Markdown表转录了全部数值并保留占位；D5为8，因为论文自身只用表1做对比，未逐个说明对每个数据集的新增点；D7为8，笔记的固定章节名不能编号，编号和亮点数据条在报告中；论文自身有多处数字出入（20倍、划分之和、平均mAP等），已如实标出而无法修复。推导数字已登记在number-exceptions文件，笔记与报告的数字核对均无未匹配项。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

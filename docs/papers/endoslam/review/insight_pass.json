@@ -1,0 +1,40 @@
+{
+ "knowledge_points": [
+  {"term": "ATE（绝对轨迹误差）", "plain": "先把预测轨迹与真值做最小二乘刚体对齐，再取各帧位置误差的均方根，衡量全局漂移。", "where": "sec:appendix-a-1j", "needed_for": "读 Table 2 时区分全局漂移和逐帧误差"},
+  {"term": "RPE（相对位姿误差）", "plain": "比较相邻两帧之间的相对运动误差，分平移和旋转两部分；本文间隔取 1 帧。", "where": "sec:appendix-a-1j", "needed_for": "理解为什么近乎不动的预测也能得到很低的旋转 RPE"},
+  {"term": "手眼标定", "plain": "求机械臂末端到相机光心的固定刚体变换，把机器人位姿换算成相机位姿。", "where": "sec:appendix-c-camera-calibration", "needed_for": "判断位姿真值的可信度"},
+  {"term": "光流散度同步", "plain": "相机沿光轴前进时光流呈发散场，其散度与前进速度相关，可用来与机器人速度对齐时间。", "where": "sec:appendix-d-temporal-synchronization", "needed_for": "理解图像帧和 1kHz 位姿如何对应"},
+  {"term": "几何一致性损失", "plain": "把一帧的深度投影到相邻帧后与该帧深度比较，惩罚两者的相对差，约束尺度一致。", "where": "sec:appendix-a-1j", "needed_for": "解释 SC-SfMLearner 与 Endo-SfMLearner 优于其余两个基线的原因"},
+  {"term": "亮度仿射对齐", "plain": "在计算光度误差前，用 a·I+c 把合成图亮度调到与目标帧一致。", "where": "sec:appendix-a-1j", "needed_for": "理解 Ew/oBr 消融的含义"},
+  {"term": "ESAB 非局部注意力", "plain": "对特征图所有位置两两计算相关并加权汇聚，再残差加回输入。", "where": "sec:appendix-a-1j", "needed_for": "理解 Ew/oAtt 消融的含义"},
+  {"term": "明暗恢复形状（Tsai-Shah）", "plain": "根据图像亮度和反射模型的线性近似直接解出表面深度的规则方法。", "where": "sec:dataset", "needed_for": "理解三维重建对比中的规则基线"}
+ ],
+ "detail_questions": [
+  {"question": "HighCam 和 LowCam 的“同一条轨迹”真的是同一条物理路径吗？", "answer": "不是。Table 2 中同名轨迹的长度不同，例如 Colon-IV Traj-I 在 HighCam 为 0.4286 m、在 LowCam 为 0.6785 m；作者称“同一轨迹”，但只能理解为同一器官上的同编号录制。", "evidence": ["sec:appendix-a-1j"], "status": "resolved"},
+  {"question": "位姿真值在图像帧上的综合误差有多大？", "answer": "论文给出机械臂 0.1mm 重复精度、手眼变换矩阵和重投影误差图，但没有给出真值位姿相对相机的综合误差。", "evidence": ["sec:appendix-a-1j", "sec:appendix-c-camera-calibration"], "status": "not_stated"},
+  {"question": "损失权重 α、β、γ、λp、λs 取什么值？", "answer": "论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "仿射亮度参数 a、c 由谁预测？", "answer": "正文只说“网络预测一组亮度变换参数”，未说明是 PoseNet 额外输出还是独立分支。", "evidence": ["sec:appendix-a-1j"], "status": "not_stated"},
+  {"question": "深度评测用的合成结肠帧与训练集是否重叠？", "answer": "训练与验证用 2,039 和 509 张合成结肠，测试用 1,062 张结肠帧，均来自 Unity，是否来自不同序列论文未说明。", "evidence": ["sec:appendix-a-1j", "sec:dataset"], "status": "not_stated"},
+  {"question": "深度 RMSE 的单位和归一化方式是什么？", "answer": "Fig. 6 只给数值，色条为 0 到 1，单位与归一化方式论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "为什么 Stomach-III 最难？", "answer": "作者归因于该器官轨迹的平均速度和加速度最高；Table F.2 中 LowCam 的 Stomach-III 平均速度 25.97 mm/s、平均加速度 519.361 mm/s2 均为五器官最高。", "evidence": ["sec:appendix-a-1j", "sec:appendix-f-dataset-analysis"], "status": "resolved"},
+  {"question": "Monodepth2 的旋转 RPE 为什么经常更低？", "answer": "作者在 Unity 附录中解释：轨迹接近直线时，预测接近单位阵的方法旋转误差自然很小；在真实轨迹上作者说 Monodepth2 出现网络不激活问题。", "evidence": ["sec:appendix-g-results", "sec:appendix-a-1j"], "status": "partly"},
+  {"question": "掩码 M 是给不一致像素加权还是降权？", "answer": "公式 M = 1 − Ddiff 意味着不一致像素被降权，正文却写“weighted with higher constant”，两者矛盾。", "evidence": ["sec:appendix-a-1j"], "status": "resolved"},
+  {"question": "PillCam 数据能否用于视频里程计？", "answer": "离体 PillCam 只有 239 帧，同步表中帧率记为 0.117 fps，正文没有任何 PillCam 的位姿实验。", "evidence": ["sec:appendix-a-1j", "sec:appendix-d-1b-shows-an-example-obtained-from-the-dataset-of-divergent-optical-flow-in-image-areas-of-high-contrast"], "status": "partly"},
+  {"question": "Fig. 5 的 MiroCam 列是哪段器官？", "answer": "图表标题写小肠，图注写 Colon-III 第四条轨迹，两者不一致。", "evidence": ["sec:appendix-a-1j"], "status": "resolved"},
+  {"question": "有没有多次训练、方差或显著性检验？", "answer": "没有，所有对比都是单次训练的结果。", "evidence": ["sec:appendix-a-1j", "sec:dataset"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "ESAB 与亮度损失降低了旋转误差。", "alternative": "旋转改善可能来自训练随机性，或来自某个变体更倾向输出小旋转；单次训练无法分辨。", "separating_evidence": "多随机种子的均值和方差，以及预测旋转幅度与真值幅度的比较。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "Endo-SfMLearner 在多数情况下 ATE 最优。", "alternative": "差距多在几厘米内，且 LowCam Colon-IV Traj-V 上三个对手都更好，优势可能取决于轨迹选择。", "separating_evidence": "覆盖全部 35 个子数据集的统计，而不是 5 条轨迹。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "只用合成结肠训练即可跨器官泛化。", "alternative": "合成三器官共享同一渲染器和纹理来源，域差远小于真实器官之间的差异，测到的是渲染内泛化。", "separating_evidence": "在真实离体帧上用扫描点云渲染的深度做评测。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "EndoSLAM 能用于评测内镜 SLAM。", "alternative": "离体、刚性、摊开的器官让问题接近静态表面上的单目里程计，缺少蠕动与闭合管腔，可能高估算法在体表现。", "separating_evidence": "同一方法在离体与在体数据上的对比。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览",
+  "说明 HighCam 与 LowCam 的同名轨迹长度不同，不是同一物理路径",
+  "把损失权重、仿射参数来源、深度 RMSE 单位、测试帧与训练帧是否重叠写成论文未说明",
+  "把跨器官泛化的结论限定在合成域，并写明用扫描点云渲染深度的分离实验",
+  "在局限中补充 PillCam 数据没有任何位姿实验",
+  "首次出现时解释 ATE、RPE 的含义"
+ ]
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SAR-RARP50: Segmentation of surgical instrumentation and Action Recognition on Robot-Assisted Radical Prostatectomy Challenge</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>前列腺根治术缝合视频上的动作识别与器械分割挑战赛：SAR-RARP50 数据集与 12 支队伍的结果</h1>
+<div class="sub">SAR-RARP50: Segmentation of surgical instrumentation and Action Recognition on Robot-Assisted Radical Prostatectomy Challenge</div>
+<div class="meta">Dimitrios Psychogyios, Emanuele Colleoni, Beatrice Van Amsterdam 等 50 位作者（University College London 等） | arXiv:2401.00496 预印本（v2），EndoVis 2022 子挑战总结</div>
+<div><span class="chip">数据集与挑战赛</span><span class="tag">手术数据集</span><span class="tag">动作识别</span><span class="tag">器械分割</span><span class="tag">多任务学习</span><span class="tag">前列腺根治术</span></div>
+<div class="one">SAR-RARP50 用 50 例真实前列腺根治术缝合视频建立动作识别与器械分割的联合基准，结果显示时序建模和测试时增强与高分同时出现，而多任务学习是否优于单任务仍无定论。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2401.00496" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/sar-rarp50/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术动作识别和器械分割模型在受控数据上表现好，到真实手术里会变差。</strong> 动作识别多用 <code>JIGSAWS</code> 这类训练台数据，分割多用 EndoVis 2017 与 2018 的猪体或离体场景。论文认为两者与真实手术视频之间有领域差异。</p>
+<p>真实数据难采集：伦理、法规、多中心协调都是门槛，逐帧人工标注又贵又易错。</p>
+<p>另一个缺口是两个任务一直分开做。器械的位置和形态本可以提示当前动作，但很少有数据同时提供两种标签，所以也没人能系统检验两者互相帮助的效果。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一篇挑战赛总结论文：发布数据集、定义评分、汇总参赛结果，不提出作者自己的模型。</strong></p>
+<ul><li>数据：50 例真实 RARP 的 DVC 缝合视频，动作 8 类按 10Hz 标注，器械 9 类按 1Hz 标注。</li><li>划分：40 例 12998 帧训练，10 例 3252 帧测试。</li><li>参赛：12 支队伍，提交 7 个动作识别、9 个分割、4 个多任务方法。</li><li>结果：动作最高 0.828，分割最高 0.847，多任务最高 0.824。</li><li>边界：方法结论都来自跨队比较；多任务是否有用，论文自己说无定论。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">首个同时含动作与分割标签的公开体内手术视频数据集（作者声明）</span><span class="i">方法结论来自跨队比较，没有受控消融</span></div><div class="strip d"><span class="t">数据</span><span class="i">50 例手术，8 位外科医生</span><span class="i">12998 训练帧 / 3252 测试帧</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p><strong>数据只来自一家医院、一种机器人、一个缝合步骤，这决定了它能测什么。</strong> 50 例手术在伦敦大学学院医院完成，都用 <code>da Vinci Si</code> 机器人，由 8 位资历不同的外科医生主刀。</p>
+<p>截取的片段是背深静脉复合体（DVC）的缝合：前列腺与膀胱、尿道断开后，缝合这一血管丛来控制出血。视频之间在光照、颜色、出血量、镜头污染上都有差异。</p>
+<p><code>SAR-RARP50</code> 是 <code>RARP45</code> 的超集，新增 5 例手术，并给全部视频补上 1Hz 的分割掩码。</p>
+<p>接下来看两种标签各自怎么定义。</p></div><div class="card" id="s4"><h3><span class="num">4</span>两种标签怎么定义</h3><p><strong>动作标签回答“双手此刻在做哪一步”，分割标签回答“每个像素属于哪个器械零件”。</strong></p>
+<p>动作有 8 类：G0 背景，G1 到 G7 依次是拾针、定位针尖、进针、出针、打结、剪线、放下缝针。标注由一名研究者完成，论文未说明是否做过一致性检验。在 <code>RARP45</code> 上，单例缝合平均约 5 分钟，G5 打结在超过 75% 的手术中缺席。</p>
+<p>分割有 9 类：器械按杆、腕、钳口三段标注，另有缝针、缝线、夹子、吸引器、针持、导尿管。标注协议规定了遮挡、带孔钳口、液体覆盖、完全浸没、低照度、暗角六种情形的处理方式。</p>
+<p><strong>类别极不平衡。</strong> 器械杆在训练集上平均占画面 12.04%，夹子、导尿管、针持都不到 0.3%。按类平均的 mIoU 因此容易被小类拉低。</p></div><div class="card" id="s5"><h3><span class="num">5</span>评分规则</h3><p><strong>三个子挑战都用两项指标的几何平均，任何一项太低都会拉低总分。</strong></p>
+<div class="math">$$Score_{ar}=\sqrt{FWA_{avg}\cdot F1@10_{avg}},\quad Score_{s}=\sqrt{mIoU\cdot mNSD},\quad Score_{mt}=\sqrt{Score_{ar}\cdot Score_{s}}$$</div>
+<p>帧准确率 FWA 只看每帧分类对不对。分段 F1@10 把连续同类帧当作片段，片段 IoU 超过 0.1 就算命中，它主要惩罚预测碎片化和乱序。</p>
+<p>NSD 统计边界像素中距离对方边界小于阈值 $\tau$ 的比例，比 IoU 更宽容贴边误差。<strong>阈值 $\tau$ 的取值论文未说明</strong>，复现者无法确定 mNSD 的严格程度。论文的 NSD 公式（11）分母印刷为两个 $\Delta^{Target}$，与文字定义不一致。</p>
+<p>赛后，作者还对每段测试视频单独打分、单独排名，再对名次取平均，检验总榜是否稳定。</p></div><div class="card" id="s6"><h3><span class="num">6</span>动作识别：时序建模拉开差距</h3><figure class="fig"><img src="images/page_012_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。动作识别汇总结果：平均准确率、F1@10 与最终分。</figcaption></figure>
+<p><strong>前五名都有时序建模，分数在 0.698 到 0.828 之间；逐帧分类的 Medical-Mechatronics 只有 0.039。</strong> 后者 F1@10 仅 0.013，说明没有时序上下文时预测会碎成大量短片段。</p>
+<p>SummerLab-AI 用预训练特征加 <code>ASFormer</code>，以 0.828 领先第二名 0.024。逐视频排名平均名次为 1.7、2.4、2.8，与总榜一致，前三名排名稳定。</p>
+<p>视频之间差别明显。资深顾问完成的视频 44 得分最高，出血少、动作规整；低年资住院医生完成的视频 46 得分最低，出血、镜头运动和助手干预都更多。</p></div><div class="card" id="s7"><h3><span class="num">7</span>器械分割：前排接近，失败在小类</h3><figure class="fig"><img src="images/page_013_fig_table_10_review.png" alt="Table 10" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 10。分割最终结果：mIoU、mNSD 与最终分。</figcaption></figure>
+<p><strong>前七名都在 0.791 以上，第一与第三只差 0.008。</strong> Uniandes 以 0.847 第一，它是唯一先在 EndoVis 2017 与 2018 上微调的队伍。</p>
+<figure class="fig"><img src="images/page_013_fig_table_9_review_repair1.png" alt="Table 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 9。按逐视频分割分重新排名后的平均名次。</figcaption></figure>
+<p>换成逐视频排名，SummerLab-AI 平均名次 2.2，排到 HiLab-2022 的 2.5 之前，第二、第三名对调。<strong>聚合方式会改变名次。</strong></p>
+<p>作者观察到，用测试时增强的卷积网络 AIA-Noobs 排第 4，超过未用增强的两个注意力模型，并据此认为测试时增强比集成更有效。</p>
+<p>定性样例中，所有队伍都把视频 42 的吸引器误分为器械杆；视频 48 的施夹器，除 AIA-Noobs 外都分错了类别。罕见器械是共同短板。</p></div><div class="card" id="s8"><h3><span class="num">8</span>多任务：看不出互相帮助</h3><figure class="fig"><img src="images/page_015_fig_table_16_review_repair1.png" alt="Table 16" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 16。多任务最终结果。</figcaption></figure>
+<p><strong>唯一能直接对照的 Uniandes，多任务分割 0.850 对单任务 0.847，动作 0.799 对单任务 0.804，差别只有千分之几。</strong> 其余三队要么是级联，要么提交了不同网络，要么没有单任务版本。</p>
+<p>采样率处理与动作分对应：保留 10Hz 动作标签的 Uniandes、AIA-Noobs 动作分更高，把动作标签降到 1Hz 的两队更低。</p>
+<p>SummerLab-AI 多任务准确率 0.783 最高，F1@10 却只有 0.365，片段很碎；Team SK 用单帧预测，F1@10 只有 0.145。</p>
+<p>论文的结论是：基于收到的提交，无法判断多任务能否提升精度。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><p><strong>我的判断：论文里的方法结论都是相关观察，不是因果证据。</strong></p>
+<ul><li>各队训练划分、分辨率、预训练、后处理都不同，没有任何受控消融。</li><li>测试时增强与集成的比较涉及两支不同队伍，作者自己也说难以比较。</li><li>Uniandes 的分割优势也可能来自 <code>Mask2Former</code> 的结构，而非手术数据预训练。</li><li>测试集只有 10 例，前三名之间没有置信区间或显著性检验。</li></ul>
+<p>论文还有几处前后不一致：HiLab-2022 在方法节写为 <code>Swin</code> 与 <code>SegFormer</code> 集成，讨论节写成 <code>Swin</code> 加 <code>UperNet</code>；摘要称 EndoVis 2022，结论节称 Endovis2023。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><ul><li>NSD 阈值 $\tau$、F1@10 的片段匹配细节论文未说明，需要查官方评测代码。</li><li>动作与分割采样率不同，多任务训练时注意对齐，保留 10Hz 动作标签。</li><li>单中心、单术式、单一机器人：外推到其他医院或术式前需要另行验证。</li><li>测试标签是否公开、数据许可条款，论文未说明，使用前需查看数据仓库页面。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SAR-RARP50 是真实体内手术上的动作识别与零件级器械分割联合基准，覆盖 50 例 DVC 缝合视频。</div><div>动作识别里，时序建模是最大的分水岭；分割里，前排接近，罕见器械是共同短板。</div><div>多任务学习的价值在这次挑战中没有被验证，也没有被否定。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>同一批真实手术视频同时有动作与分割标签，并给出详细的标注边界规则。</li><li>评分使用几何平均，并做了逐视频排名稳定性分析。</li><li>如实报告多任务结论无定论，没有夸大。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>方法结论全部来自跨队比较，缺少受控实验。</li><li>测试集只有 10 例，没有显著性检验。</li><li>NSD 阈值、标注一致性、数据许可等关键信息未说明，文中有几处前后不一致。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>同一骨干、同一划分下，多任务与单任务的受控对比结果会怎样？</li><li>在其他术式或其他医院数据上，这些模型的泛化如何？</li><li>针对施夹器、吸引器等罕见器械，重采样或合成数据能否改善分割？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 242c82d8</span><span class="s">6.0 分</span></div><p>第 1 轮自评（模型自评）：证据链、数字与边界较完整。H3 不通过：note 模式数字核对有 2 个推导值（0.008、0.3）未登记来源。D2 7：评分流程清楚，但 F1@10 的片段匹配方式只有一句话。D5 7：与 JIGSAWS、EndoVis 2017/2018 的定位分散在研究问题里，没有集中对比。D7 6：13 张表图连续堆在关键结果里，阅读负担大。D9 6：缺核心观点速览，多数小节直接给数字，缺少开头的问题和结尾的过渡；摘要段超过 220 字。另外未指出论文自身的不一致（NSD 公式分母、HiLab 架构描述前后不一）。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>6</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:fail H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>登记 0.008 与 0.3 等推导数字到 number_exceptions.json</li><li>把insight pass 中的论文未说明项写进笔记（NSD 阈值、标注一致性、测试标签与许可、置信区间）</li><li>补充论文自身不一致：NSD 公式分母、HiLab-2022 在方法节与讨论节的架构描述不同、结论节把挑战写成 Endovis2023</li><li>各小节开头写明要回答的问题，数字后补一句含义</li><li>拆分超过 220 字的段落</li><li>在研究问题里集中写与 JIGSAWS、EndoVis 2017/2018、RARP45 的对比</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 28fea8d9 · 文稿 a050e573</span><span class="s">8.3 分</span></div><p>第 2 轮自评（模型自评）：完成 insight pass 三轮并据此修改笔记；数字核对 note 与 report 均无未匹配数字，推导值 0.008、0.024、0.3 已登记在 number_exceptions.json。新增核心观点速览、与 JIGSAWS/EndoVis/RARP45 的对比表、各小节开头的问题句、论文未说明项（NSD 阈值、F1@10 匹配细节、标注一致性、显著性检验、许可与测试标签）以及论文自身三处不一致。D7 7：笔记的关键结果节仍嵌入 13 张原表，篇幅偏长，这是保留原表与可读性之间的取舍。无法修复的限制：方法结论缺少受控消融，笔记只能标明其为跨队观察；Fig 1、Fig 2、Fig 6 没有可用的独立裁剪，保留占位。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

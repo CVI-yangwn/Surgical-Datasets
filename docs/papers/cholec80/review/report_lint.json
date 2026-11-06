@@ -1,0 +1,31 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "061fe47cc1c52e13cdb31b3e59295c6dc14197123f7caf2c47c45dbebbaa7863",
+  "number_exceptions": {
+    "114": "表 VII 双极电凝 <5 秒检出块数，PDF 第 10 页表格单元格，文本抽取未收录该表数值",
+    "1630": "图 4(a) 施夹钳评估子集图像数，PDF 第 5 页图中柱标，文本抽取未收录图内文字",
+    "2769": "图 4(a) 剪刀评估子集图像数，PDF 第 5 页图中柱标",
+    "2951": "图 4(b) P7 评估子集图像数，PDF 第 5 页图中柱标",
+    "31869": "图 4(b) P4 评估子集图像数，PDF 第 5 页图中柱标",
+    "34291": "图 4(b) P2 评估子集图像数，PDF 第 5 页图中柱标",
+    "45984": "图 4(a) 抓钳评估子集图像数，PDF 第 5 页图中柱标",
+    "54678": "图 4(a) 电钩评估子集图像数，PDF 第 5 页图中柱标",
+    "4096": "图 2 中 fc6/fc7 维度，PDF 第 4 页图内文字",
+    "4103": "图 2 中 fc8 维度，PDF 第 4 页图内文字（4096+7）",
+    "2.2": "推导值：表 III Cholec80 准确率 EndoNet 75.2 减 PhaseNet 73.0",
+    "17": "推导值：表 III/IV EndoNet 离线 92.0 减逐帧 75.2 = 16.8，取约 17",
+    "10": "推导值：表 IV EndoNet 离线 92.0 减在线 81.7 = 10.3，取约 10",
+    "3": "推导值：表 IV EndoNet 离线 92.0 减 PhaseNet 89.1 = 2.9，取约 3；“2 到 3 个百分点”指 2.2 与 2.9",
+    "6": "推导值：表 IV(b) EndoVis EndoNet 86.0 减 PhaseNet 79.7 = 6.3，取约 6"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

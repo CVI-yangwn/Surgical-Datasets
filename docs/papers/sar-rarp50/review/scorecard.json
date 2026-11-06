@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "242c82d88c15321f91828987f9f71c0b287e69976fca837bc9e2d7a06714848a",
+      "note_snapshot": "review_rounds/round1_SAR_RARP50_Segmentation_of_surgical_instrumentation_and_Action_Recognition_on_Robot_Assisted_Radical_Prostatectomy_Challenge.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "fail",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 6,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 6.0,
+      "verdict": "第 1 轮自评（模型自评）：证据链、数字与边界较完整。H3 不通过：note 模式数字核对有 2 个推导值（0.008、0.3）未登记来源。D2 7：评分流程清楚，但 F1@10 的片段匹配方式只有一句话。D5 7：与 JIGSAWS、EndoVis 2017/2018 的定位分散在研究问题里，没有集中对比。D7 6：13 张表图连续堆在关键结果里，阅读负担大。D9 6：缺核心观点速览，多数小节直接给数字，缺少开头的问题和结尾的过渡；摘要段超过 220 字。另外未指出论文自身的不一致（NSD 公式分母、HiLab 架构描述前后不一）。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "登记 0.008 与 0.3 等推导数字到 number_exceptions.json",
+        "把insight pass 中的论文未说明项写进笔记（NSD 阈值、标注一致性、测试标签与许可、置信区间）",
+        "补充论文自身不一致：NSD 公式分母、HiLab-2022 在方法节与讨论节的架构描述不同、结论节把挑战写成 Endovis2023",
+        "各小节开头写明要回答的问题，数字后补一句含义",
+        "拆分超过 220 字的段落",
+        "在研究问题里集中写与 JIGSAWS、EndoVis 2017/2018、RARP45 的对比"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "28fea8d9e666fbfd9945ced8cfd2375eabd5680422ea32c4d87c295d069c4deb",
+      "note_snapshot": "review_rounds/round2_SAR_RARP50_Segmentation_of_surgical_instrumentation_and_Action_Recognition_on_Robot_Assisted_Radical_Prostatectomy_Challenge.md",
+      "report_sha256": "a050e5731f693f3f113ad1a22129e0a1e1bf8899bd0870621e5206591047c2c1",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评（模型自评）：完成 insight pass 三轮并据此修改笔记；数字核对 note 与 report 均无未匹配数字，推导值 0.008、0.024、0.3 已登记在 number_exceptions.json。新增核心观点速览、与 JIGSAWS/EndoVis/RARP45 的对比表、各小节开头的问题句、论文未说明项（NSD 阈值、F1@10 匹配细节、标注一致性、显著性检验、许可与测试标签）以及论文自身三处不一致。D7 7：笔记的关键结果节仍嵌入 13 张原表，篇幅偏长，这是保留原表与可读性之间的取舍。无法修复的限制：方法结论缺少受控消融，笔记只能标明其为跨队观察；Fig 1、Fig 2、Fig 6 没有可用的独立裁剪，保留占位。",
+      "fixes": []
+    }
+  ]
+}

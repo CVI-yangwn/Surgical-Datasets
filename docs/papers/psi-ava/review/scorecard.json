@@ -1,0 +1,73 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "1e417746a15ef41e04793c606f973106fceb61790f4a982810f223b11db8aef3",
+      "note_snapshot": "review_rounds/round1_Towards_Holistic_Surgical_Scene_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "fail",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 5
+      },
+      "overall": 6.0,
+      "verdict": "模型自评。证据链完整:数据来源、四任务定义、标注协议、两折划分、Table 2/3/4 数值和框特征消融都在,图文数字冲突(21/20 步骤、2.224/2238 关键帧)和步骤标准差 0.004 异常已指出。不足:lint_report 笔记模式有 6 个未匹配数字(DOI 片段、自算差值 0.06 与 7.5),尚未登记来源,H3 按字面记 fail,总分封顶 6.0;定位只在研究问题里简略对比 HeiCo、CholecT50、JIGSAWS,没有说明对 MISAW 的关系;研究问题没有以读者要回答的问题开头,数字后缺少“所以呢”,节与节之间没有承接;摘要翻译段落超过 220 字;部分句子为过混合语言检查改写得生硬(“本文基线”“两届 EndoVis”)。",
+      "fixes": [
+        "研究问题开头先交代张力:为什么单任务数据集不够,读者要回答什么",
+        "把核心观点速览改成先结论后数字,并为每个数字补一句含义",
+        "为关键结果各小节补“所以呢”和节间承接",
+        "补充与 MISAW、HeiCo、CholecT50 的逐项定位",
+        "把自算的 0.06、7.5 与 DOI 片段登记到 number_exceptions.json",
+        "拆分超过 220 字的摘要翻译段落",
+        "把 insight_pass 的挑战轮结论写进深度分析,并把论文未说明的问题统一写成论文未说明",
+        "改写为过语言检查而变生硬的说法"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "ee3ca3e289a5f4bdaa98df87a7b4f367389e70febf165a0b2557c8a82cc4cdf3",
+      "note_snapshot": "review_rounds/round2_Towards_Holistic_Surgical_Scene_Understanding.md",
+      "report_sha256": "4e7ae00110f7576cb4d21bede439e76e7e6092874502c147410f657740211d7d",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "模型自评。笔记和报告的数字检查都没有未匹配项,推导值(0.06、7.5、0.45、14、11)和 DOI 片段已登记到 number_exceptions.json。研究问题先交代难点,再给核心观点速览;各结果小节补了含义和承接;深度分析写入挑战轮结论(框特征消融不能单独证明长期标注的作用,排序一致只比较了两种方法,基线训练设置不统一);定位表覆盖 HeiCo、MISAW、CholecT50、JIGSAWS、Cholec80。无法修复的限制:论文本身没有标注一致性、众包质控、类别数量数值和按术者划分的实验,步骤数、关键帧数、步骤标准差和两表检测数的冲突也没有解释,笔记只能写论文未说明;Table 2 没有可用裁剪,Fig. 2(补充)和 Table 4 的自动裁剪身份不符,保留为占位。D2 停在 8,因为 mAP 聚合方式论文未说明。",
+      "fixes": []
+    }
+  ]
+}

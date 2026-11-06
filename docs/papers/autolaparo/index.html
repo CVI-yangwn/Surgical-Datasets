@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>AutoLaparo: A New Dataset of Integrated Multi-tasks for Image-guided Surgical Automation in Laparoscopic Hysterectomy</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>在 21 台子宫切除术上叠了三层标注，任务设计有新意，多任务的价值却还没被验证</h1>
+<div class="sub">AutoLaparo: A New Dataset of Integrated Multi-tasks for Image-guided Surgical Automation in Laparoscopic Hysterectomy</div>
+<div class="meta">Ziyi Wang, Bo Lu, Yonghao Long, Fangxun Zhong, Tak-Hong Cheung, Qi Dou, Yunhui Liu（香港中文大学、苏州大学、威尔士亲王医院） | arXiv:2208.02049（预印本，第 1 版）</div>
+<div><span class="chip">数据集与基准</span><span class="tag">腹腔镜手术</span><span class="tag">子宫切除术</span><span class="tag">手术工作流</span><span class="tag">视野控制</span><span class="tag">器械分割</span><span class="tag">数据集</span></div>
+<div class="one">AutoLaparo 在一家医院的 21 例腹腔镜子宫切除术视频上做了阶段、镜头运动、器械与子宫分割三层嵌套标注并给出单任务基线，工作流和分割已有中等水平，运动预测只比多数类略好，论文主打的多任务关联没有实验支撑。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2208.02049" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/autolaparo/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机：缺的是“同一台手术上的多种标注”</h3><p>手术机器人要自己动起来，先得看懂现场：手术到了哪一步，画面里有哪些器械和器官，镜头该往哪里移。腹腔镜视频正好记录了术者看到的画面。</p>
+<p><strong>问题在数据。</strong> 论文指出，已有腹腔镜数据集要么不是真实手术，要么规模小，规模大的又大多只为一项任务标注。面向自动化的数据更少，而腹腔镜视野自动控制正是一个能直接减轻扶镜助手负担的方向。</p>
+<p>子宫切除术是常见的妇科手术，已有的妇科数据集只覆盖子宫内膜异位症诊断、动作识别或小规模分割。下一节先给出论文的答案。</p><div class="strip h"><span class="t">亮点</span><span class="i">已有数据集多为单任务，面向自动化的数据很少</span><span class="i">论文没有提出新模型，价值取决于数据和任务设计</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>一句话：在同一批手术视频上，把“在哪个阶段、镜头怎么动、画面里有什么”三种标注一层套一层地标出来。</strong></p>
+<ul><li>任务 1：21 个完整视频，逐帧标 7 个阶段。</li><li>任务 2：从阶段 2 到 4 选 300 个 10 秒片段，用运动开始前 5 秒预测 7 类镜头运动。</li><li>任务 3：每个片段前 5 秒取 6 帧，共 1800 帧、5936 个掩码，9 类目标。</li></ul>
+<p>结果呈现出三种难度：工作流识别和分割已有中等水平，运动预测几乎没学到东西。后面几节依次展开。</p><div class="strip d"><span class="t">数据</span><span class="i">21 个视频，总长 1388 分钟</span><span class="i">300 个运动片段，1800 帧分割，5936 个掩码</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>视频来自香港威尔士亲王医院，2018 年 10 月到 12 月的 21 例手术，Olympus 影像平台，经伦理委员会批准。视频为 25 fps、1920×1080，原始时长 27 到 112 分钟。</p>
+<p>镜头移出腹腔（换器械、擦镜头）的片段被删掉，处理后平均 66 分钟。<strong>单中心、单平台、三个月，这决定了它测不了跨中心泛化。</strong></p>
+<p>标注由一位三十年以上经验的资深妇科医生和一位三年经验的专科医生完成，并交叉核查。两人之间的一致性论文未说明，所以标注质量无法量化。</p></div><div class="card" id="s4"><h3><span class="num">4</span>三层嵌套标注怎样搭起来</h3><p>这一节回答：三项任务的数据是怎样关联起来的？</p>
+<figure class="fig"><img src="images/page_006_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。四种器械与关键解剖结构（子宫）示例，背景经过模糊处理。</figcaption></figure>
+<ol><li><strong>视频级：</strong> 按准备、离断韧带与腹膜、离断子宫血管与韧带、横断阴道、取出标本、缝合、冲洗分为 7 个阶段。阶段 2 和 3 在子宫左右两侧对称进行，先后顺序取决于术者习惯。</li><li><strong>片段级：</strong> 镜头运动通常不到 1 秒，用运动开始时刻 $T$ 代表一次运动。每个片段 10 秒，$T$ 固定在第 5 秒，前 5 秒是输入，后 5 秒作为参考。运动分为静止和上、下、左、右、推近、拉远。</li><li><strong>帧级：</strong> 在 $t=0,1,2,3,4,5$ 秒取 6 帧，用 <code>LabelMe</code> 标注四种器械的把手、杆部和子宫。</li></ol>
+<p><strong>嵌套的好处是每个分割帧都知道自己处在哪个阶段、镜头马上要怎么动。</strong> 代价是运动和分割数据只覆盖阶段 2 到 4。</p><div class="strip h"><span class="t">亮点</span><span class="i">三层标注在时间上逐层嵌套</span><span class="i">运动和分割只覆盖阶段 2 到 4</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>类别分布与一处统计笔误</h3><figure class="fig"><img src="images/page_005_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。各类镜头运动片段在训练、验证、测试集中的数量。</figcaption></figure>
+<p>静止 78 个，是最大的一类；训练集中上只有 14 个、右只有 12 个。<strong>类别少又不平衡，是理解任务 2 结果的前提。</strong></p>
+<p>分割子集里，器械 2（<code>LigaSure</code>）最常见，把手出现在 1476 帧中；子宫出现在 941 帧。器械 4 把手平均只有 7042 像素，是最小的目标。</p>
+<p><strong>表 2 有一处对不上：</strong> 验证集各类之和是 1177，合计行写作 1127；3501、1177、1258 三者相加才等于 5936。合计行应是笔误。</p>
+<p>运动和分割子集按什么划分训练与测试，论文未说明。下一节看评测协议。</p></div><div class="card" id="s6"><h3><span class="num">6</span>评测协议与基线</h3><ul><li><strong>任务 1：</strong> 按视频划分 10/4/7。指标为准确率、精确率、召回率和 Jaccard（交集除以并集）。基线为 <code>SV-RCNet</code>、<code>TMRNet</code>、<code>TeCNO</code>、<code>Trans-SVNet</code>。</li><li><strong>任务 2：</strong> 前 5 秒从 25 fps 降到 3 fps，取 16 帧。作者提出 <code>ResNet-50</code> 帧特征平均、<code>ResNet-50</code> 接 LSTM 两个模型，指标为准确率。</li><li><strong>任务 3：</strong> COCO 平均精度，在 10 个交并比阈值上平均。基线为 <code>Mask R-CNN</code>、<code>YOLACT</code>、<code>YolactEdge</code>，统一用 <code>ResNet-50</code> 骨干，只报告测试集。</li></ul>
+<p>训练超参数和预训练设置论文未说明，复现只能依赖各方法官方代码。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><p><strong>任务 1，测试集：</strong></p>
+<div class="tbl"><table><thead><tr><th>方法</th><th>AC</th><th>PR</th><th>RE</th><th>JA</th></tr></thead><tbody><tr><td>SV-RCNet</td><td>75.62</td><td>64.02</td><td>59.70</td><td>47.15</td></tr><tr><td>TMRNet</td><td>78.20</td><td>66.02</td><td>61.47</td><td>49.59</td></tr><tr><td>TeCNO</td><td>77.27</td><td>66.92</td><td>64.60</td><td>50.67</td></tr><tr><td>Trans-SVNet</td><td>78.29</td><td>64.21</td><td>62.11</td><td>50.65</td></tr></tbody></table></div>
+<p>准确率都超过 75%，但 Jaccard 只有 47 到 51。<strong>四个模型相差不到 3 个点，排名随指标变化，7 个测试视频、无方差，无法分出高下。</strong></p>
+<p><strong>任务 3，测试集：</strong> <code>Mask R-CNN</code> 的 box AP 最高（52.10），<code>YOLACT</code> 的 mask AP 最高（54.09），<code>YolactEdge</code> 为 47.04 与 52.58。两个指标排名不同，逐类结果论文未说明。</p>
+<p><strong>任务 2：</strong> <code>ResNet-50</code> 为 28.07% 与 26.03%，加 LSTM 后为 29.82% 与 27.40%（验证与测试）。下一节解释为什么这组数字要格外小心。</p><div class="strip d"><span class="t">数据</span><span class="i">任务 1 测试准确率 75.62 到 78.29</span><span class="i">任务 3 mask AP 51.70 到 54.09</span><span class="i">任务 2 测试准确率 26.03 与 27.40</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>运动预测：只比猜最多的类略好</h3><p><strong>多数类基线</strong>指总是预测出现最多的类别。论文没有报告它，按表 1 推算：</p>
+<div class="tbl"><table><thead><tr><th>集合</th><th>最多的类别</th><th>多数类准确率</th><th>帧平均</th><th>加 LSTM</th></tr></thead><tbody><tr><td>验证（57 个）</td><td>推近，15 个</td><td>26.3%</td><td>16 个正确</td><td>17 个正确</td></tr><tr><td>测试（73 个）</td><td>下，16 个</td><td>21.9%</td><td>19 个正确</td><td>20 个正确</td></tr></tbody></table></div>
+<p><strong>加 LSTM 在两个集合上都只多对 1 个片段。</strong> 论文把提升归因于学到了时序模式，但这个差距也可能是随机波动，论文没有方差来区分。</p>
+<p>我的判断：任务 2 目前是一个开放问题，而不是已有可靠基线的基准。作者自己也说结果有待提高。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li><strong>多任务的价值：</strong> 全部 9 个基线都是单任务。没有实验把阶段标签或分割掩码交给运动预测，“三项任务高度相关、能互相促进”还只是设计意图。</li><li><strong>大规模：</strong> 论文没有和其他数据集做定量规模对比，21 例是否算大规模没有参照。</li><li><strong>最优视野：</strong> 运动标签来自助手的实际操作，它是否最优，论文没有评估。</li><li><strong>何时该动：</strong> 片段是人工挑出的含运动片段，真实系统还要判断“现在要不要动”，任务 2 不覆盖这一步。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">多任务、大规模、最优视野三个说法都缺直接证据</span></div></div><div class="card" id="s10"><h3><span class="num">10</span>复用前要核对什么</h3><ul><li>确认运动和分割子集是否按视频划分；同一片段的 6 帧相隔 1 秒、高度相似，跨集合会让分割结果偏乐观。</li><li>报告运动预测时同时给出多数类基线和逐类准确率。</li><li>运动预测只能用 $T$ 之前的帧，否则泄露答案。</li><li>表 2 验证集合计以各类之和 1177 为准。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>最值得照搬的是任务 2 的对齐方式：以运动开始时刻对齐片段，再在同一片段上取分割帧</div><div>工作流识别和分割可作小规模基准，运动预测仍是开放问题</div><div>多任务价值需要自己做实验验证</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>同一批真实手术视频上的三层嵌套标注，时间关系清楚</li><li>首个公开的子宫切除术镜头运动监督数据</li><li>器械把手与杆部分开标注，并包含子宫</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心 21 例，标注一致性、划分依据、训练超参数论文未说明</li><li>所有基线只跑一次，无方差</li><li>运动预测基线只比多数类略好，论文未报告多数类基线</li><li>主打的多任务关联没有任何实验</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>运动预测准确率能否明显超过多数类基线</li><li>分割子集是按视频还是按片段划分</li><li>加入阶段标签或分割掩码后，运动预测能提升多少</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 2a5c2a63</span><span class="s">7.5 分</span></div><p>模型自评，非独立评审。H3 为 unknown：note 模式数字核对有 58 个未匹配值，绝大多数来自表 2 表体（文本抽取丢失表体，需对照页面图像登记），另有 1.37、1.75、2.39、21.9、26.3、1177 等推导值未登记。D5 为 6：只在背景里定性提到已有数据集，没有逐个说明与 Cholec80、GLENDA、LapGyn4、SurgAI 的差别。D7 为 6：章节未编号，没有亮点与数据条。D8 为 7：AC/PR/RE/JA、AP、IoU、把手与杆部等术语首次出现时定义不全。D9 为 5：没有核心观点速览，各节不以问题开头，部分数字后没有所以然。摘要译文为一段 323 字，超出段落长度建议。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>8</b></span><span>D7 <b>6</b></span><span>D8 <b>7</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入核心观点速览，并按背景、观点、实验、深入分析的顺序组织</li><li>各节开头写出要回答的问题，数字后补所以然，节尾加衔接句</li><li>首次出现处解释 AC/PR/RE/JA、AP、IoU、多数类基线等术语</li><li>补写与 Cholec80、GLENDA、LapGyn4、SurgAI 等数据集的逐项定位</li><li>把表 2 表体数值与推导值登记到 number-exceptions 并写明来源</li><li>写 insight_pass.json 并把三轮思考的修订写入笔记</li><li>拆分摘要译文过长段落</li><li>写 reading_report.md 并通过 lint_report</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 49f17910 · 文稿 b152c88a</span><span class="s">8.5 分</span></div><p>模型自评，分数由同一模型打出，不是独立评审。总分较第 1 轮上升，没有下降项。H3 由 unknown 变为 pass：表 2 表体 52 个数值因 full_text 抽取丢失表体，已对照第 5 页 PDF 文本层与页面图像核对并登记；1177、21.9、26.3 为推导值，来源写在 number-exceptions 文件。已知上限：Fig. 1 重裁后面板字母被截、Table 2 裁图与 Table 1 相同、Table 3/5 无候选、Table 4 裁图无表体，均保留占位，表格数值已用 Markdown 转录；D5 为 8，论文只做定性对比，没有对方数据集的规模数字；D7 为 8，笔记固定章节名不能编号，编号与亮点数据条在报告中；多数类基线为本笔记据表 1 推算，已标为我的判断。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

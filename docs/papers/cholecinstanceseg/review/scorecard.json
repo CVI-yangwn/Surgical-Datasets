@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "e5e900c76590f27061ec38b7af94aa0853db23d5dfa481a26fdcddc0b305ade3",
+      "note_snapshot": "review_rounds/round1_CholecInstanceSeg_A_Tool_Instance_Segmentation_Dataset_for_Laparoscopic_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮自评：证据链、构建流程、数字和边界齐全；研究问题末尾缺核心观点速览，部分小节开头没有交代要回答的问题，若干数字（如 5,328 与 4,914 的矛盾、95.7 的口径）后缺少含义说明，数字尚未跑 lint_report 核对；与 PhaKIR、EndoVis 的定位只在研究问题提了一句；正文残留 AP、PQ、smAP 等缩写未在首次出现处定义。",
+      "fixes": [
+        "在研究问题末尾加入 ### 核心观点速览",
+        "各小节开头点明要回答的问题，结尾加承接句",
+        "首次出现处定义 AP、mAP、smAP、PQ",
+        "重要数字后补一句含义",
+        "把 Insight Pass 的挑战轮结论写入深度分析与局限",
+        "用 lint_report --mode note 核对全部数字并登记推导值",
+        "深度分析补一段与同类数据集的定位比较"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "c3b7122f786b810c7320f6fcc3783c4c87a3053a759f516b3eef4fce5a2fe847",
+      "note_snapshot": "review_rounds/round2_CholecInstanceSeg_A_Tool_Instance_Segmentation_Dataset_for_Laparoscopic_Surgery.md",
+      "report_sha256": "b4f0653f20ae38393064dbd58820650471812bc654a0dc5236becaac99d00e18",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评（模型自评）：加入核心观点速览、各节开头问题与承接句、术语首次定义、与 EndoVis/ROBUST-MIS2019/CholecSeg8k/PhaKIR 的定位，挑战轮结论（频次解释不成立、PQ 95.7 的锚定风险、剪刀 sAP 的样本量解释）写入深度分析与局限。笔记与报告数字经 lint_report 全部可在原文或图中找到，图 5 数值登记在 number_exceptions.json。无法修复的限制：两项一致性子集规模、基线训练设置、smAP 缺席处理、三个高分辨率序列身份均为论文未说明；表 2 至表 4 因裁剪混入正文或相邻表格而保留占位，数值以 Markdown 表重写。",
+      "fixes": []
+    }
+  ]
+}

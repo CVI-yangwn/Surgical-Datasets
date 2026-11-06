@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Learning Multi-modal Representations by Watching Hundreds of Surgical Video Lectures</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>让模型看手术讲座学会手术：两路语音转写当监督的视觉-语言预训练 SurgVLP</h1>
+<div class="sub">Learning Multi-modal Representations by Watching Hundreds of Surgical Video Lectures</div>
+<div class="meta">Kun Yuan, Vinkle Srivastav, Tong Yu 等；University of Strasbourg、IHU Strasbourg、TU München、IRCAD 等 | arXiv 2307.15220（Medical Image Analysis 2025 接收）</div>
+<div><span class="chip">AI_method</span><span class="tag">手术视频</span><span class="tag">视觉-语言预训练</span><span class="tag">零样本迁移</span></div>
+<div class="one">SurgVLP 把 1,326 个手术讲座的两路语音转写当作免标注监督，用医学转写定位片段、通用转写定边界，零样本结果全面超过 CLIP 与同数据微调的 CLIP*，但离全监督仍差一半以上，且只在胆囊切除上验证了纯视觉迁移。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.6</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2307.15220" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/svl/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术视觉模型离不开专家标注，而语言这条监督线几乎没人用过。</strong> 已有方法多是任务专用的全监督模型，只在单中心、单术式的数据上验证，只能预测固定类别。</p>
+<p>通用视觉领域靠海量图文对训练 <code>CLIP</code>，可以零样本迁移。手术领域没有这种配对数据，人工逐段叙述的成本也承受不起。</p>
+<p>作者看中的是开放平台上的手术讲座：讲者边放视频边解说，语音就是现成的文本。难点是这份文本很脏：术语专业，讲者会离题，描述常与画面不同步，语音识别还会把术语认错。</p><div class="strip h"><span class="t">亮点</span><span class="i">讲座语音是免费的监督，但噪声大，不能直接当标签。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>两个各有缺陷的语音转写合在一起，比任何一个单独用都更适合当监督信号。</strong></p>
+<ul><li>医学转写（<code>AWS Medical Transcribe</code>）术语准但断句差，用来决定在哪里采片段。</li><li>通用转写（<code>Whisper</code>）断句好但术语常错，用来决定片段的边界。</li><li>医学转写句走一对一对比损失，通用转写句走一对多对比损失，以容忍说话和画面不同步。</li></ul>
+<p>零样本阶段识别 F1 均值为 <code>24.0</code>，同数据微调的 <code>CLIP*</code> 为 <code>11.5</code>，全监督为 <code>67.3</code>。这意味着它明显强于通用模型，但远不能替代标注。</p><div class="strip d"><span class="t">数据</span><span class="i">预训练：<code>1,326</code> 个讲座，<code>25,578</code> 个片段-文本对</span><span class="i">阶段识别 F1：SurgVLP <code>24.0</code>，CLIP* <code>11.5</code>，全监督 <code>67.3</code></span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据：讲座怎样变成训练对</h3><p>问题是：没有人工标注，训练对从哪来？</p>
+<p>作者在 <code>Websurg</code> 抓取 <code>1,124</code> 个讲座，在 <code>EAES</code> 和 <code>YouTube</code> 人工收集 <code>202</code> 个，共 <code>1,326</code> 个。两路转写都按停顿断句并去掉无名词无动词的句子；医学转写句另做置信度过滤（阈值 <code>0.4</code>）和手术关键词过滤。</p>
+<p>结果是医学转写句稀疏而准，通用转写句稠密而顺。最终得到 <code>25,578</code> 个片段-文本对。</p>
+<figure class="fig"><img src="images/page_006_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。同一段音频的两种转写：医学转写认对了套管针，通用转写认错；第二例通用转写句子完整，医学转写支离破碎。</figcaption></figure>
+<p>原始视频与转写是否公开，论文未说明，这限制了在同一数据上复现。</p><div class="strip d"><span class="t">数据</span><span class="i">置信度阈值 <code>0.4</code>；每片段配 1 句医学转写、2 句通用转写</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>方法：采样分工与两种损失</h3><p>问题是：两份质量不同的文本，怎样各尽其用？</p>
+<p><strong>采样分工</strong>：先采一句医学转写句，保证片段里有术语；再找时间上重叠的通用转写句，在其合并边界内取中心点，长出最长 <code>10</code> 秒的随机长度片段。</p>
+<p><strong>编码</strong>：每片段取 <code>4</code> 帧送入 <code>ResNet-50</code> 后平均池化；文本用医学语料预训练的 <code>BioClinicalBert</code>，两路文本共享权重，向量维度都是 <code>768</code>。</p>
+<figure class="fig"><img src="images/page_007_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。左上为双转写片段构建，左下为两种对比损失的预训练，右侧为冻结编码器后的零样本检索与识别。</figcaption></figure>
+<p><strong>损失</strong>：医学转写句用 <code>InfoNCE</code>，即批内只有一句正样本；通用转写句用 <code>MIL-NCE</code>，即正样本是一组句子、任一句匹配即可。两者各占一半：</p>
+<p>$$\mathcal{L} = \epsilon\,\mathcal{L}_{\text{InfoNCE}} + (1-\epsilon)\,\mathcal{L}_{\text{MIL-NCE}},\quad \epsilon=0.5$$</p>
+<p>批大小 <code>80</code>，温度 <code>0.3</code>，约 <code>3</code> 天、<code>4</code> 张 <code>A100</code>。</p><div class="strip h"><span class="t">亮点</span><span class="i">新意在数据侧的分工，两种损失本身都是已有方法。</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>零样本怎么用</h3><p><strong>分类时把类别名改写成句子。</strong> 例如工具“钩”写成“我用钩去分离”，阶段写成包含器械、解剖与动作的描述句，三元组用“我用某器械对某目标做某动作”模板。</p>
+<p>原因有两个：阶段名本身含义模糊，而预训练文本是完整句子，单个词很少出现。提示词消融显示这套改写在三项任务上都优于直接用类名和 <code>CLIP</code> 默认模板。</p>
+<p>检索与定位直接比较文本和片段的余弦相似度。视频描述则只用文本训练解码器，推理时把视频向量当文本向量喂入；解码器结构论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>视觉-语言任务上，SurgVLP 与通用模型拉开了明显差距。</strong></p>
+<div class="tbl"><table><thead><tr><th>方法</th><th>检索 <code>R@10</code></th><th>检索中位秩</th><th>定位 <code>R@10</code></th></tr></thead><tbody><tr><td><code>CLIP</code></td><td>2.1</td><td>256</td><td>13.9</td></tr><tr><td><code>CLIP*</code></td><td>2.3</td><td>244</td><td>15.3</td></tr><tr><td>SurgVLP</td><td>16.1</td><td>70</td><td>29.7</td></tr></tbody></table></div>
+<p><code>CLIP*</code> 用了同样的数据，检索几乎没有进步。所以收益不只来自数据，还来自文本编码器或训练目标。</p>
+<p><strong>纯视觉任务上，它好于通用模型，但离全监督差一半以上。</strong></p>
+<div class="tbl"><table><thead><tr><th>任务</th><th>全监督</th><th><code>CLIP*</code></th><th>SurgVLP</th></tr></thead><tbody><tr><td>工具识别 mean AP</td><td>85.3</td><td>23.2</td><td>33.3</td></tr><tr><td>阶段识别 F1</td><td>67.3</td><td>11.5</td><td>24.0</td></tr><tr><td>三元组 <code>AP_ivt</code></td><td>30.8</td><td>3.7</td><td>7.0</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_019_fig_table_8_review.png" alt="Table 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 8。零样本工具识别逐类 AP；标本袋达到 64.9，剪刀与冲洗吸引器不到 8。</figcaption></figure>
+<p>标本袋识别 <code>64.9</code> 最好，剪刀与冲洗吸引器几乎认不出，作者解释为讲座里很少提到它们。描述任务 <code>BLEU-4</code> 只有 <code>0.12</code>，绝对值很低，说明生成的描述与真值措辞重合有限。</p><div class="strip d"><span class="t">数据</span><span class="i">检索 <code>R@10</code>：SurgVLP <code>16.1</code>，CLIP* <code>2.3</code></span><span class="i">三元组 <code>AP_ivt</code>：SurgVLP <code>7.0</code>，全监督 <code>30.8</code></span></div></div><div class="card" id="s7"><h3><span class="num">7</span>消融：收益来自哪个设计</h3><div class="tbl"><table><thead><tr><th>设置</th><th>阶段 AP</th><th>三元组 AP</th><th>检索 <code>R@10</code></th></tr></thead><tbody><tr><td>仅医学转写</td><td>25.5</td><td>11.0</td><td>21.6</td></tr><tr><td>仅通用转写</td><td>23.5</td><td>9.1</td><td>14.4</td></tr><tr><td>双视图</td><td>26.7</td><td>10.3</td><td>25.1</td></tr><tr><td>固定 10 秒</td><td>17.3</td><td>9.0</td><td>18.8</td></tr><tr><td>1 帧</td><td>19.7</td><td>9.5</td><td>18.1</td></tr></tbody></table></div>
+<p><strong>双视图在阶段和检索上最好，三元组上却是只用医学转写更好。</strong> 作者的解释是三元组只需关键词匹配，术语准确的那一路已经够用。</p>
+<p>随机片段长度优于任一固定长度，固定 <code>10</code> 秒最差，因为冗余帧与文本无关。消融在验证集上做，用平均精度而非主结果的 F1，为何改指标论文未说明；每组只跑一次，<code>1</code> 个点左右的差异可能在波动之内。</p></div><div class="card" id="s8"><h3><span class="num">8</span>为什么有效，哪些解释还没排除</h3><p><strong>我的判断：双视图的收益可能有相当部分来自更好的片段边界，而不只是损失。</strong> 只用一路转写时，片段切分改按该路时间戳，切分规则和损失同时变了，现有实验分不开两者。</p>
+<p>同样，SurgVLP 与 <code>CLIP*</code> 的差距可能主要来自医学文本编码器。论文没有做“通用视觉塔加医学文本塔”之类的对照，<code>CLIP*</code> 的微调设置也未说明。</p>
+<p>文本编码器实验中 <code>BioClinicalBert</code> 相似度 <code>0.86</code>，<code>CLIP</code> 文本塔 <code>0.69</code>。但它测的是同一时段转写句和元数据句能否被拉近，不是下游精度。</p><div class="strip h"><span class="t">亮点</span><span class="i">切分规则与损失、文本编码器与训练目标，两组混杂都没有拆开。</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li>跨术式的识别迁移没测：纯视觉评测全部是腹腔镜胆囊切除。</li><li>少样本或线性探测没测：能省多少标注，论文只在未来工作里提及。</li><li>显著性只覆盖阶段识别：三个种子 t 检验得 t 值 <code>5.03</code>、p 值 <code>0.0037</code>，其余任务都是单次结果。</li><li>检索测试查询经临床协作者纠正，训练文本未纠正，测试条件比训练干净。</li><li>工具与阶段表的均值列：<code>CLIP</code> 工具识别均值 <code>22.6</code>，而七类算术平均约 <code>19.0</code>，均值口径论文未说明。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><p>关键词过滤表、停顿符号列表和通用转写模型版本文中没给，片段构建要看代码。医学转写依赖商业服务，换用开源模型时转写误差模式会变，双视图的分工可能需要重新验证。</p>
+<p>零样本分类高度依赖手写提示句，换一套提示结果会变；比较不同模型时应固定提示。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>领域语音噪声大时，可以用两个错误模式不同的转写互为增强视图，一个定位、一个定边界。</div><div>零样本手术分类要把类名改写成与预训练文本分布一致的句子。</div><div>SurgVLP 是预训练起点，不是可直接部署的识别器。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>免人工标注地构建了 <code>25,578</code> 对手术视频-文本数据，方案可迁移到其他有解说的视频领域。</li><li>设立了 <code>CLIP*</code> 这个同数据对照，能部分区分数据收益和方法收益。</li><li>如实报告了负面结果：三元组上双视图不如单视图，部分类别低于基线。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>关键对照缺失：切分规则与损失、文本编码器与训练目标都混在一起。</li><li>纯视觉评测只有胆囊切除，没有少样本实验。</li><li>大多数结果没有方差，消融差值小。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>固定切分规则只换损失，双视图还有多少收益？</li><li>换用 <code>ViT</code> 或加入时序建模后，结论是否保留？</li><li>把一对多损失的正样本窗口向后平移以对齐“先说后做”，定位能否改善？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 cb828961</span><span class="s">7.3 分</span></div><p>自评。证据链、机制流程、公式和主要数字齐全，Table 5 裁剪身份不符已保留占位并转录表格。弱项：研究问题末尾缺少核心观点速览；各节开头未先交代要回答的问题，多处数字后缺少这意味着什么；与 HowTo100M/MIL-NCE、视觉自监督路线的定位只在 note_plan 中，正文偏弱；部分图注和正文仍有英文术语未首次解释（如 InfoNCE、MIL-NCE）；数字核对未运行，H3 记 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入核心观点速览</li><li>各节开头先写本节要回答的问题，关键数字后补一句意味着什么</li><li>把 insight pass 中经原文核对的细节答案与挑战结论写入正文</li><li>补写与 CLIP、HowTo100M/MIL-NCE、视觉自监督方法的定位</li><li>首次出现的术语给出中文解释</li><li>运行数字核对并登记推导数字</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 7889514b · 文稿 4bae9a96</span><span class="s">8.6 分</span></div><p>自评。第 2 轮补上核心观点速览、各节开头问题与数字后的含义，写入 insight pass 的论文未说明项（CLIP* 微调设置、描述解码器结构、数据是否公开、消融改用 AP 的原因、均值列口径）和两组未拆开的混杂，新增与 CLIP、HowTo100M/MIL-NCE、视觉自监督路线的对比表。数字核对通过，9 个数登记在 number_exceptions.json（4 个因 PDF 抽取千分位带空格、3 个 Table 5 中位秩抽取缺失经预览图核对、2 个推导均值）。无法修复的限制：Table 5 自动裁剪身份不符只能保留占位；Fig 9 具体数值在抽取文本中不可读，未转述；消融单次运行的波动无法从原文判断。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>9</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

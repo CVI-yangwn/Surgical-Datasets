@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "6b430605dc32398594062dd69a4fdd18392c1de0ec15c9373bc4668bd4cf16de",
+      "note_snapshot": "review_rounds/round1_Intuitive_Surgical_SurgToolLoc_and_SurgVU_Challenges_Results_2022_2025.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 7,
+        "D7": 6,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.3,
+      "verdict": "第 1 轮自评:证据链和数字覆盖较全,四年排行榜都有表。不足:研究问题末尾缺少核心观点速览;方法主线按年份罗列队伍,机制到结果的对应要靠读者自己拼;与 EndoVis 2017/2018 等其他路线的定位只在 note_plan 里有,正文没写;部分数字后面没有说明意义;数字尚未用 lint_report 核对(H3 unknown)。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "把 EndoVis 2017/2018 分割挑战和 COCO 通用检测的定位写进正文",
+        "每张排行榜表后补一句这组数字说明什么",
+        "按 insight pass 结果补论文未说明项和挑战轮的结论边界",
+        "运行 lint_report --mode note 核对所有数字并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "cb2dfe283411f045e0cf08c766fa9bf4a9979507ab4a66d2b703eb43e8396bbe",
+      "note_snapshot": "review_rounds/round2_Intuitive_Surgical_SurgToolLoc_and_SurgVU_Challenges_Results_2022_2025.md",
+      "report_sha256": "b580c7d3f7bc578df8c59b67579db8cf3fe6bfa4229ca1a29c46efbd10a89af0",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评(模型自评):补齐核心观点速览、与 EndoVis 2017/2018、Cholec80、COCO 的定位、每张表后的含义说明和挑战轮边界;笔记与报告数字核对均无未匹配项,无需登记推导值。无法修复的限制:论文未说明 2025 带框验证集规模、标注一致性、2024/2025 测试集规模和强标签上限;论文内 2022 冠军分数(0.4077 与 0.4452)和完整提交数(17 与 13)前后不一致,只能如实标注。年度比较受测试集变化影响,笔记已写明。",
+      "fixes": []
+    }
+  ]
+}

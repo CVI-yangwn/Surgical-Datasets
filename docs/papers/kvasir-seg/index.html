@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Kvasir-SEG: A Segmented Polyp Dataset</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>给 1000 张结肠镜息肉图补上像素级掩码：Kvasir-SEG 数据集说明</h1>
+<div class="sub">Kvasir-SEG: A Segmented Polyp Dataset</div>
+<div class="meta">Debesh Jha, Pia H. Smedsrud, Michael A. Riegler, Pål Halvorsen, Thomas de Lange, Dag Johansen, Håvard D. Johansen（SimulaMet、挪威北极大学、奥斯陆大学医院等） | arXiv:1911.07069 预印本</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">息肉分割</span><span class="tag">结肠镜</span><span class="tag">Kvasir</span></div>
+<div class="one">Kvasir-SEG 给 Kvasir 息肉类的 1000 张结肠镜图像补上医生标注、专家复核的二值掩码和边界框，并用单次 80/10/10 划分上的 ResUNet（测试 Dice 0.787763）作为基线，但患者数、标注一致性和划分文件论文未说明。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 3 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/1911.07069" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/kvasir-seg/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>息肉会被漏掉，而训练自动分割模型又缺少开放的标注数据。</strong> 论文引用的研究显示，结肠镜检查中息肉漏检率按类型和大小在 14 到 30% 之间，而息肉是结直肠癌的前驱病变。</p>
+<p>人工逐像素勾画费时，需要消化科医生参与，还存在观察者间差异；医疗图像又受隐私限制。作者梳理了已有的四个息肉分割数据集，认为它们要么需要注册或联系管理员，要么规模小，<strong>缺少一个可以直接下载、用于公平比较的开放数据集</strong>。</p>
+<p><code>Kvasir</code> 本身是 8 类各 1000 张的胃肠道图像分类数据集，只有帧级标签。Pozdeev 等人曾想在它上面评测分割，却因为没有真值而无法报告分数。这就是本文的直接起点。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份数据发布说明，基线只是示范用法。</strong></p>
+<ul><li>数据：<code>Kvasir</code> 息肉类的 1000 张图像（替换了其中 13 张），每张配一个 1-bit 二值掩码，边界框写在 JSON 文件里。</li><li>标注：工程师和医生在 <code>Labelbox</code> 中勾画，消化科专家复核。</li><li>基线：<code>ResUNet</code> 测试 <code>Dice</code> 0.787763、<code>mIoU</code> 0.777771；<code>FCM</code> 聚类测试 <code>Dice</code> 只有 0.239002。</li><li>边界：一次随机划分、无方差；患者数、标注一致性、划分文件论文未说明。</li></ul>
+<p>接下来先看数据怎么构建，再看基线说明了什么。</p><div class="strip h"><span class="t">亮点</span><span class="i">只有息肉阳性图像，没有无息肉画面</span><span class="i">边界框由掩码导出，不是独立标注</span></div><div class="strip d"><span class="t">数据</span><span class="i">1000 张图像 / 1000 个掩码</span><span class="i">ResUNet 测试 Dice 0.787763</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来、怎么标</h3><p><strong>图像全部来自 <code>Kvasir</code> 的息肉类。</strong> 作者为提升质量替换了其中 13 张，替换图由挪威 Vestre Viken 医疗信托的消化科医生采集和核验；其余图像的采集细节本文未交代，指向 <code>Kvasir</code> 原论文。</p>
+<p>标注流程分四步：</p>
+<ol><li>把 1000 张图上传到 <code>Labelbox</code>。</li><li>一名工程师和一名医生组成的小组勾画息肉边缘，经验丰富的消化科医生复核。</li><li>导出 JSON 中的 ROI 坐标点，在全黑图上画轮廓并填白，生成二值掩码。</li><li>由掩码计算外接框，写入 JSON。</li></ol>
+<figure class="fig"><img src="images/page_005_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。每行依次为原图、二值掩码、由 JSON 边界框叠加的原图；一张图可以有多个息肉和多个框。</figcaption></figure>
+<p><strong>标注质量无法量化。</strong> 摘要说由“一名医生”标注，正文说由“工程师加医生”的小组勾画，两处不一致；标注者间一致性和复核修改比例论文未说明。原图分辨率、患者数量和息肉大小分布也论文未说明。</p>
+<p>数据形态清楚之后，下一个问题是怎么评测。</p><div class="strip h"><span class="t">亮点</span><span class="i">掩码是二值的：白色前景是息肉，黑色背景</span><span class="i">部分原图带有 ScopeGuide 内镜位置探头的图像</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>指标和基线怎么设</h3><p>论文推荐两个指标。设预测像素集合与真值像素集合分别为 $A$、$B$：</p>
+<div class="math">$$\mathrm{Dice}=\frac{2|A\cap B|}{|A|+|B|},\qquad \mathrm{IoU}=\frac{|A\cap B|}{|A\cup B|}$$</div>
+<p><strong><code>mIoU</code> 的口径没有交代清楚。</strong> 公式里出现了阈值 $t$，但取哪些阈值、逐图还是全局平均、是否包含背景类，论文未说明；实验中只用 $t=0.5$ 把预测二值化。</p>
+<p>两个基线的设置：</p>
+<div class="tbl"><table><thead><tr><th>项目</th><th>FCM</th><th>ResUNet</th></tr></thead><tbody><tr><td>学习方式</td><td>无监督聚类，无参数</td><td>有监督，编码器和解码器各 5 个卷积块</td></tr><tr><td>预处理 / 增强</td><td>灰度、中值模糊、Otsu、边缘与膨胀</td><td>翻转、裁剪、缩放、旋转、亮度、cutout、随机擦除</td></tr><tr><td>输入</td><td>展平成 1D 的像素</td><td>320×320</td></tr><tr><td>训练</td><td>无</td><td>batch 8，150 个 epoch，Nadam，学习率 0.0001</td></tr><tr><td>未给出的设置</td><td>聚类数、阈值、膨胀核</td><td>每块通道数、随机种子</td></tr></tbody></table></div>
+<p>划分是 80/10/10 的随机划分，是否按患者划分论文未说明。</p></div><div class="card" id="s5"><h3><span class="num">5</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>划分</th><th>损失</th><th>Dice</th><th>mIoU</th></tr></thead><tbody><tr><td>训练</td><td>0.059389</td><td>0.940609</td><td>0.920957</td></tr><tr><td>验证</td><td>0.196520</td><td>0.803479</td><td>0.792339</td></tr><tr><td>测试</td><td>0.212236</td><td>0.787763</td><td>0.777771</td></tr></tbody></table></div>
+<p>测试集上 <code>FCM</code> 的 <code>Dice</code> 为 0.239002、<code>mIoU</code> 为 0.314187。<strong>两种方法差距很大，说明这份数据能区分“学到形状”和“只看颜色”的方法。</strong></p>
+<figure class="fig"><img src="images/page_009_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。四列依次为原图、真值、FCM 结果、ResUNet 结果。FCM 把大片黏膜和图像边角都分成前景。</figcaption></figure>
+<p>作者把 <code>FCM</code> 的失败归因于颜色特征难以区分息肉和其他胃肠道组织。表 1 中损失与 <code>Dice</code> 之和约为 1，和“用 <code>Dice</code> 作损失”一致。</p><div class="strip d"><span class="t">数据</span><span class="i">训练 Dice 0.940609，测试 0.787763</span><span class="i">FCM Dice 0.239002，mIoU 0.314187</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>为什么要小心这些数字</h3><p><strong>训练和测试的 <code>Dice</code> 差距明显，说明存在过拟合。</strong> 作者也认为加入更多样的息肉图像能提升性能。</p>
+<figure class="fig"><img src="images/page_009_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 4。训练与验证 Dice 随 epoch 的变化，红色叉号是最佳验证点，对应第 91 个 epoch。</figcaption></figure>
+<p>验证曲线抖动明显，模型是挑出验证最高点后在测试集上只评一次。只有一次划分、没有方差，0.787763 的波动范围无法估计。</p>
+<p><strong><code>FCM</code> 的 <code>mIoU</code> 高于 <code>Dice</code>，这在同一口径下不会发生。</strong> 同一组预测逐图计算时 <code>Dice</code> 不低于 <code>IoU</code>。我的判断：两个指标的计算口径可能不同，例如 <code>mIoU</code> 对前景和背景取了平均；论文未解释。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li><strong>没有证明方法优于已有工作。</strong> 作者把结果与 Kang 等人的 <code>IoU</code> 0.6607、Pozdeev 等人的 <code>Dice</code> 0.6200 到 0.8600 并列，但数据集不同，作者自己也承认没有直接可比的论文。</li><li><strong>没有评估误报。</strong> 数据只有息肉阳性图像，无法测量在无息肉画面上的误检。</li><li><strong>没有排除划分泄漏。</strong> 推断：若同一患者的多张图被随机分进训练和测试，分数会偏高；论文未给出患者信息，无法排除。</li><li><strong>没有说明跨医院泛化。</strong> 图像只来自 <code>Kvasir</code> 一个数据集，采集机构和设备分布论文未说明。</li></ul></div><div class="card" id="s8"><h3><span class="num">8</span>它在已有数据集中的位置</h3><div class="tbl"><table><thead><tr><th>数据集</th><th>规模</th><th>获取方式</th></tr></thead><tbody><tr><td>CVC-ColonDB</td><td>1200 帧中 300 帧有标注</td><td>需注册</td></tr><tr><td>ASU-Mayo</td><td>18,781 帧训练，3,500 余帧有掩码</td><td>联系管理员</td></tr><tr><td>ETIS-Larib</td><td>196 帧</td><td>需注册</td></tr><tr><td>CVC-ClinicDB</td><td>612 帧</td><td>公开</td></tr><tr><td>Kvasir-SEG</td><td>1000 张</td><td>公开下载</td></tr></tbody></table></div>
+<p><strong>它的优势是开放和规模</strong>：在可直接获取的息肉分割数据里，1000 张多于 <code>CVC-ClinicDB</code> 的 612 帧。论文提到 <code>ASU-Mayo</code> 帧间高度相似、容易过拟合，而 <code>Kvasir-SEG</code> 的帧间独立性因为缺少视频和患者信息同样无法核实。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与复用要注意什么</h3><ul><li>固定并公开自己的划分，最好按患者划分；报告多次运行的均值和标准差。</li><li>写清 <code>Dice</code> 和 <code>IoU</code> 是逐图平均还是全局累计，<code>IoU</code> 是否含背景类。</li><li>跨数据集评测（如 <code>CVC-ClinicDB</code> 训练、<code>Kvasir-SEG</code> 测试）比单集内随机划分更能反映泛化。</li><li>检查模型是否依赖左下角黑块、检查信息文字或 <code>ScopeGuide</code> 探头这类捷径。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>Kvasir-SEG 是 1000 张静态息肉图的二值分割集，掩码和边界框同源</div><div>ResUNet 测试 Dice 0.787763 只来自一次随机划分，适合作量级参考</div><div>患者数、标注一致性、mIoU 口径都论文未说明，复用时要自己补齐协议</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>开放下载，文件组织简单，图像与掩码同名对应</li><li>标注流程写明了工具、人员分工和专家复核</li><li>给出两种差异很大的基线，证明数据有可学习信号</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单一机构来源，只有阳性图像</li><li>无标注一致性、无患者信息、无公开划分</li><li>指标口径不清，FCM 结果反常未解释；外部比较不可比</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>1000 张图来自多少名患者，同一患者的图是否会跨越划分？</li><li>复核阶段修改了多少掩码，标注者之间一致性如何？</li><li>mIoU 具体怎么算，为什么 FCM 的 mIoU 高于 Dice？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 d8eda29e</span><span class="s">7.5 分</span></div><p>第 1 轮自评：证据链、数字与边界基本完整。D2=7：FCM 预处理的阈值、聚类数等参数论文未给，笔记没有明确标出这些缺口。D6=7：复用建议偏概括，缺少具体检查步骤。D7=7：小节未编号。D9=6：多数小节直接罗列事实，缺少开头的张力和数字后的含义，小节之间没有过渡。H3 未做数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补充知识点、细节问答和对中心论断的质疑，并把结论写回笔记</li><li>按叙事顺序改写各节开头，交代每节要回答的问题，数字后补一句含义</li><li>把 FCM 阈值、聚类数、ResUNet 通道数等未给出的参数逐项写成 论文未说明</li><li>核对摘要“一名医生”与正文“工程师+医生”的表述冲突，并在局限中写清</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 3d82ff09 · 文稿 5c26472e</span><span class="s">8.3 分</span></div><p>第 2 轮自评（模型自评）：insight pass 补齐了未给出的参数、标注表述冲突、指标口径与划分泄漏风险，并写回笔记与报告；数字核对无未匹配项。无法修复的限制来自论文本身：患者数、原图分辨率、标注一致性、FCM 参数、ResUNet 通道数、mIoU 口径均论文未说明，D2 因此停在 8。Table 1 自动裁剪只有页眉，保留占位并以 Markdown 表转写。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

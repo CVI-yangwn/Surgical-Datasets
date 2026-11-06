@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "工具存在标签", "plain": "由达芬奇系统安装事件导出的、每条机械臂装了什么器械的列表,不保证器械在画面中可见。", "where": "sec:introduction-2", "needed_for": "理解为什么这是弱监督而且有噪声"},
+  {"term": "clevis", "plain": "器械尖端与杆之间的腕部关节,测试框以它为主体。", "where": "sec:introduction-2", "needed_for": "理解激活图类方法为何在高交并比下失败"},
+  {"term": "COCO mAP@[0.5:0.05:0.95]", "plain": "在 0.5 到 0.95 的十个交并比阈值上平均的检测精度,框不贴合就会被大幅扣分。", "where": "sec:results-3", "needed_for": "比较各年检测分数"},
+  {"term": "按出现频率加权的 F1", "plain": "2022 赛道 1 的 F1 按每种工具在测试数据中的出现次数加权。", "where": "sec:results-3", "needed_for": "判断赛道 1 分数是否被高频工具主导"},
+  {"term": "Grand Challenge T2", "plain": "参赛队提交容器,平台在隐藏测试集上自动运行评测。", "where": "sec:introduction-2", "needed_for": "理解为什么参赛队看不到测试数据"},
+  {"term": "类激活图", "plain": "从分类网络反推出的、对某类别贡献最大的像素区域。", "where": "sec:method-4", "needed_for": "理解纯弱监督路线的天花板"},
+  {"term": "人在环标注", "plain": "模型先预测,人只修正差的部分,反复迭代扩充标注。", "where": "sec:data-5", "needed_for": "理解 2024 和 2025 领先方法"},
+  {"term": "多参考 BLEU", "plain": "每题答案与 5 个参考答案分别算 BLEU 取最大,再对所有题平均。", "where": "sec:results-7", "needed_for": "解读 2025 问答分数"}
+ ],
+ "detail_questions": [
+  {"question": "年度冠军分数能直接比较吗?", "answer": "不能。每年测试集不同,只有 2023 模型在 2022 测试集上复测过;2024 讨论明确说要谨慎解读。", "evidence": ["sec:discussion-4", "sec:discussion-5"], "status": "resolved"},
+  {"question": "2022 冠军 mAP 是多少?", "answer": "Table 14 与 HRI MV 报告都是 0.4077;2025 讨论写 0.4452,论文未说明差异来源。", "evidence": ["sec:results-3", "sec:method-3", "sec:discussion-6"], "status": "partly"},
+  {"question": "2022 赛道 1 完整提交是 17 还是 13?", "answer": "3.2 节写 17 支做了完整提交,Table 13 列 13 支,讨论写 13 个完整提交;差异可能来自是否交报告,论文未明确说明。", "evidence": ["sec:introduction-2", "sec:results-3", "sec:discussion-3"], "status": "partly"},
+  {"question": "2025 年带框验证集有多大?", "answer": "论文只说是 small validation set,没有给出帧数或框数。", "evidence": ["sec:discussion-5"], "status": "not_stated"},
+  {"question": "测试集标注者间一致性如何?", "answer": "只说 30 名标注者、两轮复核,没有给一致性指标。", "evidence": ["sec:introduction-2"], "status": "not_stated"},
+  {"question": "2024 和 2025 测试集各有多少视频、类别如何分布?", "answer": "论文只写与训练同条件、1 FPS,未给数量与分布。", "evidence": ["sec:discussion-4", "sec:discussion-5"], "status": "not_stated"},
+  {"question": "允许人工标注吗?", "answer": "规则没有禁止,前列队伍都用了人工框;排行榜不区分是否用人工框。", "evidence": ["sec:discussion-4", "sec:data-5", "sec:discussion-6"], "status": "resolved"},
+  {"question": "强监督上限是多少?", "answer": "作者说计划研究,论文未给结果。", "evidence": ["sec:discussion-3"], "status": "not_stated"},
+  {"question": "为什么全监督步骤识别分数高这么多?", "answer": "2024 讨论认为有逐帧标签时任务更容易,数据平衡与时序后处理至少和架构同样重要。", "evidence": ["sec:results-6", "sec:discussion-5"], "status": "resolved"},
+  {"question": "零样本为什么胜过微调?", "answer": "Capybara 报告官方描述只有 21 种不同文本;UoM 显示本地验证上微调高、正式测试上零样本高。", "evidence": ["sec:model-15", "sec:model-16"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "弱监督检测逐年进步", "alternative": "进步来自测试集变易或 2025 新增带框验证集,而不是方法变好。", "separating_evidence": "在同一测试集上复测历年冠军模型。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "数据整理而非架构驱动提升", "alternative": "领先队伍同时用了更强的检测器和更多算力,标签与架构混在一起。", "separating_evidence": "同一检测器在不同标签来源下的对照实验。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "标注质量比数量重要", "alternative": "SJTUB 的低分来自其后处理或过拟合,团队自己也这样怀疑。", "separating_evidence": "同一管线换用不同质量的标注。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "零样本 VLM 优于微调", "alternative": "BLEU 偏好与参考答案句式相近的短答案,零样本加提示词更容易对齐句式。", "separating_evidence": "人工或语义层面的答案正确性评估。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览,写明结论与可比性边界",
+  "关键结果每张表后补一句数字说明什么",
+  "局限中写明 2025 带框验证集规模、标注一致性、2024/2025 测试集数量为论文未说明",
+  "深度分析补充数据整理与架构未被分离、标注质量结论非控制变量",
+  "新增与 EndoVis 2017/2018 和 COCO 通用检测的定位小节",
+  "写明 2022 完整提交数 17 与 13 的不一致"
+ ]
+}

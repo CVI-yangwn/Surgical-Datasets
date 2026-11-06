@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "11045c2ecb17d21cf039dbd1fe4504cae0735c0dec0daa69c168c6f052dcce1d",
+      "note_snapshot": "review_rounds/round1_CaDIS_Cataract_Dataset_for_Image_Segmentation.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 7,
+        "D5": 6,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.0,
+      "verdict": "第 1 轮原版流程笔记(自评)。证据链完整,三任务主结果与逐类低分都有表。D2=7:构建流程有,但抽帧与类别合并规则没有逐条说明对结果的作用。D4=7:局限列了单次训练与测试视频少,但没有逐条写出会怎样影响结论。D5=6:定位只有一段,没有逐项说明相对 EndoVis 2018 与 CATARACTS 新在哪里。D6=6:我的笔记偏短。D9=5:研究问题没有核心观点速览,多处数字后没有说明意味着什么,小节结尾没有过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头先写本节要回答的问题,数字后补一句意义",
+        "把论文未说明的内容(标注一致性、批大小、UNet 初始化、许可、Fig 6 行列含义、PAC 口径)统一写成 论文未说明 并说明限制",
+        "补写正文与 Table V 数字不一致处(HRNetV2 解剖 85 对 86.3 的类比)以及 Task III 器械 mIoU 实际按 17 类计算",
+        "深度分析加入不均衡与外观相似的替代解释与缺失对照",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "2b408318815307c8c5161feef65c7bd2bec593d58e032f0e175da51d7eb06e51",
+      "note_snapshot": "review_rounds/round2_CaDIS_Cataract_Dataset_for_Image_Segmentation.md",
+      "report_sha256": "a48fe520a854ac469a4424ed942e19c5a3b0527ff1a7e72f631e39f50e541b37",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.0,
+      "verdict": "第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成并写入笔记与报告;笔记与报告数字核对无未匹配项,19 个表格图像值与推导值登记在 number_exceptions.json。无法修复的限制:Fig 1 裁图混入摘要正文,保留占位;表 II 数值不在 PDF 提取文本中,只能从页面图像核对;标注一致性、批大小、UNet 初始化、方差、许可、Fig 6 行列含义均为论文未说明。D3 未到 9:表 II 仅摘录 6 类,未列全部 36 类。",
+      "fixes": []
+    }
+  ]
+}

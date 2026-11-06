@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "bfb458a87d4b216d9c2b56b4326a9ea193c3001bb29ba8e117d8638768c72753",
+  "number_exceptions": {
+    "1.4": "推导值：Table 14 中 35.46 减 34.06 = 1.40，见 sec:model-7",
+    "2.58": "推导值：图 1 中 9.031 个实例分段除以 3.498 个关键帧约等于 2.58，见 sec:data",
+    "3498": "原文图 1 写作 3.498 Keyframes（千位用句点），见 sec:data",
+    "9031": "原文图 1 写作 9.031 Instance Segments（千位用句点），见 sec:data",
+    "218": "原文 Table 11 与 Table 12 的 DINO（SwinL）参数量 218M；文本抽取丢失该列，已在第 15 页整页预览中核对"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

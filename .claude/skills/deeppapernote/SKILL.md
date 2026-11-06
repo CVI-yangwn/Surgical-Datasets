@@ -95,7 +95,7 @@ Follow this order:
 17. perform Formal Save to the admitted target with `scripts/write_obsidian_note.py`, the same Source Manifest, and any user-approved overwrite hash; the script repeats admission before the first save side effect
 
 Round 1 ends at step 17. Record it, then continue; read `references/report-scorecard.md` for the scoring protocol:
-18. Round 1 record. Review the saved note as it is and run `scripts/record_round.py --stage baseline` with the note, dimension scores, gates, a verdict, and the fixes round 2 must make. Do not edit the note before this record exists.
+18. Round 1 record. Review the saved note as it is and run `scripts/record_round.py --stage baseline` with the note, dimension scores, gates, a verdict, and the fixes round 2 must make. Do not edit the note before this record exists: Formal Save logs every save to `save_log.jsonl` beside the note, and round 1 is refused unless the note still matches its first save.
 19. Round 2: revise by the user's method. All parts are required:
    - Insight Pass, the multi-round thinking: read `references/insight-pass.md` and work its three passes in order (knowledge points, detail questions answered from the source, a challenge round against each central claim); write `insight_pass.json` and pass `scripts/lint_insight.py`. This is the iteration; there is no further review round after it
    - Narrative review: read `references/narrative-style.md` and revise the note in its discourse order: background and motivation first, then `### 核心观点速览` at the end of `研究问题`, then specific claims, experiments, and deep analysis; keep the fixed section names; apply the concision rules; write every `not_stated` gap as 论文未说明 and every insight-pass revision into the note
@@ -105,7 +105,7 @@ Round 1 ends at step 17. Record it, then continue; read `references/report-score
    - score the final note and report from scratch against the scorecard, fix whatever that scoring finds, rerun the affected lints and Formal Save, and only then run `scripts/record_round.py --stage narrative_review`; its `--fixes` must be empty and unfixable limits go in the verdict
 20. Render the page with `scripts/render_html.py --strict --lint --insight --note`. `--strict` refuses to render when the two rounds are not recorded in order or when round 2's hashes do not match the final note and report.
 
-After a successful render, copy the page into `<output root>/_web/` if that directory exists; the page server on port 8800 lists every `.html` there.
+`render_html.py` embeds images by default, giving one portable file. Pass `--images link` to keep `images/` paths instead, for a page published next to its `images/` directory. If the project has a publish step (for example `tools/publish_paper.py`), run it after this render.
 
 Say `笔记已完成` only after step 20 succeeded. State that the score is a model self-review.
 

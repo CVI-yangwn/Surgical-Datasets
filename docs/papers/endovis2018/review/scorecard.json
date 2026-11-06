@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "b3c61df9962d82b620d313f3f2615fb9bccded7cc882f74c1006ef8b0c54a35f",
+      "note_snapshot": "review_rounds/round1_2018_Robotic_Scene_Segmentation_Challenge.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "unknown",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.3,
+      "verdict": "第 1 轮自评：证据链完整，表 V 与四个测试集都有表格，表格与正文的不一致已逐项列出。D2 7：评测协议有四步流程，但参赛方法只是列表，没有说明各类设计选择对应哪些结果。D5 6：只与 2015、2017 两届对比，没有和同期其他手术分割数据集定位。D7/D8 7：仍有 shaft、covered kidney 等英文类名混用，术语首次出现未统一定义。D9 6：多数小节直接罗列，没有先写问题再写数字含义，也没有小节之间的过渡。H2、H3 未跑数字核对，记为 unknown。",
+      "fixes": [
+        "研究问题末尾的核心观点速览改为先给答案再列要点，并加过渡句",
+        "各小节开头加一句该节要回答的问题，数字后补一句含义",
+        "统一类别中文名并在首次出现时给出英文原名",
+        "补充与同期数据集或 2017 挑战结果的数字对比定位",
+        "把评测协议对稀有类的影响写成可检验的推断并标明论文未说明",
+        "所有 not_stated 缺口统一写成论文未说明",
+        "运行 lint_report --mode note，推导数字登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "b39fb8507c984e710a3b515d421d64b7694ae06c620304af96e729d067d39817",
+      "note_snapshot": "review_rounds/round2_2018_Robotic_Scene_Segmentation_Challenge.md",
+      "report_sha256": "b34218798e9d55a238f60c3b15db5280114d81c8eb6638c1b4c1442e8c3035ad",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.4,
+      "verdict": "第 2 轮自评(模型自评,非独立评分):笔记与报告均从头重读并对照原文。数字核对与报告 lint 无未匹配数字,3 个推导值已登记。D5 仍为 7:论文本身只与 2015、2017 两届对比,没有同期其他手术场景数据集的数字可用于定位,笔记不补论文外信息。D2 为 8:评测协议四步流程清楚,但参赛方法多为单段描述,设计与结果的因果因无消融只能写成推断。无法修复的限制:测试集帧数、类别分布、标注一致性、UNC 与 Fan Voyage 方法、吸引冲洗器结果均为论文未说明;Fig 4 与 Fig 9 自动裁图被拒,保留占位。",
+      "fixes": []
+    }
+  ]
+}

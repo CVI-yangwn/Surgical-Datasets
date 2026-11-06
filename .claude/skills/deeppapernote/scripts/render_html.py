@@ -48,10 +48,14 @@ def parse_list(tags: str) -> list[str]:
     return [t.strip() for t in tags.strip().strip("[]").split(",") if t.strip()]
 
 
-def make_resolver(base: Path):
+def make_resolver(base: Path, embed: bool = True):
     def resolve(src: str) -> str:
         if src.startswith(("http://", "https://", "data:")):
             return src
+        if not embed:
+            if not (base / src).exists():
+                print(f"warning: image not found: {src}", file=sys.stderr)
+            return html.escape(src)
         p = (base / src).resolve()
         if not p.exists():
             return html.escape(src)
@@ -161,9 +165,10 @@ def checks_html(lint: dict, insight: dict) -> str:
     return "".join(f'<span class="tag">{html.escape(c)}</span>' for c in chips)
 
 
-def build(report: Path, scorecard: Path | None, note: Path | None, lint: dict | None = None, insight: dict | None = None) -> str:
+def build(report: Path, scorecard: Path | None, note: Path | None, lint: dict | None = None,
+          insight: dict | None = None, embed: bool = True, note_href: str = "") -> str:
     meta, body = split_front_matter(report.read_text(encoding="utf-8"))
-    resolve = make_resolver(report.parent)
+    resolve = make_resolver(report.parent, embed)
     regular, reserved = [], {}
     for title, text in split_sections(body):
         if title.startswith("@"):
@@ -183,7 +188,8 @@ def build(report: Path, scorecard: Path | None, note: Path | None, lint: dict | 
     checks = checks_html(lint or {}, insight or {})
     tags = "".join(f'<span class="tag">{html.escape(t)}</span>' for t in parse_list(meta.get("tags", "")))
     src = meta.get("source_url", "")
-    note_link = f'<a class="src" href="{html.escape(note.name)}">精读笔记（Markdown）</a>' if note else ""
+    note_link = (f'<a class="src" href="{html.escape(note_href or note.name)}">精读笔记（Markdown）</a>'
+                 if note else "")
     nav = ['<a href="#overview">概览</a>', '<a href="#content">正文</a>', '<a href="#takeaways">核心收获</a>',
            '<a href="#analysis">批判分析</a>'] + (['<a href="#history">自查记录</a>'] if card.get("rounds") else [])
     cards = "".join(section_card(t, x, resolve) for t, x in regular)
@@ -219,6 +225,9 @@ def main() -> int:
     ap.add_argument("--insight", default="", help="insight_pass.json")
     ap.add_argument("--output", required=True)
     ap.add_argument("--strict", action="store_true", help="refuse to render when the scorecard does not match")
+    ap.add_argument("--images", choices=("embed", "link"), default="embed",
+                    help="embed: one self-contained file; link: keep images/ paths, for publishing beside images/")
+    ap.add_argument("--note-href", default="", help="link target for the Markdown note (default: its file name)")
     a = ap.parse_args()
     load = lambda s: json.loads(Path(s).read_text(encoding="utf-8")) if s and Path(s).exists() else None
     if a.strict and a.scorecard:
@@ -227,7 +236,7 @@ def main() -> int:
         if probs:
             sys.exit("scorecard check failed: " + "; ".join(probs))
     out = build(Path(a.report), Path(a.scorecard) if a.scorecard else None, Path(a.note) if a.note else None,
-                load(a.lint), load(a.insight))
+                load(a.lint), load(a.insight), embed=a.images == "embed", note_href=a.note_href)
     Path(a.output).write_text(out, encoding="utf-8")
     print(json.dumps({"status": "ok", "output": a.output, "bytes": len(out.encode())}, ensure_ascii=False))
     return 0

@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EndoSLAM Dataset and An Unsupervised Monocular Visual Odometry and Depth Estimation Approach for Endoscopic Videos: Endo-SfMLearner</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>给胶囊内镜定位一个能打分的考场：离体猪器官上的位姿与三维真值数据集</h1>
+<div class="sub">EndoSLAM Dataset and An Unsupervised Monocular Visual Odometry and Depth Estimation Approach for Endoscopic Videos: Endo-SfMLearner</div>
+<div class="meta">Ozyoruk, Gokceler, Coskun, Incetan, Almalioglu, Mahmood, Durr, Gilbert, Turan 等；博阿齐奇大学、牛津大学、哈佛医学院、科英布拉大学、约翰斯·霍普金斯大学等 | arXiv 2006.16670（v3，2020-10-01），投稿 Medical Image Analysis</div>
+<div><span class="chip">数据集 + 方法</span><span class="tag">内镜 SLAM</span><span class="tag">胶囊内镜</span><span class="tag">单目深度估计</span><span class="tag">视觉里程计</span><span class="tag">手术数据集</span></div>
+<div class="one">EndoSLAM 用机械臂夹持四种内镜相机，在八个离体猪器官上录制 35 个带 6D 位姿真值的子数据集，并配上三维扫描与合成深度；附带的 Endo-SfMLearner 只用合成结肠训练，在真实轨迹上明显降低了旋转误差，但离体、无形变的设置和单次训练限制了结论能外推的范围。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2006.16670" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/endoslam/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>胶囊内镜是小肠检查的首选手段。医生在胶囊画面里看到病灶后，第一个问题是“它在哪里”。射频、电磁、X 射线定位都要额外硬件，<strong>只靠胶囊自己的视频做定位和建图</strong>，是更轻的路线，也是未来能活检、给药的主动胶囊所需要的。</p>
+<p>这条路卡在两处。一是没有能打分的公开数据：作者整理的既有内镜数据集几乎都面向分割和分类，没有相机轨迹和器官形状真值。二是通用自监督方法假设相邻帧亮度不变，而内镜光源随相机移动，这个假设在内镜里经常不成立。</p>
+<p>所以论文要先造一个考场，再给出一个考生。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>数据</strong>：机械臂夹持四种相机，在八个离体猪器官上录制 35 个子数据集、共 42,700 帧，每帧有 6D 位姿；六个器官有三维扫描；另有 Unity 合成帧带逐像素深度。</li><li><strong>协议</strong>：相机内参、手眼变换和时间同步三步，把 1kHz 的机器人位姿对到图像帧上。</li><li><strong>方法</strong>：Endo-SfMLearner 在 SC-SfMLearner 上加一个注意力块和一个亮度对齐，只用 2,039 张合成结肠图训练。</li><li><strong>结果</strong>：真实轨迹上旋转误差相对 SC-SfMLearner 全部降到一半以下；合成深度和三例三维重建误差也最低。</li><li><strong>边界</strong>：器官固定在泡沫上，没有蠕动；方法结果是单次训练；深度只在合成域评测。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">这个数据集的新东西是真值类型：连续相机轨迹加器官三维形状。</span><span class="i">方法上最大的差距来自几何一致性损失，两项新改动主要改善旋转。</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据是怎么采的</h3><p>器官清洗后缝在高密度泡沫上：结肠用 L 形、小肠用 Z 形、胃用 O 形支架，在暗室录制。<strong>相机装在机械臂末端，但轨迹由人手推动</strong>，所以每条轨迹的速度和加速度都不同。</p>
+<p>四台相机特性差别很大：MiroCam 是 320×320、3 fps 的胶囊；PillCam 是双头胶囊；两台常规内镜相机分别是 1280×720 和 640×480，都是 20 fps。形状真值来自两台扫描仪，点精度为 ±0.1 mm 和 ±0.05 mm。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。四种真实相机与 Unity 虚拟相机的样例帧，色调、畸变和亮度差异一目了然。</figcaption></figure>
+<p>合成部分来自 VRCaps：结肠 21,887 帧、小肠 12,558 帧、胃 1,548 帧，每帧有深度真值。</p>
+<p><strong>数据有了，下一个问题是真值靠不靠得住。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">离体 42,700 帧：HighCam 21,428、LowCam 17,978、MiroCam 3,055、PillCam 239</span><span class="i">子数据集：结肠 18、胃 12、小肠 5</span><span class="i">三维扫描文件共 23.2 GB</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>真值怎么对齐到图像</h3><p>机器人记录的是末端位姿，图像是另一个坐标系、另一个时钟。论文用三步解决：</p>
+<ol><li><strong>内参</strong>：棋盘标定，拟合带径向畸变的针孔模型，附录还给了鱼眼模型。</li><li><strong>手眼变换</strong>：Tsai-Lenz 方法求末端到相机的刚体变换。</li><li><strong>时间同步</strong>：相机大体沿光轴前进，图像光流的散度与前进速度相关；把它和机器人速度做相关，找到每条序列的起始对应。</li></ol>
+<p><strong>论文给了每一步的过程和结果，但没有给出位姿真值在图像帧上的综合误差。</strong> 机械臂 0.1mm 的精度只是下限。</p></div><div class="card" id="s5"><h3><span class="num">5</span>考生：Endo-SfMLearner</h3><p>它联合训练一个深度网络和一个位姿网络，不用任何标签。核心是两处改动：</p>
+<ul><li><strong>亮度对齐</strong>：比较合成图和目标帧之前，先用 $a\hat I + c$ 把亮度调一致，再算 L2 和 SSIM。</li><li><strong>注意力块 ESAB</strong>：位姿网络第一层后加一个非局部注意力，让它关注纹理丰富的区域。</li></ul>
+<p>尺度一致靠沿用的几何一致性损失：把一帧深度投影到相邻帧再比较。</p>
+<figure class="fig"><img src="images/page_008_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。两个深度网络、中间的注意力位姿网络和三项损失的完整数据流。</figcaption></figure>
+<p>有两处细节需要留意。正文说不一致像素会“加权”，但公式 $M = 1 - D_{diff}$ 实际是降权。五个损失权重和仿射参数由谁预测，论文未说明。</p>
+<p>训练只用 2,039 张合成结肠图，200 个 epoch，学习率 10−4。<strong>所有方法都只见过合成结肠，真实轨迹上的结果同时混入了方法能力和域差。</strong></p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>位姿实验覆盖五条轨迹、两台常规相机，共十个单元：</p>
+<div class="tbl"><table><thead><tr><th>对比</th><th>结果</th></tr></thead><tbody><tr><td>旋转 RPE vs SC-SfMLearner</td><td>十个单元全部降到一半以下</td></tr><tr><td>ATE vs SC-SfMLearner</td><td>八个单元更低</td></tr><tr><td>ATE vs Monodepth2</td><td>十个单元全部更低</td></tr></tbody></table></div>
+<p>例如 Colon-IV 第一条轨迹（高分辨率相机），完整模型 ATE 0.0878 m、旋转 0.488 度；SC-SfMLearner 是 0.1545 m 和 1.3532 度。</p>
+<p><strong>旋转改善稳定，ATE 优势只是多数成立。</strong></p>
+<p>深度在合成域：完整模型结肠、小肠、胃的 RMSE 为 0.2722、0.1785、0.2966，三个器官都最低。三维重建三例中，完整模型 RMSE 为 0.51、0.40、0.41 cm，低于 SC-SfMLearner 和规则方法。</p>
+<figure class="fig"><img src="images/page_013_fig_figure_6_review.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 6。合成三器官的深度预测与误差热图；KITTI 预训练模型带着道路场景的先验。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">Stomach-III 高分辨率相机：SC-SfMLearner ATE 0.0898 低于完整模型 0.1177</span><span class="i">三维重建 Colon-IV：0.51 / 0.86 / 0.65 cm</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么有效，哪里存疑</h3><p><strong>这个基准上最大的差距来自尺度约束。</strong> 没有几何一致性损失的 SfMLearner 和 Monodepth2 几乎跟不住轨迹，带这项损失的两种方法都能跟住形状。两项新改动是在此之上的增量。</p>
+<p>旋转改善的幅度足够大，单次训练下也有说服力。ATE 差距多在几厘米内，而且部分单元里消融变体反而更好；作者也承认消融解释不了 Stomach-III。</p>
+<p>我的判断：这些结论能说明“亮度对齐加注意力对旋转有帮助”，还不能说明两者各自的稳定贡献。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>在体表现。</strong> 器官固定在泡沫上，没有蠕动和呼吸，相机在摊开的表面上方移动，而不是在闭合管腔中前进。</li><li><strong>真实域深度。</strong> 深度只在合成帧上评测；三个合成器官共用同一渲染器，测到的是渲染内泛化。</li><li><strong>稳定性。</strong> 没有多次训练、方差或显著性检验。</li><li><strong>重建一般性。</strong> 每个器官只有一例，对齐依赖手工标注线段。</li></ul>
+<p>区分这些解释的实验都不难：用扫描点云按位姿渲染每帧深度、在真实帧上评测，或用多随机种子重跑表 2。论文没有做。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用要注意什么</h3><ul><li>没有官方划分，按器官划分可以避免同一器官泄漏到训练和测试。</li><li>两台常规相机的“同名轨迹”长度不同，并不是同一路径。</li><li>PillCam 只有 239 帧，论文没有用它做任何位姿实验。</li><li>图 5 的胶囊列，表头写小肠、图注写第三段结肠；扫描结肠的编号在不同图表中不一致。</li><li>报告时同时给 ATE 和旋转 RPE，并检查预测是否退化成直线。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>EndoSLAM 是少有的带胶囊内镜位姿和器官三维真值的数据，但它是刚性离体基准。</div><div>Endo-SfMLearner 的可靠收益在旋转误差；ATE 优势不是全胜。</div><div>只看旋转 RPE 会被“几乎不转”的预测骗到。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>四种相机、八个器官、三维扫描和合成数据放在同一套坐标里，标定与同步过程写得完整。</li><li>亮度仿射对齐成本很低，容易迁移到其他光源随相机移动的场景。</li><li>作者如实报告了 SC-SfMLearner 更好的单元和无法解释的消融。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>离体、无形变、手引导轨迹，难度与在体差距大。</li><li>方法实验为单次训练，超参数缺失，掩码的文字与公式矛盾。</li><li>深度只在合成域评测，三维重建只有三例。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>位姿真值在图像帧上的综合误差是多少？</li><li>仿射亮度参数由网络哪一部分预测，损失权重取多少？</li><li>在真实离体帧上用扫描渲染的深度评测，完整模型的优势是否还在？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 6ff06afd</span><span class="s">7.5 分</span></div><p>第1轮自评：证据链、机制和数字齐全，Table 2 有逐单元复核。D5 低于8：只与 Table 1 和 EndoAbS 做了定位，未说明与 Hamlyn 视差数据、SC-SfMLearner 以外的内镜自监督方法的差别。D6/D7 低于8：复用建议偏散，缺核心观点速览导航。D8 为7：仍有部分英文缩写首次出现未解释（ATE、RPE）。D9 为6：多数小节直接罗列，数字后缺“所以呢”，章节之间缺过渡。H3 未跑数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各小节开头先写该节要回答的问题，数字后补一句含义</li><li>首次出现时解释 ATE、RPE、ESAB 等缩写</li><li>把 insight pass 的挑战结论写入深度分析与局限</li><li>用 lint_report --mode note 做数字核对并登记推导值</li><li>补充与 Hamlyn 立体数据和 Mahmood 等合成域方法的定位对比</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 fcd4f6dd · 文稿 4b6790ab</span><span class="s">8.5 分</span></div><p>第2轮自评（模型自评）：按 insight pass 加入核心观点速览、各节开头的问题与结尾过渡、ATE/RPE 首次释义、同名轨迹长度不同、论文未说明项（损失权重、仿射参数来源、深度 RMSE 单位、测试帧与训练帧是否重叠、位姿真值综合误差）、合成域泛化的边界和 PillCam 未被使用；补充了与 Hamlyn 和 Mahmood 等合成域方法的定位。数字核对通过，图 5、图 6 嵌入图表中的数字因 PDF 文本层缺失登记在 number exceptions 中并注明出处。无法修复的限制：论文本身是单次训练、无方差，相关结论只能写成部分支持；表 2 原图因裁剪质量门被拒，只能用 Markdown 表转写。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

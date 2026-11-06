@@ -1,0 +1,40 @@
+{
+ "knowledge_points": [
+  {"term": "关键帧", "plain": "内镜停在一个视角、投射结构光并计算稠密重建的那一帧，是真值质量最高的帧。", "where": "sec:data", "needed_for": "理解关键帧 5 与带插值序列的关键帧误差差异"},
+  {"term": "插值序列", "plain": "两个关键帧之间内镜移动时的视频帧，真值由关键帧点云按机器人位姿重投影得到。", "where": "sec:data", "needed_for": "理解帧级误差曲线混入真值误差"},
+  {"term": "格雷码结构光", "plain": "投影一组黑白条纹，使每个像素得到唯一二进制编码，从而直接确定左右视图的对应点。", "where": "sec:data", "needed_for": "理解真值为何稠密"},
+  {"term": "立体校正", "plain": "用标定参数把左右图像变换到对应点位于同一水平扫描线的状态。", "where": "sec:results", "needed_for": "理解数据集 4、5 标定误差的诊断"},
+  {"term": "内参与外参", "plain": "内参描述单个相机的焦距和主点，外参描述两相机之间的相对位姿。", "where": "sec:results", "needed_for": "理解作者为何判断误差主要在内参"},
+  {"term": "深度平均绝对误差", "plain": "逐像素预测深度与真值深度之差的绝对值平均，单位 mm。", "where": "sec:results", "needed_for": "读懂表 II、表 III"},
+  {"term": "代价体", "plain": "在每个候选视差上计算左右特征匹配代价得到的三维张量，再用 3D 卷积回归视差。", "where": "sec:data", "needed_for": "理解伯尔尼方法的量化加速"},
+  {"term": "真值存储格式", "plain": "真值以 3 通道图像给出，每个非零像素存放投影到该像素的 3D 点坐标。", "where": "sec:results", "needed_for": "理解投影偏移 du、dv 的诊断"}
+ ],
+ "detail_questions": [
+  {"question": "冠军如何由两个测试集合并得出？", "answer": "原文只说两个测试集上平均误差最低者获胜，没有给出合并公式和合并后的数值。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "结构光真值本身精度多少？", "answer": "论文未说明，也没有多投影位置拼接误差。", "evidence": ["sec:data"], "status": "not_stated"},
+  {"question": "数据集总帧数、分辨率和许可？", "answer": "论文未说明。", "evidence": ["sec:data"], "status": "not_stated"},
+  {"question": "丢弃帧的 10% 阈值指什么？", "answer": "原文写的是不足 10% 的帧有真值，字面有歧义，更可能指有真值像素比例，论文未澄清。", "evidence": ["sec:results"], "status": "partly"},
+  {"question": "为什么正文出现截断的表 I？", "answer": "第 2 页的表 I 只有关键帧 1 到 3，数值与表 II 前三列相同，是重复的排版残留；正文又把表称作 Fig. II、Fig. III。", "evidence": ["sec:data", "sec:results"], "status": "resolved"},
+  {"question": "误差曲线图例与表格方法是否一致？", "answer": "图例有 11 条，含表中没有的 Jonathan Mcleod 和 Science，缺少 3 个赛后方法，原文未解释对应关系。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "图 5 两个子图为何相同？", "answer": "审图可见关键帧 1、2 曲线一致，原文未解释。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "赛后方法能否接触测试真值？", "answer": "论文只说提交于赛后数月，未说明测试真值是否已公开。", "evidence": ["sec:data"], "status": "not_stated"},
+  {"question": "数据集 8、9 是否就是测试集？", "answer": "论文未说明编号与训练、测试的对应。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "HHI 的深度范围启发式从何而来？", "answer": "用训练集真值得到最近 14.676 mm（D3k5）和最远 245.554 mm（D6k5）作为工作距离。", "evidence": ["sec:data"], "status": "resolved"},
+  {"question": "UCL 方法为何只剩 25 个样本？", "answer": "弃用插值序列和数据集 4、5 后剩 25 个，18 训练 7 验证。", "evidence": ["sec:data"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "Zeffiro 方法最好", "alternative": "冠亚军差距小于真值本身的标定与同步误差，换一种合并方式名次可能互换", "separating_evidence": "真值精度、逐帧方差或显著性检验、明确的合并方式", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "SCARED 是高质量稠密深度数据集", "alternative": "插值帧真值主要受运动学和同步误差支配，只有关键帧可称高质量", "separating_evidence": "关键帧与插值帧真值的独立精度评估", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "赛后方法优于比赛期方法", "alternative": "优势来自手工清洗真值、剔除坏数据和更长开发时间，而非模型", "separating_evidence": "在相同清洗数据上重训比赛期方法", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "数据集 4、5 的误差主要在内参", "alternative": "离散化或畸变模型不完整也能产生同样的扫描线偏移", "separating_evidence": "重新标定内参后的校正结果", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加 核心观点速览",
+  "补充真值以 3 通道 3D 坐标图存储",
+  "写明表 I 为截断重复、正文把表称作 Fig. II/III",
+  "写明图例方法名与表格不一致、图 5 两子图相同，均为论文未说明",
+  "写明赛后方法是否接触测试真值论文未说明，赛后优势不能归因于模型",
+  "冠亚军差距与真值误差的关系写成推断，合并方式写成论文未说明",
+  "数据集 8、9 与测试集的对应写成论文未说明"
+ ]
+}

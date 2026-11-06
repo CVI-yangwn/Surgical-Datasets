@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "正向运动学标注", "plain": "用机器人关节读数推算器械位置并投影成掩码，不靠人画；线缆驱动关节会让投影偏离真实轮廓。", "where": "sec:introduction", "needed_for": "理解 2017 年为什么改成人工标注"},
+  {"term": "mean IoU", "plain": "每类的交集除以并集，再对帧内出现的类别取平均。", "where": "sec:results", "needed_for": "读懂表 I 到表 VI"},
+  {"term": "按数据集大小加权", "plain": "总分时帧多的测试段权重大，数据集 9、10 是其余段的 4 倍。", "where": "sec:results", "needed_for": "部件任务 TUM 与 MIT 名次反转"},
+  {"term": "同序列切分", "plain": "数据集 1 到 8 的前 225 帧训练、后 75 帧测试，测试帧与训练帧来自同一段手术。", "where": "sec:introduction", "needed_for": "需要训练 9 个模型的规则与泄漏风险"},
+  {"term": "部件三类", "plain": "器械分为轴、腕、夹钳；单极弯剪的护套整根算轴。", "where": "sec:introduction", "needed_for": "表 III 到表 V"},
+  {"term": "U-Net 与预训练编码器", "plain": "编解码结构加跳连，编码器换成 ImageNet 预训练的 VGG。", "where": "sec:introduction", "needed_for": "解释 MIT 方法为何领先"},
+  {"term": "单次提交", "plain": "测试标签不公开，每队只能交一次结果。", "where": "sec:results", "needed_for": "判断排名能否被调参污染"}
+ ],
+ "detail_questions": [
+  {"question": "二值任务最高均值是 0.854 还是 0.888？", "answer": "表 I 中 MIT 总分为 0.888，0.854 是 MIT 在数据集 1 上的分数；按表中逐段分数加权重算也约为 0.888，正文应为笔误。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "部件任务为何 TUM 总分第一而 MIT 赢的段更多？", "answer": "数据集 9、10 帧数是其余段 4 倍，TUM 在这两段最高，主导加权总分。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "部件总分是否包含背景类？", "answer": "TUM 三个部件分项平均低于其部件总分，口径不一致，论文未说明。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "类型任务的背景类和缺失类别如何计分？", "answer": "论文未说明。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "BIT 为何二值 0.326、腕 0.005？", "answer": "论文只说 BIT 用 3 个 U-Net 集成，没有解释异常低分，也没有其数据增强信息。", "evidence": ["sec:introduction", "sec:results"], "status": "not_stated"},
+  {"question": "标注质量如何控制？", "answer": "单名标注者加一名专家复核；一致性指标论文未说明。", "evidence": ["sec:introduction", "sec:results"], "status": "partly"},
+  {"question": "类型标签与数据收集列出的器械为何不一致？", "answer": "数据收集有 Cadiere 抓钳，结果部分有抓持牵开器，论文未说明。", "evidence": ["sec:introduction", "sec:results"], "status": "not_stated"},
+  {"question": "队伍是否真的遵守留一段训练规则？", "answer": "作者承认只能依赖队伍自觉，没有核验手段。", "evidence": ["sec:results"], "status": "partly"},
+  {"question": "数据增强对成绩的贡献有多大？", "answer": "表 VII 只列选择，没有消融；TUM 镜面高光增强的提升幅度也未给出。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "数据集 8 夹钳分数为何整体很低？", "answer": "论文没有分析。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "排名是否稳定？", "answer": "没有置信区间或显著性检验。", "evidence": ["sec:results"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "MIT 方法在二值和类型任务上最好", "alternative": "领先来自 ImageNet 预训练编码器这一外部先验，而不是网络设计；且一次提交没有方差，差距可能在噪声内。", "separating_evidence": "同一网络有无预训练的对照、多次训练的方差。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "人工标注比 2015 年运动学标注更可靠", "alternative": "人工标注同样有误差（单人、孔洞未标、模糊帧），只是误差形态不同。", "separating_evidence": "两种标注与独立高质量真值的定量误差对比。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "成绩最好的队伍都用了光度增强，说明光度增强重要", "alternative": "这些队伍也用了更强的骨干和后处理，增强只是相关而非原因。", "separating_evidence": "去掉光度增强的消融。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "类型分割难是因为器械外观相近", "alternative": "训练集器械分布不均，留一段训练时某些器械几乎没见过。", "separating_evidence": "按器械统计的训练出现次数与逐类 IoU。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题与核心观点速览按问题到结论重写，速览中写明 0.854 与 0.888 的矛盾",
+  "新增与 2015 EndoVis、2018 场景分割数据集、COCO 的定位表",
+  "新增参赛方法设计与结果模式的映射表，并注明都没有消融支撑",
+  "复用建议拆为可照抄、需核查、应避免三类",
+  "部件总分口径、类型计分口径、BIT 异常、数据集 8 夹钳、排名稳定性写成论文未说明",
+  "MIT 领先一节补充“预训练先验与一次提交无方差”的另一种解释"
+ ]
+}

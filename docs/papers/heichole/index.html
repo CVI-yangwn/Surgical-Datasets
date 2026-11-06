@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Comparative Validation of Machine Learning Algorithms for Surgical Workflow and Skill Analysis with the HeiChole Benchmark</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>HeiChole：三个中心的腹腔镜胆囊切除视频，检验手术工作流与技能识别到底解决了多少</h1>
+<div class="sub">Comparative Validation of Machine Learning Algorithms for Surgical Workflow and Skill Analysis with the HeiChole Benchmark</div>
+<div class="meta">Martin Wagner 等 41 位作者，海德堡大学医院、德国癌症研究中心、德累斯顿国家肿瘤疾病中心等 | arXiv:2109.14956（预印本）</div>
+<div><span class="chip">数据集与基准</span><span class="tag">手术工作流</span><span class="tag">腹腔镜胆囊切除</span><span class="tag">挑战赛基准</span><span class="tag">多中心数据</span></div>
+<div class="one">HeiChole 用三家医院 33 台腹腔镜胆囊切除视频和 12 支队伍的挑战赛结果说明，阶段与器械识别最好只有六成多，动作识别和技能评估基本没有解决。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 8 条论文未说明</span><span class="tag">反向检验 5 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2109.14956" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/heichole/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术工作流分析要判断手术进行到哪一步、医生在做什么、用了什么器械；技能分析要判断手术做得好不好。论文认为两者是手术辅助系统和半自主手术机器人的前提。</p>
+<p><strong>问题在数据。</strong> 公开的 <code>Cholec80</code> 有 80 台单中心胆囊切除视频，阶段识别平均精度可达 91%，但只有阶段和器械标注。一个 1243 台的多中心数据集结果相近，却不公开。<code>JIGSAWS</code> 有动作和技能标注，但来自实验室模拟任务。</p>
+<p>论文因此问两件事：单中心报告的阶段识别性能能否在多中心数据上由独立团队复现；比阶段更难的动作识别和技能评估能做到什么程度。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>答案是不能复现，而且更难的任务基本没解决。</strong> 在 HeiChole 上，2019 年内镜视觉挑战赛参赛方法的阶段识别 F1 赛内最高 65.38%，器械检测最高 63.82%，动作识别最高 23.28%，技能评估唯一提交的平均绝对误差为 0.78。</p>
+<p>F1 是精确率和召回率的调和平均；这里先在每个视频内对所有类别求 F1，再对视频平均。</p>
+<p>四个关键做法：</p>
+<ol><li>三家德国医院采集 33 台手术，共 22 小时，测试集每个中心 3 台。</li><li>同一套视频上标注阶段、动作、器械、技能四类标签。</li><li>参赛者提交容器，测试集不公开，只允许在线推断。</li><li>用 1000 次 bootstrap 和成对 <code>Wilcoxon</code> 检验评估排名是否可信。</li></ol>
+<p><strong>边界：</strong> 测试集只有 9 个视频，技能任务只有 1 支队伍，摘要和正文有几处数字对不上。</p><div class="strip h"><span class="t">亮点</span><span class="i">阶段识别最好约 65%，远低于单中心报告的 91% 平均精度，但两者指标不同</span><span class="i">动作识别五个方法都在 23% 左右，几乎只会预测“持握”</span></div><div class="strip d"><span class="t">数据</span><span class="i">33 台视频，22 小时，三个中心</span><span class="i">训练 24 台，测试 9 台</span><span class="i">12 支参赛队伍</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据：多中心有多“多”</h3><p>这一节回答：测试集能不能真正考到跨中心泛化。</p>
+<div class="tbl"><table><thead><tr><th>中心</th><th>视频数</th><th>分辨率</th><th>帧率</th></tr></thead><tbody><tr><td>海德堡大学医院</td><td>15</td><td>960×540</td><td>25</td></tr><tr><td><code>Salem</code> 医院</td><td>15</td><td>1920×1080，3 台为 720×576</td><td>多数 50</td></tr><tr><td><code>Sinsheim</code> 医院</td><td>3</td><td>1920×1080</td><td>多数 50</td></tr></tbody></table></div>
+<p>训练集只有海德堡和 <code>Salem</code> 各 12 台，<code>Sinsheim</code> 的 3 台全部在测试集。<strong>所以测试时有一个中心是模型完全没见过的，但它只有 3 个视频。</strong></p>
+<p>中心之间不只病人不同：分辨率、帧率、器械品牌都不同。海德堡病例更难，15 台里有 2 台评为最难的 5 级；另两家没有 5 级病例。</p>
+<figure class="fig"><img src="images/page_021_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。训练集 24 台手术的阶段分布，横轴为相对手术进度。阶段长度差异大，P1 与 P2 会来回切换。</figcaption></figure></div><div class="card" id="s4"><h3><span class="num">4</span>标注：四类任务的粒度</h3><p>阶段沿用 <code>Cholec80</code> 的七阶段定义，但不要求固定顺序。动作只有抓取、持握、剪切、夹闭四种，每帧一个四维二值向量。器械有 21 种，归为七类。技能用改良的腹腔镜技能整体操作评估量表，五个维度各打 1 到 5 分。</p>
+<p><strong>动作的时长极不平衡。</strong> 持握每台累计 974.2 秒，抓取、剪切、夹闭每台累计都在 10 秒以内。这一点直接决定了后面的动作识别结果。</p>
+<p>技能评分只用到 3 到 5 分，1 分和 2 分从未出现。阶段由 3 名医学生、技能由 2 名医学生独立标注后协商一致；标注者间一致性论文未说明，动作和器械由几人标注论文也未说明。</p>
+<figure class="fig"><img src="images/page_023_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。训练集五个技能维度的评分分布，四个技能维度都集中在 3 到 5 分。</figcaption></figure></div><div class="card" id="s5"><h3><span class="num">5</span>评测协议：怎么防止对测试集调参</h3><p>参赛者提交 Docker 容器，输入一段视频，输出 CSV。测试集和参考标注从不公开，赛后新方法也只能提交给组织方运行。阶段、动作、器械只能用过去和当前帧，技能评估可以看完整视频。</p>
+<p>排名先按逐视频平均 F1；技能按平均绝对误差。<strong>逐视频、逐类别平均让每类权重相同，代价是罕见类别的失败会被放大。</strong></p>
+<p>排名可信度用两种方法检查：对 9 个测试视频重采样 1000 次看排名变化，用 <code>Kendall</code> 相关系数衡量变化大小（1 为完全不变）；再用 <code>Holm</code> 校正的成对 <code>Wilcoxon</code> 检验看谁显著领先。</p>
+<p>各队可以用外部公开数据，多支队伍用了 <code>Cholec80</code> 预训练；超参数和帧采样方式论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>排名</th><th>阶段</th><th>F1（%）</th><th>动作</th><th>F1（%）</th><th>器械</th><th>F1（%）</th></tr></thead><tbody><tr><td>1</td><td><code>CAMMA 1</code>（赛后）</td><td>68.78</td><td><code>Wintegral</code></td><td>23.28</td><td><code>Konica Minolta</code></td><td>63.82</td></tr><tr><td>2</td><td><code>HIKVision</code></td><td>65.38</td><td><code>Konica Minolta</code></td><td>22.83</td><td><code>CUHK</code></td><td>62.95</td></tr><tr><td>3</td><td><code>CUHK</code></td><td>64.98</td><td><code>NCT Dresden</code></td><td>22.62</td><td><code>HIKVision</code></td><td>58.20</td></tr><tr><td>末位</td><td><code>IGI Medical Technologies</code></td><td>23.93</td><td><code>VIE-PKU</code></td><td>21.75</td><td><code>NCT Dresden</code></td><td>27.45</td></tr></tbody></table></div>
+<p><strong>阶段：</strong> 赛内冠军由 <code>HIKVision</code> 和 <code>CUHK</code> 并列获得。最难的是夹闭与切断（P2）：<code>HIKVision</code> 只判对 46.92%，有 43.39% 被判成前一阶段 P1。原因是剪刀、施夹器等标志性器械在相邻阶段也会出现。</p>
+<figure class="fig"><img src="images/page_026_fig_figure_6_review.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 6。<code>HIKVision</code> 与全部参赛者的阶段混淆矩阵（%），P2 与 P1、P4 与 P5 混淆最多。</figcaption></figure>
+<p><strong>动作：</strong> 持握占手术时长 73.3%，参赛方法把 83.2% 的时间都判为持握。各方法持握的 F1 在 0.84 到 0.91，其余三类平均 F1 都低于 0.03，四类平均后就落在 23% 左右。<strong>所以动作排行榜几乎只反映持握识别的微小差别。</strong></p>
+<figure class="fig"><img src="images/page_027_fig_figure_7_review.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。测试视频 <code>HeiChole-25</code> 上各队的逐帧持握预测与参考标注，多数方法几乎全程预测持握。</figcaption></figure>
+<p><strong>器械：</strong> 最好的 <code>Konica Minolta</code> 不用任何时序信息，只额外学习器械的共现。所有参赛者平均来看，标本袋被全程误检，剪刀被漏检。</p>
+<p><strong>技能：</strong> 唯一提交对每个视频都给出同样的分数，0.78 的误差主要来自参考评分本身集中在高分段。</p></div><div class="card" id="s7"><h3><span class="num">7</span>排名可信吗</h3><p>阶段和器械排名的 <code>Kendall</code> 相关系数均值都是 0.93，动作只有 0.66。动作任务的五个方法之间没有任何显著差异。</p>
+<figure class="fig"><img src="images/page_025_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。1000 次 bootstrap 下的排名分布，黑叉为中位排名，黑线为 95% 区间。动作任务的区间明显更宽。</figcaption></figure>
+<p><strong>但这里的稳定只针对这 9 个测试视频。</strong> 重采样不会引入新中心或新病例，它说明的是排名对测试视频扰动不敏感，不是对新医院的泛化。</p></div><div class="card" id="s8"><h3><span class="num">8</span>为什么是这些结果</h3><p>论文给出的解释，以及我的判断：</p>
+<div class="tbl"><table><thead><tr><th>现象</th><th>论文的解释</th><th>我的判断</th></tr></thead><tbody><tr><td>阶段识别前三名都用卷积网络加循环网络</td><td>循环网络可记住所有历史帧</td><td>前三名在预训练和后处理上也不同，没有消融，只能算一致的迹象</td></tr><tr><td>阶段识别在海德堡最差</td><td>海德堡病例更难</td><td>海德堡的分辨率和帧率也不同，难度和画质没有分开</td></tr><tr><td>器械检测在未见过的 <code>Sinsheim</code> 上最好</td><td>与 <code>Salem</code> 器械品牌相同</td><td>合理，但只有 3 个视频</td></tr><tr><td>动作识别失败</td><td>训练集没有反映其他动作的变化</td><td>逐帧类平均 F1 同样会压平方法差异，论文没有尝试其他指标</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_024_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。各算法逐视频 F1，按医院着色。注意图注与图例对医院颜色的说法不一致，以图例为准。</figcaption></figure></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li><strong>91% 对 65% 不能直接归因于多中心。</strong> 指标不同（平均精度对 F1），训练集只有 24 台，阶段也不再有固定顺序。论文没有单中心与多中心训练的对照。</li><li><strong>动作识别低分不等于短暂动作不可学。</strong> 论文没有按事件计的指标或按类召回。</li><li><strong>技能评估没有形成可用基线。</strong> 只有 1 支队伍，且输出常数。</li><li><strong>参考标注的噪声大小未知。</strong> 标注者间一致性论文未说明。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>复现与使用要注意什么</h3><p>论文中有几处数字对不上，引用前要核对：</p>
+<ul><li>摘要阶段 F1 上限写 67.7%，排行榜最高 68.78%，赛内最高 65.38%。</li><li>摘要器械 F1 下限写 38.5%，排行榜最低是 27.45%。</li><li>正文 P0、P1 识别率 79.4% 和 82.8%，与图 6 两个混淆矩阵都对不上，口径论文未说明。</li><li>图 4 的图注与图例对医院颜色的描述不一致。</li><li>抓取和持握的“每台次数”与总数除以 33 台不符，分母论文未说明。</li></ul>
+<p>动作执行者（左手、右手、助手）做了标注却没有发布，原因论文未说明。</p>
+<p>数据使用条件：训练集以非商业、相同方式共享的许可在 <code>Synapse</code> 发布，测试集只能通过提交容器评测。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>HeiChole 的价值在评测协议和负面结果，而不在规模：33 台视频、9 台隐藏测试集</div><div>阶段与器械识别最好都在 63.82% 到 68.78% 之间，排名稳定</div><div>动作识别所有方法几乎只预测持握，排行榜不能区分方法</div><div>技能任务只有一个常数输出的提交，不能作为基线</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>测试集不公开加容器提交，避免对测试集调参</li><li>同一批视频上有四类标注，附书面标注规则</li><li>用 bootstrap 和显著性检验报告排名不确定性，而不只给一张排行榜</li><li>如实报告了动作和技能任务的失败</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>测试集只有 9 个视频，每中心 3 个，中心对比的样本量很小</li><li>难度、器械品牌、分辨率、帧率随中心一起变化，没有分离</li><li>标注者间一致性、动作与器械标注人数论文未说明</li><li>摘要与正文、图注与图例存在多处数字和描述不一致</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>按中心留一重新划分后，阶段识别的排名是否保持</li><li>动作任务改用事件级指标后，各方法之间是否出现差异</li><li>摘要中的 67.7% 和 38.5% 分别对应哪个结果</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 aa451b90</span><span class="s">7.4 分</span></div><p>模型自评。H3为unknown：note模式数字核对有9个未匹配值，其中8个是图6混淆矩阵中只存在于图像的数值（88.49、86.5、77.59、73.97、43.39、46.92、36.73、35.31），1个是arXiv编号，尚未登记例外。D2为7：机制流程只写了构建与评测四步，没有说明参赛方法输入帧率与采样方式论文未说明。D5为7：与Cholec80、JIGSAWS等的对比分散在研究问题里，没有逐项说明新增点。D6为7：复用建议只有一处集中列出。D7为7：章节未编号，没有亮点与数据条。D8为7：F1、bootstrap、Kendall相关系数、PKI等术语首次出现时未完全定义。D9为6：部分小节不以问题开头，数字后缺少所以然，节尾衔接句只有一处。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>写insight_pass.json，按知识点、细节问题、挑战三轮完成并通过lint_insight</li><li>把图6混淆矩阵数值与arXiv编号、495与99等推导值登记到number-exceptions并写明来源</li><li>各节开头写出要回答的问题，数字后补一句所以然，节尾加衔接句</li><li>首次出现处解释F1、平均精度、bootstrap、Kendall相关系数、PKI等术语</li><li>新增与已有数据集的逐项定位对比</li><li>把未说明之处统一写成论文未说明，并把insight pass得到的修订写入笔记</li><li>写reading_report.md并通过lint_report</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 c1098520 · 文稿 9a586a9b</span><span class="s">8.3 分</span></div><p>模型自评，从头按评分表重新打分。H3通过：笔记与报告的数字核对均无未匹配值，图6混淆矩阵数值、arXiv编号和推导值登记在number_exceptions.json并写明来源。D2为8：机制流程四步写清输入、操作、输出；参赛方法的帧采样方式论文未说明，无法补足。D7为8：笔记章节名固定不能编号，报告已编号并配亮点与数据条。无法修复的限制：测试集只有9个视频、技能任务只有1队、标注者间一致性论文未说明，这些来自论文本身。Table 1与Figure 9保留占位，原因是自动裁剪只截到跨页表格的片段，正文已用Markdown表格转写。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>A multi-centre polyp detection and segmentation dataset for generalisability assessment</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>六家医院的结肠镜息肉数据：PolypGen 能测出多少跨中心泛化差距</h1>
+<div class="sub">A multi-centre polyp detection and segmentation dataset for generalisability assessment</div>
+<div class="meta">Sharib Ali, Debesh Jha, Noha Ghatwary 等 15 人（利兹大学、牛津大学、SimulaMet、亚历山大大学等） | arXiv:2106.04463 v3；Scientific Data 10, 75 (2023)</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">息肉分割</span><span class="tag">结肠镜</span><span class="tag">多中心</span><span class="tag">泛化评估</span></div>
+<div class="one">PolypGen 汇集六个中心 300 多名患者的结肠镜数据，发布 3762 张阳性帧和 4275 张阴性帧及像素级掩码；用五个中心训练、第六个中心测试时，最佳网络单帧 DSC 0.82、序列 0.71、小息肉仅 0.46，但论文只给一种划分，标注一致性论文未说明。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 7 条论文未说明</span><span class="tag">反向检验 5 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2106.04463" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/polypgen/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>息肉漏检率高，而自动分割模型一换医院就掉分。</strong> 论文引用的荟萃分析显示，腺瘤漏检率 26%，锯齿状息肉 27%。约 90% 的结直肠癌由这类良性前驱病变转化而来，及早发现并完整切除几乎可以消除死亡风险。</p>
+<p>深度学习分割模型在同一中心内表现不错，但遇到域偏移较大的外部数据时性能明显下降。域偏移指训练和测试图像来自不同医院、人群或设备，统计特性不同。</p>
+<p>作者认为多数工作不做多中心评测，原因是<strong>缺少公开的多中心、带像素级标注的数据</strong>。已有数据集要么只有一两个中心，要么需要申请且已不可获取，要么没有掩码。</p>
+<figure class="fig"><img src="images/page_004_fig_table_1_review_repair1.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。已有胃肠道病变数据集的规模与可获取性；带圆点标记的已不可获取。</figcaption></figure>
+<p><code>PolypGen</code> 是表中唯一同时满足多中心、带掩码、含序列且开放获取的一项。接下来看它的答案长什么样。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份数据发布说明，分割基线只是证明数据能测出泛化差距。</strong></p>
+<ul><li>数据：六个中心、300 多名患者；阳性 3762 帧（单帧 1537、序列 2225），阴性 4275 帧。</li><li>标注：三名研究者勾画，资深消化科医生二值审核；首轮 2213 个标注拒收 676 个（30.5%）。</li><li>验证：C1 到 C5 训练、C6 测试；<code>DeepLabV3+</code>（<code>ResNet101</code>）单帧 <code>DSC</code> 0.82、序列 0.71、小息肉 0.46。</li><li>边界：只有一种划分，没有域内上界，没有检测基线，标注一致性论文未说明。</li></ul>
+<p>先看这六个中心的数据到底差在哪里。</p><div class="strip h"><span class="t">亮点</span><span class="i">按中心分文件夹，留一中心测试是数据自带的用法</span><span class="i">阴性序列可以用来测误报</span></div><div class="strip d"><span class="t">数据</span><span class="i">阳性 3762 帧 / 阴性 4275 帧</span><span class="i">首轮拒收率 30.5%</span><span class="i">小息肉 DSC 0.46</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>六个中心与两类样本</h3><p><strong>多中心的价值取决于中心之间的真实差异。</strong> 六家医院分别在法国、意大利（两家）、挪威、英国和埃及，每家至少提供 50 名患者的数据。内镜系统全部是 <code>Olympus</code>，只是型号不同，所以设备差异限于同一厂商内部。</p>
+<p>阳性样本来自确诊有息肉的患者视频，阴性样本只取无息肉的正常黏膜视频。</p>
+<div class="tbl"><table><thead><tr><th>部分</th><th>帧数</th><th>说明</th></tr></thead><tbody><tr><td>阳性单帧</td><td>1537</td><td>C1 到 C5 共 1449 张，C6 88 张</td></tr><tr><td>阳性序列</td><td>2225</td><td>23 条序列，主要来自 C2（865）、C4（450）、C6（432）</td></tr><tr><td>阴性序列</td><td>4275</td><td>23 条序列，只有原图</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_005_fig_figure_2_review_repair1.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。上半部分为各中心阳性与阴性帧数；下半部分为按尺寸统计的息肉数量。</figcaption></figure>
+<p><strong>图与正文对不上。</strong> 正文写 C5 为 458 帧、C6 为 520 帧，图中却标 C5 520、C6 484，论文未解释。阴性环有一段 1755 用的是 C6 的颜色却标为 C5，阴性帧来自哪四家医院论文未说明。</p>
+<p>数据量交代清楚后，关键是标签可不可信。</p><div class="strip h"><span class="t">亮点</span><span class="i">所有中心都用 Olympus 内镜</span><span class="i">图像尺寸从 384×288 到 1920×1080 像素</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>标注怎么做、被拒了多少</h3><p><strong>这篇论文少见地报告了拒收率。</strong> 三名研究者在 <code>Labelbox</code> 上平均分工勾画，医生团队复查，中心专家核对边界，再由其他中心的资深医生做二值审核，即只判接受或拒绝。</p>
+<p>勾画规则按情形写明：凸起息肉只画隆起区，染色息肉只画未染色部分，器械遮挡处不画，远处看不清的息肉不画，已癌变但不呈息肉外观的黏膜不画。</p>
+<figure class="fig"><img src="images/page_011_fig_figure_6_review_repair1.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 6。各中心标注的总数、接受数、拒收数，以及平坦与隆起息肉占比。</figcaption></figure>
+<p>不计模糊批次，首轮 2213 个标注中 676 个被拒，拒收率 30.5%。模糊批次重标后第二轮仍拒 34.17%。<strong>三成被拒说明息肉边界本身难以达成一致</strong>，但标注者间一致性论文未说明，被拒帧是否修正后发布也论文未说明。</p>
+<p>有了数据和标签，作者用什么协议证明它能测出泛化？</p><div class="strip h"><span class="t">亮点</span><span class="i">审核者多数来自其他中心</span><span class="i">模糊标注大多被移除，数据偏向清晰病例</span></div><div class="strip d"><span class="t">数据</span><span class="i">2213 个标注，接受 1537，拒收 676</span><span class="i">模糊批次第二轮拒收 34.17%</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>技术验证协议</h3><p><strong>设计很简单：五个欧洲中心训练，埃及中心测试。</strong> C1 到 C5 的 1449 张单帧按 80/20 分成训练和验证，在 C6 的 88 张单帧和 432 张序列帧上测试。C6 的人群和内镜型号都不同于训练中心。</p>
+<p>训练设置：约 500 轮，批大小 16，输入 512×512，<code>Adam</code>，学习率 0.01，权重衰减 0.00001，缩放、随机裁剪和水平翻转增广。</p>
+<figure class="fig"><img src="images/page_014_fig_figure_8_review.png" alt="Figure 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 8。四类基线网络的结构示意。</figcaption></figure>
+<p>指标除了 <code>DSC</code>（预测与真值掩码的重叠，即 F1）和 <code>JI</code>（交并比），还有边界类的平均豪斯多夫距离、平均表面距离 <code>MASD</code> 和归一化表面重叠 <code>NSD</code>。<code>NSD</code> 统计离真值边界不超过阈值的预测边界比例，论文把阈值设为 10，单位论文未说明。</p>
+<p>协议有一处明显缺口：<strong>没有在 C6 内部训练的上界</strong>。所以下面的数字只能说明 C6 有多难，不能说明域偏移让模型掉了多少。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>最好的网络在单帧上 <code>DSC</code> 0.82，换成序列就降到 0.71。</strong></p>
+<div class="tbl"><table><thead><tr><th>方法</th><th>单帧 DSC</th><th>序列 DSC</th><th>单帧 MASD ↓</th><th>帧率</th></tr></thead><tbody><tr><td><code>U-Net</code></td><td>0.63</td><td>0.50</td><td>93.02</td><td>21</td></tr><tr><td><code>FCN8</code></td><td>0.76</td><td>0.62</td><td>37.61</td><td>44</td></tr><tr><td><code>PSPNet</code></td><td>0.80</td><td>0.64</td><td>34.12</td><td>31</td></tr><tr><td><code>DeepLabV3+</code>（<code>ResNet50</code>）</td><td>0.81</td><td>0.67</td><td>41.04</td><td>47</td></tr><tr><td><code>ResNetUNet</code>（<code>ResNet34</code>）</td><td>0.79</td><td>0.66</td><td>35.83</td><td>87</td></tr><tr><td><code>DeepLabV3+</code>（<code>ResNet101</code>）</td><td>0.82</td><td>0.71</td><td>23.29</td><td>33</td></tr><tr><td><code>ResNetUNet</code>（<code>ResNet101</code>）</td><td>0.80</td><td>0.70</td><td>27.38</td><td>40</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_015_fig_table_5_review_repair1.png" alt="Table 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 5。七种方法在 C6 的 88 张单帧上的结果。</figcaption></figure>
+<figure class="fig"><img src="images/page_015_fig_table_6_review_repair1.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。七种方法在 C6 的 432 张序列帧上的结果。</figcaption></figure>
+<p>带残差骨干和空洞空间金字塔池化的模型在两种数据上都领先，<code>U-Net</code> 两次垫底。<code>ResNetUNet</code>（<code>ResNet34</code>）每秒 87 帧，<code>DSC</code> 只比最好的低一点，是实时场景的折中选择。</p>
+<p><strong>正文有一处笔误。</strong> 验证总结段说序列最高 <code>DSC</code> 为 0.65，但表 6 中 0.65 是 <code>JI</code>，<code>DSC</code> 是 0.71。</p>
+<p>整体数字之外，按尺寸和验证中心拆开看更能说明问题。</p><div class="strip d"><span class="t">数据</span><span class="i">单帧最佳 DSC 0.82，序列最佳 0.71</span><span class="i">ResNetUNet（ResNet34）每秒 87 帧</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>小息肉与验证中心</h3><p><strong>小息肉几乎是失败点。</strong> <code>DeepLabV3+</code>（<code>ResNet101</code>）在大息肉上 <code>DSC</code> 0.87、中息肉 0.84，小息肉只有 0.46。小息肉指外接框不超过 100×100 像素，与毫米没有固定换算。其余模型的分层数值论文未给出完整表。</p>
+<p>表 7 每次用四个中心训练、一个中心验证，<code>DeepLabV3+</code>（<code>ResNet50</code>）的 <code>DSC</code> 在 0.76 到 0.82 之间。作者据此说验证集选择影响很大。</p>
+<figure class="fig"><img src="images/page_016_fig_table_7_review_repair1.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。不同验证中心下 DeepLabV3+（ResNet50）的结果。</figcaption></figure>
+<p>但每种设置只训练一次，这个差距是否超出随机波动论文未说明。表 7 的平均豪斯多夫距离在 4.70 到 4.88 之间，而表 5 同一模型在 C6 上是 9.95，表 7 到底在哪个数据上计算论文未说明。</p><div class="strip h"><span class="t">亮点</span><span class="i">小息肉 DSC 不到大息肉的一半</span><span class="i">表 7 与表 5 的边界距离量级不一致</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><p><strong>这些数字证明了 C6 难，没证明难在域偏移。</strong> 下面三点是证据链的缺口：</p>
+<ul><li><strong>没有域内上界。</strong> 没有 C6 内部训练的分数，无法把下降归因于跨中心。</li><li><strong>序列分数混了两种错误。</strong> 序列里有无息肉帧，误报和分割误差都会拉低 <code>DSC</code>，论文没有分开报告。Fig. 9 的讨论也提到序列中得分高的多为无息肉帧。</li><li><strong>没有方差。</strong> 表中 ± 的含义论文未说明，多次训练的方差也没有，0.01 到 0.02 的模型差距无法判断是否稳定。</li></ul>
+<p>此外，标题强调检测，但技术验证只有分割；检测基线论文未说明。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复用前要检查什么</h3><ul><li>下载后先统计各中心帧数，对照正文和 Fig. 2a，确认 C5 和 C6 的实际数字。</li><li>做泛化实验至少报告域内留出、留一中心和小息肉分层三种结果。</li><li>序列评测把有息肉帧的 <code>DSC</code> 和无息肉帧的误报率分开算，阴性序列正好用来测误报。</li><li>六个中心都是 <code>Olympus</code>，不能据此推断对其他厂商设备的泛化。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>PolypGen 是少有的开放、多中心、带掩码且含序列与阴性帧的息肉数据集</div><div>首轮标注拒收率 30.5%，说明边界本身有分歧</div><div>C6 外部测试上最佳单帧 DSC 0.82、序列 0.71、小息肉 0.46</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>按中心组织数据，留一中心评测开箱可用</li><li>写明勾画规则和专家审核流程，并报告拒收率</li><li>同时提供单帧、阳性序列和阴性序列</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>只有一种外部测试划分，没有域内上界</li><li>标注一致性、被拒帧去向、阴性帧中心归属论文未说明</li><li>正文与 Fig. 2a、表 6 存在数字不一致</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>C6 内部训练能达到多少 DSC？</li><li>4275 张阴性帧上各模型的误报率是多少？</li><li>表 7 的指标是在验证中心还是在 C6 上计算的？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 3192babc</span><span class="s">7.4 分</span></div><p>第 1 轮自评（模型自评）：证据链、数字与边界基本完整，表 5/6/7 已整理成表格并插入原图。D2=7：构建流程四步有输入输出，但标注审核中“被拒帧去向”没有交代。D5=7：与已有数据集的对比只放了表 1 原图，没有逐项说明新在哪里。D6=7：复用建议偏概括。D7=7：小节未编号。D9=6：多数小节直接罗列事实，缺少开头的问题和数字后的含义，小节之间没有过渡。H3 未做数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补充知识点、细节问答和对中心论断的质疑，并把结论写回笔记</li><li>按叙事顺序改写各节开头，交代每节要回答的问题，数字后补一句含义</li><li>把正文与图表数字矛盾（Fig. 2a 的 C5/C6、序列 DSC 0.65 写法、Table 7 的 dAHD 量级）逐项核对并写清</li><li>补充 PolypGen 相对 Kvasir-SEG、CVC-ClinicDB 等的具体差异</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 1f8eb8d7 · 文稿 332222f9</span><span class="s">8.5 分</span></div><p>第 2 轮自评（模型自评，非独立评审）：完成 insight pass（8 个知识点、12 个细节问题、5 条质疑），把序列 DSC 混合误报、无域内上界、表 7 计算对象、阴性帧中心归属、± 含义等写成论文未说明；补充与 Kvasir-SEG 等的逐项对比；各节加入开头问题与过渡。数字核对通过，派生值与图内文字登记在 number_exceptions.json。无法修复的限制：论文本身只有一种划分且无方差，D2 停在 8 因为标注流程中被拒帧去向原文无解；D7=8 因为笔记固定节名不编号，编号只在网页报告中。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

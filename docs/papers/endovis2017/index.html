@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>2017 Robotic Instrument Segmentation Challenge</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>给机器人手术器械分割建一个可信的考场：EndoVis 2017 挑战赛总结</h1>
+<div class="sub">2017 Robotic Instrument Segmentation Challenge</div>
+<div class="meta">M. Allan, A. Shvets, T. Kurmann 等 19 位作者（Intuitive Surgical、MIT、伯尔尼大学、慕尼黑工业大学、伦敦大学学院等） | arXiv:1902.06426 预印本，结果于 MICCAI 2017 挑战日公布</div>
+<div><span class="chip">数据集与挑战赛</span><span class="tag">手术数据集</span><span class="tag">器械分割</span><span class="tag">机器人手术</span><span class="tag">da Vinci</span><span class="tag">EndoVis</span></div>
+<div class="one">EndoVis 2017 用 10 段猪腹腔 da Vinci Xi 手术、共 3000 帧的人工标注建立了器械二值、部件、类型三级分割基准，二值最佳 mean IoU 为 0.888、部件 0.751、类型只有 0.542，但数据小、一半测试帧与训练帧同序列，排名对加权方式敏感。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 7 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/1902.06426" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/endovis2017/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>机器人手术里的器械分割一直缺一个可信的公共考场。</strong> 器械跟踪和增强现实叠加都要先知道哪些像素是器械，而领域里没有像 <code>COCO</code> 那样的公共数据和验证集。</p>
+<p>2015 年 <code>EndoVis</code> 子挑战提供过机器人器械数据，但真值由 <code>dVRK</code> 正向运动学投影生成。正向运动学就是用关节读数推算器械位置，线缆驱动关节会让投影偏离真实轮廓；背景也很单一。<strong>在这样的数据上拿高分，说明不了模型真的会分割。</strong></p>
+<p>2017 年的挑战针对这两点做了改进：人工逐帧标注、10 段不同手术、增加部件和类型标签。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份挑战赛总结，作者没有提出自己的方法。</strong></p>
+<ul><li>数据：10 段猪腹腔 da Vinci Xi 手术，每段 300 帧、1 Hz 采样，共 3000 帧，其中 1800 帧训练。</li><li>任务：二值分割、部件分割（轴、腕、夹钳）、类型分割，难度逐级上升。</li><li>结果：二值 MIT 总分 0.888，5 支队伍超过 0.8；部件 TUM 0.751 最高；类型 MIT 只有 0.542。</li><li>边界：一次提交、无方差、无消融；一半测试帧与训练帧来自同一段手术。</li></ul>
+<p>接下来先看考场怎么搭，因为分数的含义取决于它。</p><div class="strip h"><span class="t">亮点</span><span class="i">二值分割已较成熟，类型识别远未解决</span><span class="i">名次会随加权方式改变</span></div><div class="strip d"><span class="t">数据</span><span class="i">10 支队伍参赛，部件 9 支、类型 6 支</span><span class="i">3000 帧，1800 帧训练</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据怎么采、怎么切</h3><p><strong>测试帧有一半与训练帧来自同一段手术。</strong> 数据集 1 到 8 各取前 225 帧训练、后 75 帧测试；数据集 9、10 的全部 300 帧只用于测试。</p>
+<p>为防止用同段训练数据作弊，规则要求评测第 $k$ 段测试数据时不能用第 $k$ 段训练数据，于是每队至少要训练 9 个模型。额外手术数据被禁止，只允许用公开非手术数据预训练。作者承认这条规则只能依赖队伍自觉。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。数据集 1 到 8 的训练样例帧，可以看到不同段之间的组织、缝线、超声探头和夹子差异。</figcaption></figure>
+<p>标注由 Intuitive Surgical 团队用 <code>Viame</code> 逐帧画多边形，只标左眼，每个样本由一名标注者完成、一名专家复核。<strong>标注者间一致性论文未说明。</strong></p><div class="strip h"><span class="t">亮点</span><span class="i">只标左眼，但提供双目图像和相机标定</span><span class="i">实例级标签，派生出三级任务标签</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>三级任务和评测口径</h3><p>二值任务把器械与背景分开，超声探头、夹子和组织都算背景。部件任务把器械分为轴、腕、夹钳；单极弯剪看不到腕，整根护套算轴。类型任务要识别器械型号，两种双极镊因外观相近合并成一类。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 4。类型任务涉及的器械；前三幅钳口非常相似，原图题对第七、第八幅的标号疑似写反。</figcaption></figure>
+<p>评测用单类 IoU：</p>
+<div class="math">$$\mathrm{IoU}=\frac{TP}{TP+FP+FN}$$</div>
+<p>每帧对出现的类别取平均，再对帧平均得到每段分数，最后<strong>按数据集大小加权</strong>。数据集 9、10 的测试帧是其余段的 4 倍，所以它们主导总分。</p>
+<p>部件总分是否计入背景类、类型任务的背景和缺失类如何计分，论文未说明。</p></div><div class="card" id="s5"><h3><span class="num">5</span>参赛方法的共同点</h3><p>10 支队伍中 8 支用编解码类 <code>CNN</code>，主要差别在预训练、输入尺寸和后处理：</p>
+<div class="tbl"><table><thead><tr><th>队伍</th><th>核心做法</th></tr></thead><tbody><tr><td>MIT</td><td>U-Net 加 ImageNet 预训练 VGG 编码器（TernausNet）</td></tr><tr><td>TUM</td><td>ResNet-50 编码器的残差编解码网络，镜面高光增强，保留与图像边界相连的连通域</td></tr><tr><td>UB</td><td>先二值后部件与类型的级联网络，不做外部预训练</td></tr><tr><td>NCT</td><td>共享主干、部件与类型双输出头</td></tr><tr><td>UW</td><td>不用机器学习，颜色阈值加 GrabCut</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_005_fig_fig_5_review.png" alt="Fig 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 5。NCT 的网络，部件（5 通道）和类型（8 通道）两个输出头共享同一主干。</figcaption></figure>
+<p>下一节看这些差别在分数上留下了什么。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>队伍</th><th>二值</th><th>部件</th><th>类型</th></tr></thead><tbody><tr><td>MIT</td><td><strong>0.888</strong></td><td>0.737</td><td><strong>0.542</strong></td></tr><tr><td>UB</td><td>0.875</td><td>0.700</td><td>0.453</td></tr><tr><td>TUM</td><td>0.873</td><td><strong>0.751</strong></td><td>未参加</td></tr><tr><td>NCT</td><td>0.843</td><td>0.699</td><td>0.409</td></tr><tr><td>SIAT</td><td>0.803</td><td>0.667</td><td>0.371</td></tr><tr><td>UCL</td><td>0.785</td><td>0.623</td><td>0.337</td></tr></tbody></table></div>
+<p><strong>正文写二值最佳为 0.854，表 I 是 0.888。</strong> 0.854 是 MIT 在数据集 1 上的分数；我按表中逐段分数加权重算约为 0.888，正文应是笔误。</p>
+<p>部件任务拆开后，轴最容易、夹钳最难：TUM 的轴 0.822，夹钳只有 0.556。<strong>夹钳恰是与组织接触、对跟踪最有用的部位。</strong></p>
+<figure class="fig"><img src="images/page_011_fig_fig_12_review.png" alt="Fig 12" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 12。类型分割的定性结果：掩码轮廓大多准确，但器械常被整段标成错误类型。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">二值：MIT 0.888，前三名相差 0.015</span><span class="i">部件：TUM 0.751，MIT 赢 7 段</span><span class="i">类型：MIT 0.542，单段最低 0.000</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么名次不稳</h3><p><strong>部件任务 MIT 赢下 7 段，总分却输给 TUM。</strong> TUM 在两段独立测试序列上最高（0.736 和 0.807），而这两段权重大。我按 10 段等权重算，MIT 约 0.756、TUM 约 0.738，名次反过来。</p>
+<p>所以总分更奖励对新手术的泛化，逐段获胜次数更奖励同序列测试段上的拟合。论文没有给出排名的置信区间或显著性检验。</p>
+<p>类型任务的波动更大：数据集 1 上最高只有 0.177，数据集 3 上达到 0.926。作者归因于器械外观相近；训练集器械分布不均是另一种解释，例如单极弯剪只出现在 2 段训练序列中。论文没有给出逐类出现次数，两种解释无法区分。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>没有任何消融。</strong> 表 VII 只列各队的数据增强选择，不能说明哪项增强导致了好成绩。</li><li><strong>没有覆盖烟雾和严重光照歧义。</strong> 图 13 中 UB 在薄烟帧上整体失效，而它的二值总分与 TUM 只差 0.002。</li><li><strong>只有猪组织和 da Vinci Xi。</strong> 对人体组织、其他平台的泛化无法判断。</li><li>BIT 的异常低分（二值 0.326）、数据集 8 夹钳分数极低，原因论文未说明。</li></ul>
+<figure class="fig"><img src="images/page_012_fig_fig_13_review_repair1.png" alt="Fig 13" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 13。上排是薄烟帧及 UB、TUM 的二值结果，下排是烟雾散去后的下一帧；UB 在烟雾帧上几乎全部漏检。</figcaption></figure></div><div class="card" id="s9"><h3><span class="num">9</span>它在已有数据集中的位置</h3><div class="tbl"><table><thead><tr><th>对象</th><th>标注</th><th>本文相对它的变化</th></tr></thead><tbody><tr><td>2015 EndoVis 子挑战</td><td>正向运动学自动生成</td><td>改为人工标注，扩到 10 段手术，加部件和类型</td></tr><tr><td><code>COCO</code></td><td>人工，328k 张图像</td><td>本文只有 3000 帧</td></tr><tr><td>2018 EndoVis 场景分割</td><td>论文未说明</td><td>2018 年扩展到组织与第三方器械</td></tr></tbody></table></div>
+<p>作者自己也承认，规模小会让排名偏向能过拟合的模型，并计划以后用完全独立的训练集和测试集。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复用时要注意什么</h3><ul><li><strong>可以照抄：</strong> 隐藏测试标签、只允许一次提交；部件任务按轴、腕、夹钳分别报告。</li><li><strong>需要核查：</strong> 自己是否按序列划分，优先只用数据集 9、10 测试；同时报告加权和等权两种均值；写明是否计入背景类。</li><li><strong>应该避免：</strong> 用表中 0.015 这样的小差距排名次；在夹钳细边界上过度优化，因为孔洞没有标注。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>二值器械分割在 da Vinci 猪手术数据上已达到 0.8 以上，类型识别最佳只有 0.542</div><div>总分按帧数加权，名次会因此改变</div><div>一半测试帧与训练帧同序列，复用时要按序列划分</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>人工逐帧标注替代了有偏移的运动学标注</li><li>公开了每支队伍在每段数据上的分数和部件拆分结果</li><li>作者如实列出了标注、规模和设计上的局限</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>只有 3000 帧、10 段猪手术，没有人体数据</li><li>单人标注，夹钳孔洞未标，无一致性统计</li><li>没有方差、显著性检验或消融；正文与表格有数字矛盾</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>部件总分是否计入背景类？</li><li>类型任务的标签列表为何与数据收集部分不一致？</li><li>训练集器械分布不均对类型分数的影响有多大？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 11d62dba</span><span class="s">7.3 分</span></div><p>第 1 轮自评：结构完整，主表、部件拆分表和方法对照表齐全，口径矛盾（正文 0.854 与表 I 0.888）已指出。D2=7：机制流程只讲数据构建，参赛方法与结果之间的对应只在深度分析零散出现。D5=6：与 2015 子挑战、COCO、2018 后续数据集的定位只在研究问题和局限中提到，没有集中对比。D6=7：复用建议有，但未区分照抄/核查/避免。D7=7、D9=6：小节多以事实开头而非问题，部分数字后缺少意义说明，缺少小节间的衔接。H3 未跑数字核对，推导值（0.888 重算、等权 0.756/0.738、0.671、600 帧）尚未登记。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>研究问题开头先交代张力，核心观点速览改为按问题-结论组织</li><li>各节开头补一句本节要回答的问题，数字后补“这意味着什么”</li><li>新增与 2015 EndoVis 子挑战、2018 场景分割数据集和 COCO 的集中定位对比</li><li>把参赛方法与结果模式的对应（预训练编码器、镜面增强、边界后处理）集中写成一张映射表</li><li>复用建议拆成可照抄、需核查、应避免三类</li><li>运行 lint_report --mode note，推导数字写入 number-exceptions</li><li>按 insight pass 结果把 not_stated 缺口写成论文未说明</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 208bd12e · 文稿 77171fa5</span><span class="s">8.5 分</span></div><p>第 2 轮自评（模型自评）：从头按评分表重打。证据链、数字和边界较完整，lint_report 笔记与报告均无未匹配数字，推导值 0.002/0.015/0.671/0.738/0.756/600 已登记来源。新增设计选择与结果映射表、与 2015 EndoVis/COCO/2018 数据集的定位表、照抄/核查/避免三类复用建议；不可修复的限制：论文没有消融、方差和置信区间，映射表只能写相关不能写因果；部件总分口径、类型计分口径、BIT 异常、数据集 8 夹钳低分只能写论文未说明。D2=8 而非更高：本文没有自己的方法，机制流程只能描述数据构建与评测协议。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

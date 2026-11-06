@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "整场景语义分割", "plain": "给画面中每个像素都赋一个类别,解剖、器械、胶带、手都要标,不只标器械。", "where": "sec:introduction", "needed_for": "与 EndoVis 2017/2019 只标器械的数据集比较"},
+  {"term": "超声乳化白内障手术的 14 个阶段", "plain": "文献 [25] 把手术分为切口、粘弹剂注入、撕囊、水分离、乳化、植入晶状体、缝合等 14 步。", "where": "sec:introduction", "needed_for": "理解按阶段抽帧和 Table I"},
+  {"term": "器械尖端与把手分开标注", "plain": "同一器械的工作端和手柄是两个类别,例如 Rycroft 套管与 Rycroft 套管把手。", "where": "sec:introduction", "needed_for": "理解任务三的 25 类和把手类低分"},
+  {"term": "PA / PAC / mIoU", "plain": "PA 是全部像素准确率;PAC 是逐类准确率的平均;mIoU 是逐类交并比的平均,对小类最敏感。", "where": "sec:model-3", "needed_for": "解释 PA 几乎不变而 mIoU 随任务大幅下降"},
+  {"term": "按视频划分", "plain": "一个视频的所有帧只进入训练、验证、测试之一,避免相邻帧泄漏。", "where": "sec:model-3", "needed_for": "解释验证与测试差距"},
+  {"term": "被忽略类别", "plain": "训练时不监督、计算指标时也不计入的类别。", "where": "sec:model-3", "needed_for": "比较不同论文报告的 mIoU 是否同口径"},
+  {"term": "混淆矩阵", "plain": "行和列分别是一种标签来源,格子里是某类像素被判成另一类的比例。", "where": "sec:model-4", "needed_for": "读懂 Fig 6 中撕囊镊与组织镊互判"}
+ ],
+ "detail_questions": [
+  {"question": "标注者间一致性是多少?", "answer": "只描述了一人标注、一人复核、医学官员裁决和程序化轮廓检查,没有一致性数值或复核改动比例。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "任务三的器械 mIoU 按多少类计算?", "answer": "按 Table IX 逐类值验算,UNet 的 52 等于 17 个器械类的平均,未计入 IoU 为 0 的晶状体推注器把手;而全类 mIoU 59.2 计入了它。两个汇总口径不一致,论文未说明原因。", "evidence": ["sec:model-4"], "status": "partly"},
+  {"question": "PAC 公式算的是召回还是精确率?", "answer": "按原文定义 p_ij 是预测为 i、标注为 j,公式分母对 j 求和,即预测为 i 的总像素,是精确率的平均。论文没有说明实现是否与公式一致。", "evidence": ["sec:model-3"], "status": "partly"},
+  {"question": "Fig 6 的行是真值还是预测?", "answer": "图注只写混淆矩阵,没有标注行列含义。每行之和约为 100,结合正文撕囊镊被误判为组织镊,推断行是真值。", "evidence": ["sec:model-4"], "status": "not_stated"},
+  {"question": "17 类器械出现在不到一半视频中是否与 Table II 一致?", "answer": "按 Table II 的出现视频数,少于 12.5 个视频的器械类为 15 类,与正文 17 不符。", "evidence": ["sec:introduction"], "status": "partly"},
+  {"question": "批大小、UNet 初始化、模型选择规则是什么?", "answer": "只给了 GPU、100 个 epoch、学习率和 Adam 参数;批大小、UNet 是否预训练、用哪个 epoch 的权重测试都没有写。", "evidence": ["sec:model-3"], "status": "not_stated"},
+  {"question": "结果有没有重复实验或方差?", "answer": "每个配置只有一个数,没有种子、标准差或显著性检验。", "evidence": ["sec:model-2", "sec:model-3", "sec:model-4"], "status": "not_stated"},
+  {"question": "数据许可和使用条件是什么?", "answer": "只给出挑战赛网址,没有许可条款。", "evidence": ["sec:preamble"], "status": "not_stated"},
+  {"question": "为什么验证集 mIoU 稳定高于测试集?", "answer": "作者归因于三个测试视频的器械类别分布与验证集不同;没有给出按视频的分布对比来验证。", "evidence": ["sec:model-4"], "status": "partly"},
+  {"question": "任务三忽略了哪些类别?", "answer": "规则是不在所有划分出现且出现视频少于 5 个;按 Table II,编号 25 到 35 的 11 类被忽略,晶状体推注器把手只在 4 个视频出现但三个划分都有,因此保留并得到 0。", "evidence": ["sec:model-3", "sec:introduction"], "status": "resolved"},
+  {"question": "四个模型的比较是否公平?", "answer": "参数量 14M 到 66M 不等,预训练来源不同(ImageNet、Pascal VOC、UNet 未说明),DeepLabV3+ 用轻量骨干,比较的是整套配置而非架构本身。", "evidence": ["sec:model", "sec:model-3"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "类别变多后 UPerNet 和 HRNetV2 更好,因为感受野更大、更能分割细节", "alternative": "差距来自参数量和预训练来源不同:UNet 14M 且初始化未说明,HRNetV2 66M 用 ImageNet 权重", "separating_evidence": "固定参数量或统一预训练后的对照,或多次运行的方差", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "器械低分主要由类别不均衡造成", "alternative": "主要由外观相似和测试视频太少造成,例如撕囊镊与组织镊互判", "separating_evidence": "加权损失或重采样对照,以及按视频的测试分布", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "标注质量高,边界准确", "alternative": "单人标注加复核仍有系统性偏差,例如小器械边界被统一画宽或画窄", "separating_evidence": "重复标注的一致性 IoU", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加入 ### 核心观点速览",
+  "关键结果补写任务三器械 mIoU 实际按 17 类、全类 mIoU 计入 0 分类别的口径不一致",
+  "深度分析加入模型比较混杂了参数量和预训练来源的替代解释",
+  "PAC 口径、Fig 6 行列含义、标注一致性、批大小与 UNet 初始化、方差、许可统一写为 论文未说明",
+  "各节开头补问题句,数字后补意义,节末补过渡"
+ ]
+}

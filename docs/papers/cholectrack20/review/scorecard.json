@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "faa51a11e2721b1e29cd5431bfe66ff9ddcad89e5a145d067eb728a5d5096063",
+      "note_snapshot": "review_rounds/round1_CholecTrack20_A_Multi_Perspective_Tracking_Dataset_for_Surgical_Tools.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 6,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.5,
+      "verdict": "模型自评。D5为7：与已有数据集的对比只摘了 Table 1 的三行，没有逐一说明每个数据集缺什么。D6为7：复现注意点只说要做什么，没有说要避免什么。D7为6：章节未编号，Figure 3 与 Table 2 保留占位，核心观点速览后的过渡偏少。D9为6：核心观点速览已有，但关键结果中多处数字后缺少“这说明什么”，部分小节不以问题开头。H3 为 unknown：note 模式有 12 个未匹配数字，均来自 Table 1、Table 3、Figure 4 的表格或图中标签（文本抽取未带出，已打开裁剪图核对），以及原文写作“∼875, 000”的 875,000，尚未登记。摘要翻译段落 418 字，超过简洁性阈值。",
+      "fixes": [
+        "按 insight pass 三轮（知识点、细节问题、挑战）补充笔记，写入所有论文未说明项",
+        "关键结果各小节以要回答的问题开头，数字后补一句含义，小节末加过渡",
+        "对已有数据集逐一说明缺少的视角或属性",
+        "复现注意点增加应避免的做法",
+        "把 Table 1、Table 3、Figure 4 中的数字和 875,000 登记到 number-exceptions 文件并注明来源",
+        "拆分过长的摘要翻译段落"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "2abb8b64914b7885dda3c62a90a4a1794b367458308552c3e272c1ba2ae94f03",
+      "note_snapshot": "review_rounds/round2_CholecTrack20_A_Multi_Perspective_Tracking_Dataset_for_Surgical_Tools.md",
+      "report_sha256": "b05dae12e4c3dff5d8c101486ace78862afda8d3f679cf1f241e36e760c66c8b",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "模型自评。笔记与报告重新从头打分。D7为7：Figure 3 无独立候选、Table 2 被自动视觉质量门拒绝，两处保留占位，Table 2 主要列已改写为表格；Figure 7 判为低优先级未放置。D2、D5、D6、D8、D9 为8：已逐一说明已有数据集缺少的视角与属性，复现注意点补了应避免的做法，关键结果各小节以问题开头并在数字后给出含义。无法从原文补足的限制：跟踪器所用检测器与训练配置、表 3 的 @25 FPS 含义、各划分视频、轨迹 ID 一致性、45% 临床门槛依据，均写为论文未说明。数字核对：note 与 report 模式均无未匹配数字，表格与图中标签及推导值已登记在 number_exceptions.json。",
+      "fixes": []
+    }
+  ]
+}

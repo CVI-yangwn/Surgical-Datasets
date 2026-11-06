@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "140e71b675b31649bd53d6ae7e77a13ebf5d5032dc79fbf11ae7a2fcbb646439",
+  "number_exceptions": {
+    "3.54": "推导值：Zeffiro 测试集 1 平均 3.60 与测试集 2 平均 3.47 的简单均值（表 II、表 III）",
+    "3.75": "推导值：Rosenthal 测试集 1 平均 3.44 与测试集 2 平均 4.05 的简单均值（表 II、表 III）",
+    "0.58": "推导值：测试集 2 上 Rosenthal 4.05 减 Zeffiro 3.47（表 III）",
+    "13": "推导值：10 个比赛期方法加 3 个赛后方法（第 III、IV 节）",
+    "9": "推导值：7 个训练集加 2 个测试集，每个数据集对应一头猪（第 II 节）"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

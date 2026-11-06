@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>CholecTrack20: A Multi-Perspective Tracking Dataset for Surgical Tools</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>同一个器械框标三套身份：手术器械多视角跟踪数据集</h1>
+<div class="sub">CholecTrack20: A Multi-Perspective Tracking Dataset for Surgical Tools</div>
+<div class="meta">Chinedu Innocent Nwoye 等六人；斯特拉斯堡大学 ICube、巴塞尔大学 Clarunis、IHU Strasbourg | arXiv:2312.07352 v2，CVPR 2025 接收</div>
+<div><span class="chip">数据集 / 基准</span><span class="tag">手术器械跟踪</span><span class="tag">多目标跟踪</span><span class="tag">腹腔镜胆囊切除术</span><span class="tag">数据集</span></div>
+<div class="one">CholecTrack20 在 20 台完整腹腔镜胆囊切除术上为每个器械框标出术中、腔内、可见性三套轨迹 ID，现有最好的跟踪器在三个视角下 HOTA 只有 17.4%、27.0% 和 44.7%，难点在身份关联而不是检测。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2312.07352" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cholectrack20/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术器械跟踪的难点不在“找到器械”，而在“认出它还是不是刚才那一把”。</strong> 器械会被遮挡、移出画面、从套管口拔出体外，再插回来；同类器械还可能同时出现。</p>
+<p>已有手术跟踪数据集只采用一种轨迹定义：要么器械离开画面轨迹就结束，要么整台手术一个身份。临床用途却各需要不同的时间尺度：统计器械使用要跨越拔出再插入，评估操作步骤要知道画面外的器械是否还在体内，实时反馈只需要画面内的轨迹。</p>
+<p>在通用数据集上预训练的模型，在出血、烟雾、反光等手术画面里也表现不佳。作者认为需要一个专门的、带上下文标签的手术跟踪数据集。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这篇论文的核心贡献是轨迹定义，而不是模型。</strong> 同一个框带三个 ID，区别只在“轨迹何时结束”。</p>
+<ul><li><strong>数据：</strong> 20 台完整手术，1 FPS 标注，35000 帧、65200 个框。</li><li><strong>标签：</strong> 7 类器械、4 类操作者、8 类视觉挑战、7 个手术阶段，加三套轨迹 ID。</li><li><strong>结果：</strong> 最好的 <code>Bot-SORT</code> 在可见性、腔内、术中视角的 <code>HOTA</code> 分别是 44.7%、27.0%、17.4%。</li><li><strong>边界：</strong> 跟踪器所用检测器和训练配置论文未说明；正文有三处描述与表格矛盾。</li></ul>
+<p>接下来先看三种定义，因为后面所有分数差异都由它决定。</p></div><div class="card" id="s3"><h3><span class="num">3</span>三种轨迹视角</h3><figure class="fig"><img src="images/page_001_fig_figure_1_review_repair1.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。中间部分说明三种视角：可见性只覆盖画面内（FoV），腔内加上画面外但在体内（OOCV），术中再加上体外（OOB）。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>视角</th><th>轨迹何时结束</th><th>真值 ID 数（测试集）</th></tr></thead><tbody><tr><td>可见性</td><td>器械离开画面，两秒内的短暂消失仍算同一条</td><td>916</td></tr><tr><td>腔内</td><td>器械经套管口离开体内，即使不在画面中</td><td>247</td></tr><tr><td>术中</td><td>器械在本台手术中最后一次出现</td><td>70</td></tr></tbody></table></div>
+<p><strong>真值 ID 数从 916 降到 70，意味着定义越长，跟踪器越需要在器械不可见时保持身份。</strong> 腔内轨迹最难标注：器械常在画面外退出，论文规定当同一套管口进入另一件器械，或原器械松开夹持的组织时，推断它已出体。</p>
+<figure class="fig"><img src="images/page_003_fig_figure_2_review_repair1.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。同一把 Hook 和 Clipper 的位置曲线，在三种视角下被切成不同数量的轨迹段。</figcaption></figure>
+<p>定义清楚之后，问题变成：这三套 ID 是怎么标出来的，标得可信吗？</p></div><div class="card" id="s4"><h3><span class="num">4</span>数据怎么来、怎么标</h3><p>原始视频来自 <code>Cholec80</code> 和 <code>CholecT50</code>，在斯特拉斯堡大学医院录制。作者挑选长而清晰、覆盖全部阶段的手术，从 25 FPS 下采样到 1 FPS，并匿名化体外画面。</p>
+<p>标注分四步：四名研究者在器械尖端画框并按套管口判断操作者；同时标注阶段、画面外与体外状态、进出事件和视觉挑战；再结合类别、位置、操作者和交互标签分配三套 ID，不确定处回到 25 FPS 复查；最后做一致性评估和外科医生仲裁。整个过程持续两年。</p>
+<div class="tbl"><table><thead><tr><th>验证</th><th>框重叠（<code>Jaccard</code>）</th><th>器械类别一致性</th><th>操作者一致性</th></tr></thead><tbody><tr><td>组内</td><td>99.4%</td><td>94.6%</td><td>94.0%</td></tr><tr><td>组间（20 个样本）</td><td>91.8%</td><td>95.2%</td><td>92.7%</td></tr></tbody></table></div>
+<p>外科医生仲裁了 758 个不确定样本，修正 133 个。<strong>这些一致性只覆盖框和类别，最关键的轨迹 ID 一致性论文未说明。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">20 台手术，总时长 50581 秒</span><span class="i">35000 帧，65200 个框，2,624 条轨迹</span><span class="i">训练、验证、测试按手术划分，5:1:4</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>数据长什么样</h3><figure class="fig"><img src="images/page_004_fig_figure_4_review_repair1.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。(a) 视觉挑战总时长按划分分布；(b) 器械占比及各视角平均轨迹长度。</figcaption></figure>
+<p><strong>类别极不平衡：</strong> 抓钳 42.7%、电钩 34.8%，两者合计 77.5%；剪刀、施夹器、冲洗器都不到 1%。遮挡是最常见的视觉挑战，累计可达 23,000 秒。抓钳平均每台在体内 27 分 39 秒、重新插入 8.4 次，正是长时重识别问题的来源。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_5_review_repair1.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。器械位置随时间的分布，(a) 按类别着色，(b) 按操作者着色；按操作者着色分区更清楚。</figcaption></figure>
+<p>论文据此指出，不同类别的轨迹大多交织在一起，但操作者与位置强相关，因为套管口位置固定。这一点后面会成为改进方向。</p></div><div class="card" id="s6"><h3><span class="num">6</span>和已有数据集比</h3><div class="tbl"><table><thead><tr><th>数据集</th><th>已有视角</th><th>缺什么</th></tr></thead><tbody><tr><td>四个检测数据集</td><td>无轨迹</td><td>没有身份标签</td></tr><tr><td><code>EndoVis'15</code>、<code>RMIT</code></td><td>可见性</td><td>没有腔内、术中视角</td></tr><tr><td>Fathollahi 等</td><td>术中</td><td>没有可见性、腔内视角</td></tr><tr><td>以上全部</td><td>—</td><td>没有操作者、视觉挑战、阶段标签</td></tr></tbody></table></div>
+<p><code>CholecTrack20</code> 是表中唯一三种视角和三类上下文属性都具备的数据集，帧数 35000 也是表中最多的。</p></div><div class="card" id="s7"><h3><span class="num">7</span>检测：现成方法已经不弱</h3><p>13 个检测器用 <code>pycocotools</code> 评测。<code>YOLOv7</code> 到 <code>YOLOv10</code> 的综合平均精度都在 55.6 到 56.5 之间，比其余模型高十几个点。电钩最容易检测，冲洗器和标本袋最难。</p>
+<p><strong>正文说 <code>YOLOv7</code> 以 56.1 最高、全部类别领先，但表 2 中 <code>YOLOv9</code> 是 56.5。</strong> 电钩、冲洗器、标本袋三类的最高分也分别属于 <code>YOLOv8</code>、<code>YOLOv10</code>、<code>YOLOv9</code>。引用排名应以表格为准。</p>
+<p>检测这层表现尚可，那么跟踪的低分从哪里来？</p></div><div class="card" id="s8"><h3><span class="num">8</span>跟踪：分数低在关联</h3><figure class="fig"><img src="images/page_007_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。三种视角下各跟踪器的完整指标。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>跟踪器</th><th>术中</th><th>腔内</th><th>可见性</th></tr></thead><tbody><tr><td><code>FairMOT</code></td><td>5.8</td><td>7.5</td><td>15.3</td></tr><tr><td><code>OCSORT</code></td><td>14.6</td><td>23.7</td><td>37.0</td></tr><tr><td><code>ByteTrack</code></td><td>15.8</td><td>24.7</td><td>41.5</td></tr><tr><td><code>SMILETrack</code></td><td>15.9</td><td>24.9</td><td>41.3</td></tr><tr><td><code>Bot-SORT</code></td><td>17.4</td><td>27.0</td><td>44.7</td></tr></tbody></table></div>
+<p><strong>同一跟踪器在三个视角下检测分几乎不变，<code>Bot-SORT</code> 都在 70.7 到 70.8；关联分却从 28.7 跌到 10.4 和 4.4。</strong> 三个视角共用同一组检测，差距来自身份关联。</p>
+<p>术中视角真值只有 70 个 ID，<code>Bot-SORT</code> 却预测了 4501 个，说明长时重识别基本失效。</p>
+<p><strong>正文说腔内最难、术中居中，与表 3 相反：每个跟踪器的术中分数都低于腔内。</strong> 从定义看也合理：术中要求器械拔出再插入后接上原 ID，对外观相同的同类器械几乎只能靠上下文判断。</p>
+<figure class="fig"><img src="images/page_008_fig_figure_9_review_repair1.png" alt="Figure 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 9。按八类视觉挑战拆分的跟踪分数。</figcaption></figure>
+<p>按视觉挑战拆分时，跟踪在模糊、反光、覆盖不足下较好，检测却恰好在这几类下最差。论文未解释这一矛盾，所以这部分只能当作描述。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没证明什么</h3><p>同一跟踪器三视角的检测数、ID 数和速度几乎相同，例如 <code>TransTrack</code> 都是 21640 个检测、4079 个 ID。<strong>我的推断是作者用同一份输出对照了三套真值，没有针对视角调整方法。</strong> 所以“低于 45%”只适用于直接套用通用跟踪器的情形。</p>
+<p>表 3 标题写“@ 25 FPS”，而标注是 1 FPS，真值检测数 29994 与 1 FPS 的测试集规模相符。评测帧率和真值扩展方式论文未说明。</p><div class="strip h"><span class="t">亮点</span><span class="i">瓶颈在关联：部分成立，缺一个用真值框输入跟踪器的对照实验</span><span class="i">三视角有临床价值：未经验证，论文没有做任何下游任务</span><span class="i">不足以临床转化：45% 门槛是作者判断，临床所需精度论文未说明</span><span class="i">标注质量高：框和类别成立，轨迹 ID 一致性论文未说明</span></div></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><ul><li>汇报时写明视角，三个视角的数字不能混比，也不要取平均。</li><li>检测用 <code>pycocotools</code>，不要用 <code>ultralytics</code> 自带评测。</li><li>跟踪评测走 <code>TrackEval</code>，确认作者的合并请求是否已合入。</li><li>按视频划分，不要按帧随机划分；各划分具体包含哪些视频论文未说明，需查项目页。</li><li>跟踪器的检测器、训练配置论文未说明，复现表 3 需查代码。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>同一个框、三套 ID，把“轨迹何时结束”变成可控变量，可以单独研究长时重识别。</div><div>现有跟踪器的瓶颈在身份关联，术中视角最难，最好只有 17.4%。</div><div>操作者和套管口位置是最自然的关联先验，数据集已经提供。</div><div>引用时以表格为准，正文有三处描述与表格矛盾。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>第一个同时提供三种轨迹视角的手术跟踪数据集，并带操作者、阶段、视觉挑战标签。</li><li>完整手术视频，长时重识别问题真实存在。</li><li>检测与跟踪基线覆盖广，按类别、挑战、阶段细分。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单一医院、单一术式，泛化未讨论。</li><li>轨迹 ID 一致性、跟踪器设置、评测帧率论文未说明。</li><li>正文与表格在检测排名、视角难度上矛盾。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>用真值框作为输入时，三个视角的关联分是多少？</li><li>利用操作者和阶段标签的方法能把术中视角提高多少？</li><li>三种视角的轨迹用于技能评估等下游任务时，哪种最有用？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 faa51a11</span><span class="s">7.5 分</span></div><p>模型自评。D5为7：与已有数据集的对比只摘了 Table 1 的三行，没有逐一说明每个数据集缺什么。D6为7：复现注意点只说要做什么，没有说要避免什么。D7为6：章节未编号，Figure 3 与 Table 2 保留占位，核心观点速览后的过渡偏少。D9为6：核心观点速览已有，但关键结果中多处数字后缺少“这说明什么”，部分小节不以问题开头。H3 为 unknown：note 模式有 12 个未匹配数字，均来自 Table 1、Table 3、Figure 4 的表格或图中标签（文本抽取未带出，已打开裁剪图核对），以及原文写作“∼875, 000”的 875,000，尚未登记。摘要翻译段落 418 字，超过简洁性阈值。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>6</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮（知识点、细节问题、挑战）补充笔记，写入所有论文未说明项</li><li>关键结果各小节以要回答的问题开头，数字后补一句含义，小节末加过渡</li><li>对已有数据集逐一说明缺少的视角或属性</li><li>复现注意点增加应避免的做法</li><li>把 Table 1、Table 3、Figure 4 中的数字和 875,000 登记到 number-exceptions 文件并注明来源</li><li>拆分过长的摘要翻译段落</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 2abb8b64 · 文稿 b05dae12</span><span class="s">8.3 分</span></div><p>模型自评。笔记与报告重新从头打分。D7为7：Figure 3 无独立候选、Table 2 被自动视觉质量门拒绝，两处保留占位，Table 2 主要列已改写为表格；Figure 7 判为低优先级未放置。D2、D5、D6、D8、D9 为8：已逐一说明已有数据集缺少的视角与属性，复现注意点补了应避免的做法，关键结果各小节以问题开头并在数字后给出含义。无法从原文补足的限制：跟踪器所用检测器与训练配置、表 3 的 @25 FPS 含义、各划分视频、轨迹 ID 一致性、45% 临床门槛依据，均写为论文未说明。数字核对：note 与 report 模式均无未匹配数字，表格与图中标签及推导值已登记在 number_exceptions.json。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

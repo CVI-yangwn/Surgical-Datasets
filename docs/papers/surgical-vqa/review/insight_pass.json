@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "视觉问答", "plain": "输入一张图和一个问题，输出答案的任务。", "where": "sec:introduction", "needed_for": "理解为什么换问题就能从同一帧取出不同信息"},
+  {"term": "VisualBERT", "plain": "在 BERT 编码器里同时输入文本词元和视觉词元的多层 Transformer。", "where": "sec:preliminaries", "needed_for": "理解新版只改了每层的中间层和输出层"},
+  {"term": "跨词元模块", "plain": "把特征转置后沿词元维做线性混合，再转置回来。", "where": "sec:preliminaries", "needed_for": "理解公式 (1) 和序列长度必须固定"},
+  {"term": "自适应平均池化", "plain": "把任意大小的特征图池化到固定的 n×n 网格。", "where": "sec:preliminaries", "needed_for": "理解图块数消融"},
+  {"term": "束搜索", "plain": "生成时每步保留若干条得分最高的候选句子。", "where": "sec:preliminaries", "needed_for": "理解句子式回答的推理方式"},
+  {"term": "BLEU 与 CIDEr", "plain": "按与参考句的 n 元词重合度给生成句打分的指标。", "where": "sec:results", "needed_for": "理解模板句为什么能拿到很高分数"},
+  {"term": "F 值", "plain": "精确率与召回率的调和平均，对少数类答错更敏感。", "where": "sec:results", "needed_for": "理解基线准确率高但 F 值低"}
+ ],
+ "detail_questions": [
+  {"question": "答案是人工写的还是模板生成的？", "answer": "由原数据集的工具、交互、阶段标注生成，没有新增人工标注。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "问题模板的完整清单和每类问题的数量？", "answer": "论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "Cholec80-VQA 的 40 个视频如何分到训练和测试？", "answer": "只说沿用 Cholec80 原划分，视频数论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "新版参数为什么少约 25M？", "answer": "替换了每层的中间层和输出层；分类 159.0M 对 184.2M，句子 184.7M 对 209.8M。逐层拆解论文未说明。", "evidence": ["sec:results", "sec:model-2"], "status": "partly"},
+  {"question": "三折是怎么划分的？", "answer": "论文未说明。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "基线 MedFuse 如何改造成句子生成？", "answer": "论文未说明。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "为什么新版在句子任务上略差？", "answer": "作者推测跨词元模块干扰了解码器所依赖的自注意力输出，没有实验验证。", "evidence": ["sec:model", "sec:model-2"], "status": "partly"},
+  {"question": "时序实验改变了什么？", "answer": "骨干换成 UCF101 预训练的 3D ResNet50，时间长度 3。", "evidence": ["sec:model-2"], "status": "resolved"},
+  {"question": "注意力头数、束宽、序列长度、分词器词表大小？", "answer": "论文未说明。", "evidence": ["sec:preliminaries", "sec:dataset"], "status": "not_stated"},
+  {"question": "句子答案中槽位词的准确率？", "answer": "论文未说明，只报告了整句指标。", "evidence": ["sec:model-2"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "新版编码器在分类上稳定优于原版", "alternative": "差距与随机种子或折间波动同量级，只是噪声", "separating_evidence": "多随机种子的均值与方差，或显著性检验", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "Transformer 模型在句子回答上远超基线", "alternative": "主要是学会了模板句式，基线的句子版本也可能实现得较弱", "separating_evidence": "槽位词准确率，以及基线句子版本的实现细节", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "时序特征降低句子回答表现", "alternative": "下降来自换了骨干和预训练域，而不是多帧输入本身", "separating_evidence": "固定骨干只改变帧数的对照", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览，写明收益主要来自换成 Transformer，新版只带来小幅分类收益和参数节省",
+  "三折小节写明折的划分方式论文未说明，结论改为新版不低于原版",
+  "句子结果后写明槽位准确率论文未说明，以及基线句子版本的实现论文未说明",
+  "时序消融写明骨干与预训练域同时改变，结论未与帧数分离",
+  "数据小节写明问题模板清单和 Cholec80 视频划分论文未说明",
+  "补充相对 ResMLP 原文的定位：只借用跨词元与跨通道结构，保留自注意力"
+ ]
+}

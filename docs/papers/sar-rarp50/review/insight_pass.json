@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "DVC 缝合", "plain": "前列腺离断后缝合背深静脉复合体以控制出血，是本数据集唯一截取的手术步骤。", "where": "sec:dataset", "needed_for": "判断数据覆盖范围与外推边界"},
+  {"term": "帧准确率 FWA", "plain": "分类正确的帧占视频总帧数的比例，不关心片段是否碎裂。", "where": "sec:evaluation", "needed_for": "理解 SummerLab-AI 多任务准确率高而 F1@10 低"},
+  {"term": "分段 F1@10", "plain": "把连续同类帧当作片段，预测片段与同类参考片段 IoU 超过 0.1 即算命中，主要惩罚碎片化与乱序。", "where": "sec:evaluation", "needed_for": "理解逐帧方法与单帧多任务方法得分极低"},
+  {"term": "NSD", "plain": "预测与参考边界中距离对方边界小于阈值的像素比例，比 IoU 更宽容贴边误差。", "where": "sec:evaluation", "needed_for": "理解分割分为何同时用 mIoU 与 mNSD"},
+  {"term": "几何平均评分", "plain": "两个指标相乘后开方，任何一项很低都会把总分拉低。", "where": "sec:evaluation", "needed_for": "理解三个子挑战的排名分数"},
+  {"term": "零件级分割", "plain": "器械按杆、腕、钳口分类而不按器械型号分类，便于跨器械共享语义。", "where": "sec:dataset", "needed_for": "理解针持、施夹器误分的定性失败"},
+  {"term": "测试时增强 TTA", "plain": "推理时对翻转、缩放后的输入分别预测再平均。", "where": "sec:approaches", "needed_for": "理解作者关于 TTA 优于集成的判断"},
+  {"term": "逐视频排名稳定性", "plain": "每段测试视频单独打分、单独排名，再对名次取平均，检验总榜是否被个别视频左右。", "where": "sec:evaluation", "needed_for": "理解分割第二、第三名对调"}
+ ],
+ "detail_questions": [
+  {"question": "训练与测试如何划分？", "answer": "40 例手术 12998 帧训练，另 10 例 3252 帧测试，作者称按标签分布相近来分配。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "NSD 的距离阈值 τ 取多少？", "answer": "论文只说按 Seidlitz 等人实现并过滤大于 τ 的距离，未给出 τ 的数值。", "evidence": ["sec:evaluation"], "status": "not_stated"},
+  {"question": "动作标注是否有多人一致性检验？", "answer": "由一名研究者标注，理由是临床与非临床解读无分歧；没有一致性数据。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "分割标注的质量控制有哪些？", "answer": "外包团队在临床人员监督下标注，再由两名研究者复核修正；没有一致性指标。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "NSD 公式是否印刷正确？", "answer": "公式（11）分母写成两个 ΔTarget，与文字定义的预测集加参考集不一致，应为排版错误。", "evidence": ["sec:evaluation"], "status": "resolved"},
+  {"question": "HiLab-2022 的分割架构是什么？", "answer": "方法节写为 Swin Transformer 与 SegFormer 集成，讨论节却写为 Swin Transformer 加 UpperNet，论文前后不一致。", "evidence": ["sec:dataset", "sec:approaches"], "status": "partly"},
+  {"question": "挑战赛属于哪一届 EndoVis？", "answer": "摘要写 EndoVis 2022，结论节写 Endovis2023，前后不一致。", "evidence": ["sec:preamble", "sec:conclusions"], "status": "resolved"},
+  {"question": "多任务方案如何处理 10Hz 与 1Hz 的采样差？", "answer": "Uniandes 按各自频率分别优化；AIA-Noobs 复制前一帧分割补到 10Hz；SummerLab-AI 与 Team SK 把动作标签降到 1Hz。", "evidence": ["sec:approaches"], "status": "resolved"},
+  {"question": "前三名分割差距是否显著？", "answer": "最终分 0.847、0.840、0.839，论文只给逐视频排名平均，没有置信区间或显著性检验。", "evidence": ["sec:approaches"], "status": "not_stated"},
+  {"question": "测试集标签与数据许可是否公开？", "answer": "论文只给出 UCL 数据仓库链接，许可条款与测试标签发布情况未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "哪些视频最难，为什么？", "answer": "视频 46 由低年资住院医生完成，出血、镜头运动、助手干预更多，得分最低；视频 44 由资深顾问完成，得分最高。", "evidence": ["sec:approaches"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "两阶段注意力模型在动作识别上最好", "alternative": "前几名都在大规模视频数据上预训练，并用了平滑损失或窗口滤波后处理，差距可能来自预训练和后处理而非架构。", "separating_evidence": "同一队伍在相同预训练与后处理下替换时序模块的受控消融。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "TTA 比网络集成更有效", "alternative": "AIA-Noobs 与 NCC-Next 的训练分辨率、损失、数据划分都不同，排名差可能与 TTA 无关。", "separating_evidence": "同一模型开关 TTA、同一组模型做或不做集成的对比。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "手术器械数据预训练是 Uniandes 分割第一的重要原因", "alternative": "Mask2Former 的掩码分类结构或更高输入分辨率也可能带来优势。", "separating_evidence": "Uniandes 去掉 EndoVis 2017/2018 微调后的分数。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "多任务是否优于单任务仍无定论", "alternative": "这一结论本身成立；但挑战未要求同架构单任务对照，也是答案缺失的原因。", "separating_evidence": "多支队伍同架构单任务与多任务的成对提交。", "in_paper": true, "verdict": "supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加核心观点速览",
+  "在局限中写明 NSD 阈值、标注一致性、测试标签与许可、显著性检验均为论文未说明",
+  "补充论文自身的三处不一致：NSD 公式分母、HiLab-2022 架构描述、EndoVis 届次",
+  "把架构、TTA、预训练三条判断明确标为作者基于跨队比较的观察，并在深度分析中写出替代解释",
+  "说明 SummerLab-AI 多任务准确率高而 F1@10 低反映片段碎裂"
+ ]
+}

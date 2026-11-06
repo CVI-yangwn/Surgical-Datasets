@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "c8442ffe04c33990b71933beeb9f3992ee0e4b74036269e1ee7c1da6e26f76c6",
+      "note_snapshot": "review_rounds/round1_EndoNet_A_Deep_Architecture_for_Recognition_Tasks_on_Laparoscopic_Videos.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮自评：证据链、机制和数字齐全，表 II 到表 VII 均已转录。D4 7：边界分散在深度分析和局限两节，没有逐条对应中心主张。D5 7：与 Blum、Lalys、Klank 的定位只在研究问题里一句带过，没有说清各自新在哪里。D6 7：复用建议偏笼统。D7 7：缺少核心观点速览，Fig. 7 占位放在方法主线而非原计划的深度分析。D9 6：多数小节直接摆数字，开头没有交代问题，结尾没有过渡。H3 未跑数字核对，记为 unknown。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "按叙事顺序重写各节开头，先交代该节要回答的问题",
+        "数字后补一句含义，尤其是 HHMM 贡献与多任务收益的大小对比",
+        "把每个中心主张的不能证明之处逐条写清",
+        "补 insight pass 的细节问答与挑战轮修订，原文没有的写论文未说明",
+        "运行 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "b395ea636faceb517a05376f2b1794dd595e99cb8ca29c0d0b6209ff6ad41280",
+      "note_snapshot": "review_rounds/round2_EndoNet_A_Deep_Architecture_for_Recognition_Tasks_on_Laparoscopic_Videos.md",
+      "report_sha256": "061fe47cc1c52e13cdb31b3e59295c6dc14197123f7caf2c47c45dbebbaa7863",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.4,
+      "verdict": "第 2 轮自评（模型自评）：加入核心观点速览，各节开头先给问题；主张边界逐条写明（多任务与 fc8 拼接未分离、无显著性检验、EndoVis 重训分类器、单中心）；数字核对在笔记和报告上均无未匹配项，图内数字与推导值登记在 number_exceptions.json。D5 7：与前作的定位只能依据论文相关工作的简述，论文没有在同一协议下复现 Blum、Lalys 的方法，无法补强。D2 8：HHMM 底层状态数和训练细节论文只引用前作，无法展开。保留 Fig. 5、Fig. 7、Fig. 10 三个占位（前两个裁剪混入相邻内容，Fig. 10 无图像候选，数值已转录为表格）。",
+      "fixes": []
+    }
+  ]
+}

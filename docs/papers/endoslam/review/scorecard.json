@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "6ff06afd2d36af249e911a400975100bbf00245b0a58f93430cafe4540c6f7a0",
+      "note_snapshot": "review_rounds/round1_EndoSLAM_Dataset_and_An_Unsupervised_Monocular_Visual_Odometry_and_Depth_Estimation_Approach_for_Endoscopic_Videos_Endo_SfMLearner.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.5,
+      "verdict": "第1轮自评：证据链、机制和数字齐全，Table 2 有逐单元复核。D5 低于8：只与 Table 1 和 EndoAbS 做了定位，未说明与 Hamlyn 视差数据、SC-SfMLearner 以外的内镜自监督方法的差别。D6/D7 低于8：复用建议偏散，缺核心观点速览导航。D8 为7：仍有部分英文缩写首次出现未解释（ATE、RPE）。D9 为6：多数小节直接罗列，数字后缺“所以呢”，章节之间缺过渡。H3 未跑数字核对，记为 unknown。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各小节开头先写该节要回答的问题，数字后补一句含义",
+        "首次出现时解释 ATE、RPE、ESAB 等缩写",
+        "把 insight pass 的挑战结论写入深度分析与局限",
+        "用 lint_report --mode note 做数字核对并登记推导值",
+        "补充与 Hamlyn 立体数据和 Mahmood 等合成域方法的定位对比"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "fcd4f6ddcce64579ac1a70e8668045e115c0dfad00cd9c8e4f90aa64dad2daed",
+      "note_snapshot": "review_rounds/round2_EndoSLAM_Dataset_and_An_Unsupervised_Monocular_Visual_Odometry_and_Depth_Estimation_Approach_for_Endoscopic_Videos_Endo_SfMLearner.md",
+      "report_sha256": "4b6790abaf07d2287275ba3811e84658913132da362247774dc10e752f35f5ac",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第2轮自评（模型自评）：按 insight pass 加入核心观点速览、各节开头的问题与结尾过渡、ATE/RPE 首次释义、同名轨迹长度不同、论文未说明项（损失权重、仿射参数来源、深度 RMSE 单位、测试帧与训练帧是否重叠、位姿真值综合误差）、合成域泛化的边界和 PillCam 未被使用；补充了与 Hamlyn 和 Mahmood 等合成域方法的定位。数字核对通过，图 5、图 6 嵌入图表中的数字因 PDF 文本层缺失登记在 number exceptions 中并注明出处。无法修复的限制：论文本身是单次训练、无方差，相关结论只能写成部分支持；表 2 原图因裁剪质量门被拒，只能用 Markdown 表转写。",
+      "fixes": []
+    }
+  ]
+}

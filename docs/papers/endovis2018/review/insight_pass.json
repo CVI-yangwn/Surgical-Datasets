@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "IoU 交并比", "plain": "预测与真值重叠像素占二者并集的比例,TP/(TP+FP+FN)。", "where": "sec:results", "needed_for": "读懂表 I 至表 V 的全部分数"},
+  {"term": "逐帧 mIoU", "plain": "每帧只对出现的类别取平均,类别都不出现的帧剔除,再对帧平均。", "where": "sec:results", "needed_for": "理解稀有类分数只反映其出现帧"},
+  {"term": "covered kidney 被覆盖肾脏", "plain": "肾筋膜与肾周脂肪及其下肾脏合并成的一个标签。", "where": "sec:data", "needed_for": "解释测试集 2、4 的低分和与背景的混淆"},
+  {"term": "器械三部件", "plain": "da Vinci 器械按杆部 shaft、腕部 wrist、钳口 clasper 拆分,沿用 2017 年划分。", "where": "sec:data", "needed_for": "比较器械类与解剖类难度"},
+  {"term": "双目与标定", "plain": "每帧有左右两张 1280×1024 图像及出厂内外参,但只标左目。", "where": "sec:data", "needed_for": "判断双目方法能否参与以及标签覆盖范围"},
+  {"term": "DeepLab V3+", "plain": "带空洞卷积和解码器的分割网络,本次多支前列队伍的骨干。", "where": "sec:data", "needed_for": "理解 OTH、Digital Surgery、IRCAD 的方法共性"},
+  {"term": "留一交叉验证", "plain": "每次留出一段训练序列做验证,其余训练。", "where": "sec:data", "needed_for": "理解 OTH 的训练流程"}
+ ],
+ "detail_questions": [
+  {"question": "四个测试集各有多少帧,总分如何加权", "answer": "论文说按数据集大小加权,但测试集帧数论文未说明;按表核对,表 V 等于四段的等权平均。", "evidence": ["sec:results", "sec:data"], "status": "partly"},
+  {"question": "类别出现在帧中按真值还是预测判断", "answer": "论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "吸引冲洗器为何没有出现在任何结果表中", "answer": "论文未说明;类别定义列出了它,但表 I 至表 V 都没有该列。", "evidence": ["sec:data", "sec:results"], "status": "not_stated"},
+  {"question": "Fan Voyage 与 UNC 用的是什么方法", "answer": "论文未说明;第三节没有这两队的条目。", "evidence": [], "status": "not_stated"},
+  {"question": "NCT 1 与 NCT 2 分别对应方法 2 还是方法 8", "answer": "论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "训练集中各类像素占比和出现帧数", "answer": "论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "标注者间一致性如何", "answer": "论文未说明;只提到兽医质控。", "evidence": ["sec:data"], "status": "partly"},
+  {"question": "为什么测试集 4 肾实质平均只有 0.091", "answer": "作者解释为大部分肾表面被覆盖;该段先是远景,下方大量小肠,再用超声探头扫肾和肝。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "测试集 3 的正文与表 III 是否一致", "answer": "不一致:正文说分数差且肾被严重覆盖,表 III 平均 Overall 0.658 为四段最高,且没有 covered kidney 列。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "表的加粗与图注是否和数字一致", "answer": "不一致:表 I 中 NCT 2 实际赢 3 类;表 III 的杆部、肾实质、小肠加粗都不是最高值。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "OTH 的 2017 预训练贡献多少", "answer": "论文未说明,没有消融。", "evidence": [], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "缝针等细小类别难,是因为目标细小", "alternative": "这些类别在训练集中太少,或缝针标注本身不稳定", "separating_evidence": "训练集类别像素占比、标注一致性、按目标尺寸分组的 IoU", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "covered kidney 低分来自标签定义歧义", "alternative": "模型容量或训练策略不足,换更强模型就能解决", "separating_evidence": "标注者间一致性或人类重标的 IoU 上限", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "OTH Regensburg 方法总体最好", "alternative": "0.621 对 0.607 的差距在测试集抽样噪声之内", "separating_evidence": "逐帧分数的置信区间或排名稳定性分析", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "测试集 4 难是因为肾被覆盖", "alternative": "远景、超声探头遮挡和肝区背景占比高共同拉低分数", "separating_evidence": "按帧场景分段的分数", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "核心观点速览改为先给一句答案,再列数据、类别、结果、边界",
+  "各小节开头加一句该节回答的问题,关键数字后补含义",
+  "类别统一用中文名,首次出现时给英文原名",
+  "评测协议一节写明出现类别判据、测试集帧数论文未说明,并写出对稀有类的影响",
+  "关键结果补写 OTH 与 UNC 的差距没有显著性检验",
+  "局限与我的笔记中列出吸引冲洗器、Fan Voyage、UNC、NCT 对应、类别分布五个论文未说明之处",
+  "定位部分加上与 2017 挑战结果的数字对比"
+ ]
+}

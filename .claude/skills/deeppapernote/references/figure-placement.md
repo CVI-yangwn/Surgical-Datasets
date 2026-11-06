@@ -77,7 +77,17 @@ Every selected candidate begins as `review_pending`. Review it after the synthes
 1. Open the exact candidate crop and its complete source page preview.
 2. Compare them with the matched Figure/Table identity and external caption.
 3. Confirm that the crop is a Visual-Body Crop: the complete scientific visual is present, all internal labels remain readable, and the external caption and surrounding paper prose are absent.
-4. Record the review in that candidate's existing decision entry using the generated `writing_contract.figure_table_contract.visual_review` fields and values.
+4. Record the review with the script, never by editing the JSON by hand:
+
+```bash
+python3 scripts/plan_figure_table_decisions.py --review-decisions <figure_table_decisions.json> \
+  --record-review "Figure 3" --status pass --preserved '["axes", "legend"]' --notes "<what you checked>" \
+  --output <figure_table_decisions.json>
+```
+
+`--status pass` sets the decision to `insert`; `fail` (with a terminal `--failure-reason`) sets `visual_defect`; `repair_requested` (with a repairable `--failure-reason` and `--revised-bbox`) leaves it pending for a Bounded Crop Repair. The script binds the review to the asset's current SHA-256, checks it against the visual review contract, and refreshes the summary counts.
+
+Before reviewing, read each item's `auto_warnings`. `same_crop_as:`, `crop_overlaps:` and `crop_page_..._not_caption_page_...` mean the crop probably belongs to another Figure/Table; confirm identity against the page preview before passing it.
 
 A passing review is valid only for the decision entry's current asset SHA-256. Any asset change returns the item to `review_pending`. Complete the Figure/Table Decision Freeze before planning or drafting; grounding must reject an unresolved or stale review.
 

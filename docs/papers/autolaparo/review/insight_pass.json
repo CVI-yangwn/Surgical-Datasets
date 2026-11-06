@@ -1,0 +1,37 @@
+{
+ "knowledge_points": [
+  {"term": "手术工作流识别", "plain": "给视频每一帧判定它处在手术的哪个阶段。", "where": "sec:introduction", "needed_for": "任务 1 与表 3"},
+  {"term": "视野控制", "plain": "决定腹腔镜往哪里移动、推近还是拉远，传统上由扶镜助手完成。", "where": "sec:introduction", "needed_for": "任务 2 的动机"},
+  {"term": "运动开始时刻 T", "plain": "镜头开始移动的时刻，片段内固定在第 5 秒，只能用它之前的画面预测。", "where": "sec:introduction", "needed_for": "任务 2 的输入输出定义"},
+  {"term": "把手与杆部", "plain": "器械头部可动的操作端和细长的杆身分开标注，四种器械因此变成 8 类。", "where": "sec:introduction", "needed_for": "9 类分割与表 2"},
+  {"term": "Jaccard", "plain": "预测集合与真值集合的交集除以并集，比准确率更苛刻。", "where": "sec:method", "needed_for": "表 3 的 JA 列"},
+  {"term": "COCO AP", "plain": "在 IoU 阈值 0.5 到 0.95 的 10 个值上平均的检测或分割精度。", "where": "sec:method-3", "needed_for": "表 5"},
+  {"term": "多数类基线", "plain": "总是预测出现最多的类别得到的准确率，用来判断模型是否学到了东西。", "where": "sec:method-2", "needed_for": "解读表 4 的 26% 到 30%"}
+ ],
+ "detail_questions": [
+  {"question": "工作流划分是多少个视频？", "answer": "训练 10、验证 4、测试 7。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "运动和分割子集按什么划分训练、验证、测试？", "answer": "只给出各集合的片段数和标注数，划分依据和是否按视频隔离论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "运动预测为何降采样到 3 fps、取 16 帧？", "answer": "论文说是为了从连续帧中获取丰富信息，5 秒内 3 fps 含首末帧共 16 帧；为何选 3 fps 而非其他值没有对比。", "evidence": ["sec:method"], "status": "partly"},
+  {"question": "运动预测准确率是否超过多数类基线？", "answer": "多数类基线论文未说明。按表 1 测试集最多的是下（16 个），验证集最多的是推近（15 个），基线只比它们多 1 到 4 个片段。", "evidence": [], "status": "not_stated"},
+  {"question": "两位标注者的一致性如何？", "answer": "只说结果经过校对和交叉核查，一致性指标论文未说明。", "evidence": [], "status": "not_stated"},
+  {"question": "表 2 验证集合计为何是 1127？", "answer": "各类之和为 1177，且 3501+1177+1258 才等于 5936，合计行应为笔误。", "evidence": ["sec:introduction"], "status": "partly"},
+  {"question": "基线的训练超参数和预训练是什么？", "answer": "论文未说明任何超参数或预训练设置。", "evidence": [], "status": "not_stated"},
+  {"question": "分割结果为什么只报告测试集？", "answer": "正文只说结果在测试集上，没有解释，验证集结果论文未说明。", "evidence": ["sec:method-3"], "status": "partly"},
+  {"question": "运动片段从哪些阶段选出？", "answer": "从阶段 2 到 4 中选出 300 个 10 秒片段。", "evidence": ["sec:introduction"], "status": "resolved"},
+  {"question": "表 2 合计行的平均像素 2073600 是什么？", "answer": "等于 1920×1080，是整帧像素数，不是各类平均。论文没有解释该格。", "evidence": ["sec:introduction"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "三项任务高度相关，可支持多任务学习并提升感知", "alternative": "嵌套采样只是让标注在时间上对齐，并不意味着加入另一任务的标签会提升效果。", "separating_evidence": "把阶段标签或分割掩码加入运动预测输入的对照实验。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "ResNet-50+LSTM 因学习了时序模式而更好", "alternative": "73 个测试片段上差 1 个片段，可能只是随机波动。", "separating_evidence": "多次运行的方差或显著性检验。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "工作流识别结果令人满意，可用于在线识别", "alternative": "准确率被时长长的阶段主导，短阶段可能识别很差。", "separating_evidence": "逐阶段 JA 或混淆矩阵，以及在线延迟。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "AutoLaparo 是大规模数据集", "alternative": "21 例、单中心，与已有腹腔镜数据集相比规模普通。", "separating_evidence": "与其他数据集的病例数与时长对比表。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览",
+  "关键结果中把运动预测与多数类对照写成表格，并标出基线学到的规律有限",
+  "核心说法表中把多任务、LSTM 提升、大规模三项写为未区分",
+  "把划分依据、一致性、超参数、多数类基线、验证集分割结果统一写成论文未说明",
+  "首次出现处定义 Jaccard、COCO AP、多数类基线、运动开始时刻",
+  "补写与已有数据集的逐项定位"
+ ]
+}

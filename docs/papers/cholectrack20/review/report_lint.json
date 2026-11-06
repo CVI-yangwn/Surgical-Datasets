@@ -1,0 +1,31 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "b05dae12e4c3dff5d8c101486ace78862afda8d3f679cf1f241e36e760c66c8b",
+  "number_exceptions": {
+    "1171": "Table 1 RMIT 行 Tool Boxes 列（PDF 第5页表格，文本抽取未带出数值，已打开 Table 1 裁剪图核对）",
+    "13500": "Table 1 EndoVis'15 行 Frame Count 列（PDF 第5页）",
+    "1500": "Table 1 RMIT 行 Frame Count 列（PDF 第5页）",
+    "2700": "Table 1 Fathollahi 等行 Total Duration 与 Frame Count 列（PDF 第5页）",
+    "6471": "Table 1 Cholec80-locations 行 Tool Boxes 列（PDF 第5页）",
+    "50581": "Table 1 CholecTrack20 行 Total Duration (s) 列（PDF 第5页）",
+    "21640": "Table 3 TransTrack 各视角 #Dets 列（PDF 第7页表格，已打开 Table 3 裁剪图核对）",
+    "4079": "Table 3 TransTrack 各视角 #IDs 列（PDF 第7页）",
+    "4501": "Table 3 Bot-SORT 术中视角 #IDs 列（PDF 第7页）",
+    "5761": "Table 3 SMILETrack 术中视角 #IDs 列（PDF 第7页）",
+    "34.8": "Figure 4(b) 环形图内环 Hook 占比标签（PDF 第4页，已打开 Figure 4 裁剪图核对）",
+    "875,000": "原文写作 ∼875, 000（第4页 3.6 节，PDF 文本抽取在逗号后多一个空格）",
+    "77.5": "推导值：Figure 4(b) 抓钳 42.7% + 电钩 34.8%",
+    "10": "推导值：5:1:4 划分按 20 个视频换算的训练集视频数（亦用于 Table 1 框数约十倍的说法）",
+    "8": "推导值：5:1:4 划分按 20 个视频换算的测试集视频数"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

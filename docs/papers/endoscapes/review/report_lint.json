@@ -1,0 +1,24 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "72c46e7b285123d412df2f4a3ac88c51bf6e9e8dd3591e983b94cd54aabde42f",
+  "number_exceptions": {
+    "10.1038": "DOI 前缀,来自元数据 doi 10.1038/s41597-025-04642-4,不在 PDF 正文",
+    "04642": "DOI 片段,来自元数据 doi 10.1038/s41597-025-04642-4",
+    "025": "DOI 片段 s41597-025-04642-4,来自元数据",
+    "2025": "发表渠道 Sci Data 12, 331 (2025),来自元数据 venue 字段",
+    "331": "发表渠道 Sci Data 12, 331 (2025),来自元数据 venue 字段",
+    "15.1": "推导值:Table 7 BBox201 设置下 LG-CVS 平均 mAP 63.3 减 LayoutCVS 48.2",
+    "5.7": "推导值:Table 6 Mask-RCNN 掩码 mAP Seg201 28.6 减 Seg50 22.9;同节 4.4 为 Cascade-Mask-RCNN 30.0 减 25.6",
+    "4.4": "推导值:Table 6 Cascade-Mask-RCNN 掩码 mAP Seg201 30.0 减 Seg50 25.6"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

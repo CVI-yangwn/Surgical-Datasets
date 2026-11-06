@@ -1,0 +1,29 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "638a241571ca0d5f952e72f5fa3db2de7f1d0d6cdfe4428cb18e992e7c4e2866",
+  "number_exceptions": {
+    "29.393": "图3(a) 柱状图标签（PDF 第3页），文本抽取未带出，已看页面预览核对",
+    "29.46": "图3(a) 柱状图标签（PDF 第3页）",
+    "20.23": "图3(a) 柱状图标签（PDF 第3页）",
+    "8.893": "图3(a) 柱状图标签（PDF 第3页）",
+    "3.125": "图3(a) 柱状图标签（PDF 第3页）",
+    "2.557": "图3(a) 柱状图标签（PDF 第3页）",
+    "3.317": "图3(b) 柱状图标签（PDF 第3页）",
+    "1.824": "图3(b) 柱状图标签（PDF 第3页）",
+    "0.573": "图3(b) 柱状图标签（PDF 第3页）",
+    "0.561": "图3(b) 柱状图标签（PDF 第3页）",
+    "0.05": "图3(b) 柱状图标签（PDF 第3页）",
+    "0.018": "图3(b) 柱状图标签（PDF 第3页）",
+    "3.2": "推导值：每目录 80 帧 ÷ Cholec80 帧率 25 fps = 3.2 秒"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

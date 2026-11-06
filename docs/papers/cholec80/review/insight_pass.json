@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "手术阶段识别", "plain": "给手术视频的每一帧标上它属于手术流程的哪一步。", "where": "sec:introduction", "needed_for": "全部阶段识别结果"},
+  {"term": "器械存在检测", "plain": "只判断画面里有哪些器械，不要求框出位置。", "where": "sec:introduction", "needed_for": "表 II 与多任务设计"},
+  {"term": "迁移学习微调", "plain": "从 ImageNet 训练好的 AlexNet 出发，在手术图像上继续训练。", "where": "sec:related-work", "needed_for": "AlexNet 与 PhaseNet 的差距解释"},
+  {"term": "两级 HHMM", "plain": "顶层状态是阶段、底层状态刻画阶段内部变化的隐马尔可夫模型，用来让逐帧结果符合手术顺序。", "where": "sec:methodology", "needed_for": "HHMM 前后差距与 P5/P6 跳变"},
+  {"term": "离线与在线", "plain": "离线可看整段视频并用 Viterbi 求最优路径，在线只能用到当前帧为止的信息、用前向算法。", "where": "sec:methodology", "needed_for": "表 IV 两列的差距"},
+  {"term": "平均精度 AP", "plain": "精确率-召回率曲线下面积，衡量单个器械的检测质量。", "where": "sec:evaluation-3", "needed_for": "表 II"},
+  {"term": "fc8 特征", "plain": "fc7 的 4096 维加 fc_tool 的 7 维器械置信度拼成的 4103 维向量。", "where": "sec:methodology", "needed_for": "EndoNet 与 PhaseNet 的比较是否公平"},
+  {"term": "EndoNet-GTbin", "plain": "把 fc8 中的自动器械置信度换成真值器械标签的对照特征。", "where": "sec:evaluation-2", "needed_for": "自动器械信号是否足够的结论"}
+ ],
+ "detail_questions": [
+  {"question": "Cholec80 的视频来自几家医院、几位医生？", "answer": "一家医院（斯特拉斯堡大学医院），13 名外科医生。", "evidence": ["sec:methodology", "sec:results"], "status": "resolved"},
+  {"question": "阶段由谁标注、有没有标注一致性？", "answer": "阶段由一名资深外科医生定义；标注者人数、一致性和标注工具论文未说明。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "评估子集 4 折交叉验证的具体分组是什么？", "answer": "只说做 4 折交叉验证并取 5 次平均，具体视频分组论文未说明。", "evidence": ["sec:evaluation-2"], "status": "not_stated"},
+  {"question": "为什么不直接用 fc_phase 而要接 SVM？", "answer": "为了与其他特征公平比较，并能在阶段定义不同的 EndoVis 上评估；初步实验中两者差别很小。", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "损失权重 a、b 为什么都取 1？", "answer": "初步实验中改变权重没有提升，未给出具体数值。", "evidence": ["sec:methodology"], "status": "partly"},
+  {"question": "图 10 的准确率是 HHMM 前还是后？", "answer": "论文未明说；40 个视频处 75.2 与表 III 一致，推断为 HHMM 前。", "evidence": ["sec:results"], "status": "partly"},
+  {"question": "HHMM 底层状态数如何确定？", "answer": "只说由数据决定并引用前作 [31]，具体方法论文未说明。", "evidence": ["sec:evaluation-2"], "status": "not_stated"},
+  {"question": "EndoNet 比 PhaseNet 好，是多任务损失的作用还是 fc8 多拼了 7 维？", "answer": "EndoNet 用 fc8、PhaseNet 用 fc7，两因素没有分开做消融，论文未说明。", "evidence": ["sec:evaluation-2", "sec:results"], "status": "not_stated"},
+  {"question": "应用实验（表 VI、VII）是多次平均吗？", "answer": "不是，来自生成图 9 的同一次随机运行。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "多任务收益有显著性检验吗？", "answer": "没有，只报均值和标准差。", "evidence": ["sec:results"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "多任务训练得到更有区分力的阶段特征", "alternative": "收益来自 fc8 多出的 7 维器械置信度，而不是多任务损失改善了主干表征", "separating_evidence": "用 EndoNet 的 fc7 单独做阶段识别，或给 PhaseNet 的 fc7 拼接 ToolNet 输出", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "EndoNet 特征可泛化到其他数据集", "alternative": "EndoVis 仍是同术式且只有 7 个视频，且 SVM 和 HHMM 在目标域重训，泛化的只是特征而不是系统", "separating_evidence": "在多中心或其他术式上冻结整个系统测试", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "画面中有超出器械存在的阶段信息，EndoNet 已学到", "alternative": "人工器械信号表现差可能部分因为它用一个高斯建模二值输入，时序模型对它不友好", "separating_evidence": "HHMM 前比较也成立：二值器械 48.2 对 EndoNet 75.2", "in_paper": true, "verdict": "supported"},
+  {"claim": "二值标签足以训练器械存在检测", "alternative": "网络优势只来自更多训练图像", "separating_evidence": "同样 10 个视频训练时网络 62.0 与 65.9 仍高于 DPM 58.4", "in_paper": true, "verdict": "supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览，明确 HHMM 贡献约 17 个百分点而多任务约 2 到 3 个百分点",
+  "深度分析写明多任务损失与 fc8 拼接两个因素未被分开，论文未说明",
+  "复现注意点写明 4 折分组、HHMM 底层状态数、标注一致性论文未说明",
+  "关键结果写明图 10 准确率口径论文未说明，按表 III 推断为 HHMM 前",
+  "局限写明多任务收益无显著性检验",
+  "泛化结论限定为特征可迁移、分类器与时序模型在目标域重训"
+ ]
+}

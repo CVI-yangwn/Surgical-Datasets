@@ -1,0 +1,169 @@
+{
+  "knowledge_points": [
+    {
+      "term": "CVS 三准则",
+      "plain": "C1 两结构、C2 肝胆三角清理、C3 胆囊板,按 [5] 形式化为三个图像级二值标签;论文没有展开临床含义。",
+      "where": "sec:dataset",
+      "needed_for": "理解 CVS 预测是三标签分类"
+    },
+    {
+      "term": "CVS 可评估区间",
+      "plain": "解剖阶段内从任一准则可评估开始、到第一次上夹结束的片段,只在这里按 1fps 抽帧。",
+      "where": "sec:introduction",
+      "needed_for": "理解 58813 帧的来源和无选择偏差的说法"
+    },
+    {
+      "term": "帧级与视频级达成",
+      "plain": "帧级总体要求同一帧三项同时达成,视频级只要求每项在某一帧达成过。",
+      "where": "sec:model",
+      "needed_for": "解释 Table 4 两组比率的巨大差距"
+    },
+    {
+      "term": "Cohen's kappa",
+      "plain": "扣除偶然一致后的两人一致度,这里对三对标注者取平均。",
+      "where": "sec:dataset",
+      "needed_for": "判断标签噪声和模型上限"
+    },
+    {
+      "term": "bAcc",
+      "plain": "平衡准确率,正负类召回率的平均;按定义,全零分类器在每个准则上只能拿到一半。",
+      "where": "sec:model-2",
+      "needed_for": "理解为什么不用准确率"
+    },
+    {
+      "term": "Seg50 与 Seg201",
+      "plain": "Seg201 是 1933 帧掩码的完整私有版,Seg50 是公开的 50 个视频子集。",
+      "where": "sec:dataset",
+      "needed_for": "理解天花板结果为何无法复现"
+    },
+    {
+      "term": "潜在图(LG-CVS)",
+      "plain": "以检测到的对象为节点、对象关系为边构造图,再用图预测 CVS。",
+      "where": "sec:model-2",
+      "needed_for": "解释 Table 7 中图方法领先"
+    }
+  ],
+  "detail_questions": [
+    {
+      "question": "kappa 是在哪些帧上计算的?",
+      "answer": "论文只说先算每对标注者再平均,没有说明是全部 11090 帧还是某个子集。",
+      "evidence": [
+        "sec:dataset"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "Seg50 的掩码帧数是 422 还是 493?",
+      "answer": "摘要和 Fig. 3 写 422,正文和 Table 1 写 493(343/76/74),论文没有解释。",
+      "evidence": [
+        "sec:preamble",
+        "sec:dataset"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "边界框怎么来的?",
+      "answer": "从 1933 帧分割掩码自动导出。",
+      "evidence": [
+        "sec:introduction"
+      ],
+      "status": "resolved"
+    },
+    {
+      "question": "划分如何保证可比?",
+      "answer": "以视频级 CVS 达成分层随机抽样,按视频切分,并与 [1,9,8,2] 共用。",
+      "evidence": [
+        "sec:dataset"
+      ],
+      "status": "resolved"
+    },
+    {
+      "question": "测试集帧级达成率为何高于训练集?",
+      "answer": "论文只按视频级分层,没有讨论帧级分布差异。",
+      "evidence": [
+        "sec:model"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "低标签的 15/30 个视频如何抽取?",
+      "answer": "论文说各抽三组,并公开这些划分,但没有说明是否分层。",
+      "evidence": [
+        "sec:model-3"
+      ],
+      "status": "partly"
+    },
+    {
+      "question": "bAcc 的判定阈值是多少?",
+      "answer": "论文没有给出阈值。",
+      "evidence": [
+        "sec:model-2"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "学习率、批大小、输入分辨率?",
+      "answer": "只说沿用 [9,2] 并用 mmdetection 与逆频率加权 BCE,具体超参数未给。",
+      "evidence": [
+        "sec:method"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "数据来自几个中心、什么设备?",
+      "answer": "论文未给出采集中心、设备和患者信息。",
+      "evidence": [
+        "sec:introduction",
+        "sec:dataset"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "Seg50 下 LayoutCVS 为何好于 BBox 设置?",
+      "answer": "论文只把 Seg50 与 Seg201 的差距归于掩码更少,没有解释掩码相对框的增益。",
+      "evidence": [
+        "sec:model-2",
+        "sec:model-3"
+      ],
+      "status": "not_stated"
+    },
+    {
+      "question": "标注成本是否有数字?",
+      "answer": "论文只定性称 CVS 便宜、掩码昂贵。",
+      "evidence": [
+        "sec:model"
+      ],
+      "status": "not_stated"
+    }
+  ],
+  "challenges": [
+    {
+      "claim": "1fps 抽帧消除了选择偏差",
+      "alternative": "抽帧区间本身由人工判定可评估起止点,偏差只是从挑帧移到了挑区间。",
+      "separating_evidence": "区间判定的一致性或同模型在新旧测试集上的对比。",
+      "in_paper": false,
+      "verdict": "partly_supported"
+    },
+    {
+      "claim": "对象级图表示提升 CVS 预测",
+      "alternative": "增益来自检测器骨干带来的更好特征,而非关系建模;ResNet50-DetInit 已达 60.2。",
+      "separating_evidence": "去掉边或关系的消融。",
+      "in_paper": false,
+      "verdict": "partly_supported"
+    },
+    {
+      "claim": "Seg201 结果代表天花板",
+      "alternative": "差距也可能来自 Seg50 测试集与训练视频更少导致的方差,而非掩码数量本身。",
+      "separating_evidence": "多次运行方差或在 Seg201 中抽同等帧数的对照。",
+      "in_paper": false,
+      "verdict": "not_separated"
+    }
+  ],
+  "revisions": [
+    "研究问题开头补 CVS 背景与 DeepCVS 的两条缺陷,并在末尾保留核心观点速览",
+    "深度分析加入三个挑战轮结论:区间判定仍是人工、图方法增益未消融、天花板差距未排除方差",
+    "所有 not_stated 项写成论文未说明:kappa 计算帧、422/493、帧级分布、bAcc 阈值、超参数、采集中心、掩码增益、标注成本",
+    "低标签抽样写成部分说明:公开划分但未说明是否分层",
+    "删去无依据的“mAP 上限不会接近 100”,自算差值登记来源"
+  ]
+}

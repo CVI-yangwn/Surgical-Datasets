@@ -1,0 +1,25 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "b4f0653f20ae38393064dbd58820650471812bc654a0dc5236becaac99d00e18",
+  "number_exceptions": {
+    "38,144": "图5(a) 饼图标签（PDF 第9页），文本抽取未带出，已打开裁剪图核对：抓钳实例数",
+    "19,282": "图5(a) 饼图标签（PDF 第9页）：电钩实例数",
+    "2,558": "图5(a) 饼图标签（PDF 第9页）：双极钳实例数",
+    "2,420": "图5(a) 饼图标签（PDF 第9页）：冲洗吸引器实例数",
+    "1,324": "图5(a) 饼图标签（PDF 第9页）：施夹器实例数",
+    "712": "图5(a) 饼图标签（PDF 第9页）：剪刀实例数",
+    "4,914": "图5(b) 饼图标签（PDF 第9页）：无器械帧数",
+    "14,885": "图5(b) 饼图标签（PDF 第9页）：1 个器械的帧数",
+    "16,805": "图5(b) 饼图标签（PDF 第9页）：2 个器械的帧数"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

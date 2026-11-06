@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>OphCLIP: Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical Video-Language Pretraining</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>用眼科手术视频教会模型看懂手术：数据集 OphVL 与检索增强预训练 OphCLIP</h1>
+<div class="sub">OphCLIP: Hierarchical Retrieval-Augmented Learning for Ophthalmic Surgical Video-Language Pretraining</div>
+<div class="meta">Ming Hu, Kun Yuan, Yaling Shen 等；Shanghai AI Laboratory、Monash University、University of Strasbourg 等 | arXiv 2411.15421（预印本，cs.CV）</div>
+<div><span class="chip">AI_method</span><span class="tag">手术视频</span><span class="tag">视觉-语言预训练</span><span class="tag">检索增强</span></div>
+<div class="one">OphCLIP 先用 YouTube 眼科手术视频构建 OphVL，再用片段级与视频级对比学习加沉默视频检索预训练，零样本阶段识别明显提升，但提升主要来自领域数据，知识库收益不稳定。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.4</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2411.15421" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/ophclip/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>眼科手术视频很多，但能教模型看懂手术的配对数据很少。</strong> 单模态任务如阶段识别、器械分割已有进展，多模态表示学习仍少有人做。 作者指出障碍有专业术语、数据有限、需要专家标注，以及手术视频常长达数小时。</p>
+<p>表 1 里眼科显微镜一栏只有本文的 OphVL 和人工标注的 OphNet2024。 网上还有大量没有解说的沉默视频，以往的数据集多半只用有解说的视频。</p>
+<figure class="fig"><img src="images/page_001_fig_figure_1_review_repair1.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。上半部分比较 OphVL 与已有手术数据集的规模，下半部分是四个阶段识别数据集上的准确率。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">先有数据，才谈得上手术领域的视觉-语言预训练。</span><span class="i">沉默视频是被忽略的资源。</span></div><div class="strip d"><span class="t">数据</span><span class="i">OphVL：375,198 个片段-文本对</span><span class="i">视频：13,654 个叙述视频，30,636 个沉默视频</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>答案分三步：造数据，做两层对比学习，用标题检索沉默视频。</strong> 片段与解说对齐学细节，整段视频与标题对齐学流程，检索到的沉默视频嵌入作额外正样本。</p>
+<p><strong>头条结果是零样本阶段识别：Cat-21 达到 41.4%，Cataract-1K 达到 62.8%。</strong> 原版 CLIP 在两者上只有 11.5% 和 5.4%。</p>
+<p>边界同样要记住：OphNet 的操作识别只有 7.1%，CaDIS 上器械误报率没有降低，知识库收益因数据集而异。</p><div class="strip h"><span class="t">亮点</span><span class="i">提升主要来自领域数据，这是我的判断。</span><span class="i">方法部分的增量并不稳定。</span></div><div class="strip d"><span class="t">数据</span><span class="i">Cat-21：41.4 / 28.8</span><span class="i">Cataract-1K：62.8 / 48.5</span><span class="i">OphNet-O：7.1 / 2.3</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据：OphVL 怎么造出来</h3><p><strong>要点是用专家词表找频道，再用音频和画面把视频筛成有解说的真实手术。</strong> 作者与三位执业眼科医生整理出超过 3K 个术语，按频道搜索 YouTube，过滤后剩下约 100K 个视频。</p>
+<p>画面过滤用 ResNet50 判断关键帧是否为眼科显微镜画面，超过 80% 即为有效视频。 音频过滤看人声占比，阈值 0.2，低于阈值的视频成为沉默视频，只保留标题和元数据。</p>
+<p>文本用 Whisper Large-V3 转写，再经 Rake、SurgicBERTa 和大语言模型去噪，最后摘要成手术类型、阶段、器械、药物、解剖和目的。</p>
+<figure class="fig"><img src="images/page_004_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。OphVL 构建流程：检索、过滤叙述风格、语音转文字、文本纠正与结构化提取，再与片段配对。</figcaption></figure>
+<p>数据有了，下一节看模型怎样使用它。</p><div class="strip h"><span class="t">亮点</span><span class="i">文本被改写成围绕手术概念的结构化描述。</span><span class="i">沉默视频只用标题，不用解说。</span></div><div class="strip d"><span class="t">数据</span><span class="i">术语：超过 3K 个</span><span class="i">平均片段 72 秒</span><span class="i">总时长 9363 小时</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>方法：两层对比加沉默视频检索</h3><p><strong>核心设计是一套编码器、两层对比学习、一个检索知识库。</strong> 片段级用 InfoNCE 对齐片段与解说，并加一项自监督。 视频级把片段特征平均池化后与标题对齐。</p>
+<p>检索用 PubMedBERT 编码标题，在记忆库的标题键上做最大内积搜索，训练时只取 1 个沉默视频。 取回的视觉和文本嵌入作为额外正样本，加入视频级损失。</p>
+<figure class="fig"><img src="images/page_006_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。OphCLIP 的预训练框架：左侧叙述视频的片段级与视频级预训练，右侧沉默视频知识库。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">训练时交替优化片段级与视频级损失。</span><span class="i">在文本模态内检索，避开 CLIP 对眼科视频的误检。</span></div><div class="strip d"><span class="t">数据</span><span class="i">批大小：120 和 140</span><span class="i">嵌入维度：768</span><span class="i">8 张 RTX-4090，训练 2 天</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>评测协议</h3><p><strong>所有评测都是帧级分类，不含时序建模。</strong> 零样本时冻结编码器，把类别名写成句子提示，用相似度分类。 阶段识别报 Accuracy 和 F1，器械识别报假阳性率 FPR（越低越好）和 mAP。</p>
+<p>阶段识别提示有三种：关键词式、描述式（Caption）和两者合并的 Mix。 线性探测则冻结视觉编码器，训练线性 SVM，使用 10% 和 100% 的训练数据。</p><div class="strip h"><span class="t">亮点</span><span class="i">阶段识别共五个数据集，另有 OphNet 的操作与阶段。</span><span class="i">器械识别用 Cataract-1K、CatInstSeg 和 CaDIS。</span></div><div class="strip d"><span class="t">数据</span><span class="i">Cat-21：11 类</span><span class="i">Cataract-1K：12 类阶段，9 类器械</span><span class="i">OphNet：96 个阶段，232 个操作</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>第一，领域数据本身就带来大幅提升。</strong> Cataract-1K 上，原版 CLIP（RN50）为 6.9 / 2.0，在 OphVL 上预训练的 CLIP* 为 20.8 / 15.9。</p>
+<p><strong>第二，OphCLIP 在 CLIP* 之上继续提升，但幅度因数据集而异。</strong> Cataract-1K 从 20.8 到 62.8，Cataract-101 只从 36.2 到 39.3。</p>
+<figure class="fig"><img src="images/page_007_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。零样本阶段识别与器械识别的主结果对比。</figcaption></figure>
+<p><strong>第三，器械识别里基线 FPR 全是 100.0%，OphCLIP 降到 45.1% 和 51.1%。</strong> 补充表 8 显示基线各类召回率均为 100.0，即全部判为阳性。</p>
+<p>线性探测中，Cat-21 上 OphCLIP 为 72.1 / 57.9，CLIP* 为 59.4 / 40.5。 Cataract-1K 的器械 F1 在 100% 数据下只有 11.6。</p><div class="strip h"><span class="t">亮点</span><span class="i">通用预训练数据换成别的并无稳定帮助。</span><span class="i">基线几乎没有区分器械的能力。</span></div><div class="strip d"><span class="t">数据</span><span class="i">Cataract-1K 器械 FPR：45.1</span><span class="i">CatInstSeg 器械 FPR：51.1</span><span class="i">Cat-21 线性探测：72.1 / 57.9</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么有效</h3><p><strong>我的判断：主要原因是领域匹配加文本分布对齐。</strong> CLIP 到 CLIP* 的跳升最大，Cat-21 从 13.3 / 2.7 到 28.8 / 17.6。 论文自己也说要用描述式提示减小预训练与下游语料的文本差距。</p>
+<p>层级训练在此基础上继续加分：不带知识库的 OphCLIP 在 Cataract-1K 上已到 60.5 / 44.7。 知识库再把 Caption 提示下的 F1 从 44.7 提到 47.2，Mix 提示下从 43.0 提到 48.5。</p>
+<figure class="fig"><img src="images/page_008_fig_table_5_review.png" alt="Table 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 5。OphCLIP 各组件的消融。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">层级训练的作用最稳。</span><span class="i">Mix 提示只在部分数据集上优于 Caption。</span></div><div class="strip d"><span class="t">数据</span><span class="i">Cataract-1K 无知识库：60.5 / 44.7</span><span class="i">Cataract-1K 完整模型：62.8 / 48.5</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说明什么</h3><p><strong>第一，表 3 与正文自相矛盾。</strong> 正文把 OphNet-O 与 P 的数字对调。 CaDIS 上 OphCLIP 的 FPR 为 14.7 和 28.7，高于 CLIP 的 13.0 和 28.1，正文却说假阳性更低。</p>
+<p><strong>第二，知识库收益不稳定。</strong> CatRelDet 上 Mix 提示加知识库为 32.6 / 34.2，低于不加的 34.5 / 36.1。</p>
+<p><strong>第三，没有证据表明模型理解了手术流程，</strong>因为评测只用帧级分类。 也没有多次种子的方差和显著性检验，小差异不应当作结论。</p>
+<figure class="fig"><img src="images/page_011_fig_table_9_review.png" alt="Table 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 9。Cataract-101 与 CatRelDet 上的补充消融。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">OphNet 绝对水平很低。</span><span class="i">论文自述验证以白内障手术为主。</span></div><div class="strip d"><span class="t">数据</span><span class="i">OphNet-O：7.1 / 2.3</span><span class="i">OphNet-P：18.2 / 4.8</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>怎么确认不是巧合</h3><p>对三个核心论断，各问一次怀疑者会怎么说。</p>
+<p><strong>层级与检索是否超出数据集本身？</strong>部分成立。论文缺少同预算下只去掉层级或检索的对照。</p>
+<p><strong>沉默视频内容是否真的有用？</strong>未能区分。多出的正样本可能只是正则，论文没有随机替换检索结果的对照。</p>
+<p><strong>降低器械假阳性是否可靠？</strong>部分成立。Cataract-1K 与 CatInstSeg 上成立，CaDIS 上没有降低。</p><div class="strip h"><span class="t">亮点</span><span class="i">最缺的是沉默视频内容的对照实验。</span></div><div class="strip d"><span class="t">数据</span><span class="i">检索数量 K：1</span></div></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><p><strong>先核对式 7：印出的分母只含取回的 K 个样本，K 又是 1。</strong> 若字面成立，这一项恒为常数，实际是否含批内负样本论文未说明。</p>
+<p>训练设置：ResNet-50 和 BioClinicalBert，学习率 8e-5，温度 0.1，两项权重都是 0.5。 表 6 总 epoch 为 60，正文是 40 个 epoch 加交替训练，两者如何对应论文未说明。</p>
+<p>数据的公开方式论文未说明，只给出项目主页。 规模口径也要核对：引言写 7.5K 小时，3.4 节写 9363 小时。</p><div class="strip h"><span class="t">亮点</span><span class="i">记忆库的更新时机与频率论文未说明。</span><span class="i">文本的人工质检比例论文未说明。</span></div><div class="strip d"><span class="t">数据</span><span class="i">学习率：8e-5</span><span class="i">温度：0.1</span><span class="i">嵌入维度：768</span></div></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>领域数据是最大的增益来源，先做数据再谈方法。</div><div>用标题做检索键，把沉默视频当作额外正样本，是低成本利用无解说视频的思路。</div><div>零样本提示要与预训练文本分布对齐。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>构建了规模较大的眼科手术视频-文本数据集，并给出详细的构建流程。</li><li>同时报告了零样本、线性探测和两组消融，数字完整。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>表 3 与正文矛盾，CaDIS 上的结论不成立。</li><li>知识库收益不稳定，缺少关键对照。</li><li>评测只做帧级，没有方差与显著性检验。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>检索数量 K 增大后收益何时饱和？</li><li>去掉自监督项会怎样？</li><li>沉默视频的标题质量如何影响检索？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 f85e19de</span><span class="s">7.3 分</span></div><p>自评。证据链、机制和数字较完整，表 3 与正文的矛盾、式 7 的歧义已标出；弱项是没有开篇的核心观点速览，各节没有先交代要回答的问题，多处数字后缺少这意味着什么，定位与复用建议偏简略，数字核对尚未运行故 H3 记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入核心观点速览</li><li>各节开头先写要回答的问题，数字之后补一句意味着什么</li><li>把 insight pass 中经源文核对的问题答案写入正文</li><li>补强竞争路线与复用建议</li><li>运行数字核对并登记推导数字</li><li>修正不能被源文支持的措辞</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 7b23d17d · 文稿 68f6e4c2</span><span class="s">8.4 分</span></div><p>自评，由写作者本人打分。较第一轮上升，原因是加入核心观点速览、各节先写问题、数字后补结论，并把挑战检验与论文未说明项写入正文和报告。仍有限制：论文只与 CLIP 系基线比较，无法写出对 SurgVLP 等已有手术方法的直接数字对比，D5 只有 7；式 7 的实现细节和表 3 的原图未能取得，D2 和 D7 各有缺口；所有图表审图由本人完成。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

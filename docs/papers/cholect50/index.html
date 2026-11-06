@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Rendezvous: Attention Mechanisms for the Recognition of Surgical Action Triplets in Endoscopic Videos</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>CholecT50 与 Rendezvous：让模型说出“哪件器械、在做什么、作用在哪”</h1>
+<div class="sub">Rendezvous: Attention Mechanisms for the Recognition of Surgical Action Triplets in Endoscopic Videos</div>
+<div class="meta">Chinedu Innocent Nwoye, Tong Yu, Cristians Gonzalez, Barbara Seeliger, Pietro Mascagni, Didier Mutter, Jacques Marescaux, Nicolas Padoy（斯特拉斯堡大学 ICube、IHU Strasbourg、IRCAD 等） | arXiv 2109.03223 v2；Medical Image Analysis 2022</div>
+<div><span class="chip">AI_method（含数据集贡献）</span><span class="tag">手术数据集</span><span class="tag">动作三元组</span><span class="tag">CholecT50</span><span class="tag">注意力机制</span><span class="tag">腹腔镜胆囊切除术</span></div>
+<div class="one">论文发布逐帧标注 100 类手术动作三元组的 CholecT50，并用器械激活图引导的注意力加自注意力与交叉注意力混合解码，把三元组 mAP 从 20.0 提到 29.9。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2109.03223" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cholect50/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">11 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术视频理解长期停在“阶段”这一层。</strong> 相位识别只能说现在处于“夹闭与切断”阶段，说不出施夹钳夹的是胆囊管还是胆囊动脉，而后者正是安全监控需要的信息。</p>
+<p>更细的尝试只做了一半：<code>EndoVis 2019</code> 的动作识别只有 4 个动词，不管器械和组织；<code>SARAS-ESAD</code> 的 21 类标签不区分器械。</p>
+<p>⟨器械, 动作, 目标⟩ 三元组是最细的表述，难点有三：目标要“被器械作用”才算数；同一把抓钳的牵拉、抓持、分离很难分；一帧里有多个三元组时，要把分量正确配对。</p>
+<p>作者此前的 <code>Tripnet</code> 用拼接引导动作和目标、用外积建模组合。本文要改进这两步，并提供更大的数据集。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>数据：</strong> CholecT50 有 50 个视频、100 类三元组，由 6 种器械、10 种动作、15 种目标组合而成，1fps 下 100.86K 帧、161K 个实例。</li><li><strong>编码器：</strong> 动作主要看器械类型，目标主要看器械位置，所以动作用通道注意力、目标用位置注意力，引导图是器械的类激活图。</li><li><strong>解码器：</strong> 三元组特征作为查询，去看三个分量的类别图（交叉注意力），再加一个自注意力头，共 8 层。</li><li><strong>结果：</strong> 三元组 mAP 从 <code>Tripnet</code> 的 20.0 提到 29.9；器械检测已饱和，增益来自动作、目标和关联。</li><li><strong>边界：</strong> 只看单帧、只有一次划分、标签没有框和实例数，29.9 的绝对水平说明问题远未解决。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">三元组识别 = 三个多标签分类 + 一个配对问题</span><span class="i">器械类激活图是整个模型的空间先验来源</span></div><div class="strip d"><span class="t">数据</span><span class="i">50 个视频，100 类，161K 个实例</span><span class="i">训练、验证、测试为 35、5、10 个视频</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据集怎样构建</h3><p><strong>类别表是临床专家筛出来的，不是数据中自然出现的全部组合。</strong> 45 个视频来自 Cholec80，5 个来自院内，两名外科医生在时间轴上标出每个动作的起止。</p>
+<p>筛类分两步。先把语义相同的组合归并，例如十二指肠和结肠统一为“肠”；再由三名临床医生按可能性和有用性打 1 到 5 分，结合出现次数取前若干类。理论组合 900 种，观测到约 300 种，最终留 100 类。</p>
+<p>分布很不平衡：抓钳牵拉胆囊有 48628 个实例，最少的类只有 8 个；对安全最关键的施夹胆囊管有 1856 个。</p>
+<div class="tbl"><table><thead><tr><th>划分</th><th>视频</th><th>帧</th><th>标签</th></tr></thead><tbody><tr><td>训练</td><td>35</td><td>72815</td><td>113884</td></tr><tr><td>验证</td><td>5</td><td>6797</td><td>10267</td></tr><tr><td>测试</td><td>10</td><td>21251</td><td>36854</td></tr></tbody></table></div>
+<p><strong>论文未说明的三件事：</strong> 两名标注者的一致性、临床评分的截断标准、数据许可条款。前者决定标签噪声上限，后两者决定别人能否复现同样的数据。</p>
+<p>所以这个数据集适合帧级识别，不适合直接做检测或计数。下一节看模型如何利用“以器械为中心”。</p></div><div class="card" id="s4"><h3><span class="num">4</span>编码器：用器械引导动作和目标</h3><p>只有帧级标签，模型并不知道器械在哪。<strong>做法是先学器械的类激活图，再拿它去引导另外两个分量。</strong></p>
+<p>骨干是 <code>ResNet-18</code>，最后两块步长改为 1，输出 32×56×512 的特征。器械分支经两层卷积得到 6 通道激活图。动作分支在 6×6 的类别维度上做注意力，只携带“哪种器械”的信息；目标分支在 1792×1792 的像素维度上做注意力，携带“器械在哪”的信息。</p>
+<p>$$E = \beta (V A) + X_Z$$</p>
+<p>增强特征 $E$ 是原特征加上注意力加权后的值，$\beta$ 是可学习系数。</p>
+<figure class="fig"><img src="images/page_011_fig_fig_7_review.png" alt="Fig 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 7。Attention Tripnet：与 RDV 相同的器械分支和动作目标分支，后接被新解码器取代的 3D 交互空间。</figcaption></figure>
+<p>分量识别好以后，还要配对。</p></div><div class="card" id="s5"><h3><span class="num">5</span>解码器：混合注意力多头</h3><p><strong>旧方法对三个分量做外积，枚举 6×10×15 个组合，其中大多数不可能出现。</strong> 新解码器只在 100 个有效类别上建模。</p>
+<p>每层有 4 个头：三元组特征生成查询，分别对器械、动作、目标类别图做交叉注意力，再对自身做一次自注意力，拼接后经 1×1 卷积融合。查询以 0.3 的比例遮蔽，避免 8 层重复。</p>
+<p>序列单位是“类别图”而不是图像块。附录中 6 层图像块序列的 AP_IVT 为 24.1，2 层类别图已达 27.0。</p>
+<figure class="fig"><img src="images/page_009_fig_fig_5_review_repair1.png" alt="Fig 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 5。三个分量类别图提供键和值，三元组特征提供共享查询，3 个交叉注意力头和 1 个自注意力头拼接融合。</figcaption></figure></div><div class="card" id="s6"><h3><span class="num">6</span>训练与评测协议</h3><p>三个分量用加权 sigmoid 交叉熵，按不确定性方法自动加权；三元组损失前 18 个 epoch 不参与。优化器为带动量 0.95 的随机梯度下降，学习率 0.001，每 50 个 epoch 乘 0.1，批大小 8，训练 200 个 epoch。</p>
+<p>评测同时看分量 AP、组合 AP 和 Top-N 准确率。<strong>mAP 是先在每个视频内逐类算 AP，再对视频平均</strong>，混合全部帧算出的数字不能与论文对比。</p><div class="strip d"><span class="t">数据</span><span class="i">单张 GTX 1080 Ti 训练约 118-180 小时</span><span class="i">8 层 RDV 有 16.61M 参数</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><p>先看编码器。表 4 中，通道注意力主要帮动作，位置注意力主要帮目标，两者合用时动作 AP 从 48.4 到 61.1、目标 AP 从 28.2 到 40.2。<strong>这个交叉模式是“动作看类型、目标看位置”唯一的定量证据。</strong></p>
+<p>再看解码器。同样输入四路特征，只做自注意力时 AP_IVT 为 26.1，加入交叉注意力后为 29.9。</p>
+<figure class="fig"><img src="images/page_013_fig_table_7_review.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。朴素基线、Tripnet 与本文两个模型在分量检测和三元组关联上的 AP。</figcaption></figure>
+<p>主表里，<code>Attention Tripnet</code> 只换编码器，AP_IVT 从 20.0 到 23.4；<code>RDV</code> 再换解码器，到 29.9。两者分量 AP 几乎相同，差别全在关联：AP_IV 39.4 对 31.1。摘要说的“提高 9% 以上”是 9.9 个百分点的绝对提升。</p>
+<figure class="fig"><img src="images/page_012_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。解码层数与精度、参数量、帧率的取舍。</figcaption></figure>
+<p>层数加到 8，帧率从 54.2 降到 28.1 FPS，仍高于作者说的实时门槛 25 FPS。前 20 个预测中包含正确答案的比例为 95.9%，而 Top-5 只有 76.3%，说明很多三元组彼此相似。</p><div class="strip d"><span class="t">数据</span><span class="i">AP_IVT：Tripnet 20.0，Attention Tripnet 23.4，RDV 29.9</span><span class="i">器械 AP：三者都在 92 左右</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>为什么有效</h3><p><strong>最大的增益来自“把分量当辅助任务、把分量类别图喂给解码器”。</strong> 去掉辅助损失，AP_IVT 从 29.9 掉到 21.2；四路输入比单一输入高 7.3；交叉注意力在此之上再加 3.8。</p>
+<p>我的判断：三元组标签稀疏且长尾，分量标签更密。先学好 6、10、15 类的分量，再学 100 类的组合，本质是把难问题拆成容易的子问题。交叉注意力那一步有“同样输入、只换注意力”的对照，是几项结论里最干净的。</p>
+<figure class="fig"><img src="images/page_014_fig_table_9_review_repair1.png" alt="Table 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 9。三个模型各自 AP 最高的 10 个三元组及均值。</figcaption></figure>
+<p>临床关键类的提升明显：施夹胆囊管从 39.62 到 59.68，剪断胆囊动脉从 40.37 到 53.84。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li><strong>泛化：</strong> 只有一次 35/5/10 划分、10 个测试视频，多次运行的方差论文未说明。</li><li><strong>注意力的解释：</strong> 位置注意力也可能只是容量更大；论文没有控制参数量，也没有定量比对注意力图与目标区域。</li><li><strong>论文自身的数字出入：</strong> 正文说双注意力使动作提升 12.4，按表算是 12.7；表 6 中 2 层 AP_IT 为 41.1，而附录中同为 2 层的模型是 34.1，很可能是排版错误；附录辅助损失表中“有辅助损失”一行对应几层，论文未说明。</li><li><strong>定位：</strong> 弱监督定位只对器械有效，目标无法定位；同类三元组的多个实例无法区分。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>怎么确认不是巧合</h3><p>论文对 <code>Tripnet</code> 做了符号秩检验：AP_IVT 上 <code>RDV</code> 的 p≪0.001，器械 AP 上 p≈0.374 不显著，与“器械已饱和”一致。</p>
+<p>但检验单位是 30 批连续帧，<strong>批次可能来自同一视频，彼此并不独立</strong>。我的判断是 p 值偏乐观，以视频为单位的检验论文没有做。基线也都由作者自己实现。</p>
+<figure class="fig"><img src="images/page_015_fig_fig_9_review.png" alt="Fig 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 9。RDV 的预测与热图，绿色为正确，红色为错误或漏检。</figcaption></figure>
+<p>定性图里的错误集中在“器械可见但没有动作”：双极闲置时被判成施夹，剪刀闲置时被判成剪断。</p></div><div class="card" id="s11"><h3><span class="num">11</span>复现要注意什么</h3><ul><li>类别权重怎么算、编码器缩放因子取多少，论文未说明。</li><li>评测必须逐视频逐类算 AP 再平均。</li><li>超参数在 5 个验证视频上最多搜了 74 组，换数据集时要重新调。</li><li>代码基于 TensorFlow，作者给出了 GitHub 仓库。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>CholecT50 是帧级三元组识别的基准，没有框和实例数</div><div>把组合标签拆成分量辅助任务，是增益最大的一步</div><div>用一个分量的激活图引导另一个分量，可在无框标注下提供空间先验</div><div>比较结果时先确认 mAP 是逐视频平均</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>数据集的类别经临床归并、评分和仲裁，逐类计数完整公开</li><li>消融覆盖编码器、解码器、层数、序列方式和辅助损失</li><li>同时报告分量、组合、Top-N 和逐类结果，并做了显著性检验</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单一划分、10 个测试视频，没有方差</li><li>显著性检验以连续帧批次为单位</li><li>表 4、表 6、附录表中有几处数字对不上</li><li>标注一致性和数据许可论文未说明</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>两名标注医生的一致性有多高？</li><li>多次划分下 RDV 相对 Tripnet 的优势还剩多少？</li><li>加入时序建模后，抓持、牵拉、分离这类易混动作能改善多少？</li><li>如何把二值标签扩展为可检测、可计数的实例标签？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 2930f7c2</span><span class="s">7.4 分</span></div><p>第 1 轮自评：证据链、机制和主要数字齐全，已指出表 4 正文与表格差值不符、表 6 中 41.1 疑似排版错误、表 B.19 行对应层数不明。不足：数字尚未经 lint_report 核对（H3 unknown）；核心观点速览位于研究问题末尾但部分节缺开篇张力和收尾过渡；数据集章节对 CholecT50 作为数据贡献的边界（来源单一、一致性未报告）分析偏少；摘要翻译中“9% 以上”的单位口径未提示；Fig. 11 与附录 A 共现统计未提及。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>完成 insight_pass 三轮并把结论写回笔记</li><li>按叙事顺序给各节补开篇问题与收尾过渡，数字后补“这说明什么”</li><li>数据与任务定义补 CholecT50 作为数据集的边界与可复用性分析</li><li>核对全文数字，推导值登记到 number-exceptions</li><li>说明摘要“9% 以上”是绝对百分点（20.0 到 29.9）</li><li>提及 Fig. 11 注意力可视化与附录 A 共现统计</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 1724c191 · 文稿 c2d7a68f</span><span class="s">8.5 分</span></div><p>第 2 轮自评（模型自评）：insight_pass 三轮完成，6 项修改已写回笔记和报告；数字核对无未匹配项，表 1-3 的计数因 full_text.md 未抽出表格单元格而登记在 number_exceptions.json（已对照 PDF 原表），差值和 1792 作为推导值登记。无法修复的限制：Table 1-5、8、10 和 Fig. 2 保留占位（未选中或裁剪身份不符），数值已用 Markdown 表转录；论文自身数字出入（表 4 差值、表 6 的 41.1、表 B.19 层数）只能指出不能修正；标注一致性、许可、类别权重论文未说明。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

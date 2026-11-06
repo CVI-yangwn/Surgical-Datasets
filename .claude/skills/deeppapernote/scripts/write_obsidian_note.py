@@ -534,6 +534,38 @@ def write_paper_directory_sidecar(
     return sidecar_path
 
 
+SAVE_LOG = "save_log.jsonl"
+
+
+def append_save_log(target_path: Path, note_sha256: str, overwrote: bool) -> None:
+    """Append one line per Formal Save so later rounds can tell which bytes were saved first."""
+    import datetime as _dt
+
+    entry = {
+        "saved_at": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+        "note": target_path.name,
+        "note_sha256": note_sha256,
+        "overwrote_existing_note": overwrote,
+    }
+    with (target_path.parent / SAVE_LOG).open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
+def record_title(record: dict) -> str:
+    """Title from a metadata, identity, or plain record, in that order of nesting."""
+    if str(record.get("title", "")).strip():
+        return str(record["title"]).strip()
+    for key in ("accepted_metadata", "work_level_identity"):
+        nested = record.get(key)
+        if isinstance(nested, dict) and str(nested.get("title", "")).strip():
+            return str(nested["title"]).strip()
+    for obs in record.get("identity_observations", []) or []:
+        title = str(((obs or {}).get("record") or {}).get("title", "")).strip()
+        if title:
+            return title
+    return ""
+
+
 def atomic_write_note(path: Path, note_text: str) -> None:
     fd, temp_name = tempfile.mkstemp(
         dir=path.parent,
@@ -546,6 +578,10 @@ def atomic_write_note(path: Path, note_text: str) -> None:
             handle.write(note_text)
         if path.is_file():
             shutil.copymode(path, temp_path)
+        else:
+            umask = os.umask(0)
+            os.umask(umask)
+            os.chmod(temp_path, 0o666 & ~umask)
         os.replace(temp_path, path)
     finally:
         temp_path.unlink(missing_ok=True)
@@ -592,13 +628,19 @@ def main() -> None:
     output_mode, root_path = resolve_note_output_mode(config)
 
     record = maybe_load_json_record(args.input) or {}
-    title = args.title or str(record.get("title", "")).strip()
+    title = args.title or record_title(record)
     if not title:
         raise SystemExit("write_obsidian_note.py requires --title or metadata with a title.")
 
     source_manifest = (
         require_source_manifest(args.source_manifest) if output_mode == "obsidian" else {}
     )
+    # Workspace mode does not admit against the manifest, but the earlier stages key
+    # their artifacts by its paper_id, so report the same id here.
+    manifest_paper_id = str(source_manifest.get("paper_id", ""))
+    if not manifest_paper_id and args.source_manifest:
+        manifest_record = maybe_load_json_record(args.source_manifest) or {}
+        manifest_paper_id = str(manifest_record.get("paper_id", ""))
     args.archive_input = {**record, **source_manifest, "title": title}
     if not args.target_directory:
         args.target_directory = (source_manifest.get("archive_source") or {}).get(
@@ -660,6 +702,35 @@ def main() -> None:
             subdir=resolved_subdir,
             filename=args.filename,
         )
+        if target_path.is_file():
+            if not args.overwrite_existing_note:
+                block_note_conflict(
+                    args,
+                    target_path,
+                    conflict_code="same_language_note_exists",
+                    source_sha256=str(source_manifest.get("source_sha256", "")),
+                    output_language=output_language,
+                )
+            expected_sha256 = args.expected_existing_note_sha256.strip().lower()
+            if not SOURCE_SHA256_RE.fullmatch(expected_sha256):
+                raise SystemExit(
+                    "--overwrite-existing-note requires a 64-character "
+                    "--expected-existing-note-sha256 from the conflict response."
+                )
+            if file_sha256(target_path) != expected_sha256:
+                block_note_conflict(
+                    args,
+                    target_path,
+                    conflict_code="stale_overwrite_confirmation",
+                    source_sha256=str(source_manifest.get("source_sha256", "")),
+                    output_language=output_language,
+                )
+            approved_existing_note_sha256 = expected_sha256
+            admission = "overwrite_same_language_note"
+        elif args.overwrite_existing_note:
+            raise SystemExit(
+                "--overwrite-existing-note is only valid when the target language note exists."
+            )
 
     if args.preflight:
         emit(
@@ -768,11 +839,7 @@ def main() -> None:
         asset_subdir = asset_dir.relative_to(target_path.parent).as_posix()
         asset_directory_existed = asset_dir.exists()
         ensure_parent(target_path)
-        paper_id = (
-            args.paper_id
-            or str(source_manifest.get("paper_id", ""))
-            or str(record.get("paper_id", ""))
-        )
+        paper_id = args.paper_id or manifest_paper_id or str(record.get("paper_id", ""))
         sidecar_path = (
             target_path.parent / PAPER_DIRECTORY_SIDECAR
             if output_mode == "obsidian"
@@ -850,6 +917,7 @@ def main() -> None:
             if sidecar_backup is not None:
                 sidecar_backup.unlink(missing_ok=True)
 
+        append_save_log(target_path, note_sha256, overwrote_existing_note)
         payload = {
             "status": "ok",
             "script": "write_obsidian_note.py",

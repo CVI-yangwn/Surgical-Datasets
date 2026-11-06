@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>CholecInstanceSeg: A Tool Instance Segmentation Dataset for Laparoscopic Surgery</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>在 85 段胆囊切除术视频上补一层七类器械实例分割标注</h1>
+<div class="sub">CholecInstanceSeg: A Tool Instance Segmentation Dataset for Laparoscopic Surgery</div>
+<div class="meta">Oluwatosin Alabi, Ko Ko Zayar Toe, Zijian Zhou, Charlie Budd, Nicholas Raison, Miaojing Shi, Tom Vercauteren（伦敦国王学院、国王学院医院、同济大学） | arXiv:2406.16039 第 2 版，DOI 10.1038/s41597-025-05163-w</div>
+<div><span class="chip">数据集论文</span><span class="tag">器械实例分割</span><span class="tag">腹腔镜胆囊切除术</span><span class="tag">半自动标注</span><span class="tag">Cholec80</span></div>
+<div class="one">作者在 Cholec80、CholecT50、CholecSeg8k 的 85 个序列上用人工、语义转实例和模型辅助三种方式标出 41,933 帧、64,483 个七类器械实例，给出按视频隔离的划分和两个基线，规模可观但质控证据和基线设置都偏弱。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2406.16039" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cholecinstanceseg/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>微创手术只能通过内镜看画面，辅助系统需要知道画面里有哪些器械、各在哪里。这要求实例分割：不仅分出器械像素，还要给同类的不同个体不同编号。</p>
+<p>已有数据卡在四个地方：多来自猪手术；多任务数据集里器械部分很少；有的只有单类二值实例；大多没有实例编号。<strong>论文要补的缺口是人体常规手术、多类器械、带实例编号、规模足够训练。</strong></p>
+<figure class="fig"><img src="images/page_002_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。常用器械分割数据集对比，是"最大开放实例分割数据集"这一说法的依据。</figcaption></figure>
+<p>表 1 里带实例信息的只有 ROBUST-MIS2019（两类）和本文。同期的 PhaKIR 因未完全公开没有纳入比较，所以"最大"是在表中范围内成立。</p><div class="strip h"><span class="t">亮点</span><span class="i">没有新采视频，而是在 Cholec80 家族已有视频上加标注</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份数据发布论文，贡献是标注本身和生产标注的流程。</strong></p>
+<ul><li><strong>数据：</strong> 四个分区共 41,933 帧、64,483 个实例，七类器械。</li><li><strong>生产：</strong> 语义标签转实例、SAM 点提示人工标注、检测模型生成候选再人工修正。</li><li><strong>评测：</strong> 按视频划分，指标为 COCO mAP 加按序列计算的 smAP。</li><li><strong>结果：</strong> Mask2Former 为 61.47 mAP，Mask R-CNN 为 41.70；圈套器无结果，剪刀波动最大。</li><li><strong>边界：</strong> 单一医院、单一术式；一致性子集规模和基线训练设置论文未说明。</li></ul><div class="strip d"><span class="t">数据</span><span class="i">85 个序列，41,933 帧，64,483 个实例</span><span class="i">训练 26,830 帧，验证 4,284 帧，测试 10,819 帧</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>85 个序列从哪里来</h3><p>所有帧来自 CAMMA 团队的内部数据集 Cholec120 的三个公开子集。理解它们的重叠关系，是读懂后面划分的前提。</p>
+<figure class="fig"><img src="images/page_003_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。Cholec120 与三个公开子集的关系，其中 CholecT50 与 CholecSeg8k 共享 10 个序列。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>分区</th><th>序列</th><th>采样</th><th>帧数</th><th>实例数</th></tr></thead><tbody><tr><td>Instance-CholecSeg8k</td><td>17</td><td>沿用全部帧</td><td>8,080</td><td>10,523</td></tr><tr><td>Instance-CholecT50-sparse</td><td>35</td><td>每 30 帧取 1 帧</td><td>2,681</td><td>4,098</td></tr><tr><td>Instance-CholecT50-full</td><td>15</td><td>全部 1 fps 帧</td><td>28,317</td><td>45,221</td></tr><tr><td>Instance-Cholec80-sparse</td><td>28</td><td>每 30 帧取 1 帧</td><td>2,855</td><td>4,641</td></tr></tbody></table></div>
+<p><strong>全序列分区一个就占了约三分之二的帧和七成的实例。</strong> 这意味着规模主要来自 15 段视频的连续帧，独立场景数远少于帧数暗示的那样多。</p></div><div class="card" id="s4"><h3><span class="num">4</span>标什么、怎么标</h3><p>七类器械为抓钳、双极钳、电钩、施夹器、剪刀、冲洗吸引器和圈套器；圈套器是作者在 Cholec80 六类之外新增的。夹子、缝针、缝线、标本袋、纱布不标；有器械伸出时，套管算作器械的一部分。</p>
+<p>协议列出 12 种困难情形，如烟雾、反光、器械在液体中，并要求查看相邻帧、按预期形状推断。表 1 写 8 个语义类别，与七类器械差一类，论文未说明差的是什么。</p>
+<p>三条生产路线：</p>
+<ul><li><strong>语义转实例：</strong> 对 CholecSeg8k 按类做连通域分析；遮挡造成的碎片合并、同类重叠重标、标签噪声清理，共处理 892 个问题帧。</li><li><strong>人工标注：</strong> 两个稀疏分区用改造过的 Segment Anything Annotator，以点提示为主，困难情形手工描边。</li><li><strong>模型辅助：</strong> 全序列分区，见下一节。</li></ul></div><div class="card" id="s5"><h3><span class="num">5</span>半自动标注流程</h3><figure class="fig"><img src="images/page_007_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。半自动标注的迭代流程，从种子标注到全序列分区。</figcaption></figure>
+<ol><li>种子：CholecSeg8k 分区与 CholecT50 稀疏分区，补标新增类别。</li><li>用种子训练 RTMDet-Ins-l，对未标注帧生成候选。</li><li>人工修正：小错用 LabelMe 改，大错用 SAM 重标。</li><li>再训练：第一轮约 11k 张训练、生成约 10k、修正 5k；第二轮 21k 张训练、生成约 17k、修正 4k。</li></ol>
+<p><strong>多数生成帧没有被修改，它们是逐帧审核过还是只抽查，论文未说明。</strong> 这直接决定全序列分区的质量下限。</p></div><div class="card" id="s6"><h3><span class="num">6</span>划分与指标</h3><figure class="fig"><img src="images/page_011_fig_figure_7_review.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。推荐划分及每部分包含的视频编号。</figcaption></figure>
+<p>共享的 10 个视频全部放进训练集，验证和测试只用各分区独有的视频，所以评测反映的是对新手术的泛化。</p>
+<p>smAP 先在每个序列内算某类平均精度，再对序列取平均，最后对类别取平均：</p>
+<p>$$smAP=\frac{1}{C}\sum_{j=1}^{C}sAP_j$$</p>
+<p>它让每段视频等权，抵消全序列分区的权重。某类在某段视频缺席时如何处理，论文未说明，这会左右稀有类的结果。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>方法</th><th>抓钳</th><th>电钩</th><th>冲洗吸引器</th><th>施夹器</th><th>双极钳</th><th>剪刀</th><th>mAP</th><th>smAP</th></tr></thead><tbody><tr><td>Mask R-CNN</td><td>37.25</td><td>61.84</td><td>43.04</td><td>58.73</td><td>28.42</td><td>20.91</td><td>41.70</td><td>50.18</td></tr><tr><td>Mask2Former</td><td>61.10</td><td>82.16</td><td>68.38</td><td>81.30</td><td>48.02</td><td>27.89</td><td>61.47</td><td>74.92</td></tr></tbody></table></div>
+<p>圈套器两项都是空值，汇总指标是其余六类的平均。<strong>Mask2Former 每类都更高，说明数据对模型有区分度。</strong> 但两者都是默认超参、单次训练，主干和分辨率论文未说明，不能当强基线。</p>
+<figure class="fig"><img src="images/page_009_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。各类实例数与每帧器械数，抓钳和电钩合计约占九成实例。</figcaption></figure>
+<p>正文说约 5,328 帧没有器械，图 5(b) 中这个数是 3 个器械的帧，无器械帧为 4,914。图中五项相加等于总帧数，所以应以图为准。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><p><strong>作者把电钩最好归因于频次高，但数字不支持。</strong> 抓钳实例约为电钩两倍，两个模型上都低 20 多个点；施夹器实例少，却高于抓钳。我的判断：末端形状是否固定更可能是原因，论文没有做混淆分析。</p>
+<p>剪刀全局精度最低，序列精度却高，标准差达 33.20。作者解读为跨序列差异大；另一种解释是剪刀只出现在少数测试序列，平均的是少数几个数。每类覆盖几个测试序列，论文未说明，两种解释分不开。</p>
+<p><strong>质控给出的是"修了多少"，不是"还剩多少错"。</strong> 两项一致性分别为 91.2 和 95.7，子集大小都未说明。半自动与人工一致，也可能是修正者被候选锚定。</p><div class="strip h"><span class="t">亮点</span><span class="i">频次解释不了类别间的差距</span><span class="i">95.7 的一致性无法排除锚定</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>质控做了什么</h3><div class="tbl"><table><thead><tr><th>检查</th><th>结果</th></tr></thead><tbody><tr><td>超过 3 个器械的帧全部复查</td><td>修正 26 帧</td></tr><tr><td>对照 Cholec80 器械存在标签找漏标</td><td>发现 267 个错误帧，作者称成功率约 48%</td></tr><tr><td>器械间重叠超过 0.1 IoU 的帧复查</td><td>调整 247 帧</td></tr></tbody></table></div>
+<p>三项规则都针对特定错误；边界精度这类规则覆盖不到的误差没有量化，作者也承认允许边界有小瑕疵。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><ul><li>原图要从 CAMMA 和 Kaggle 下载后用作者脚本对齐；测试集标注需申请。</li><li>共享的 10 个视频在训练集出现两次，训练时权重偏高。</li><li>三个序列为 1920×1080，具体是哪三个论文未说明，预处理需统一尺寸。</li><li>七类评测要单独说明圈套器的处理，并同时报告 mAP、smAP 和每类覆盖的序列数。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>这是目前可公开获取、带七类器械实例编号的胆囊切除术数据，可与 Cholec80 阶段标签、CholecT50 动作三元组对齐</div><div>规模主要来自全序列分区的 15 段视频，独立场景少于帧数所暗示的</div><div>两个基线只是可训练性的证明，不是强基线</div><div>语义转实例和模型辅助迭代标注的流程可以直接复用</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>按视频隔离的划分，避免同一手术泄漏到评测</li><li>公开了连通域转换中三类失败的处理方式和各阶段工时</li><li>用父数据集的器械存在标签交叉检查漏标，思路可迁移</li><li>smAP 和序列标准差暴露了跨手术的波动</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单一医院、单一术式，没有跨中心验证</li><li>一致性子集规模、半自动帧审核方式、基线训练设置都未说明</li><li>圈套器仅 43 个实例，基线无结果</li><li>正文与图表有多处不一致：无器械帧数、图 6 标题、表 1 类别数</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>两项一致性评估各用了多少帧，是否包含困难情形？</li><li>测试集中有没有圈套器，剪刀分布在几个测试序列中？</li><li>不看候选的独立人工标注与半自动结果相比，一致性会降多少？</li><li>在其他医院的胆囊切除术视频上，用本数据训练的模型会掉多少？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 e5e900c7</span><span class="s">7.6 分</span></div><p>第 1 轮自评：证据链、构建流程、数字和边界齐全；研究问题末尾缺核心观点速览，部分小节开头没有交代要回答的问题，若干数字（如 5,328 与 4,914 的矛盾、95.7 的口径）后缺少含义说明，数字尚未跑 lint_report 核对；与 PhaKIR、EndoVis 的定位只在研究问题提了一句；正文残留 AP、PQ、smAP 等缩写未在首次出现处定义。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入 ### 核心观点速览</li><li>各小节开头点明要回答的问题，结尾加承接句</li><li>首次出现处定义 AP、mAP、smAP、PQ</li><li>重要数字后补一句含义</li><li>把 Insight Pass 的挑战轮结论写入深度分析与局限</li><li>用 lint_report --mode note 核对全部数字并登记推导值</li><li>深度分析补一段与同类数据集的定位比较</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 c3b7122f · 文稿 b4f0653f</span><span class="s">8.5 分</span></div><p>第 2 轮自评（模型自评）：加入核心观点速览、各节开头问题与承接句、术语首次定义、与 EndoVis/ROBUST-MIS2019/CholecSeg8k/PhaKIR 的定位，挑战轮结论（频次解释不成立、PQ 95.7 的锚定风险、剪刀 sAP 的样本量解释）写入深度分析与局限。笔记与报告数字经 lint_report 全部可在原文或图中找到，图 5 数值登记在 number_exceptions.json。无法修复的限制：两项一致性子集规模、基线训练设置、smAP 缺席处理、三个高分辨率序列身份均为论文未说明；表 2 至表 4 因裁剪混入正文或相邻表格而保留占位，数值以 Markdown 表重写。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

@@ -1,0 +1,40 @@
+{
+ "knowledge_points": [
+  {"term": "逐视频平均 F1", "plain": "先在每个视频内对所有类别求 F1 再平均，每个类和每个视频权重相同。", "where": "sec:models", "needed_for": "解释动作任务为何所有方法都约 23%"},
+  {"term": "平均精度", "plain": "Cholec80 报告的指标，与 F1 不同，两者数值不能直接比较。", "where": "sec:introduction", "needed_for": "91% 对 65% 的比较"},
+  {"term": "在线推断", "plain": "预测当前帧时只能用过去和当前帧，不能看未来帧。", "where": "sec:methods", "needed_for": "解释为何不能用双向时序模型平滑"},
+  {"term": "bootstrap 排名稳定性", "plain": "对测试视频有放回重采样 1000 次并重算排名，看排名变多少。", "where": "sec:models", "needed_for": "判断排名是否可信"},
+  {"term": "Kendall 相关系数", "plain": "两个排名的一致程度，1 为完全相同，-1 为完全反转。", "where": "sec:models", "needed_for": "比较三项任务排名的可靠性"},
+  {"term": "先验知识推断 PKI", "plain": "按阶段顺序和一致性纠正不可能的阶段跳转的后处理。", "where": "sec:methods", "needed_for": "理解 CUHK 与 HIKVision 的阶段方法"},
+  {"term": "GOALS 量表", "plain": "腹腔镜技能整体操作评估量表，各项 1 到 5 分。", "where": "sec:analysis", "needed_for": "理解技能任务的标签"},
+  {"term": "未定义器械杆", "plain": "只看到杆身、此前未见尖端时无法确定是哪种器械的标签。", "where": "sec:analysis", "needed_for": "理解器械任务为何排除该类"}
+ ],
+ "detail_questions": [
+  {"question": "为什么 Sinsheim 只放进测试集？", "answer": "划分为分层随机分配，测试集三中心各 3 台；Sinsheim 只有 3 台，因此全部进入测试集。论文没有说这是刻意的未见中心设计。", "evidence": ["sec:analysis"], "status": "partly"},
+  {"question": "标注者间一致性是多少？", "answer": "论文只说阶段由 3 人、技能由 2 人独立标注后协商一致，没有报告一致性数值。", "evidence": ["sec:analysis"], "status": "not_stated"},
+  {"question": "动作和器械由几人标注？", "answer": "论文只写由医学专家按规则标注，人数未给出。", "evidence": ["sec:analysis"], "status": "not_stated"},
+  {"question": "为什么动作 F1 都在 23% 左右？", "answer": "hold 占 73.3% 时长，各方法 hold F1 为 0.84 到 0.91，其余动作平均 F1 低于 0.03，类平均后约为四分之一。", "evidence": ["sec:results", "sec:discussion"], "status": "resolved"},
+  {"question": "摘要的 67.7% 从哪来？", "answer": "排行榜最高为 68.78，赛内最高 65.38，正文和图 9 都没有 67.7。", "evidence": ["sec:abstract", "sec:results"], "status": "not_stated"},
+  {"question": "摘要器械下限 38.5% 是否对应排行榜？", "answer": "排行榜第 8 名为 27.45，38.47 是第 7 名，摘要区间与排行榜不一致，论文未解释。", "evidence": ["sec:abstract", "sec:results"], "status": "not_stated"},
+  {"question": "正文 P0 79.4%、P1 82.8% 的口径？", "answer": "与图 6 两个混淆矩阵的对角线值都不一致，口径未说明。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "参赛方法输入帧率或采样方式？", "answer": "各队如何下采样或处理 25 与 50 帧率差异未说明。", "evidence": ["sec:methods"], "status": "not_stated"},
+  {"question": "为何技能 MAE 0.78 不能代表能力？", "answer": "唯一提交对每个视频输出相同分数，参考分又集中在 3 到 5 分。", "evidence": ["sec:results", "sec:discussion"], "status": "resolved"},
+  {"question": "每台动作次数的分母？", "answer": "全部动作 167.1 与除以 33 一致，抓取 28.6、持握 21.5 却与除以 99 吻合，分母未说明。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "执行者标注为何未发布？", "answer": "论文只说做了标注但未作为数据集发布，原因未给。", "evidence": ["sec:results"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "多中心设置导致阶段识别从 91% 降到约 65%", "alternative": "差距来自指标不同（F1 对平均精度）、训练集只有 24 台和无固定阶段顺序，与中心数量无关。", "separating_evidence": "在 HeiChole 上按单中心与多中心训练对比，或在 Cholec80 上用相同 F1 协议重算。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "UKHD 病例更难导致阶段识别在 UKHD 最差", "alternative": "UKHD 视频分辨率 960×540、帧率 25，与其他中心不同，画质或器械差异同样能解释。", "separating_evidence": "按难度分层而非按中心比较，或控制分辨率后重测。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "循环网络比三维卷积更适合阶段识别", "alternative": "前三名还共享 Cholec80 预训练和 PKI 等后处理，排名差异可能来自这些因素。", "separating_evidence": "同一主干只替换时序模块的消融。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "动作识别失败是因为训练数据没有反映其他动作的变化", "alternative": "逐帧类平均 F1 对极短动作过于严苛，指标本身压平了方法差异。", "separating_evidence": "按事件计的检测指标或按类报告召回。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "阶段与器械排名稳定可信", "alternative": "bootstrap 只在 9 个测试视频上重采样，换一批病例排名可能改变。", "separating_evidence": "在新的外部视频上复测。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在深度分析中写明 91% 对 65% 混合了指标、训练规模和阶段顺序三个因素，标为我的判断",
+  "中心差异段补充分辨率与帧率作为难度之外的混杂因素",
+  "方法对应表中循环网络一行注明共享 Cholec80 预训练与后处理，没有消融",
+  "动作任务补充：论文未尝试事件级指标，无法区分数据问题与指标问题",
+  "局限中写明标注者间一致性、动作与器械标注人数、参赛方法帧采样方式、执行者标注未发布原因均为论文未说明",
+  "数字不一致列表补充摘要器械下限 38.5% 与排行榜 27.45 不符，以及 P0、P1 识别率口径未说明"
+ ]
+}

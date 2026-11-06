@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Intuitive Surgical SurgToolLoc and SurgVU Challenges Results: 2022-2025</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>只给“装了哪些器械”的标签,能不能学会在手术画面里框出器械?四年挑战赛的答案</h1>
+<div class="sub">Intuitive Surgical SurgToolLoc and SurgVU Challenges Results: 2022-2025</div>
+<div class="meta">Aneeq Zia, Max Berniker 等;Intuitive Surgical 及数十个参赛队机构 | arXiv:2305.07152(v4),MICCAI EndoVis 子挑战总结</div>
+<div><span class="chip">挑战赛数据集与评测报告</span><span class="tag">手术器械检测</span><span class="tag">弱监督</span><span class="tag">伪标签</span><span class="tag">手术视觉问答</span><span class="tag">MICCAI EndoVis</span></div>
+<div class="one">四年挑战用达芬奇系统事件导出的噪声工具存在标签考察弱监督器械检测,冠军 mAP 从 0.4077 升到 0.5188,但领先方法几乎都靠伪标签和人工标注自造带框数据,纯弱监督路线始终落后。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2305.07152" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgtoolloc/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>机器人手术的数据很多,难的是标注。</strong> 达芬奇系统在手术中记录视频、运动学和系统事件,但给视频加上有意义的标注需要懂手术的人,成本高、耗时长,不同标注者之间还有差异。</p>
+<p><strong>系统事件是一种免费的标签。</strong> 每次装上或卸下器械,系统都会记下器械类型和时间。问题在于,器械装着不代表在画面里看得见,事件也不告诉你器械在哪。组织方想知道:能不能把这种噪声弱标签直接拿来训练检测器。</p>
+<p>于是从 2022 年起,Intuitive Surgical 在 MICCAI EndoVis 连续举办同一个主任务的挑战赛,每年再加一个使用同一批视频的第二赛道。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>四年里检测分数有进步,但最高只到 0.5188 mAP,而且进步主要来自参赛队自己造出的带框数据。</strong></p>
+<ul><li>冠军 mAP 依次为 0.4077、0.4669、0.4244、0.5188;通用检测 CO-DETR 在 COCO 上为 0.66。</li><li>起作用的是少量人工标注加跟踪传播、教师模型伪标签、人在环迭代;类激活图路线一直落后。</li><li>全监督步骤识别前五名都超过 0.81 加权 F1,开放式问答 BLEU 最高 0.4215。</li><li>每年测试集不同,只有 2023 对 2022 做过同测试集复测;2025 年新增带框验证集。</li></ul>
+<p>下面先看标签具体弱在哪里。</p><div class="strip h"><span class="t">亮点</span><span class="i">这个挑战的新意在标签来源,而不在任务形式</span><span class="i">排行榜实际奖励的是“谁能更省力地造出带框训练集”</span></div><div class="strip d"><span class="t">数据</span><span class="i">冠军 mAP:0.4077 / 0.4669 / 0.4244 / 0.5188</span><span class="i">COCO 参照:CO-DETR 0.66</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据与标签:弱在哪里</h3><p>视频来自达芬奇系统上的手术训练练习,受训者在活体猪或离体猪器官上做解剖、缝合、电凝等标准操作。</p>
+<ul><li><strong>2022/2023:</strong> 24,695 个 30 秒剪辑,60 FPS,1280×720,14 种器械,每剪辑最多 3 把。</li><li><strong>2024/2025:</strong> 155 次训练的 280 段长视频,超过 840 小时、超过 1800 万帧,12 种器械,另有 8 类手术任务标签;2025 年再加任务的文字描述和一个带框小验证集。</li></ul>
+<p><strong>标签是四条机械臂各装了什么。</strong> 装内镜的臂记为 <code>nan</code>,整个剪辑只给一个标签。噪声来自三处:器械装着但被遮挡或移出视野;部分标签缺失或错配;器械分布极不平衡,WhiteBox 统计最常见类别是最少类别的 1149 倍。</p>
+<p><strong>测试框只框 clevis。</strong> clevis 是器械尖端与杆之间的腕部关节;只有它不明显或器械很大时才把尖端也包进来。测试帧的界面区域被模糊,防止模型直接读出器械名称。</p>
+<figure class="fig"><img src="images/page_011_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。2022 年两个赛道:只分类,或分类加定位。</figcaption></figure>
+<p>这条“只框 clevis”的规则,后面会解释为什么激活图类方法几乎全军覆没。</p></div><div class="card" id="s4"><h3><span class="num">4</span>四年任务与评测协议</h3><div class="tbl"><table><thead><tr><th>年份</th><th>赛道 1</th><th>赛道 2</th><th>指标</th></tr></thead><tbody><tr><td>2022</td><td>工具存在分类</td><td>分类加框</td><td>加权 F1;mAP</td></tr><tr><td>2023</td><td>只有检测</td><td>无</td><td>mAP</td></tr><tr><td>2024</td><td>弱监督检测</td><td>逐帧步骤识别</td><td>mAP;加权 F1</td></tr><tr><td>2025</td><td>弱监督检测,附带框验证集</td><td>开放式问答</td><td>mAP;BLEU</td></tr></tbody></table></div>
+<p>mAP 是在 0.5 到 0.95 的十个交并比阈值上平均的检测精度,框不贴合就会大幅扣分。问答的 BLEU 对 5 个参考答案分别计算,取最大后再平均。</p>
+<p>参赛队提交容器,Grand Challenge 平台在隐藏测试集上以 1 FPS 自动评测;只有同时交最终结果和方法报告的队伍算完整提交。</p></div><div class="card" id="s5"><h3><span class="num">5</span>参赛方法的三条路线</h3><p><strong>路线一,借公开分割数据造框。</strong> HKMV 把 EndoVis17/18 掩码里的 clevis 转成框,得到 5212 张图,再自训练扩到 11035 张。HRI MV 只人工标注首帧,用 SiamFC++ 跟踪传播,交并比低于 0.2 的伪标签丢弃。</p>
+<p><strong>路线二,少量人工标注加跟踪扩展。</strong> 2023 年 PUMCH 用 OSTrack、ANL-Surg 用 Mixformer、SDS-HD 用 TAPIR 关键点跟踪;2024 年 PDMYR 用 DarkLabel 三天标注 220,000 帧;2025 年 PUH-SVU 再加上 MAE 预训练和 Co-DETR 教师伪标签。</p>
+<p><strong>路线三,用分类网络的激活图定位。</strong> SK、HVRL、VANDY-VISE、ITeM、CAMMA,以及 2024 年 SEU-MIA 的 CLIP 方案都属于这一类。</p>
+<figure class="fig"><img src="images/page_031_fig_figure_16_review.png" alt="Figure 16" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 16。ITeM 的激活图定位流程,是路线三的典型结构。</figcaption></figure></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>2022 年分类尚可、检测断崖。</strong> 赛道 1 前三 F1 为 0.7485、0.72、0.7055;赛道 2 只有前三超过 0.3 mAP,HVRL 与 ITeM 为 0。</p>
+<p><strong>2023 年路线二全面领先。</strong> PUMCH 0.4669,前六名都在 0.3 以上;2023 模型放回 2022 测试集复测仍然更好,这是唯一的同测试集跨年证据。</p>
+<p><strong>2024 年同一批视频的对照最清楚。</strong> PDMYR 检测 0.4244,步骤识别 0.8977;SJTUB 用 SAM2 生成超过 30 万帧,只得 0.2754。</p>
+<p><strong>2025 年首次超过 0.5。</strong> PUH-SVU 0.5188、Medibot 0.5018;组织方承认带框验证集很可能促成了提升。</p>
+<p>这些数字为什么会这样,下一节看机制。</p><div class="strip d"><span class="t">数据</span><span class="i">2022 赛道 2:HRI MV 0.4077,HKMV 0.3726,NVIDIA 0.3058</span><span class="i">2024 步骤识别:PDMYR 0.8977</span><span class="i">2025 问答:Capybara 0.4215,UoM-SurgicalAI 0.3656</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么数据整理压过架构</h3><p><strong>激活图落在判别区,而评测要框 clevis。</strong> HRI MV 的特征图显示原模型高激活集中在 clevis,结果把 Cadiere 抓钳误判;扩大候选框包进钳口后才分对。分类要看钳口,评测只框 clevis,激活图两头都顾不上。</p>
+<p><strong>本地分数普遍虚高。</strong> NVIDIA 本地 F1 为 0.8526,测试 0.7055;SJTUB 本地 0.90,测试 0.2754。连续剪辑高度相似、本地标签与测试口径不同,都会抬高本地分数。NVIDIA 用图像哈希按场景分折,就是针对前一点。</p>
+<p><strong>零样本问答胜过微调。</strong> Capybara 指出官方描述只有 21 种文本,微调容易学成模板;UoM 在本地验证上 DoRA 微调 0.8528 高于零样本 0.5701,正式最终阶段却是零样本 0.2776 高于 DoRA 的 0.2367。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>年度进步没有被完全控制。</strong> 只有 2023 对 2022 做了复测,2024 冠军低于 2023,2025 训练条件变了。</li><li><strong>数据整理与架构没有被分离。</strong> 领先队伍同时换了标签和检测器,论文没有单变量对照。</li><li><strong>标注质量比数量重要,只是跨队观察。</strong> SJTUB 团队自己怀疑问题在数据偏差或后处理代码。</li><li><strong>BLEU 不等于答案正确。</strong> Medibot 也指出单靠 BLEU 不够。</li><li><strong>论文未说明:</strong> 2025 带框验证集的规模、测试集标注者间一致性、2024/2025 测试集的视频数量与类别分布、强标签下的性能上限。</li><li><strong>数字前后不一致:</strong> 2022 冠军在 Table 14 为 0.4077,2025 讨论写 0.4452;2022 赛道 1 完整提交在 3.2 节写 17,结果表与讨论为 13,论文未说明原因。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现与借用要注意什么</h3><ul><li>验证集按场景或病例分组,参考 NVIDIA 的图像哈希分折。</li><li>遮挡底部界面:训练时随机裁掉或模糊,测试帧本来就被模糊。</li><li>先确定框的口径(clevis 还是尖端),再选生成伪标签的方法。</li><li>定位部位小、判别部位在别处时,考虑检测与分类解耦,如 Medibot 的单类检测器加分类器。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>只靠系统事件存在标签,社区四年最好做到 0.5188 mAP</div><div>领先方法都自造带框数据,存在标签主要用来挑帧和校验</div><div>同一批视频有逐帧标签时步骤识别可到 0.8977,说明低分来自监督不足</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>同一主任务连续四年,并做过一次同测试集跨年复测</li><li>测试框口径和界面遮挡规则写得清楚</li><li>收录各队完整方法报告,能把排行榜和做法对照着读</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>不限制人工标注,排行榜不区分是否用了人工框</li><li>每年测试集不同,年度结论证据强度不一</li><li>文中有数字前后不一致,且部分关键统计论文未说明</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>同一检测器在强标签下能达到多少?</li><li>不同标签来源对同一管线的影响有多大?</li><li>换成语义层面的评估后,零样本与微调的排序会不会改变?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 6b430605</span><span class="s">7.3 分</span></div><p>第 1 轮自评:证据链和数字覆盖较全,四年排行榜都有表。不足:研究问题末尾缺少核心观点速览;方法主线按年份罗列队伍,机制到结果的对应要靠读者自己拼;与 EndoVis 2017/2018 等其他路线的定位只在 note_plan 里有,正文没写;部分数字后面没有说明意义;数字尚未用 lint_report 核对(H3 unknown)。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>6</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>把 EndoVis 2017/2018 分割挑战和 COCO 通用检测的定位写进正文</li><li>每张排行榜表后补一句这组数字说明什么</li><li>按 insight pass 结果补论文未说明项和挑战轮的结论边界</li><li>运行 lint_report --mode note 核对所有数字并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 cb2dfe28 · 文稿 b580c7d3</span><span class="s">8.3 分</span></div><p>第 2 轮自评(模型自评):补齐核心观点速览、与 EndoVis 2017/2018、Cholec80、COCO 的定位、每张表后的含义说明和挑战轮边界;笔记与报告数字核对均无未匹配项,无需登记推导值。无法修复的限制:论文未说明 2025 带框验证集规模、标注一致性、2024/2025 测试集规模和强标签上限;论文内 2022 冠军分数(0.4077 与 0.4452)和完整提交数(17 与 13)前后不一致,只能如实标注。年度比较受测试集变化影响,笔记已写明。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "b34218798e9d55a238f60c3b15db5280114d81c8eb6638c1b4c1442e8c3035ad",
+  "number_exceptions": {
+    "0.036": "推导值:表 V 总分第一 OTH Regensburg 0.621 减第三 NCT 2 0.585",
+    "0.014": "推导值:表 V 总分 OTH Regensburg 0.621 减 UNC 0.607(该数值也恰为表 V 中 OTH 的缝针分数)",
+    "18": "推导值:表 I 至表 V 中参赛队伍的行数(不含 Average 行)"
+  },
+  "section_count": 11,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

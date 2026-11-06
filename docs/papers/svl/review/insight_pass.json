@@ -1,0 +1,39 @@
+{
+  "knowledge_points": [
+    {"term": "ASR（自动语音识别）", "plain": "把讲座音频转成带时间戳的文字，本文用医学版 AWS 和通用版 Whisper 两套。", "where": "sec:approach", "needed_for": "理解两个文本视图为何互补"},
+    {"term": "InfoNCE", "plain": "批内对比损失：一个片段只有一句正样本文本，其余文本都是负样本。", "where": "sec:approach", "needed_for": "AWS 视图的对齐方式"},
+    {"term": "MIL-NCE", "plain": "多实例版对比损失：正样本是一组句子，组内任一句匹配即可。", "where": "sec:approach", "needed_for": "解释如何容忍讲者先说后做的错位"},
+    {"term": "零样本迁移", "plain": "不用任何下游标签，把类别改写成句子，用文本与图像向量的相似度直接分类。", "where": "sec:approach", "needed_for": "读懂 Table 8 到 10 与全监督的差距"},
+    {"term": "上下文提示词", "plain": "把类别名改写成描述器械、解剖和动作的句子，贴近预训练文本分布。", "where": "sec:approach", "needed_for": "Fig 9 提示词消融"},
+    {"term": "CLIP*", "plain": "在 SVL-Pretrain 上继续微调的 CLIP，用来区分数据收益和方法收益。", "where": "sec:appendix", "needed_for": "主结果对照的解读"},
+    {"term": "纯文本训练的视频描述", "plain": "只用文本训练解码器，推理时把视频向量当文本向量喂入。", "where": "sec:approach", "needed_for": "Table 7 的含义"},
+    {"term": "中位秩", "plain": "真值片段在检索排序中名次的中位数，越低越好。", "where": "sec:experiments", "needed_for": "Table 5 检索结果"}
+  ],
+  "detail_questions": [
+    {"question": "为什么 AWS 句要做置信度和关键词过滤而 Whisper 句不做？", "answer": "AWS 句断句差，需要过滤留下含术语的句子；Whisper 句有清楚的停顿符号。过滤使 AWS 句稀疏、Whisper 句稠密，因此每片段配 1 句 AWS、2 句 Whisper。", "evidence": ["sec:approach", "sec:experiments"], "status": "resolved"},
+    {"question": "消融在哪个划分上做？", "answer": "在三项任务的验证集上做，因为超参据此选定。", "evidence": ["sec:appendix"], "status": "resolved"},
+    {"question": "消融中阶段识别用 mean AP，主结果用 F1，两者能否直接比较？", "answer": "不能，指标不同且划分不同；论文没有解释为何消融改用 AP。", "evidence": ["sec:experiments", "sec:appendix"], "status": "not_stated"},
+    {"question": "随机 Random 基线和 SurgVLP 主结果是否有方差？", "answer": "Random 取 3 次平均；SurgVLP 只在阶段识别上用 3 个种子做了 t 检验，其余任务未报方差。", "evidence": ["sec:appendix", "sec:methods"], "status": "partly"},
+    {"question": "CLIP* 微调用了什么损失和超参？", "answer": "只说加载 CLIP 权重并在 SVL-Pretrain 上微调，没有给出损失、文本视图和超参。", "evidence": ["sec:appendix"], "status": "not_stated"},
+    {"question": "Table 8 和 Table 9 的 Mean 列是否等于七类的算术平均？", "answer": "全监督和 SurgVLP 基本吻合，但 CLIP 工具 Mean 为 22.6 而七类平均约 19.0，Random 阶段 Mean 为 1.8 而七类平均约 3.7；论文未说明 Mean 的计算方式。", "evidence": ["sec:methods-2", "sec:methods-3"], "status": "not_stated"},
+    {"question": "SVL-Pretrain 原始视频和转写是否公开？", "answer": "正文只给出代码仓库地址，没有说明数据是否发布。", "evidence": ["sec:preamble", "sec:experiments"], "status": "not_stated"},
+    {"question": "纯文本训练描述的解码器结构和训练细节是什么？", "answer": "只说参照 Nukrai et al. 2022 构建可训练文本解码器，结构与超参未给出。", "evidence": ["sec:approach"], "status": "not_stated"},
+    {"question": "检索测试查询和预训练文本的清洁程度是否一致？", "answer": "不一致：测试查询由临床协作者纠正错字和标点，预训练转写未纠正。", "evidence": ["sec:experiments", "sec:approach"], "status": "resolved"},
+    {"question": "为什么固定 10 秒片段最差？", "answer": "作者解释为长片段含更多与文本无关的冗余帧，配对变弱。", "evidence": ["sec:appendix"], "status": "resolved"},
+    {"question": "作者摘要写 1.4k 讲座，正文写 1,326，差异在哪？", "answer": "1.4k 是取整说法；正文分别给出 Websurg 1,124 与 EAES/YouTube 202，合计 1,326。", "evidence": ["sec:introduction", "sec:experiments"], "status": "resolved"}
+  ],
+  "challenges": [
+    {"claim": "多文本视图带来更好的表示", "alternative": "收益来自片段切分规则（用 Whisper 合并边界），而非双视图损失；单视图时切分规则同时改变。", "separating_evidence": "固定切分规则、只换损失的对照实验", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "SurgVLP 的方法优于 CLIP 路线", "alternative": "差距主要来自医学预训练的文本编码器，而不是训练目标或数据构造。", "separating_evidence": "CLIP 视觉塔加 BioClinicalBert，或 SurgVLP 换 CLIP 文本塔的对照", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "表示能零样本迁移到胆囊切除识别", "alternative": "提升大部分来自手写提示词与类别的契合，而非表示本身。", "separating_evidence": "同一提示词下比较各模型；Fig 9 只比较了 SurgVLP 自身的提示变体", "in_paper": true, "verdict": "partly_supported"},
+    {"claim": "SurgVLP 显著优于 CLIP*", "alternative": "单次运行的波动", "separating_evidence": "多种子 t 检验", "in_paper": true, "verdict": "partly_supported"}
+  ],
+  "revisions": [
+    "研究问题末尾加入核心观点速览",
+    "关键结果中注明消融用验证集与 mean AP，与主结果 F1 不可直接比较，论文未说明原因",
+    "注明 Table 8/9 的 Mean 列与七类平均不一致，论文未说明计算方式，并登记推导值",
+    "深度分析中写明切分规则与损失、文本编码器与训练目标两组混杂未被拆开",
+    "注明显著性检验只覆盖阶段识别",
+    "复现注意点补充 CLIP* 微调设置、描述解码器结构、数据是否公开均为论文未说明"
+  ]
+}

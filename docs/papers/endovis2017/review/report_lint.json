@@ -1,0 +1,22 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "77171fa5d17f8982ad994b53f388b61233db83f02bf873f8f36430ee1b2eaa3d",
+  "number_exceptions": {
+    "0.015": "推导值：表 I 二值总分 MIT 0.888 减 TUM 0.873（前三名 MIT、UB 0.875、TUM 0.873 的最大差）",
+    "0.671": "推导值：表 III、IV、V 中 TUM 的 shaft 0.822、wrist 0.634、clasper 0.556 的算术平均，(0.822+0.634+0.556)/3≈0.671",
+    "0.738": "推导值：表 II 中 TUM 10 个数据集分数等权平均（0.708…0.807 之和 7.380 除以 10）",
+    "0.756": "推导值：表 II 中 MIT 10 个数据集分数等权平均（之和 7.557 除以 10，四舍五入 0.756）；该数字恰好也出现在原文表中，但此处含义是重算值",
+    "600": "推导值：第 II-B 节 8 段 x 75 帧 = 600 测试帧；2 段 x 300 帧 = 600 测试帧",
+    "0.002": "推导值：表 I 二值总分 UB 0.875 减 TUM 0.873；数字恰好也出现在原文表 V 中，但此处含义是差值"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "aa451b90a1004e69c5c313533b3808d9515f4e347a9ecb0e56c24468e27f820d",
+      "note_snapshot": "review_rounds/round1_Comparative_Validation_of_Machine_Learning_Algorithms_for_Surgical_Workflow_and_Skill_Analysis_with_the_HeiChole_Benchmark.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "模型自评。H3为unknown：note模式数字核对有9个未匹配值，其中8个是图6混淆矩阵中只存在于图像的数值（88.49、86.5、77.59、73.97、43.39、46.92、36.73、35.31），1个是arXiv编号，尚未登记例外。D2为7：机制流程只写了构建与评测四步，没有说明参赛方法输入帧率与采样方式论文未说明。D5为7：与Cholec80、JIGSAWS等的对比分散在研究问题里，没有逐项说明新增点。D6为7：复用建议只有一处集中列出。D7为7：章节未编号，没有亮点与数据条。D8为7：F1、bootstrap、Kendall相关系数、PKI等术语首次出现时未完全定义。D9为6：部分小节不以问题开头，数字后缺少所以然，节尾衔接句只有一处。",
+      "fixes": [
+        "写insight_pass.json，按知识点、细节问题、挑战三轮完成并通过lint_insight",
+        "把图6混淆矩阵数值与arXiv编号、495与99等推导值登记到number-exceptions并写明来源",
+        "各节开头写出要回答的问题，数字后补一句所以然，节尾加衔接句",
+        "首次出现处解释F1、平均精度、bootstrap、Kendall相关系数、PKI等术语",
+        "新增与已有数据集的逐项定位对比",
+        "把未说明之处统一写成论文未说明，并把insight pass得到的修订写入笔记",
+        "写reading_report.md并通过lint_report"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "c1098520c412cbf271b8d68f6b0ea9666bd907bc1c52da3ec9e9fb834c9da552",
+      "note_snapshot": "review_rounds/round2_Comparative_Validation_of_Machine_Learning_Algorithms_for_Surgical_Workflow_and_Skill_Analysis_with_the_HeiChole_Benchmark.md",
+      "report_sha256": "9a586a9bcbad6c0c793cbf66ffebb08a527be2ae8a251913b07e2928a8535644",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "模型自评，从头按评分表重新打分。H3通过：笔记与报告的数字核对均无未匹配值，图6混淆矩阵数值、arXiv编号和推导值登记在number_exceptions.json并写明来源。D2为8：机制流程四步写清输入、操作、输出；参赛方法的帧采样方式论文未说明，无法补足。D7为8：笔记章节名固定不能编号，报告已编号并配亮点与数据条。无法修复的限制：测试集只有9个视频、技能任务只有1队、标注者间一致性论文未说明，这些来自论文本身。Table 1与Figure 9保留占位，原因是自动裁剪只截到跨页表格的片段，正文已用Markdown表格转写。",
+      "fixes": []
+    }
+  ]
+}

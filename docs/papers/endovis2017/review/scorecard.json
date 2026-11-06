@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "11d62dba73466a714fd66f4640527a08702cfaa73182e990e961230d4d5cf1a5",
+      "note_snapshot": "review_rounds/round1_2017_Robotic_Instrument_Segmentation_Challenge.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.3,
+      "verdict": "第 1 轮自评：结构完整，主表、部件拆分表和方法对照表齐全，口径矛盾（正文 0.854 与表 I 0.888）已指出。D2=7：机制流程只讲数据构建，参赛方法与结果之间的对应只在深度分析零散出现。D5=6：与 2015 子挑战、COCO、2018 后续数据集的定位只在研究问题和局限中提到，没有集中对比。D6=7：复用建议有，但未区分照抄/核查/避免。D7=7、D9=6：小节多以事实开头而非问题，部分数字后缺少意义说明，缺少小节间的衔接。H3 未跑数字核对，推导值（0.888 重算、等权 0.756/0.738、0.671、600 帧）尚未登记。",
+      "fixes": [
+        "研究问题开头先交代张力，核心观点速览改为按问题-结论组织",
+        "各节开头补一句本节要回答的问题，数字后补“这意味着什么”",
+        "新增与 2015 EndoVis 子挑战、2018 场景分割数据集和 COCO 的集中定位对比",
+        "把参赛方法与结果模式的对应（预训练编码器、镜面增强、边界后处理）集中写成一张映射表",
+        "复用建议拆成可照抄、需核查、应避免三类",
+        "运行 lint_report --mode note，推导数字写入 number-exceptions",
+        "按 insight pass 结果把 not_stated 缺口写成论文未说明"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "208bd12eeb0794ae945a78eb7757846146c69a93cbedbe4dd2069cf10b878811",
+      "note_snapshot": "review_rounds/round2_2017_Robotic_Instrument_Segmentation_Challenge.md",
+      "report_sha256": "77171fa5d17f8982ad994b53f388b61233db83f02bf873f8f36430ee1b2eaa3d",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评（模型自评）：从头按评分表重打。证据链、数字和边界较完整，lint_report 笔记与报告均无未匹配数字，推导值 0.002/0.015/0.671/0.738/0.756/600 已登记来源。新增设计选择与结果映射表、与 2015 EndoVis/COCO/2018 数据集的定位表、照抄/核查/避免三类复用建议；不可修复的限制：论文没有消融、方差和置信区间，映射表只能写相关不能写因果；部件总分口径、类型计分口径、BIT 异常、数据集 8 夹钳低分只能写论文未说明。D2=8 而非更高：本文没有自己的方法，机制流程只能描述数据构建与评测协议。",
+      "fixes": []
+    }
+  ]
+}

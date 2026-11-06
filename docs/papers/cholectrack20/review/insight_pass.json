@@ -1,0 +1,39 @@
+{
+ "output_language": "zh-CN",
+ "knowledge_points": [
+  {"term": "HOTA", "plain": "把检测精度 DetA 和关联精度 AssA 按几何平均合成的跟踪总分", "where": "sec:models", "needed_for": "读懂三视角结果和低于 45% 的结论"},
+  {"term": "AssA 与 DetA", "plain": "AssA 衡量同一真实目标是否一直用同一个 ID，DetA 衡量框是否找对", "where": "sec:model-2", "needed_for": "判断瓶颈在关联而不在检测"},
+  {"term": "三种轨迹视角", "plain": "同一个框的 ID 何时断开：离开画面、离开体内，或整台手术结束", "where": "sec:methodology", "needed_for": "理解为何同一输出在三个视角分数不同"},
+  {"term": "套管口与操作者", "plain": "器械经固定的套管口进入腹腔，每个套管口对应一名术者的一只手", "where": "sec:methodology", "needed_for": "理解 ID 标注依据和操作者先验"},
+  {"term": "重识别", "plain": "目标消失后再出现时认回原来的 ID", "where": "sec:methodology", "needed_for": "理解术中视角为何最难"},
+  {"term": "Cohen's Kappa 与 Jaccard", "plain": "前者衡量类别标签一致性并扣除偶然一致，后者衡量两个框的重叠", "where": "sec:methodology", "needed_for": "评估标注质量的证据范围"},
+  {"term": "COCO AP", "plain": "在多个交并比阈值下平均的检测精度，AP0.5:0.95 是主指标", "where": "sec:model", "needed_for": "读懂检测基线排名"}
+ ],
+ "detail_questions": [
+  {"question": "三个视角中哪个最难？", "answer": "Table 3 中每个跟踪器的术中 HOTA 都低于腔内（Bot-SORT 17.4 对 27.0），但正文说腔内最难、术中居中，正文与表格矛盾", "evidence": ["sec:model-2", "sec:models"], "status": "resolved"},
+  {"question": "检测排名第一是谁？", "answer": "正文说 YOLOv7 的 56.1 最高，表 2 中 YOLOv9 为 56.5；电钩、冲洗器、标本袋三类也不是 YOLOv7 最高", "evidence": ["sec:model"], "status": "resolved"},
+  {"question": "三个视角是否分别训练或运行了跟踪器？", "answer": "同一跟踪器三视角的 #Dets、#IDs、FPS 基本相同，说明是同一输出对照三套真值；论文没有明说", "evidence": ["sec:model-2"], "status": "partly"},
+  {"question": "跟踪器用的检测器和训练配置是什么？", "answer": "论文未说明", "evidence": ["sec:models"], "status": "not_stated"},
+  {"question": "Table 3 标题的 @25 FPS 指什么？", "answer": "标注是 1 FPS，真值 #Dets 29994 与 1 FPS 测试集规模相符；评测帧率和真值扩展方式论文未说明", "evidence": ["sec:model-2", "sec:methodology"], "status": "not_stated"},
+  {"question": "各划分包含哪些视频？", "answer": "只给出 5:1:4 和按时长平衡，具体视频论文未说明", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "轨迹 ID 的标注一致性是多少？", "answer": "只报告框的 Jaccard 和类别、操作者的 Kappa，ID 一致性论文未说明", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "画面外器械何时算出体？", "answer": "同一套管口进入另一件器械，或原器械松开夹持组织时推断出体", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "可见性轨迹允许多长的短暂消失？", "answer": "两秒以内的遮挡或消失后要重识别回原 ID", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "45% HOTA 的临床门槛依据是什么？", "answer": "作者判断，临床所需精度论文未说明", "evidence": ["sec:models-4"], "status": "not_stated"},
+  {"question": "视觉挑战对检测和跟踪的影响为何方向不同？", "answer": "检测在模糊、套管口视角、反光下最差，跟踪却在这几类下较好；论文把后者归因于数据增强，未解释两者矛盾", "evidence": ["sec:model", "sec:models-4"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "三视角定义产生了临床意义不同的任务", "alternative": "三种视角只是同一关联任务的不同断点，分数差异只反映真值 ID 数（70/247/916）不同，未必对应临床用途差异", "separating_evidence": "用三视角轨迹分别做技能评估或使用统计等下游任务并比较", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "现有跟踪器不足以临床转化", "alternative": "低分可能来自通用跟踪器未针对视角调整、检测器或训练设置不佳，而非任务本身极难", "separating_evidence": "给出检测器、训练细节，或加入使用操作者/阶段上下文的专门方法", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "瓶颈在身份关联而不在检测", "alternative": "DetA 只到 70 左右，检测漏检也会拉低 AssA", "separating_evidence": "用真值框作为输入运行跟踪器，看 AssA 是否仍低", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "标注质量高", "alternative": "一致性只测了框和类别，最难的 ID 分配可能一致性更低", "separating_evidence": "报告三套 ID 的组间一致性", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在关键结果中指出视角难度排序与正文矛盾，以表 3 为准",
+  "新增结论边界小节，写明真值框输入实验缺失、45% 门槛缺依据",
+  "写入跟踪器检测器与训练配置、@25 FPS、划分视频、ID 一致性四项论文未说明",
+  "补充视觉挑战下检测与跟踪结论方向相反的说明",
+  "逐一说明已有数据集缺少的视角与属性",
+  "复现注意点增加应避免的做法"
+ ]
+}

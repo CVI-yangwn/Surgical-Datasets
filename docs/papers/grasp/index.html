@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Pixel-Wise Recognition for Holistic Surgical Scene Understanding</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>在 13 台机器人前列腺根治术上同时标注阶段、步骤、器械实例分割和原子动作，并用统一基线检验各层能否互相帮助</h1>
+<div class="sub">Pixel-Wise Recognition for Holistic Surgical Scene Understanding</div>
+<div class="meta">Nicolás Ayobi、Santiago Rodríguez、Alejandra Pérez、Pablo Arbeláez 等，哥伦比亚安第斯大学、Fundación Santa Fe de Bogotá、西雅图儿童医院、华盛顿大学 | arXiv 2401.11174（v3，2024-12-27）；投稿 Medical Image Analysis</div>
+<div><span class="chip">数据集与基准论文</span><span class="tag">机器人辅助手术</span><span class="tag">前列腺根治术</span><span class="tag">手术数据集</span><span class="tag">器械实例分割</span><span class="tag">原子动作检测</span></div>
+<div class="one">GraSP 在 13 台机器人前列腺根治术上提供阶段、步骤、器械实例分割和原子动作四层标注，基线 TAPIS 在测试集动作检测上比前作高 53%，并显示分割提议与长时预训练能帮助动作检测，但数据单中心、测试仅 5 台，多数提升与标准差同量级。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">7.9</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2401.11174" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/grasp/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>要理解一台手术，模型既要知道“进行到哪一步”，也要知道“每件器械在画面哪里、此刻在做什么”。</strong> 机器人能记录器械的使用信号和运动学，却不能把它们对应到画面中的位置。</p>
+<p><strong>现有基准把这两件事分开做。</strong> 阶段识别数据集没有空间标注；分割数据集没有流程标签；<code>SAR-RARP50</code> 有真人机器人手术分割，但只是语义分割。没有同一批视频上的多层标注，就无法检验一层的信号能否帮助另一层。</p>
+<p>GraSP 是作者在 PSI-AVA 上的扩展：新增 5 台手术，把器械框升级为实例掩码，数据与标注量增加超过 55%。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文给出两样东西：一个四层标注的数据集，一个把分割区域与视频特征结合的基线 TAPIS。</p>
+<ul><li><strong>四层任务：</strong> 阶段 11 类、步骤 21 类（长时），器械 7 类实例分割、原子动作 14 类多标签检测（短时）。</li><li><strong>标注质控：</strong> 动作三人独立标注取多数，再用专家共现矩阵检查逻辑；分割两轮专家复查；两类标注用二部匹配合成同一套实例。</li><li><strong>基线：</strong> 分割模型给出区域，视频编码器给出时间上下文，交叉注意力把两者合起来。</li><li><strong>结论边界：</strong> 测试集动作 mAP 39.26、步骤 mAP 52.01，远未饱和；互补性的提升多在 1 到 2 个点。</li></ul>
+<p>下面依次看数据、标注、评测，再看结果。</p><div class="strip h"><span class="t">亮点</span><span class="i">首个同时含阶段、步骤、器械实例分割、原子动作的公开真人机器人手术数据集（按表 1）</span><span class="i">分割提议与长时预训练都提升动作检测，但幅度小</span></div><div class="strip d"><span class="t">数据</span><span class="i">13 台手术，32.37 小时，30 fps</span><span class="i">两折交叉验证 8 台，测试 5 台</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p><strong>基准能否用，先看采集条件和有没有捷径。</strong> 13 台手术都在一家医院，由 3 名资深术者用 <code>da Vinci Si 3000</code> 完成，取内窥镜左目的 2D 画面。</p>
+<p>原始画面带有器械名称和使用状态指示，模型可能直接读这些字。作者裁掉黑边、把帧从 1024x1280 改为 800x1280，并遮盖指示区，两版都会公开。</p>
+<p>平均每台 2.49 小时。阶段段落常超过 20 分钟，步骤最长约 10 分钟。每个关键帧有 1 到 5 个器械，平均 2.23 个；超过 10% 的器械实例面积不到画面的 2%，细小器械是分割的主要难点。</p>
+<p>所有任务都有长尾：<code>Idle</code> 在阶段和步骤中最多，动作以静止、握持、移动为主。这决定了下一节质控的重点。</p><div class="strip d"><span class="t">数据</span><span class="i">器械相对面积 0.02% 到 40.4%，平均 7.5%</span><span class="i">约 80% 的关键帧含 2 到 3 个器械</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>四层标注怎么做</h3><p><strong>难点在于让不同团队、不同粒度的标签彼此一致。</strong></p>
+<p><strong>长时：</strong> 两名泌尿外科住院医师独立标注起止时间，再协商。两人不一致的帧在阶段上占 21%，步骤上占 37%，步骤更细，分歧更多。</p>
+<p><strong>分割：</strong> 17 名标注员经培训后手绘掩码，可参考前作的框和 <code>MATIS</code> 的预测。专家首轮复查发现 9% 的实例有错，其中勾画问题 8.2%；返工后终审又修正 2%。</p>
+<p><strong>动作：</strong> 每个器械框由 3 人看 3 秒片段独立标注最多 3 个动作，保留至少两人一致的标签。三组交并比低于 0.3 的 2.18% 实例、违反共现矩阵的 5.4% 实例由团队复核。</p>
+<p><strong>对齐：</strong> 用二部匹配把动作框与掩码导出框配对，补上动作侧漏标的 2% 和分割侧漏标的 1.2%，最后统一用掩码导出框。</p>
+<p>这些质控说明了错误比例，但动作标注者间的一致系数论文未说明。</p><div class="strip h"><span class="t">亮点</span><span class="i">共现矩阵把专家知识变成可自动检查的规则</span><span class="i">掩码导出框让两类标注共享同一套实例</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>怎么评测</h3><p><strong>指标决定哪些错误会被惩罚。</strong> 阶段与步骤在 1 fps 帧上算逐帧 mAP 和视频级 F1。分割以实例级掩码 mAP（交并比阈值 0.5）为主，另报 mIoU、IoU、mcIoU。</p>
+<p>动作检测沿用 AVA 的框级 mAP，对每个实例的每个动作类别单独计分。<strong>这比要求整组动作全对宽松，动作 mAP 不能读成“完整描述器械行为”的能力。</strong></p>
+<p>调参只在两折上做，测试前在两折合并数据上重训。</p></div><div class="card" id="s6"><h3><span class="num">6</span>基线 TAPIS 怎么工作</h3><p>TAPIS 把“看清器械”和“看懂时间”分给两个模块。</p>
+<ol><li><code>Mask2Former</code> 在关键帧上输出最多 5 个置信度大于 0.1 的器械掩码及其嵌入。</li><li><code>MViT</code> 读入以关键帧为中心的 16 帧时间窗，输出类别标记和时空特征。</li><li>类别标记经线性层预测阶段或步骤。</li><li>区域嵌入作查询、时空特征作键和值，交叉注意力后分类器械或动作。</li></ol>
+<p>训练分三阶段：先多任务训练长时识别，损失为</p>
+<p>$$\mathcal{L}_{longterm}=\lambda_{phases}\mathcal{L}_{CE}^{phases}+\lambda_{steps}\mathcal{L}_{CE}^{steps}$$</p>
+<p>取 $\lambda_{phases}=1$、$\lambda_{steps}=0.5$；再单独训练分割；最后冻结分割、用预计算区域微调短时任务。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><p><strong>测试集主结果（表 4）：</strong> TAPIS 在阶段、步骤、动作上都最高。</p>
+<div class="tbl"><table><thead><tr><th>Method</th><th>Phase mAP</th><th>Step mAP</th><th>Action mAP</th><th>Seg mAP (mask)</th></tr></thead><tbody><tr><td>SlowFast</td><td>68.77</td><td>46.35</td><td>22.01</td><td>71.32</td></tr><tr><td>TAPIR</td><td>72.59</td><td>50.24</td><td>25.57</td><td>–</td></tr><tr><td>TAPIS-VST</td><td>76.24</td><td>50.74</td><td>33.10</td><td>89.58</td></tr><tr><td>TAPIS</td><td>76.72</td><td>52.01</td><td>39.26</td><td>89.10</td></tr></tbody></table></div>
+<p>动作检测比前作 TAPIR 高 53%，但绝对值只有 39.26。分割上 TAPIS-VST 略好，参数却是 96M 对 44M。</p>
+<figure class="fig"><img src="images/page_017_fig_table_14_review.png" alt="Table 14" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 14。原子动作微调消融：是否用带类别的区域、是否做长时预训练。</figcaption></figure>
+<p>表 14 是“任务互补”的直接证据：两者都用得 35.46，去掉器械类别得 33.52，去掉长时预训练得 34.06。</p>
+<p><strong>分割提议的作用（表 12）：</strong> R50 分割提议的动作 mAP 为 31.24，与 SwinL 的 <code>DINO</code> 的 31.37 持平；SwinL 分割提议达 35.46。</p>
+<p><strong>外部基准：</strong> RARP-45 手势识别 TAPIS 最好（mAP 57.25）；<code>MISAW</code> 上 <code>SAHC</code> 在阶段 F1 和两项步骤指标上超过 TAPIS。</p><div class="strip d"><span class="t">数据</span><span class="i">测试集动作 mAP：39.26 对 TAPIR 25.57</span><span class="i">多任务训练：步骤 mAP 49.72 到 50.74，阶段 mAP 72.31 到 71.36</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><p><strong>互补性方向一致，强度有限。</strong> 35.46 对 34.06 的差距小于后者 1.95 的标准差；多任务训练还让阶段 mAP 下降。只有两折，显著性检验论文未说明。</p>
+<p><strong>分割的收益未与模型结构分开。</strong> 另一种解释是收益来自 <code>Mask2Former</code> 的结构或预训练，论文没有“同一模型只换框监督或掩码监督”的实验。</p>
+<p><strong>排序一致不等于标注可靠。</strong> 外部基准上方法排序与 GraSP 一致，说明 GraSP 能区分强弱方法；标注质量要靠一致性数据证明，而动作的一致系数论文未说明。</p>
+<p><strong>相对干净的证据是交叉注意力头。</strong> 它比 Time MLP 参数少，在四种提议下仍更好，不能用参数量解释。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用要注意什么</h3><ul><li>测试集成绩来自合并两折重训的模型，自己报告时应同样处理。</li><li>短时任务用的是预计算区域，在线计算更好但更贵。</li><li>长时损失权重对结果敏感，搜索范围论文未说明。</li><li>图 1 的实例数与关键帧数之比和正文每帧 2.23 个实例口径不同，原因论文未说明，统计前应核对。</li><li>数据单中心、单机型，跨中心泛化论文未说明。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>GraSP 是目前少见的四层标注真人机器人手术数据集，步骤与动作层远未饱和</div><div>三人投票加共现矩阵校验、掩码导出检测框，是可复用的标注设计</div><div>任务互补的证据方向一致但幅度小，需更多运行或更多数据确认</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>标注流程透明，给出了各类错误比例和处理办法</li><li>固定划分与指标，并开放数据、代码和模型</li><li>消融覆盖区域提议、分类头设计、类别信息和长时预训练</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心 13 台、测试仅 5 台</li><li>多数消融差异与标准差同量级，没有显著性检验的报告</li><li>动作标注一致系数缺失；分割收益与模型结构未分离</li><li>TAPIS 为离线模型，不能实时</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>在其他医院的前列腺手术视频上，GraSP 训练的模型表现如何？</li><li>同一模型用框监督与掩码监督训练，动作检测差多少？</li><li>因果在线版本的 TAPIS 会损失多少精度？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 1f16b741</span><span class="s">7.4 分</span></div><p>第 1 轮按原流程保存的笔记：四层任务、标注协议、TAPIS 机制与主要表格齐全。D4 7：边界列出但未逐条对照核心主张做挑战；D5 7：与 PSI-AVA、SAR-RARP50 等的定位分散在不同章节；D6 7：复用建议缺少‘要避免什么’；D7 7：研究问题末尾没有核心观点速览；D9 6：多数小节直接列数字，缺少开头的问题和数字后的含义。H3 未知：尚未对笔记跑数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入 ### 核心观点速览</li><li>按 insight pass 对四个核心主张逐条做挑战并把结论写回深度分析</li><li>对笔记跑 lint_report --mode note，推导值登记 number_exceptions</li><li>各小节开头补上要回答的问题，关键数字后补一句含义</li><li>我的笔记补充需要避免的做法</li><li>把原文未回答的问题统一写成论文未说明</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 a42a6189 · 文稿 bfb458a8</span><span class="s">7.9 分</span></div><p>第 2 轮（自评）：加入核心观点速览，四个核心主张逐条挑战并写回深度分析与报告第 8 节；未说明之处统一写为论文未说明；笔记与报告数字核对无未匹配项，5 个值登记在 number_exceptions.json（2 个推导值、2 个千位分隔写法、1 个抽取丢失的表格值）。D9 7：报告各节开头有问题、结尾有过渡，但笔记关键结果部分仍以表格加解释为主，叙事较弱。不可修复的限制：表 1、4、6、7、11、12、13 无可用裁剪，保留占位，其中 4、7、11、13 的数值以 Markdown 表转录；论文本身未给动作一致系数、显著性检验与跨中心结果。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "36e1f031e86b573e409fa0300f10ada2dc6ccd73f86325636cd3cdf2b513aad5",
+      "note_snapshot": "review_rounds/round1_Surgical_VQA_Visual_Question_Answering_in_Surgical_Scenes_using_Transformer.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.5,
+      "verdict": "第 1 轮自评：结构完整，主表、三折、参数量、消融数字齐全，机制流程四步可复述。D5 低于 8：只说明了相对 MedFuse 和 VisualBERT 的差异，没有交代 ResMLP 原文的定位。D6 低于 8：复用建议偏概括。D7、D9 低于 8：研究问题末尾没有核心观点速览，多数小节直接给数字，缺少开头的问题和结尾的过渡。D8：“原版/新版”等简称在首次使用时才定义，正文前半仍有个别长句。H3 未知：尚未运行数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各小节开头点出问题、数字后补充含义、节末加过渡",
+        "补充相对 ResMLP 原文的定位",
+        "把 insight pass 的追问答案和挑战结论写入正文，原文没有的写论文未说明",
+        "运行 lint_report.py --mode note 做数字核对，推导值登记到 number_exceptions.json",
+        "撰写 reading_report.md"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "34ae04621a779d67338d3bec53399b6c776657a5875633f0b66d849c996236a1",
+      "note_snapshot": "review_rounds/round2_Surgical_VQA_Visual_Question_Answering_in_Surgical_Scenes_using_Transformer.md",
+      "report_sha256": "ca7f4ba0a2e983c3dcbce72c8193f72c1a906bb85a5d90a844065658589de700",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评（模型自评）：研究问题末尾加了核心观点速览；各节开头说明要回答的问题，数字后写出含义，节末有过渡；insight pass 的 6 条修改和全部论文未说明项已写入笔记与报告。数字核对无未匹配项，推导值和脚本截断的带 M 后缀参数量登记在 number_exceptions.json。无法修复的限制：问题模板、三折划分、MedFuse 句子版实现、槽位准确率、注意力头数与束宽等论文未说明；Table 2 自动裁剪身份不符，保留占位并在正文转写数值。D2 维持 8：256 通道到 300 维嵌入的映射论文未说明。",
+      "fixes": []
+    }
+  ]
+}

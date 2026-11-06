@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "3192babcd750ce4dd9b1649f625c6f7cb17b402270797f8f07df643bd25d77f7",
+      "note_snapshot": "review_rounds/round1_A_multi_centre_polyp_detection_and_segmentation_dataset_for_generalisability_assessment.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮自评（模型自评）：证据链、数字与边界基本完整，表 5/6/7 已整理成表格并插入原图。D2=7：构建流程四步有输入输出，但标注审核中“被拒帧去向”没有交代。D5=7：与已有数据集的对比只放了表 1 原图，没有逐项说明新在哪里。D6=7：复用建议偏概括。D7=7：小节未编号。D9=6：多数小节直接罗列事实，缺少开头的问题和数字后的含义，小节之间没有过渡。H3 未做数字核对，记为 unknown。",
+      "fixes": [
+        "按 insight pass 三轮补充知识点、细节问答和对中心论断的质疑，并把结论写回笔记",
+        "按叙事顺序改写各节开头，交代每节要回答的问题，数字后补一句含义",
+        "把正文与图表数字矛盾（Fig. 2a 的 C5/C6、序列 DSC 0.65 写法、Table 7 的 dAHD 量级）逐项核对并写清",
+        "补充 PolypGen 相对 Kvasir-SEG、CVC-ClinicDB 等的具体差异",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "1f8eb8d7787ae391afe814daa5fc410ee709d6a534a075fea13d58d808311778",
+      "note_snapshot": "review_rounds/round2_A_multi_centre_polyp_detection_and_segmentation_dataset_for_generalisability_assessment.md",
+      "report_sha256": "332222f9161c2f019fe4ac45693bd7126a59b1844d38ac1302bce31746beca80",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评（模型自评，非独立评审）：完成 insight pass（8 个知识点、12 个细节问题、5 条质疑），把序列 DSC 混合误报、无域内上界、表 7 计算对象、阴性帧中心归属、± 含义等写成论文未说明；补充与 Kvasir-SEG 等的逐项对比；各节加入开头问题与过渡。数字核对通过，派生值与图内文字登记在 number_exceptions.json。无法修复的限制：论文本身只有一种划分且无方差，D2 停在 8 因为标注流程中被拒帧去向原文无解；D7=8 因为笔记固定节名不编号，编号只在网页报告中。",
+      "fixes": []
+    }
+  ]
+}
