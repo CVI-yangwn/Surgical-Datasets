@@ -1,0 +1,170 @@
+{
+ "knowledge_points": [
+  {
+   "term": "VideoMAE",
+   "plain": "遮盖 90% 时空图块再重建的视频自监督预训练方法。",
+   "where": "sec:methodology",
+   "needed_for": "SurgMAE 只是它的继续预训练"
+  },
+  {
+   "term": "继续预训练",
+   "plain": "从已有权重出发,在新领域数据上接着做同一自监督目标。",
+   "where": "sec:methodology",
+   "needed_for": "与 Kinetics 版 VideoMAE 的对比"
+  },
+  {
+   "term": "线性探测",
+   "plain": "冻结骨干只训分类头,衡量特征本身的可分性。",
+   "where": "sec:methodology",
+   "needed_for": "Table 4 的全部结论"
+  },
+  {
+   "term": "Top-k 准确率",
+   "plain": "真值落在得分最高的 k 个类别中即算对。",
+   "where": "sec:datasets-2",
+   "needed_for": "二类子任务的数字解读"
+  },
+  {
+   "term": "不平衡因子",
+   "plain": "最多类与最少类样本数之比,论文控制在 10 以内。",
+   "where": "sec:evaluation",
+   "needed_for": "长尾说法与评测公平性"
+  },
+  {
+   "term": "6C-10S-72T",
+   "plain": "6 类、10 个子类、72 个标签的评测分类体系。",
+   "where": "sec:appendix-e",
+   "needed_for": "“72 个任务”到底指什么"
+  },
+  {
+   "term": "按视频划分",
+   "plain": "同一视频的片段只进训练或只进测试。",
+   "where": "sec:evaluation",
+   "needed_for": "泄漏风险判断"
+  }
+ ],
+ "detail_questions": [
+  {
+   "question": "SurgBench-P 到底有多少帧?",
+   "answer": "摘要 53M,表 2 预训练合计 56,062,458,第 4 节 74.4M,三者无法换算。",
+   "evidence": [
+    "sec:abstract",
+    "sec:evaluation",
+    "sec:methodology"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "继续预训练实际用了多少数据?",
+   "answer": "四阶段精炼后只剩 39,807 个片段;每阶段的数据量与来源比例论文未说明。",
+   "evidence": [
+    "sec:methodology"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "预训练是否排除了评测测试集所在视频?",
+   "answer": "论文未说明;S8-S16 同时贡献预训练帧和评测帧。",
+   "evidence": [
+    "sec:evaluation"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "二类子任务的分类头有几类输出?",
+   "answer": "论文未说明;T8 Top-1 低于 0.5,说明不是逐子任务二分类。",
+   "evidence": [
+    "sec:methodology"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "为什么 T5 随机初始化 Top-3 最高?",
+   "answer": "论文没有讨论,只说 T4、T8 没有改善。",
+   "evidence": [
+    "sec:methodology"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "大模型版的提升能归因于规模吗?",
+   "answer": "部分;两版的 epoch、批大小、学习率都不同,只有两个规模点。",
+   "evidence": [
+    "sec:methodology",
+    "sec:models-2"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "LapGyn 实验证明了跨模态泛化吗?",
+   "answer": "没有;LapGyn 仍是妇科腹腔镜,只有一个数据集一次运行。",
+   "evidence": [
+    "sec:models-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "结果有方差或多次运行吗?",
+   "answer": "论文未说明,所有数字是单次结果。",
+   "evidence": [
+    "sec:methodology"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "全参数微调下差距多大?",
+   "answer": "论文未说明,只报告冻结骨干、只训分类头的结果。",
+   "evidence": [
+    "sec:methodology"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "数据如何获取?",
+   "answer": "只能申请获取,没有公开链接;三个来源因许可不再分发。",
+   "evidence": [
+    "sec:abstract",
+    "sec:evaluation"
+   ],
+   "status": "resolved"
+  }
+ ],
+ "challenges": [
+  {
+   "claim": "在 SurgBench-P 上继续预训练提升了手术视频表示",
+   "alternative": "提升来自预训练时见过评测测试视频的画面,而非更通用的手术表示",
+   "separating_evidence": "剔除测试视频后重做预训练再比较",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "SurgBench 覆盖 11 个专科、22 种术式",
+   "alternative": "广度几乎全部来自 AVOS 一个 YouTube 来源,评测集并不覆盖这些专科",
+   "separating_evidence": "按来源统计每个专科的帧数,并在这些专科上评测",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "模型越大表现越好",
+   "alternative": "差异来自不同的训练轮数、批大小和学习率",
+   "separating_evidence": "固定超参只改规模,并加入更多规模点",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "预训练能泛化到未见术式",
+   "alternative": "LapGyn 与 AutoLaparo 同属妇科腹腔镜,是近分布迁移",
+   "separating_evidence": "在开放手术或眼科等不同模态数据上测试",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  }
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览,先给结论再展开",
+  "关键结果补写 T5 随机初始化 Top-3 最高、T1 大模型略低于标准版等反例",
+  "局限把四阶段数据量、测试视频去重、分类头结构、方差、全参数微调统一写成论文未说明",
+  "深度分析写明大模型对比混杂了训练轮数和超参",
+  "LapGyn 段写明它属于妇科腹腔镜,不能支撑跨模态泛化",
+  "我的笔记补写复现时要自行补齐的设置:分类头结构、Top-3 算法、测试视频去重"
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "视频级 VQA", "plain": "问题针对一段多帧视频而不是单张图,答案可能依赖帧间变化", "where": "sec:introduction", "needed_for": "数据集相对帧级 VQA 的新意"},
+  {"term": "Whisper 转写", "plain": "语音识别模型,把术者讲解转成带时间戳的文字", "where": "sec:methodology", "needed_for": "片段切分与问答文本来源"},
+  {"term": "CGVP / FGCE / QAG 智能体", "plain": "三个由 LLM 担任的处理步骤:合并片段、抽取概念、生成问答", "where": "sec:methodology", "needed_for": "判断问答质量依赖什么"},
+  {"term": "视频组重采样器", "plain": "用固定数量的可学习查询把多帧视觉特征压成固定长度", "where": "sec:model", "needed_for": "帧数消融的解释"},
+  {"term": "CVS 平衡准确率", "plain": "胆囊切除关键安全视野三条标准的二分类,按类别平均召回,随机约为 50", "where": "sec:model-3", "needed_for": "判断 58.88 的分量"},
+  {"term": "CholecT50 三元组", "plain": "每帧标注器械、动作、目标三元组", "where": "sec:model-4", "needed_for": "目标分项落后的含义"},
+  {"term": "零样本与微调", "plain": "对比模型没有在 SurgPub-Video 上训练,SurgLLaVA-Video 训练过", "where": "sec:experiments", "needed_for": "基准领先幅度的解读"}
+ ],
+ "detail_questions": [
+  {"question": "2500 万帧怎么算出来的", "answer": "论文没有给出算法;原始视频 3,538 个、平均 323.5 秒、30 Hz 约合 3400 万帧,片段 10,926 个、29.85 秒约合 980 万帧,都不等于 2500 万", "evidence": ["sec:abstract", "sec:methodology"], "status": "not_stated"},
+  {"question": "正文说十个专科提升超过 10%,对照的是谁", "answer": "表 2 中相对最强基线超过 10 点的只有内分泌和食管;相对 GPT-4o 是 8 个专科;骨科和胸科并未领先,与正文所说全部专科一致提升不符", "evidence": ["sec:model-2", "sec:experiments"], "status": "resolved"},
+  {"question": "开放式答案如何评分", "answer": "论文只说下游任务用选择题完全匹配;基准中开放题的评分方式未说明", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "专家复核了多少问答、改了多少", "answer": "只说医学专家复核并可多轮迭代,人数、比例、修改率未说明", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "出题的 GPT-4o 能看到视频帧吗", "answer": "FGCE 明确只给转写和文章文本;QAG 提示要求基于可见证据,但是否输入帧未说明", "evidence": ["sec:methodology", "sec:experiments"], "status": "not_stated"},
+  {"question": "基准如何抽样", "answer": "从 705 个视频中随机抽 20% 问答,再删除多数类的相似问答,得到 3,337 个;705 个视频是否就是全部测试视频未说明", "evidence": ["sec:methodology"], "status": "partly"},
+  {"question": "表 2 总体准确率与消融 80.82 为何不同", "answer": "消融的全量数据与 16 帧应对应主模型,但总体为 80.82 而表 2 为 82.84,原因未说明", "evidence": ["sec:model-2", "sec:model-4"], "status": "not_stated"},
+  {"question": "下游三个数据集是否参与训练", "answer": "只说沿用 SurgVLM 的实验设置,是否用其训练集微调未说明", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "GPT-4o 在 CVS 上为何只有 9.07", "answer": "远低于随机的 50,论文未解释,可能是拒答或格式不匹配", "evidence": ["sec:model-3"], "status": "not_stated"},
+  {"question": "视觉编码器、LLM 型号和训练超参数", "answer": "只说沿用 TinyLLaVA-Video 预训练权重、冻结编码器,具体型号与学习率等未说明", "evidence": ["sec:model", "sec:experiments"], "status": "not_stated"},
+  {"question": "期刊视频的版权与发布许可", "answer": "只说将会发布,许可未说明", "evidence": ["sec:abstract", "sec:conclusion"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "基准领先说明模型获得了手术视频理解能力", "alternative": "模型学到了 GPT-4o 出题的风格和选项分布,同分布微调本身就带来大幅领先", "separating_evidence": "只给问题不给视频的盲答对照,或对比模型在同数据上微调", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "视频输入带来时间理解", "alternative": "多数问题只需单帧甚至只需转写知识即可回答", "separating_evidence": "单帧输入与打乱帧序的对照", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "SurgPub-Video 带来下游泛化", "alternative": "下游增益来自对 SurgVLM 设置下选择题格式的适应,或下游训练集参与了微调", "separating_evidence": "说明下游训练数据来源,并报告不用 SurgPub-Video 只用下游数据的对照", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "数据越多越好", "alternative": "单次训练的随机波动", "separating_evidence": "多次运行的方差", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览",
+  "关键结果核对正文:十个专科提升超 10 点与表 2 不符,骨科与胸科未领先",
+  "写明 2500 万帧无法由给出的时长复现",
+  "写明消融总体 80.82 与表 2 的 82.84 不一致",
+  "深度分析加入同分布出题风格与单帧替代解释,并写明缺少盲答和单帧对照",
+  "把评分方式、复核规模、出题是否看帧、下游训练、模型型号、版权写成论文未说明",
+  "我的笔记加入复现检查项"
+ ]
+}

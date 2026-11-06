@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "腹腔镜胆囊切除", "plain": "经腹壁小孔插入内镜和器械切除胆囊的手术,是手术视频研究最常用的术式。", "where": "sec:background", "needed_for": "理解 7 个阶段和器械种类的来源"},
+  {"term": "Cholec80 阶段定义", "plain": "把胆囊切除分为准备、Calot 三角解剖、夹闭切断、胆囊剥离、装袋、清理凝血、取出 7 个阶段的约定。", "where": "sec:background", "needed_for": "阶段标签与其他数据集是否可以合用"},
+  {"term": "实例分割", "plain": "不仅给出每个像素属于哪类器械,还区分同类的不同个体。", "where": "sec:background", "needed_for": "掩码蓝通道编码实例的意义"},
+  {"term": "COCO 可见性三态", "plain": "关键点标为可见、被遮挡或不存在,源自 COCO 人体关键点协议。", "where": "sec:background", "needed_for": "评估遮挡关键点时如何分开统计"},
+  {"term": "多实例多类别 DSC", "plain": "对每个器械实例计算掩码重叠系数再平均,类别错了该实例记零。", "where": "sec:background", "needed_for": "解读 83.64% 一致性的含义"},
+  {"term": "留一视频 / 留一医院", "plain": "每次拿一个视频或一家医院的全部数据做验证,其余训练。", "where": "sec:dataset", "needed_for": "作者推荐的划分方式与小样本问题"},
+  {"term": "CVAT", "plain": "开源的图像与视频标注工具,支持多边形和点标注。", "where": "sec:background", "needed_for": "标注流程的复现"}
+ ],
+ "detail_questions": [
+  {"question": "阶段标注帧到底是 485,875 还是 486,875?", "answer": "摘要和正文为 485,875;Table 1 合计行为 486,875;逐行相加为 485,875,合计行是笔误。分割帧同理,19,435 正确,表中 19,475 有误。", "evidence": ["sec:abstract", "sec:background"], "status": "resolved"},
+  {"question": "为什么分割和关键点只标 1 fps?", "answer": "论文只说明每 25 帧标一帧,未说明选择理由,也未讨论对时序方法的影响。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "三家医院各贡献多少数据?", "answer": "MRI 6 个视频,UKHD 1 个,KWS 1 个,按 Table 1 时长计算 MRI 约占 79%。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "标注者间一致性是多少?", "answer": "论文采用顺序复核而非并行双标,没有报告标注者间一致性。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "83.64% 衡量的是什么?", "answer": "第二轮与第三轮复核结果之间的多实例多类别 DSC,主要差异来自器械分类。它是修改量,不是对独立真值的精度。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "阶段和关键点有定量质检吗?", "answer": "没有,两者都只有复核流程描述和合理性检查。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "测试集有多少视频、来自哪些医院?", "answer": "论文只说中间编号的视频留作测试且不公开,未给出数量和医院来源。", "evidence": ["sec:background", "sec:dataset"], "status": "not_stated"},
+  {"question": "病人年龄、术者经验、相机型号是什么?", "answer": "只写成年病人、性别不同、相机不同,未给出具体统计。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "undefined 过渡阶段占多少,评测是否计入?", "answer": "Figure 2 显示各视频都有 undefined 段,但论文未给出占比,也未说明评测时如何处理。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "挑战赛期间修正了多少错误?", "answer": "只说修正了罕见错误、数据持续更新,未给出数量和版本记录。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "遮挡关键点的真值从哪里来?", "answer": "标注员结合前后帧和器械预期运动推断位置;分割则只标可见部分。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "论文是否报告基线?", "answer": "没有,基线和挑战赛结果在挑战赛论文 arXiv 2507.16559 中。", "evidence": ["sec:background", "sec:references"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "PhaKIR 是首个多机构三任务联合数据集,可研究跨机构差异", "alternative": "6:1:1 的结构使另两家医院各只有 1 个视频,跨中心差异与单个病人、单个术者的差异无法区分。", "separating_evidence": "每家医院多个视频、不同术者的对照,或按医院留一的基线结果与方差。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "顺序三轮复核保证了高质量标注", "alternative": "同一团队顺序复核容易沿用前人判断,83.64% 只说明最后一轮还在改,不说明最终标注接近独立真值。", "separating_evidence": "独立双标的一致性,或对一部分帧做盲重标。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "社区使用且无系统性错误报告,进一步验证了质量", "alternative": "参赛者只为比赛训练模型,不一定会系统检查标签;没有报告不等于没有错误。", "separating_evidence": "错误报告数量、修正比例与版本差异统计。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览,写明论文不含基线",
+  "研究问题补充论文与挑战赛论文的分工",
+  "数据来源补充 MRI 约占阶段帧 79% 的推导与意义",
+  "质检协议补写顺序复核可能沿用前人判断的替代解释",
+  "把 1 fps 选择理由、测试集、病人与相机信息、undefined 占比、错误修正记录写成 论文未说明 并说明限制",
+  "深度分析加入社区验证的证据强度讨论",
+  "各节开头写本节要回答的问题,数字后补一句意义"
+ ]
+}

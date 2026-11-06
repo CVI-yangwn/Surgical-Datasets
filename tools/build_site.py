@@ -20,6 +20,8 @@ CATALOG = [
         {'name': 'Cataract-1K', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.06295', 'data': 'https://github.com/Negin-Ghamsarian/Cataract-1K', 'task': '阶段识别 / 分割 / 异常检测', 'size': '1000 个视频', 'source': '医院', 'slug': 'cataract-1k', 'note': 'Cataract_1K'},
         {'name': 'OphNet', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.07471', 'data': 'https://minghu0830.github.io/OphNet-benchmark', 'task': '阶段、器械、操作识别', 'size': '2278 个视频', 'source': 'YouTube', 'slug': 'ophnet', 'note': 'OphNet'},
         {'name': 'CaDIS', 'year': 2019, 'paper': 'https://arxiv.org/abs/1906.11586', 'data': 'https://cataracts-semantic-segmentation2020.grand-challenge.org/', 'task': '白内障手术图像语义分割', 'size': '', 'source': '', 'slug': 'cadis', 'note': 'CaDIS'},
+        {'name': 'Cataract-LMM', 'year': 2025, 'paper': 'https://arxiv.org/abs/2510.16371', 'data': 'https://huggingface.co/datasets/mjahmadi/Cataract-LMM', 'task': '阶段识别 / 实例分割 / 器械-组织交互跟踪 / 技能评估', 'size': '3000 个视频', 'source': '两家眼科医院', 'slug': 'cataract-lmm', 'note': 'Cataract_LMM'},
+        {'name': 'Sankara-MSICS', 'year': 2024, 'paper': 'https://arxiv.org/abs/2411.16794', 'data': '', 'task': '小切口白内障器械分割 / 阶段识别', 'size': '53 个视频（3527 帧像素标注）', 'source': 'Sankara 眼科医院', 'slug': 'sankara-msics', 'note': 'Phase_Informed'},
     ]),
     ('endoscopic', '🔬 内镜', 'Endoscopic', [
         {'name': 'EndoBench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2505.23601', 'data': 'https://huggingface.co/datasets/Saint-lsy/EndoBench', 'task': '多模态大模型视觉问答评测', 'size': '', 'source': '', 'slug': 'endobench', 'note': 'EndoBench'},
@@ -28,7 +30,7 @@ CATALOG = [
         {'name': 'EndoSLAM', 'year': 2020, 'paper': 'https://arxiv.org/abs/2006.16670', 'data': 'https://github.com/CapsuleEndoscope/EndoSLAM', 'task': '内镜视觉里程计与深度估计', 'size': '', 'source': '', 'slug': 'endoslam', 'note': 'EndoSLAM'},
     ]),
     ('laparoscopic', '🩻 腹腔镜', 'Laparoscopic', [
-        {'name': 'SLAM', 'year': 2025, 'paper': '', 'data': 'https://figshare.com/articles/dataset/SLAM_-_Surgical_LAparoscopic_Motions/28104782/3', 'task': '动作分类', 'size': '~3650 个视频', 'source': '', 'slug': None, 'note': None},
+        {'name': 'SLAM', 'year': 2025, 'paper': 'https://www.nature.com/articles/s41597-025-05093-7', 'data': 'https://figshare.com/articles/dataset/SLAM_-_Surgical_LAparoscopic_Motions/28104782/3', 'task': '动作分类', 'size': '4,097 个视频片段', 'source': '瑞金医院卢湾分院', 'slug': 'slam', 'note': 'A_Comprehensive_Video'},
         {'name': 'Cholec80（EndoNet）', 'year': 2016, 'paper': 'https://arxiv.org/abs/1602.03012', 'data': '', 'task': '阶段识别 / 器械识别', 'size': '', 'source': '', 'slug': 'cholec80', 'note': 'EndoNet'},
         {'name': 'CholecT50', 'year': 2021, 'paper': 'https://arxiv.org/abs/2109.03223', 'data': '', 'task': '手术动作三元组识别', 'size': '50 个视频', 'source': '', 'slug': 'cholect50', 'note': 'Rendezvous'},
         {'name': 'CholecSeg8k', 'year': 2020, 'paper': 'https://arxiv.org/abs/2012.12453', 'data': '', 'task': '胆囊切除语义分割', 'size': '8,080 帧（17 段视频）', 'source': 'Cholec80', 'slug': 'cholecseg8k', 'note': 'CholecSeg8k'},
@@ -37,6 +39,7 @@ CATALOG = [
         {'name': 'Endoscapes', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.12429', 'data': 'https://github.com/CAMMA-public/Endoscapes', 'task': '分割 / 检测 / 关键安全视野评估', 'size': '201 个视频', 'source': '', 'slug': 'endoscapes', 'note': 'The_Endoscapes'},
         {'name': 'CholecTrack20', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.07352', 'data': '', 'task': '多器械跟踪', 'size': '20 个视频', 'source': '', 'slug': 'cholectrack20', 'note': 'CholecTrack20'},
         {'name': 'CholecInstanceSeg', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.16039', 'data': '', 'task': '器械实例分割', 'size': '41.9k 帧（85 台手术）', 'source': 'Cholec80 与 CholecT50', 'slug': 'cholecinstanceseg', 'note': 'CholecInstanceSeg'},
+        {'name': 'PhaKIR', 'year': 2025, 'paper': 'https://arxiv.org/abs/2511.06549', 'data': 'https://doi.org/10.5281/zenodo.15740619', 'task': '阶段识别 / 器械关键点 / 器械实例分割', 'size': '8 个视频（485,875 帧阶段标注）', 'source': '三家德国医院', 'slug': 'phakir', 'note': 'Video_Dataset_for_Surgical_Phase'},
     ]),
     ('robotic', '🤖 机器人手术', 'Robotic', [
         {'name': 'EndoVis 2017', 'year': 2019, 'paper': 'https://arxiv.org/abs/1902.06426', 'data': '', 'task': '器械分割', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': 'endovis2017', 'note': '2017_Robotic'},
@@ -50,9 +53,11 @@ CATALOG = [
     ('multimodal', '💬 多模态与问答', 'Multimodal', [
         {'name': 'Surgical-VQA', 'year': 2022, 'paper': 'https://arxiv.org/abs/2206.11053', 'data': '', 'task': '手术场景视觉问答', 'size': '', 'source': 'EndoVis 2018 与 Cholec80', 'slug': 'surgical-vqa', 'note': 'Surgical_VQA'},
         {'name': 'SVL（SurgVLP）', 'year': 2023, 'paper': 'https://arxiv.org/abs/2307.15220', 'data': 'https://github.com/CAMMA-public/SurgVLP', 'task': '手术视频-语言预训练', 'size': '', 'source': '手术讲解视频', 'slug': 'svl', 'note': 'Learning_Multi'},
+        {'name': 'SurgBench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2506.07603', 'data': '', 'task': '手术视频基础模型预训练与多任务评测', 'size': '5300 万帧（22 种术式）', 'source': '16 个来源整合', 'slug': 'surgbench', 'note': 'SurgBench'},
     ]),
     ('notyet', '🕒 尚未公开', 'Not yet', [
         {'name': 'OphCLIP', 'year': 2025, 'paper': 'https://arxiv.org/abs/2411.15421', 'data': '', 'task': '图文对齐', 'size': '375K 图文对', 'source': 'YouTube', 'slug': 'ophclip', 'note': 'OphCLIP', 'tag': '眼科'},
+        {'name': 'SurgPub-Video', 'year': 2025, 'paper': 'https://arxiv.org/abs/2508.10054', 'data': '', 'task': '手术视频视觉问答', 'size': '3000 多个视频', 'source': '医学期刊附带视频', 'slug': 'surgpub-video', 'note': 'SurgPub_Video', 'tag': '多模态'},
     ]),
 ]
 

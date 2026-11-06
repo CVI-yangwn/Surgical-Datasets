@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/SurgBench_A_Unified_Large_Scale_Benchmark_for_Surgical_Video_Analysis/reading_report.md",
+  "mode": "report",
+  "report_sha256": "ee8a7d4f95e7ee20bab50f0e600f5b0bcc0849401252771608b4dd8ae752355f",
+  "number_exceptions": {
+    "0.5": "推导值:二分类子任务的随机猜测 Top-1 水平,1/2",
+    "1300": "Figure 3 纵轴读数:最多的标签约 1300 个样本,来自图像而非正文",
+    "5300": "摘要 53 million frames 的中文写法 5300 万"
+  },
+  "section_count": 8,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

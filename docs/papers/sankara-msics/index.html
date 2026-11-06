@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Phase-Informed Tool Segmentation for Manual Small-Incision Cataract Surgery</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>第一个手法小切口白内障手术数据集,以及用手术阶段辅助器械分割的 ToolSeg</h1>
+<div class="sub">Phase-Informed Tool Segmentation for Manual Small-Incision Cataract Surgery</div>
+<div class="meta">Bhuvan Sachdeva、Naren Akash 等,Microsoft Research、Sankara Eye Hospital 与 University of Bonn | arXiv 2411.16794,v2,预印本,2024-12-03</div>
+<div><span class="chip">方法论文(附新数据集)</span><span class="tag">白内障手术</span><span class="tag">MSICS</span><span class="tag">器械分割</span><span class="tag">手术阶段</span><span class="tag">SAM 2</span><span class="tag">伪标签</span></div>
+<div class="one">Sankara-MSICS 提供 53 个小切口白内障手术视频的 18 阶段标注和 3527 帧 13 类器械掩码;ToolSeg 用阶段条件解码器加 SAM 2 伪标签,把 U-Net 的 DSC 从 50.66 提到 62.70(预测阶段)或 69.96(真值阶段),但数据是否公开论文未说明。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.0</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2411.16794" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/sankara-msics/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>白内障手术视频分析几乎只研究了超声乳化,而低收入地区最常用的是手法小切口手术(MSICS)。</strong> 超声乳化依赖昂贵设备;MSICS 成本低、速度快,也适合硬核等复杂病例。</p>
+<p>两种术式的阶段和器械都不同。MSICS 切口为 6 到 8 mm,有核娩出等独有阶段,使用娩核匙(Vectis)、旋核钩(Dialer)、结膜剪等超声乳化中不用的器械,已有的白内障数据集不能直接替代。</p>
+<p>眼科器械分割本身也难:器械细小,背景平均占每帧 94.51% 的像素;角膜反光扭曲器械外观;不同器械外观相近。</p>
+<figure class="fig"><img src="images/page_001_fig_figure_1_review_repair1.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。同一视频中外观相似的水分离套管(左)和旋核钩(右),二者属于不同阶段。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">缺口:没有公开的 MSICS 数据集</span><span class="i">难点:小器械、强反光、外观相似</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案分两部分:一个数据集,一个用阶段信息辅助分割的方法 ToolSeg。</p>
+<ul><li>数据:53 个视频标注 18 个阶段,3527 帧标注 13 类器械,按视频五折交叉验证。</li><li>阶段先验:在 U-Net 解码器每级加入按阶段调制特征的 PCD 层。</li><li>伪标签:SAM 2 把人工掩码传播到前后帧,共 24405 帧。</li></ul>
+<p><strong>结果:</strong> U-Net 基线 DSC 50.66,预测阶段加伪标签到 62.70,真值阶段加伪标签到 69.96。<strong>边界:</strong> 最好结果依赖人工阶段标签,数据集是否公开论文未说明。</p><div class="strip d"><span class="t">数据</span><span class="i">53 个视频,18 个阶段,3527 帧,13 类器械</span><span class="i">DSC:基线 50.66,v4 62.70,v7 69.96</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来、怎样标注</h3><p>数据能外推多远,取决于来源。53 个视频于 2023 年 10 月到 2024 年 10 月在 Sankara 眼科医院录制,1920 × 1080、30 fps,训练时缩小到 480 × 270。<strong>这是单中心数据</strong>,术者人数、病人统计和伦理审批论文未说明。</p>
+<p>标注用基于 SAM 的网页工具:住院眼科医生点击正负点生成掩码并选类别,每帧显示所属阶段。质量控制用一组 30 帧的公共子集与资深医生的标注比对,两名医生的标注因质量问题被拒绝;之后做形态学去噪和高斯平滑。标注者间一致性的数值论文未说明。</p>
+<figure class="fig"><img src="images/page_013_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。MSICS 的 18 个阶段及各阶段所用器械,是阶段先验的依据。</figcaption></figure>
+<p>器械呈长尾分布:Hoskins 镊有 2005 个实例,撕囊针只有 86 个。<strong>少见器械的像素占比也最小</strong>,撕囊针、水分离套管、旋核钩都在 0.75% 以下。</p><div class="strip h"><span class="t">亮点</span><span class="i">阶段与器械一一对应得很紧,多数阶段只用一到三种器械</span><span class="i">少见器械又小又少,是最难的类别</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>阶段从哪来:MS-TCN++</h3><p>部署时没有人工阶段标签,阶段要先预测。作者用 MS-TCN++(多级时序卷积网络)在另外 90 个内部视频上训练,在本数据集上测试。</p>
+<p><strong>预测阶段只有一半是对的:</strong> 准确率 50.10%,F1 50.23%。混淆矩阵中切口阶段一帧都没有被预测出来,相邻阶段大量混淆。</p>
+<figure class="fig"><img src="images/page_015_fig_figure_9_review.png" alt="Figure 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 9。阶段识别混淆矩阵,行为真值、列为预测。</figcaption></figure>
+<p>这一质量限制了阶段先验的实际收益,第 7 节的结果会显示这一点。</p></div><div class="card" id="s5"><h3><span class="num">5</span>ToolSeg:按阶段调制解码器</h3><p>阶段信号怎样进入网络?在 U-Net 解码器每一级加一个 PCD 层。</p>
+<figure class="fig"><img src="images/page_004_fig_figure_3_review_repair1.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。ToolSeg 结构,黄色为 PCD 层。</figcaption></figure>
+<p>PCD 层有三步。PAFT 为每个阶段 $p$ 学习通道向量,做逐通道缩放和平移,形式与 FiLM 相同:</p>
+<p>$$f' = \gamma_p \odot f + \beta_p$$</p>
+<p>DFBF 由特征卷积和阶段嵌入算出像素级系数 $\alpha = H(f) + \eta_p$;CGate 用它混合两种特征:</p>
+<p>$$f'' = f' \cdot \alpha + f \cdot (1 - \alpha)$$</p>
+<p>只用 PAFT 的叫 PCD-Base,三步都用的叫 PCD-Gated。$\alpha$ 是否经 sigmoid 限制在 0 到 1,论文未说明,而门控的含义依赖这一点。</p></div><div class="card" id="s6"><h3><span class="num">6</span>SAM 2 伪标签</h3><p>人工标注只覆盖 3527 帧,其余帧都没用上。对每个标注帧中的每个器械,先从真值前景、背景各采两点提示 SAM 2,再按真阳、真阴、假阳、假阴四个区域各采两点迭代修正,保留最好的一组点。</p>
+<p>用这组点向前后各传播 90 帧、每 30 帧取一帧,每个标注帧多得 6 帧,共 20878 帧伪标签。训练先用人工加伪标签,再只用人工标注微调。</p>
+<figure class="fig"><img src="images/page_014_fig_figure_8_review.png" alt="Figure 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 8。掩码传播到前后 3 秒;第一行 -2s 帧受手术灯反光影响出错。</figcaption></figure>
+<p><strong>伪标签质量明显低于人工标注</strong>:654 帧对比 DSC 66.06%,所以只作弱监督。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><p>先看拆开两个因素的消融(表 1,五折 DSC 均值):</p>
+<div class="tbl"><table><thead><tr><th>变体</th><th>阶段</th><th>伪标签</th><th>DSC</th></tr></thead><tbody><tr><td>v0</td><td>无</td><td>无</td><td>50.66</td></tr><tr><td>v1</td><td>无</td><td>有</td><td>58.29</td></tr><tr><td>v3</td><td>预测,Gated</td><td>无</td><td>57.52</td></tr><tr><td>v4</td><td>预测,Gated</td><td>有</td><td>62.70</td></tr><tr><td>v6</td><td>真值,Gated</td><td>无</td><td>64.76</td></tr><tr><td>v7</td><td>真值,Gated</td><td>有</td><td>69.96</td></tr></tbody></table></div>
+<p><strong>两个因素都有用,而且叠加近似相加。</strong> 真值阶段带来 12 到 14 个点,预测阶段只有 5 到 7 个点;伪标签单独带来 7.63 个点。</p>
+<p>基线对比(表 3):TernausNet 52.03 最高;在腹腔镜上表现好的实例分割方法 ISINet 和 MATIS Frame 只有 37.60 和 18.24。</p>
+<figure class="fig"><img src="images/page_008_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。13 类器械的逐类 DSC。</figcaption></figure>
+<p>逐类看:阶段先验主要帮了只在少数阶段出现的器械,如角膜刀从 46.24 到 67.92;伪标签主要帮了少见小器械,如旋核钩从 41.23 到 58.96。跨阶段使用的 Hoskins 镊几乎不受阶段影响。</p>
+<p>在 CaDIS 上,v6 的 DSC 为 68.63,高于 U-Net 的 62.84;<strong>但加伪标签的 v7 反而降到 67.72</strong>,论文没有解释。</p><div class="strip d"><span class="t">数据</span><span class="i">伪标签单独 +7.63 个点,预测阶段单独 +6.86 个点</span><span class="i">MS-TCN++ 准确率 50.10%</span><span class="i">CaDIS:v6 68.63,v7 67.72</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>为什么有效</h3><p>阶段相当于给每帧一个器械候选集合。PAFT 按阶段改变通道响应,让解码器偏向该阶段可能的器械,所以增益集中在阶段专属器械上。</p>
+<p>伪标签解决的是另一件事:少见器械样本不足。两者叠加近似相加,我的判断是它们作用在不同的误差来源上。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li>阶段语义与额外参数没分开:没有用随机或打乱阶段做条件的对照。</li><li>伪标签与两段训练没分开:没有只用人工标注做两段训练的对照;50% 标注胜过全监督的 1.16 个点在标准差以内。</li><li>实例分割方法落后的原因没分开:ISINet 和 MATIS 本依赖时序,这里只用单帧,调参情况论文未说明。</li><li>泛化只对阶段条件成立:CaDIS 上只有真值阶段版本,伪标签反而降低效果。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><p>论文报告的百分比是相对提升:摘要的“23.77% 到 38.10%”换成百分点是 12.04 到 19.30。正文与表格有几处不一致:U-Net 的 DSC 被写成 52.03;表 3 中 v4 的 IoU 标准差印作 34.4;表 4 标为 v3 的列平均值等于表 1 的 v2。</p>
+<p>损失函数、数据增强、基线训练设置、各标注比例下的伪标签帧数,论文未说明。代码与数据下载地址论文未给出。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>阶段条件可用按类别的通道仿射加门控实现,改动小</div><div>可部署性能看 v4(62.70),不是 v7(69.96)</div><div>SAM 2 点提示加传播是低成本扩充标注的方案,伪标签只作弱监督</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>第一个 MSICS 器械与阶段数据集,填补低收入地区术式的空白</li><li>消融把阶段来源、门控和伪标签分开报告,并给出五折标准差</li><li>逐类结果把增益和器械的阶段专属性、样本量对应起来</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>数据是否公开、许可和获取方式论文未说明</li><li>最好结果依赖人工阶段标签,预测阶段准确率只有 50.10%</li><li>缺少随机阶段和两段训练的对照,文字与表格有多处不一致</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>用随机阶段做条件时性能下降多少?</li><li>阶段识别准确率提高后,v4 能否接近 v7?</li><li>为什么 CaDIS 上伪标签降低了效果?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 f43e14f6</span><span class="s">7.4 分</span></div><p>第 1 轮原版流程笔记(模型自评)。证据链完整,表 1 到表 5 的数字与 PCD 公式都在。D4=7:边界列了真值阶段依赖与数据开放,但对照缺失(随机阶段)只在深度分析出现一次,没有逐条说明对结论的影响。D5=7:定位表只比数据集规模,没有说明相对时序先验方法新在哪里。D6=7:可复用点没有写要避免什么。D7=7、D8=7:部分段落中英术语混排,器械名首次出现没有统一译名。D9=6:研究问题没有核心观点速览,多处数字后缺少意义说明,小节结尾没有过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各节开头写本节要回答的问题,数字后补一句意义,小节结尾加过渡</li><li>把论文未说明的内容(术者人数、伦理、损失函数、增强、alpha 是否经 sigmoid、伪标签帧数、CaDIS 阶段来源)统一写成 论文未说明 并说明限制</li><li>深度分析补充随机阶段对照、容量解释和伪标签与标注量耦合的替代解释</li><li>统一器械译名并在首次出现时给出原名</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 429404cd · 文稿 ed6f4b58</span><span class="s">8.0 分</span></div><p>第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成(8 个知识点、12 个细节问题、4 条挑战),修订已写入笔记与报告;笔记与报告数字核对无未匹配项,表 4 实例数(提取文本缺失,取自表格图像)与推导值登记在 number_exceptions.json。无法修复的限制:Table 2 与 Table 5 自动裁图身份不符,保留占位,数字取自 PDF 文本;Figure 2、4、7、10 与 Table 1、7 未进入候选裁图;数据公开与许可、伦理、损失函数、数据增强、alpha 约束、伪标签帧数、CaDIS 类别选择均为论文未说明。D3 未到 9:CaDIS 逐类结果只摘录 2 类。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

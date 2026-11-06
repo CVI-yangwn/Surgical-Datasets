@@ -1,0 +1,29 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/Video_Dataset_for_Surgical_Phase_Keypoint_and_Instrument_Recognition_in_Laparoscopic_Surgery_PhaKIR/reading_report.md",
+  "mode": "report",
+  "report_sha256": "81bca8af369d46e906a4914bd6e1b775922995a5f4a4c999685d5d64ea3f13a1",
+  "number_exceptions": {
+    "5649": "Figure 4(第 5 页)柱状图图像:PE-Forceps 出现帧数",
+    "4177": "Figure 4(第 5 页)柱状图图像:Palpation-Probe 出现帧数",
+    "3251": "Figure 4(第 5 页)柱状图图像:Grasper 出现帧数",
+    "2465": "Figure 4(第 5 页)柱状图图像:Suction-Rod 出现帧数",
+    "2295": "Figure 4(第 5 页)柱状图图像:Blunt-Grasper-Spec. 出现帧数",
+    "206": "Figure 4(第 5 页)柱状图图像:Drainage 出现帧数",
+    "203": "Figure 4(第 5 页)柱状图图像:Bipolar-Clamp 出现帧数",
+    "151": "Figure 4(第 5 页)柱状图图像:Needle-Probe 出现帧数",
+    "117": "Figure 4(第 5 页)柱状图图像:Blunt-Grasper-Curved 出现帧数",
+    "3000": "推导值:Figure 4 前三类出现帧数(5649、4177、3251)均超过 3000",
+    "210": "推导值:Figure 4 中出现帧数最多为 206 的后 7 类均不到 210",
+    "382,050": "推导值:Table 1 中 6 个 MRI 视频阶段帧之和 58,675+72,300+48,975+73,750+42,775+85,575",
+    "79": "推导值:382,050 / 485,875 约 78.6%"
+  },
+  "section_count": 8,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

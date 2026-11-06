@@ -1,0 +1,73 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "8a8fd3e8b57b0f22604170479aa7cc5a87e9cc98832ff0fdde33d3dc1180954f",
+      "note_snapshot": "review_rounds/round1_SurgPub_Video_A_Comprehensive_Surgical_Video_Dataset_for_Enhanced_Surgical_Intelligence_in_Vision_Language_Model.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 7,
+        "D2": 7,
+        "D3": 8,
+        "D4": 7,
+        "D5": 6,
+        "D6": 5,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 6.7,
+      "verdict": "第 1 轮原版流程笔记(自评)。三张结果表与构建流程都在。D1=7:深度分析对同源分布只给一段,没有对照证据。D2=7:QAG 生成与专家复核的规模、开放题评分方式没有展开。D4=7:局限列了未说明项,但没有逐条写出对结论的影响。D5=6:定位表缺 SVL、OphVL 等视频语言数据集,与 Surg-3M 的差异只有一句。D6=5:我的笔记偏短,缺少复现检查项。D9=5:研究问题没有核心观点速览,数字后多没有说明意味着什么,小节结尾无过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头先写本节要回答的问题,数字后补一句意义,小节末尾加过渡",
+        "核对正文表述与表格:十个专科提升超 10 点、食管领先 11.56 点、CVS 比 SurgVLM 高 7.48,写出不一致处",
+        "说明表 2 总体准确率不等于专科准确率按基准占比加权的结果,样本数论文未说明",
+        "区分消融总体 80.82 与表 2 的 82.84",
+        "把评分方式、专家复核规模、版权、下游是否零样本、模型型号等写成 论文未说明 并说明限制",
+        "深度分析加入同源分布与问题风格的替代解释、单帧与无视觉对照的缺失",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "07dffb7ee2dc8fc6db97dc849f51f22f37fbc2513ade423e3adff3540a461981",
+      "note_snapshot": "review_rounds/round2_SurgPub_Video_A_Comprehensive_Surgical_Video_Dataset_for_Enhanced_Surgical_Intelligence_in_Vision_Language_Model.md",
+      "report_sha256": "4f80cc9339613919298fbb3d27778d807a186e6811843ec346908a4b8f6f85b1",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成,7 个修订写入笔记与报告;笔记与报告数字核对无未匹配项,Fig 2(d) 与表 1 的图像值和推导值登记在 number_exceptions.json。正文与表 2 的不一致(所有专科一致提升、十个专科超 10%)、2500 万帧无法复现、消融 80.82 与主结果 82.84 不一致都已写明。无法修复的限制:Figure 5 裁图混入图注,保留占位;评分方式、专家复核规模、出题是否看帧、下游是否参与训练、模型型号与超参数、许可均为论文未说明。D3 未到 9:表 2 正文只摘 5 个专科,消融各任务数值只能从雷达图读出,未列表。",
+      "fixes": []
+    }
+  ]
+}

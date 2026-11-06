@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Video Dataset for Surgical Phase, Keypoint, and Instrument Recognition in Laparoscopic Surgery (PhaKIR)</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>同一批完整胆囊切除手术上同时标阶段、器械实例掩码和关键点:8 个视频、三家医院</h1>
+<div class="sub">Video Dataset for Surgical Phase, Keypoint, and Instrument Recognition in Laparoscopic Surgery (PhaKIR)</div>
+<div class="meta">Tobias Rueckert、Christoph Palm 等,OTH Regensburg 与慕尼黑工业大学附属医院 | arXiv 2511.06549,v1,预印本,2025-11-09</div>
+<div><span class="chip">数据集论文</span><span class="tag">腹腔镜胆囊切除</span><span class="tag">手术阶段识别</span><span class="tag">器械实例分割</span><span class="tag">器械关键点</span><span class="tag">多中心</span></div>
+<div class="one">PhaKIR 在三家德国医院的 8 个完整腹腔镜胆囊切除视频上提供逐帧阶段标签与每秒一帧的 19 类器械实例掩码和关键点,是 MICCAI 2024 挑战赛的训练集;论文不含基线,医院比例 6:1:1,阶段与关键点没有定量质检。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 6 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.0</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2511.06549" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/phakir/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">8 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术辅助系统要同时知道器械是什么、在哪、是哪一个,以及手术进行到哪一步,而公开数据把这几件事拆在不同数据集里。</strong> 阶段识别有 Cholec80、HeiChole,器械分割有 EndoVis 2017/2018、ROBUST-MIS,关键点只有少数数据集提供。</p>
+<p>作者还指出三类与真实手术不符的问题:只有 HeiChole 是多中心;很多数据集不区分器械类型或实例;完整手术少见,部分数据用的是非人体组织。这些缺口让时序建模和跨机构泛化都难以研究。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口:没有一个数据集在同一批完整手术上同时标阶段、实例掩码和关键点</span><span class="i">论文的回答:PhaKIR,MICCAI 2024 PhaKIR 挑战赛的训练集</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是把三项任务标在同一批序列上:三家德国医院的 8 个完整腹腔镜胆囊切除视频,阶段逐帧标,器械实例掩码和关键点每秒标一帧。</p>
+<p><strong>它只是数据描述。</strong> 论文不训练模型、不报告挑战赛成绩,方法比较在同一团队的挑战赛论文 arXiv 2507.16559 中。</p>
+<p><strong>边界有三条:</strong> 医院比例为 6:1:1,跨中心结论很弱;阶段与关键点没有定量质检;测试集不公开,使用者要自己按视频划分。</p><div class="strip d"><span class="t">数据</span><span class="i">8 个视频,总时长 323:55,25 fps,1920 × 1080</span><span class="i">阶段标签 485,875 帧;分割与关键点各 19,435 帧</span><span class="i">19 类器械,7 个阶段加 undefined,每件器械 2 到 4 个关键点</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>视频从哪里来</h3><p>能外推多远,取决于视频构成。MRI 提供 6 个视频,UKHD 和 KWS 各 1 个;UKHD 的视频就是 HeiChole2.mp4,按新协议全部重标。腹腔外画面被裁掉,裁剪帧索引随数据发布。</p>
+<p><strong>多中心的主体仍是一家医院:</strong> MRI 的阶段帧约占 79%。另两家各只有一个视频,单个病人或术者的差异与医院差异分不开。</p>
+<p>Table 1 的合计行写成 486,875 帧和 19,475 帧,而逐行相加得到的是正文的 485,875 和 19,435,合计行应是笔误。复现时以文件实际帧数为准。</p>
+<p>病人年龄、术者经验和相机型号,论文未说明,所以无法分析域偏移来自哪里。</p></div><div class="card" id="s4"><h3><span class="num">4</span>三项任务标了什么</h3><p><strong>阶段识别</strong>沿用 Cholec80 的 7 个阶段,另设 undefined 表示过渡。阶段起点是特征器械首次出现,终点是这些器械全部消失。undefined 的占比和评测处理论文未说明,不同论文的阶段指标口径可能不同。</p>
+<figure class="fig"><img src="images/page_003_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。8 个视频各阶段的相对时长。各视频阶段比例差异很大,每个视频都有长短不一的过渡段。</figcaption></figure>
+<p><strong>实例分割</strong>在 CVAT 中画多边形,只标可见部分,19 类器械,同类实例分开。掩码的红、绿通道编码类别,蓝通道编码实例。</p>
+<p><strong>关键点</strong>按器械类型标 2 到 4 个点:入画端点、杆尖交界、一到两个尖端,每点带可见、遮挡、不存在三态。与分割不同,遮挡点允许借助前后帧推断位置,这部分真值含有标注者的推断。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。三家医院各一帧的原图与三项任务的标注。最后一行白圈是被遮挡的关键点。</figcaption></figure>
+<p>分割与关键点为何选 1 fps,论文未说明。相邻两次标注隔 24 帧,逐帧时序方法只能用稀疏监督。</p><div class="strip h"><span class="t">亮点</span><span class="i">三项标注对齐在同一序列上,分割与关键点还对齐在同一帧上</span><span class="i">遮挡关键点的真值是推断位置,分割只标可见区域</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>标注怎样检查</h3><p>四名有医学背景的人员标注:一名资深外科医生和三名医学生。每个视频一人初标,本人复查,再由两人依次复核。作者认为这三项任务比肿瘤分割简单、数据量大,所以选顺序复核而不是并行双标。</p>
+<p>分割和关键点还把标注与原图并排做成视频,按时间看颜色是否跳变。关键点由未参与分割的人在掩码之上标注,顺带复核了分割分类。</p>
+<p><strong>唯一的定量数字是分割第二、第三轮之间的 DSC 一致性 83.64%</strong>,主要差异来自器械分类,类别错的实例记零。它衡量的是最后一轮的修改量,不是对独立真值的精度。阶段和关键点没有定量数字。</p><div class="strip d"><span class="t">数据</span><span class="i">分割复核一致性 DSC 83.64%</span><span class="i">66 支挑战赛队伍使用,未报告系统性错误</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>论文没有基线,能看的是分布。器械出现帧数是长尾:PE-Forceps 出现在 5649 帧,Hook-Clamp 只有 24 帧。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。19 类器械各自出现的帧数。最多与最少相差两个数量级以上。</figcaption></figure>
+<p><strong>长尾意味着平均指标会被常见类主导。</strong> 按视频划分时,最少的几类可能在验证视频里一次都不出现,需要单独报告或合并。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li>没有基线,数据的难度和区分度要看挑战赛论文。</li><li>没有标注者间一致性。顺序复核时后一位看得到前一位的结果,容易沿用前人判断;83.64% 不能当作标注精度。</li><li>社区验证偏弱。参赛者的目标是训练模型,不一定检查标签;修正了多少错误、发过哪些版本,论文未说明。</li><li>测试集的视频数和医院来源论文未说明,挑战赛成绩能否代表跨中心泛化无法判断。</li></ul></div><div class="card" id="s8"><h3><span class="num">8</span>复现与使用前要核对什么</h3><p>作者建议按视频划分,可用留一视频或留一医院。我的判断:留一视频更可靠;留一医院时 UKHD 和 KWS 各只有一个视频,只能当作域偏移的定性参考。</p>
+<figure class="fig"><img src="images/page_007_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。数据集目录结构。每个视频包含视频、裁剪索引、阶段、关键点和掩码五个文件。</figcaption></figure>
+<p>数据在 Zenodo 申请获取,许可为 CC-BY-NC-SA,仅限非商业用途,使用时需同时引用本文、挑战赛论文和 HeiChole 论文。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>PhaKIR 的价值在三任务对齐和完整序列,不在规模</div><div>帧数以文件为准,Table 1 合计行有误</div><div>按视频划分,长尾类别单独报告,遮挡关键点按可见性分开评估</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>阶段、实例掩码、关键点在同一批完整手术上对齐</li><li>掩码编码、关键点模板和文件结构交代清楚,格式开放</li><li>质检流程写得具体,并给出一个定量一致性数字</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>只有 8 个视频,MRI 占主体,跨中心证据弱</li><li>没有基线,没有标注者间一致性,阶段和关键点没有定量质检</li><li>Table 1 合计行与正文不一致</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>测试集来自哪些医院,规模多大?</li><li>undefined 过渡段占多少,评测是否计入?</li><li>三任务联合训练是否优于单任务?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 0c379183</span><span class="s">7.3 分</span></div><p>第 1 轮原版流程笔记(自评)。采集、三任务定义、质检与文件组织都有,Table 1 已用表格重写并指出合计行笔误。D4=7:局限列了作者承认项和论文未说明项,但没有逐条说明对使用者的具体影响,例如 Undefined 阶段与稀疏监督。D5=7:定位表只按论文背景整理,没有说明与挑战赛论文的分工。D6=7:我的笔记较短。D7=7:Figure 1 放在任务三之后,离研究问题较远。D9=5:研究问题没有核心观点速览,多处数字后缺少意义说明,小节之间没有过渡。H3 尚未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各节开头先写本节要回答的问题,数字后补一句意义</li><li>把论文未说明的内容统一写成 论文未说明 并说明限制(标注者间一致性、测试集、病人与相机信息、undefined 占比、错误修正记录)</li><li>深度分析加入对多中心与质检数字的替代解释</li><li>说明论文与挑战赛论文的分工</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 12ec8df9 · 文稿 81bca8af</span><span class="s">8.0 分</span></div><p>第 2 轮(自评)。研究问题末尾加了核心观点速览,并写明本文与挑战赛论文的分工、论文不含基线。各节开头先说本节要回答的问题,数字后补了意义(MRI 约占阶段帧 79%、长尾对平均指标的影响)。Insight Pass 的 7 项论文未说明(1 fps 理由、标注者间一致性、测试集、病人与相机信息、undefined 占比、错误修正记录)已写入笔记与报告。挑战轮把多中心与质检两条中心论断降为部分支持和未区分,并写入深度分析。数字核对通过,Figure 4 柱值与推导值登记在 number_exceptions.json。无法修复的限制:论文本身没有基线,D3 只能写数据统计;Table 1 与 Table 4 因裁图缺陷保留占位,以 Markdown 表格替代。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

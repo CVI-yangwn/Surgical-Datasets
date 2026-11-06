@@ -1,0 +1,40 @@
+{
+ "knowledge_points": [
+  {"term": "超声乳化白内障手术", "plain": "用超声探头把混浊晶状体打碎吸出，再植入人工晶状体的标准术式。", "where": "sec:abstract", "needed_for": "理解 13 个阶段的顺序和撕囊为何单独做跟踪"},
+  {"term": "撕囊", "plain": "在晶状体前囊上撕出一个连续圆形开口，是后续步骤能否顺利的关键。", "where": "sec:dataset", "needed_for": "跟踪与技能子集只覆盖这一阶段"},
+  {"term": "跨中心评测", "plain": "在一家医院的数据上训练，在另一家医院的数据上测试，测量换设备和站点后的性能下降。", "where": "sec:dataset", "needed_for": "阶段与分割的域偏移结论"},
+  {"term": "宏平均 F1", "plain": "每个类别单独算 F1 再取平均，小类别与大类别权重相同。", "where": "sec:dataset", "needed_for": "解释为何短阶段会拉低整体分数"},
+  {"term": "Edit 分数与分段 F1", "plain": "按连续片段而非单帧比较预测与真值，惩罚碎片化的预测。", "where": "sec:dataset", "needed_for": "视频级模型的时序质量比较"},
+  {"term": "mask mAP@0.50:0.95", "plain": "在 0.50 到 0.95 的十个交并比阈值上平均的实例分割精度。", "where": "sec:dataset", "needed_for": "Table 12 到 14 的所有分割数字"},
+  {"term": "HOTA、DetA、AssA", "plain": "多目标跟踪的综合指标，分别衡量整体、检测精度和身份关联精度。", "where": "sec:dataset", "needed_for": "跟踪标注一致性的解读"},
+  {"term": "ICC 与 Fleiss Kappa", "plain": "评分者之间一致性的统计量，分别用于连续分数和类别标签。", "where": "sec:dataset", "needed_for": "判断标签可信度"},
+  {"term": "真值框提示", "plain": "把人工标注的边界框直接交给 SAM，让它只负责画掩码，不负责定位。", "where": "sec:dataset", "needed_for": "理解 SAM 分数是上界"}
+ ],
+ "detail_questions": [
+  {"question": "两家医院各贡献多少视频？", "answer": "Farabi 2930 个，Noor 70 个；阶段子集 129 对 21，分割帧 3932 对 2162。", "evidence": ["sec:methods", "sec:dataset"], "status": "resolved"},
+  {"question": "阶段识别的域外测试集有多大？", "answer": "21 个 Noor 视频，即阶段子集中全部 Noor 视频；训练和验证全部来自 Farabi。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "文字里约 22% 和约 12% 的降幅如何计算？", "answer": "与四个指标相对降幅的平均吻合；论文没有写明口径。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "Table 12 与 Table 13 的 YOLOv11 12 类结果为何不同（73.9 对 73.19）？", "answer": "论文未说明是否来自不同训练运行。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "路径长度分析是否控制了片段时长？", "answer": "没有；论文只报告回归斜率和组均值，没有相关系数或显著性。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "运动学量是否按分辨率归一化？", "answer": "坐标以像素计；论文未说明是否对两站点分辨率做尺度归一化。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "路径长度分组的 3.7 分与 K 均值分组是什么关系？", "answer": "论文未说明。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "阶段子集和分割子集是否同一批 150 个视频？", "answer": "论文写分割帧取自这 150 个视频，但没有给出视频编号对应。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "术者级别在各子集中的分布？", "answer": "论文未说明住院医师、专科医师、专家各占多少。", "evidence": ["sec:methods"], "status": "not_stated"},
+  {"question": "技能分类测试集有多少段？", "answer": "按 15% 划分约 25 到 26 段，论文未给出确切数字，也未说明指标是在片段还是窗口层面计算。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "跟踪修正者与技能评分者是否独立？", "answer": "跟踪由 8 名住院医师修正，评分由 3 名眼科医生完成，论文未说明人员是否重叠。", "evidence": ["sec:dataset"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "冻结的基础模型特征对跨中心偏移更鲁棒", "alternative": "差异来自单次运行和只有 21 个视频的测试集的随机波动；DINO 配 MS-TCN 时降幅反而大于 ResNet50。", "separating_evidence": "多次随机种子或多次划分的方差", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "监督模型优于 SAM 证明了标注质量", "alternative": "这只说明领域微调有效，与标注好坏无关。", "separating_evidence": "标注一致性数字（mIoU 0.874 校准）", "in_paper": true, "verdict": "not_separated"},
+  {"claim": "路径长度反映手术熟练度", "alternative": "路径长度主要是片段时长的代理，高分片段本来就短。", "separating_evidence": "时长归一化后的路径长度与分数的相关", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "反向迁移降幅更大是因为器械外观差异", "alternative": "Noor 训练帧来自较少视频，且目标在低分辨率画面中更小。", "separating_evidence": "控制训练视频数或分辨率的实验", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "关键结果中说明约 22% 和约 12% 是四个指标相对降幅的平均",
+  "深度分析写明 DINO 配 MS-TCN 的降幅大于 ResNet50，鲁棒性只在 CLIP 上两种时序模型都成立",
+  "深度分析写明路径长度未控制时长，结论只到同向变化",
+  "局限中列出 Table 12 与 Table 13 的不一致、像素单位未归一化、3.7 分阈值与 K 均值关系未说明",
+  "反向迁移给出训练规模与分辨率的替代解释",
+  "深度分析加入逐项定位：相对 Cataract-1K、CaDIS、CATARACTS"
+ ]
+}

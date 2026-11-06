@@ -1,0 +1,36 @@
+{
+"knowledge_points": [
+{"term": "片段分类", "plain": "每个样本是一段 30 帧的短视频,只给一个动作标签,模型输出类别而不是起止时间。", "where": "sec:dataset", "needed_for": "判断 85.90% 衡量的是什么"},
+{"term": "ViViT", "plain": "把视频切成时空小块后用自注意力建模的视频 Transformer 分类器。", "where": "sec:dataset-2", "needed_for": "理解唯一的基线"},
+{"term": "全景与局部全景", "plain": "两类都是镜头观察状态,区别只在视野是整体还是局部。", "where": "sec:dataset", "needed_for": "解释 PanoView 低分与互混"},
+{"term": "循环补帧", "plain": "不足 30 帧的片段从开头重复帧补齐。", "where": "sec:dataset", "needed_for": "判断短动作片段里有多少重复帧"},
+{"term": "病人级划分", "plain": "同一病人的全部片段只进入训练、验证、测试中的一个。", "where": "sec:dataset", "needed_for": "判断测试结果是否有泄漏"},
+{"term": "整体准确率与逐类准确率", "plain": "整体按样本数加权,逐类是每类内部判对比例。", "where": "sec:dataset-2", "needed_for": "看出整体分数掩盖少数类"}
+],
+"detail_questions": [
+{"question": "70/15/15 是按病人还是按片段划分?", "answer": "论文未说明。混淆矩阵各类行和约为各类总数的 15%,更像按片段分层随机划分。", "evidence": ["sec:dataset", "sec:dataset-2"], "status": "partly"},
+{"question": "8 帧或 16 帧如何从 30 帧片段中取?", "answer": "论文未说明采样方式。", "evidence": [], "status": "not_stated"},
+{"question": "ViViT 的预训练权重、优化器、学习率是什么?", "answer": "只给了 80 个 epoch、批大小 4 和输入尺寸,其余论文未说明。", "evidence": [], "status": "not_stated"},
+{"question": "每个病人有多少片段?", "answer": "正文写 15 到 38 个,表 3 实际为 9 到 943 个,两者矛盾。", "evidence": ["sec:dataset"], "status": "resolved"},
+{"question": "病人年龄统计是否自洽?", "answer": "表 2 写 53 ± 32,范围 21~78;范围只有 57 岁,标准差不可能达到 32,数值可能有误。", "evidence": ["sec:dataset"], "status": "resolved"},
+{"question": "表 1 的类别数是否与正文一致?", "answer": "正文说 CholecT50 有 100 个三元组类别,表 1 写 10。", "evidence": ["sec:analysis", "sec:dataset"], "status": "resolved"},
+{"question": "混淆矩阵的类别名是否与数据集一致?", "answer": "图中用 Needle 代替 Suturing,行和与表 4 逐类准确率吻合。", "evidence": ["sec:dataset-2", "sec:model"], "status": "resolved"},
+{"question": "胸腔镜测试集有多少片段?", "answer": "论文未说明。", "evidence": [], "status": "not_stated"},
+{"question": "表 4 的测试集包含胸腔镜片段吗?", "answer": "包含。表 4 最好的 85.90% 等于表 5 混合模型在混合测试集上的值。", "evidence": ["sec:dataset-2", "sec:model"], "status": "resolved"},
+{"question": "片段之间是否重叠,是否来自同一动作区间?", "answer": "论文未说明切分是否重叠;只说标注区间被切成等长片段。", "evidence": [], "status": "not_stated"}
+],
+"challenges": [
+{"claim": "85.90% 说明数据集能支撑动作识别模型训练", "alternative": "若按片段划分,同一动作区间切出的相邻片段同时进训练和测试,模型可能在记住病人和场景外观。", "separating_evidence": "按病人划分的重跑结果", "in_paper": false, "verdict": "not_separated"},
+{"claim": "加入胸腔镜数据提升性能,说明多样性有益", "alternative": "混合模型多了胸腔片段,提升可能来自样本量,也可能来自胸腔测试片段与训练片段同源。", "separating_evidence": "等样本量对照,以及胸腔镜手术内部的划分方式", "in_paper": false, "verdict": "not_separated"},
+{"claim": "多术式提高跨术式的泛化", "alternative": "19 号直肠癌手术一台占 943 个片段,多样性实际集中在少数病人。", "separating_evidence": "按术式留出测试", "in_paper": false, "verdict": "not_separated"},
+{"claim": "长时间步提升 HookCut、Suturing", "alternative": "单次训练的随机波动,差距只有 2 到 7 个点。", "separating_evidence": "多次运行方差", "in_paper": false, "verdict": "partly_supported"}
+],
+"revisions": [
+"研究问题末尾加核心观点速览",
+"深度分析加入划分泄漏推断,依据混淆矩阵行和与 15% 的比例",
+"写出正文与表格的三处不一致:15 到 38 个片段、年龄标准差、CholecT50 类别数",
+"写明采样方式、预训练与优化器、胸腔测试样本数、片段是否重叠为 论文未说明",
+"说明表 4 测试集含胸腔镜片段",
+"指出 19 号病人占 943 个片段"
+]
+}

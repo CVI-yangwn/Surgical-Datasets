@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgBench: A Unified Large-Scale Benchmark for Surgical Video Analysis</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>把 16 个手术视频来源统一切片,做成预训练集加 72 个标签的分类评测集</h1>
+<div class="sub">SurgBench: A Unified Large-Scale Benchmark for Surgical Video Analysis</div>
+<div class="meta">Jianhui Wei、Zikai Xiao 等,浙江大学、之江实验室、哈佛大学 | arXiv 2506.07603,v2,预印本,2025-06-16</div>
+<div><span class="chip">基准与数据集论文</span><span class="tag">手术视频</span><span class="tag">视频基础模型</span><span class="tag">预训练数据</span><span class="tag">多任务评测</span><span class="tag">VideoMAE</span></div>
+<div class="one">SurgBench 把 16 个已有手术视频来源统一编码切片,组成约 5300 万帧的预训练集和 23,004 个片段的分类评测集,继续预训练的 VideoMAE 在线性探测下平均 Top-1 从 0.378 升到 0.448,但规模数字不一致、预训练与评测同源、数据只能申请获取。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2506.07603" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgbench/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">8 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>通用视频基础模型靠海量多样的数据学到可迁移的表示,手术视频缺的正是这样的数据。</strong> 论文认为已有手术数据有三个短板:病种单一、术式和专科窄(多是腹腔镜胆囊切除和机器人前列腺切除)、任务孤立(单一术式的阶段识别或单独的器械识别)。</p>
+<p>已有的手术预训练语料 Endo-FM、GSViT、Surg-3M 只覆盖 3 到 5 个专科,而且都没有配套的统一评测集。论文要做的是同时补上预训练数据和评测协议。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口:多专科的手术视频预训练数据,以及统一的多任务评测</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>SurgBench 没有新增标注,做的是“收集、统一格式、重新切片”。</strong> 16 个来源(15 个公开、1 个私有)统一成 H.264、短边 320、20 到 30 FPS。无标签部分切成 10 秒片段作预训练集 SurgBench-P;带标签的 9 个来源切成 1 到 10 秒片段作评测集 SurgBench-E。</p>
+<p>验证方法是让 VideoMAE 在 SurgBench-P 上继续预训练,冻结骨干只训分类头。平均 Top-1 从 Kinetics 版的 0.378 升到 0.448。</p>
+<p><strong>边界:单次、线性探测;预训练与评测同源,论文未说明是否剔除测试视频;专科广度大多来自 AVOS 一个来源。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">SurgBench-P:论文称 53M 帧、11 个专科、22 种术式、538 小时</span><span class="i">SurgBench-E:23,004 个片段、10 个子任务、72 个标签</span><span class="i">平均 Top-1:随机 0.229、VideoMAE 0.378、SurgMAE 0.448、SurgMAE(L) 0.487</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>评测能外推多远,取决于数据来源。表 2 把 16 个来源分成两组:S1 到 S7 只进预训练集,S8 到 S16 同时贡献预训练帧和评测帧。</p>
+<figure class="fig"><img src="images/page_004_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。16 个来源的病种、术式、任务和帧数。虚线以上只用于预训练。</figcaption></figure>
+<p><strong>AVOS 一个来源贡献 28,473,879 个预训练帧,占预训练合计 56,062,458 的一半以上。</strong> AVOS 是从 YouTube 收集的开放手术视频,有 330 个链接已失效。它和 SimSurgSkill2021、AIxSuture 受许可限制,只用于预训练,不随评测集发布。</p>
+<p>私有数据是中国三家三甲医院的腹腔镜右半结肠切除,按 6 个阶段标注。</p><div class="strip h"><span class="t">亮点</span><span class="i">预训练帧的一半以上来自 AVOS</span><span class="i">三个来源因许可不能再分发</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>评测集怎样组织</h3><p>SurgBench-E 按 6 个类别、10 个子类、72 个标签组织,论文称 6C-10S-72T。</p>
+<figure class="fig"><img src="images/page_006_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。10 个子类 T1 到 T10 的标签数与来源。</figcaption></figure>
+<p><strong>“72 个任务”实际是 72 个类别标签,独立的分类问题只有 10 个。</strong> 其中 T5 器械、T7 息肉、T8 内镜动作、T10 器官都只有 2 个标签。“器官检测”和“息肉检测”在这里是片段级二分类,不是定位任务。</p>
+<p>切片后按视频 5:5 划分训练与测试,同一视频只出现在一侧。不平衡因子控制在 10 以内;一个片段有多个标签时拆成多个单标签样本,并用 top-k 准确率评测。</p><div class="strip d"><span class="t">数据</span><span class="i">子类标签数从 2 到 19 不等,T6 消化道病变最多</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>预训练与评测协议</h3><p>继续预训练从 Kinetics-400 版 VideoMAE 出发,遮盖比例 0.9,每个片段 16 帧、时间采样率 4。数据经四阶段精炼:收集全部片段、过滤 AVOS 等过大来源、上采样少数来源、再上下采样对齐评测分布,最后只剩 39,807 个片段。<strong>每阶段保留多少、各来源占多少,论文未说明。</strong></p>
+<figure class="fig"><img src="images/page_003_fig_figure_1_review_repair1.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。数据构建流程:来源、原始片段、SurgBench-P 与 SurgBench-E 的拆分。</figcaption></figure>
+<p>评测时冻结骨干只训分类头,也就是线性探测。标准版用 ViT-Base,大模型版用 ViT-Large;两者训练轮数分别是 54 和 38 个 epoch,批大小和学习率也不同。</p>
+<p>指标是 top-k 准确率:$\mathrm{Acc@}k=\frac{1}{M}\sum_m \mathbb{1}[y_m\in\mathrm{Top}_k(\hat{p}_m)]$。分类头输出多少类,论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_007_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。四个模型在 T1 到 T10 上的 Top-1 与 Top-3。</figcaption></figure>
+<p><strong>继续预训练后平均 Top-1 高 7 个点、Top-3 高 7.9 个点。</strong> 提升主要来自 T9 机器人教学动作(0.102 到 0.475)和 T7 结肠息肉(0.374 到 0.561)。大模型版再高 3.9 和 5.7 个点。</p>
+<p>表里也有论文没讨论的反例:T5 的 Top-3 最高的是随机初始化,为 0.799;T4 标准版 0.293 略低于 VideoMAE 的 0.298;T1 大模型版 0.182 略低于标准版 0.185。所以“几乎所有类别都提升”需要打折。</p>
+<figure class="fig"><img src="images/page_008_fig_figure_7_review_repair1.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。LapGyn 上的微调曲线,唯一的分布外实验。</figcaption></figure>
+<p>LapGyn 上继续预训练模型 84.23%,VideoMAE 81.54%。但 LapGyn 与 AutoLaparo 同属妇科腹腔镜,是近分布迁移,不能支撑“对未见模态泛化”。</p><div class="strip d"><span class="t">数据</span><span class="i">T9 Top-1:0.102 到 0.475</span><span class="i">LapGyn:81.54% 对 84.23%</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><p><strong>二类子任务的数字说明分类头不是逐子任务的。</strong> 若每个子类有自己的二分类头,Top-3 应恒为 1、Top-1 随机水平为 0.5;而 T8 的 Top-1 只有 0.000 到 0.020。我的推断是分类头建在更大的标签空间上,论文未说明。</p>
+<p><strong>预训练与评测同源。</strong> S8 到 S16 既贡献预训练帧也贡献评测帧,论文未说明是否剔除了测试视频。提升最大的 T7、T9,来源都在预训练集中。</p>
+<p><strong>规模数字前后不一致。</strong> 摘要 53M,表 2 预训练合计 56,062,458,第 4 节 74.4M,三者无法换算。</p>
+<p><strong>大模型对比不是干净的规模实验。</strong> 训练轮数、批大小、学习率都不同,且只有两个规模点。</p><div class="strip h"><span class="t">亮点</span><span class="i">主结果能否当作泛化证据,取决于测试视频是否被剔除</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>复现要注意什么</h3><ul><li>数据和代码只能申请获取;AVOS 链接已部分失效,专科广度难以还原。</li><li>四阶段精炼的比例、分类头结构、Top-3 算法、随机种子都需要自己补齐。</li><li>只有线性探测结果,全参数微调下的差距论文未说明。</li><li>所有结果单次运行,子类间 1 个点以内的差别不可靠。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SurgBench 的价值是把多个手术视频来源统一成一套预训练加评测的流程</div><div>评测是 10 个片段级分类子任务,不是 72 个独立任务</div><div>主结果需要先确认测试视频是否从预训练集中剔除</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>统一编码、按视频划分、控制不平衡,协议清楚</li><li>附录逐个说明每个来源的切片方法与许可</li><li>专科覆盖比已有手术预训练语料广</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>规模数字在摘要、表 2、正文之间不一致</li><li>单次线性探测,没有方差,也没有全参数微调</li><li>二类子任务的评测方式不透明,逐类结果表缺失(正文显示 Table ??)</li><li>数据只能申请获取</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>SurgBench-P 是否剔除了 SurgBench-E 测试集所在的视频?</li><li>分类头是 72 类共享还是逐子任务?</li><li>全参数微调下继续预训练的优势还剩多少?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 db88f9aa</span><span class="s">7.2 分</span></div><p>第 1 轮原版流程笔记(自评)。证据链完整:来源表、分类体系、主结果表、分布外与混合预训练都有图表。D2=7:构建流程有,但四阶段精炼每阶段的数据量与比例没有交代为论文未说明。D5=7:与 Endo-FM、GSViT、Surg-3M 的比较只在表里,没有写清各自新在哪里。D6=6:我的笔记偏短。D7=7:Figure 1 放在机制流程之后,与正文顺序略错位。D9=5:研究问题没有核心观点速览,主结果表后缺少逐项意义说明,小节之间没有过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各节开头先写本节要回答的问题,数字后补一句意义</li><li>把论文未说明的内容(四阶段各自数据量、分类头结构、Top-3 算法、测试视频去重、方差、全参数微调)统一写成 论文未说明</li><li>补写 T5 随机初始化 Top-3 0.799 最高、T1 大模型略低于标准版等反例</li><li>展开与 Endo-FM、GSViT、Surg-3M 的定位</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 4e59ab99 · 文稿 ee8a7d4f</span><span class="s">8.2 分</span></div><p>第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成,6 条修订写入笔记与报告;笔记与报告数字核对无未匹配项,3 个推导或图像读数登记在 number_exceptions.json。D4=9:明确列出测试视频去重、分类头结构、规模口径、大模型混杂、近分布迁移五条边界并给出理由。无法修复的限制:四阶段精炼比例、分类头结构、Top-3 算法、方差、全参数微调均为论文未说明;正文逐类结果表显示为 Table ??;Table 7、8 裁图被拒,保留占位;数据只能申请获取。D3 未到 9:Table 2 只在图中给出,正文未逐行列出 16 个来源的帧数。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

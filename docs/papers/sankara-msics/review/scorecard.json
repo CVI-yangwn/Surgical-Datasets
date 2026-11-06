@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "f43e14f62d8e0515d5eacbd4cac4bb5c8ab57eb3de14366376a398aa4c7f5608",
+      "note_snapshot": "review_rounds/round1_Phase_Informed_Tool_Segmentation_for_Manual_Small_Incision_Cataract_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮原版流程笔记(模型自评)。证据链完整,表 1 到表 5 的数字与 PCD 公式都在。D4=7:边界列了真值阶段依赖与数据开放,但对照缺失(随机阶段)只在深度分析出现一次,没有逐条说明对结论的影响。D5=7:定位表只比数据集规模,没有说明相对时序先验方法新在哪里。D6=7:可复用点没有写要避免什么。D7=7、D8=7:部分段落中英术语混排,器械名首次出现没有统一译名。D9=6:研究问题没有核心观点速览,多处数字后缺少意义说明,小节结尾没有过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头写本节要回答的问题,数字后补一句意义,小节结尾加过渡",
+        "把论文未说明的内容(术者人数、伦理、损失函数、增强、alpha 是否经 sigmoid、伪标签帧数、CaDIS 阶段来源)统一写成 论文未说明 并说明限制",
+        "深度分析补充随机阶段对照、容量解释和伪标签与标注量耦合的替代解释",
+        "统一器械译名并在首次出现时给出原名",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "429404cde53161350e0454169bfcbf3ccf45408adebddd41ef9a7309e814efc4",
+      "note_snapshot": "review_rounds/round2_Phase_Informed_Tool_Segmentation_for_Manual_Small_Incision_Cataract_Surgery.md",
+      "report_sha256": "ed6f4b58fff02434f79160559b037459ead337ada325a64362ba05856614aa21",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.0,
+      "verdict": "第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成(8 个知识点、12 个细节问题、4 条挑战),修订已写入笔记与报告;笔记与报告数字核对无未匹配项,表 4 实例数(提取文本缺失,取自表格图像)与推导值登记在 number_exceptions.json。无法修复的限制:Table 2 与 Table 5 自动裁图身份不符,保留占位,数字取自 PDF 文本;Figure 2、4、7、10 与 Table 1、7 未进入候选裁图;数据公开与许可、伦理、损失函数、数据增强、alpha 约束、伪标签帧数、CaDIS 类别选择均为论文未说明。D3 未到 9:CaDIS 逐类结果只摘录 2 类。",
+      "fixes": []
+    }
+  ]
+}

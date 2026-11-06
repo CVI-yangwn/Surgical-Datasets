@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "0c379183f3f11f31afa1132faca74b50243ab825dcf0ae265578456ee0567f33",
+      "note_snapshot": "review_rounds/round1_Video_Dataset_for_Surgical_Phase_Keypoint_and_Instrument_Recognition_in_Laparoscopic_Surgery_PhaKIR.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.3,
+      "verdict": "第 1 轮原版流程笔记(自评)。采集、三任务定义、质检与文件组织都有,Table 1 已用表格重写并指出合计行笔误。D4=7:局限列了作者承认项和论文未说明项,但没有逐条说明对使用者的具体影响,例如 Undefined 阶段与稀疏监督。D5=7:定位表只按论文背景整理,没有说明与挑战赛论文的分工。D6=7:我的笔记较短。D7=7:Figure 1 放在任务三之后,离研究问题较远。D9=5:研究问题没有核心观点速览,多处数字后缺少意义说明,小节之间没有过渡。H3 尚未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头先写本节要回答的问题,数字后补一句意义",
+        "把论文未说明的内容统一写成 论文未说明 并说明限制(标注者间一致性、测试集、病人与相机信息、undefined 占比、错误修正记录)",
+        "深度分析加入对多中心与质检数字的替代解释",
+        "说明论文与挑战赛论文的分工",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "12ec8df9055d60cb4fa71d00abceae79b180f2c291d9c9269a127ef0c2437a56",
+      "note_snapshot": "review_rounds/round2_Video_Dataset_for_Surgical_Phase_Keypoint_and_Instrument_Recognition_in_Laparoscopic_Surgery_PhaKIR.md",
+      "report_sha256": "81bca8af369d46e906a4914bd6e1b775922995a5f4a4c999685d5d64ea3f13a1",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.0,
+      "verdict": "第 2 轮(自评)。研究问题末尾加了核心观点速览,并写明本文与挑战赛论文的分工、论文不含基线。各节开头先说本节要回答的问题,数字后补了意义(MRI 约占阶段帧 79%、长尾对平均指标的影响)。Insight Pass 的 7 项论文未说明(1 fps 理由、标注者间一致性、测试集、病人与相机信息、undefined 占比、错误修正记录)已写入笔记与报告。挑战轮把多中心与质检两条中心论断降为部分支持和未区分,并写入深度分析。数字核对通过,Figure 4 柱值与推导值登记在 number_exceptions.json。无法修复的限制:论文本身没有基线,D3 只能写数据统计;Table 1 与 Table 4 因裁图缺陷保留占位,以 Markdown 表格替代。",
+      "fixes": []
+    }
+  ]
+}

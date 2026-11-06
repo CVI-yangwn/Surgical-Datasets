@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>A Comprehensive Video Dataset for Surgical Laparoscopic Action Analysis</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>SLAM:34 台腹腔镜手术切出 4097 个短片段,标注七类基础动作</h1>
+<div class="sub">A Comprehensive Video Dataset for Surgical Laparoscopic Action Analysis</div>
+<div class="meta">Zi Ye、Ru Zhou 等,上海交通大学医学院附属瑞金医院卢湾分院与中国科学院软件研究所等 | Scientific Data 12:862,2025,DOI 10.1038/s41597-025-05093-7</div>
+<div><span class="chip">数据集论文</span><span class="tag">腹腔镜手术</span><span class="tag">动作识别</span><span class="tag">视频数据集</span><span class="tag">ViViT</span><span class="tag">跨术式</span></div>
+<div class="one">SLAM 从一家医院 34 台手术中切出 4097 个 30 帧片段并标注七类基础动作,ViViT 最高测试准确率 85.90%,但划分单位未说明、单个病人占近四分之一片段,这个分数不能直接当作对新病人的泛化能力。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.0</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://www.nature.com/articles/s41597-025-05093-7" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/slam/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>腹腔镜动作识别缺少跨术式的公开数据。</strong> 自动识别术中动作可以服务于导航、培训和术后评估,也是手术机器人自动化的一步。论文认为瓶颈在数据:已有数据集规模小、术式单一、部分测试集不公开、标注质量不一。</p>
+<p>表 1 中七个已有数据集各自只覆盖一种术式:LapGyn4 和 LapGyn6-Actions 是妇科,HeiChole 和 CholecT50 是胆囊切除,ESAD、PSI-AVA、GraSP 是前列腺切除。CholecT50 的测试集不公开。</p>
+<figure class="fig"><img src="images/page_002_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。已有腹腔镜动作数据集与 SLAM 的对比。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">缺口:没有一个公开数据集同时覆盖多种腹腔镜术式的基础动作</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是 SLAM:从 34 台手术中切出 4097 个 30 帧片段,每段标一个动作,共七类,按 70/15/15 公开划分。</p>
+<p><strong>验证只用了一个模型。</strong> ViViT 在六种帧数与分辨率设置下的测试准确率为 80.77% 到 85.90%,全景视野类最低。</p>
+<p><strong>最该记住的边界:</strong> 片段总时长约 82 分钟;划分单位论文未说明,混淆矩阵的计数更像按片段分层抽样;19 号病人一人贡献 943 个片段。所以 85.90% 不能直接当作对新病人的表现。</p><div class="strip d"><span class="t">数据</span><span class="i">34 台手术,4097 个片段,每段 30 帧</span><span class="i">最高测试准确率 85.90%(16 帧、768 分辨率)</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p><strong>多样性在术式名称上,不在样本量上。</strong> 34 台手术在 2021 到 2023 年录制于瑞金医院卢湾分院,单中心、同一款 30° 内镜,25 fps,1920 × 1080。胆囊切除 22 例、阑尾切除 6 例,其余 7 种术式各 1 到 2 例,其中 1 例是胸腔镜肺手术。</p>
+<figure class="fig"><img src="images/page_003_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。病人构成与术式分布。</figcaption></figure>
+<p>表 2 的年龄写作 53 ± 32,范围 21~78。范围只有 57 岁,标准差不可能是 32,这个数值可能有误,论文未解释。</p></div><div class="card" id="s4"><h3><span class="num">4</span>七类动作与分布</h3><p>七类中五类是操作(进腹、上夹、电钩切割、缝合、吸引),两类是视野状态(全景、局部全景)。<strong>两类全景只靠视野范围区分</strong>,没有特定器械动作。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_1_review_repair1.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。七类动作的示例帧,(f) 与 (g) 外观接近。</figcaption></figure>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。各类片段总数,吸引 1033 个最多,全景 180 个最少。</figcaption></figure>
+<p>表 3 给出逐病人计数。<strong>19 号直肠癌根治术一台就有 943 个片段</strong>,约占全集 23%,其中上夹 323 个、吸引 407 个。正文说每个病人有 15 到 38 个片段,与表 3 矛盾。</p>
+<figure class="fig"><img src="images/page_005_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。逐病人逐类片段数。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">各类片段数:进腹 251,上夹 968,电钩 798,缝合 471,全景 180,局部全景 396,吸引 1033</span><span class="i">19 号病人 943 个片段,胸腔镜 34 号病人 175 个</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>片段是怎样做出来的</h3><p>流程分四段:医生定义类别、技术团队设计标注;文本标注转为结构化格式并做命名、路径和隐私处理;把标注区间切成 30 帧等长片段,不足的从头循环补帧;最后按 70/15/15 划分并训练模型。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_3_review_repair1.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。数据采集与标注流程。</figcaption></figure>
+<p><strong>每段只有一名医师标注。</strong> 两名副主任医师各标一半,主任医师抽查 10%,约 1% 被修改。论文承认没有标注者间一致性分析。</p>
+<p>片段是否重叠、划分按病人还是按片段,论文未说明。作者提供了每段原始起止帧的 CSV,可以用来检查。</p></div><div class="card" id="s6"><h3><span class="num">6</span>验证协议</h3><p>ViViT 训练 80 个 epoch,按验证集最好的权重测试;基础输入 8 帧、224 × 224、批大小 4,再比较 16 帧和 448、768 分辨率。帧采样方式、预训练权重、优化器、学习率,论文未说明,复现只能依赖作者代码。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><figure class="fig"><img src="images/page_007_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。六种设置的逐类与整体准确率。</figcaption></figure>
+<p><strong>整体分数只差约 5 个点,逐类分数差得多。</strong> 整体在 80.77% 到 85.90% 之间;全景视野在 32.14% 到 71.43% 之间,局部全景在 58.33% 到 85.00% 之间。电钩和上夹稳定在 89% 以上。</p>
+<p>16 帧 768 分辨率下全景升到 71.43%,进腹却降到 66.67%。进腹在测试集只有 39 个片段,一两个样本就能改变几个点;每个设置只训练一次,这类波动不宜当作规律。</p>
+<p>胸腔镜实验:仅腹腔镜训练的模型在胸腔测试集上 43.75%,混合训练后 65.62%,腹腔镜测试集也从 81.59% 升到 86.66%。胸腔测试片段数论文未说明,按百分比推断约 32 个。</p><div class="strip d"><span class="t">数据</span><span class="i">仅腹腔镜模型:混合 79.97%,腹腔镜 81.59%,胸腔 43.75%</span><span class="i">混合模型:混合 85.90%,腹腔镜 86.66%,胸腔 65.62%</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>错误集中在哪里</h3><figure class="fig"><img src="images/page_008_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 4。16 帧、768 分辨率下的混淆矩阵,缝合类在图中写作 Needle。</figcaption></figure>
+<p>全景有 20 个判对、3 个判为局部全景;吸引有 15 个被判为上夹。各行和与表 4 吻合,说明行是真值。<strong>两类全景的混淆来自类别定义本身</strong>:区别只是视野大小,短片段里很难看出。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><p><strong>测试集更像按片段抽样。</strong> 混淆矩阵各行和为 146、121、28、156、39、72、60,约为各类总数的 15%(我的判断)。若按片段划分,同一动作区间的相邻片段可能分进训练和测试,模型能借助病人特有的外观,85.90% 可能偏高。</p>
+<p><strong>多术式的好处没有被单独检验。</strong> 没有按术式留出的测试,上夹和吸引的三分之一以上来自 19 号病人。</p>
+<p><strong>胸腔镜增广的效果与样本量混在一起。</strong> 混合模型多了 175 个片段,论文没有等样本量对照,而且胸腔数据只来自一台手术。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SLAM 是 30 帧短片段的七类动作分类,总时长约 82 分钟,不是长视频流程数据</div><div>85.90% 来自单模型单次训练,划分单位未说明</div><div>全景与局部全景是最难的一对,适合作为难例子集</div><div>使用前先按 patient 列检查训练集和测试集的病人重叠</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>覆盖 9 种术式,动作定义不依赖具体术式</li><li>划分、标签和代码全部公开,figshare 无需注册</li><li>逐病人逐类计数完整,方便自行重划分</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心、单设备,单个病人占近四分之一片段</li><li>无标注者间一致性,每段只有一人标注</li><li>只有一个基线,训练细节缺失</li><li>正文与表格有不一致:每病人片段数、年龄标准差、CholecT50 类别数</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>按病人划分后准确率会降多少?</li><li>8 或 16 帧如何从 30 帧片段中采样?</li><li>对 19 号病人降采样后,上夹和吸引的准确率如何变化?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 faec4ca9</span><span class="s">6.6 分</span></div><p>第 1 轮原版流程笔记(自评)。数据来源、七类动作、片段统计、表 4 与表 5 都已转录。D1=7:深度分析偏薄,没有把划分单位和单病人占比连到结果可信度。D4=6:局限只列名目,没有说明会怎样影响 85.90% 的解读。D5=6:定位只有两句。D6=5:我的笔记太短。D9=5:研究问题没有核心观点速览,数字后多数没有说明意义。H3 未做数字核对。</p><div class="dims"><span>D1 <b>7</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>6</b></span><span>D5 <b>6</b></span><span>D6 <b>5</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>把划分单位未说明、预训练与优化器未说明、胸腔测试样本数未说明统一写成 论文未说明 并说明影响</li><li>补写正文与表格的不一致:每个病人 15 到 38 个片段与表 3 的 9 到 943 冲突,年龄 53 ± 32 与范围 21~78 不相容,表 1 HeiChole 类别数与正文不同</li><li>深度分析加入片段级划分泄漏、19 号病人占比、混合模型样本量混杂三个替代解释</li><li>说明 8 或 16 帧如何从 30 帧片段中取,论文未说明</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 52319f34 · 文稿 f97f5275</span><span class="s">8.0 分</span></div><p>第 2 轮(自评)。Insight Pass 的 6 条修订均已写入笔记与报告:核心观点速览、划分泄漏推断(依据混淆矩阵行和约为各类 15%)、三处正文与表格不一致、四项 论文未说明、表 4 测试集含胸腔片段、19 号病人占 943 个片段。数字核对无未匹配项,推导值登记在 number_exceptions.json。无法修复的限制:Table 5 裁图被自动视觉检查拒绝,保留占位并转录数值;划分单位只能推断;训练细节缺失,无法独立复现表 4。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

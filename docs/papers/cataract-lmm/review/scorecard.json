@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "60bf587c97dc3ba209f1732e0b6b66f8ad6482c3509d65903ccb14ab438c0f5e",
+      "note_snapshot": "review_rounds/round1_Cataract_LMM_Large_Scale_Multi_Source_Multi_Task_Benchmark_for_Deep_Learning_in_Surgical_Video_Analysis.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "fail",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 7,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 6.0,
+      "verdict": "第 1 轮原版流程笔记（自评）。四层标注、四个任务的主结果表都在，证据链完整。H3=fail：数字核对有 9 个未匹配值（推导出的降幅、参数量换算、斜率千分位写法、DOI 片段），尚未登记来源。D2=7：跟踪与技能的协议有，但 K 均值分组与 3.7 分阈值、像素单位对后续结论的影响没有写进流程。D4=7：深度分析提出时长混杂与小测试集，但没有逐条写出受影响的结论。D5=6：定位散在创新点与深度分析，没有逐项与 Cataract-1K、CaDIS、CATARACTS 比较。D7=7：Table 14 只有文字表，无图。D8=7：摘要一段超过 300 字。D9=6：研究问题已有核心观点速览，但各节开头没有先写本节要回答的问题，结果小节多处数字后缺少意义说明，小节之间缺少过渡。",
+      "fixes": [
+        "用 lint_report.py --mode note 登记推导数字的来源，消除 H3 失败",
+        "各节开头先写本节要回答的问题，结果小节的数字后补一句意义",
+        "在深度分析中加一段逐项定位：相对 Cataract-1K、CaDIS、CATARACTS 各新在哪里",
+        "把 K 均值与 3.7 分阈值、像素单位写成会改变结论的协议细节，并写清论文未说明之处",
+        "Insight Pass 中逐项核对中心论断，把挑战结果写回笔记",
+        "摘要翻译按句拆段，避免超长段落"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "7a55c240ffb8dedd6fce24e13e3528959523565f5ab786abb854a78ca0c8614d",
+      "note_snapshot": "review_rounds/round2_Cataract_LMM_Large_Scale_Multi_Source_Multi_Task_Benchmark_for_Deep_Learning_in_Surgical_Video_Analysis.md",
+      "report_sha256": "ae792c1b89035579d6dc0f8061d33e47126164d57f70308e930735d2ea37a9c0",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮（自评）。完成 Insight Pass（9 个知识点、11 个细节问题、4 个挑战），修订写回笔记与报告。H3 通过：推导值、单位换算和 DOI 片段已登记在 number_exceptions.json。D4=9：冻结特征鲁棒性只在 CLIP 上成立、SAM 对比不能证明标注质量、路径长度未控制时长、反向迁移的替代解释都已写明。D5=8：新增与 CATARACTS、CaDIS、Cataract-1K 的逐项对比表。无法修复的限制：论文不提供方差、技能测试集段数和术者分布，笔记中以论文未说明标出；Table 14 没有可用裁图，只保留文字表。",
+      "fixes": []
+    }
+  ]
+}

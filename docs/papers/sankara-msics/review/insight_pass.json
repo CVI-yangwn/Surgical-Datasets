@@ -1,0 +1,40 @@
+{
+ "knowledge_points": [
+  {"term": "MSICS 与超声乳化", "plain": "MSICS 用 6 到 8 mm 切口把整个晶状体核手工取出,超声乳化用 2 到 3 mm 切口把核击碎吸出,两者的阶段和器械不同。", "where": "sec:related-work", "needed_for": "理解为什么超声乳化数据集不能直接替代"},
+  {"term": "IoU 与 DSC", "plain": "预测与真值的重叠度;DSC 等于两倍交集除以两者面积之和,同一预测的 DSC 高于 IoU。", "where": "sec:data-2", "needed_for": "读懂表 1 到表 5"},
+  {"term": "MS-TCN++", "plain": "在整段视频的帧特征上做多级时序卷积,逐帧输出阶段标签。", "where": "sec:related-work", "needed_for": "理解预测阶段从哪来、质量多高"},
+  {"term": "PAFT", "plain": "按阶段查表得到一对通道向量,对解码器特征做逐通道缩放和平移,与 FiLM 相同。", "where": "sec:related-work", "needed_for": "理解阶段先验怎样进入网络"},
+  {"term": "DFBF 与 CGate", "plain": "由特征卷积和阶段嵌入算出像素级系数,在阶段调制特征和原始特征之间加权混合。", "where": "sec:related-work", "needed_for": "理解 PCD-Base 与 PCD-Gated 的差别"},
+  {"term": "SAM 2 掩码传播", "plain": "给一帧的点提示,SAM 2 像跟踪一样把掩码推到前后帧。", "where": "sec:related-work", "needed_for": "理解 20878 帧伪标签的来源"},
+  {"term": "相对提升", "plain": "论文的百分比是新值除以旧值减一,不是百分点差。", "where": "sec:method", "needed_for": "正确引用摘要中的 23.77% 到 38.10%"},
+  {"term": "真值阶段与预测阶段", "plain": "真值阶段是人工标注的阶段,预测阶段来自 MS-TCN++;前者是上界,部署时只有后者。", "where": "sec:method", "needed_for": "区分 v7 和 v4 哪个代表实际性能"}
+ ],
+ "detail_questions": [
+  {"question": "数据集是否公开,在哪下载,什么许可?", "answer": "论文没有下载地址、许可或发布说明。", "evidence": ["sec:abstract", "sec:conclusion"], "status": "not_stated"},
+  {"question": "术者人数、病人人口统计和伦理审批是什么?", "answer": "论文只说视频来自 Sankara 眼科医院,其余未说明。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "MS-TCN++ 用什么数据训练,准确率多少?", "answer": "在另外 90 个同期内部视频上训练,在本数据集上准确率 50.10%,F1 50.23%。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "mIoU 与 mDSC 是否包含背景?", "answer": "正文未说明;表 4 的 13 类平均等于表 1 的均值,推断不含背景。", "evidence": ["sec:models", "sec:data-2"], "status": "partly"},
+  {"question": "表 4 的 v3 列是否真是 v3?", "answer": "该列 13 类平均为 55.40,等于表 1 的 v2,不等于 v3 的 57.52,论文未解释。", "evidence": ["sec:models", "sec:data-2"], "status": "partly"},
+  {"question": "摘要的 23.77% 到 38.10% 指什么?", "answer": "v4 与 v7 相对 v0 的 DSC 相对提升。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "alpha 是否经过 sigmoid,是相加还是平均?", "answer": "正文说是平均,公式写成相加,是否经 sigmoid 论文未说明。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "损失函数、数据增强、基线训练设置是什么?", "answer": "论文未说明,只给出优化器、学习率、批大小和早停。", "evidence": ["sec:data-2"], "status": "not_stated"},
+  {"question": "25% 和 50% 设置下伪标签有多少帧?", "answer": "论文未说明;伪标签由人工标注帧传播,数量应随标注减少。", "evidence": ["sec:method"], "status": "not_stated"},
+  {"question": "伪标签质量如何?", "answer": "654 个同时有人工标注的帧上 DSC 66.06%,IoU 55.79%。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "CaDIS 实验如何选 13 类器械,阶段从哪来?", "answer": "论文只说考虑 13 类器械和 18 个阶段,选择规则和阶段来源未说明。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "表 3 中 v4 的 IoU 标准差 34.4 是否可信?", "answer": "表 1 同一配置为 4.4,应为排版错误。", "evidence": ["sec:method", "sec:data-2"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "阶段信息提升了分割", "alternative": "PCD 层增加参数和条件分支,提升可能来自容量而不是阶段语义。", "separating_evidence": "用随机或打乱的阶段做条件的对照。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "伪标签让 50% 标注超过全监督", "alternative": "1.16 个点的差距在标准差以内;且两阶段训练本身(先预训练再微调)也可能带来收益。", "separating_evidence": "多次种子的显著性检验,以及只用人工标注做两阶段训练的对照。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "实例分割方法在眼科场景本质上更差", "alternative": "ISINet 和 MATIS 原本依赖时序,这里只用单帧,且可能没有为本数据集调参。", "separating_evidence": "使用时序版本并报告调参过程的对照。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "ToolSeg 泛化到 CaDIS", "alternative": "增益来自 CaDIS 真值阶段,而 CaDIS 上伪标签反而降低效果,泛化只对阶段条件成立。", "separating_evidence": "CaDIS 上的预测阶段版本和标准差。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览,写明 v4 才是可部署结果",
+  "关键结果说明百分比是相对提升并换算成百分点",
+  "逐类结果写明表 4 的 v3 列与表 1 的 v2 一致",
+  "深度分析加入随机阶段对照缺失、两阶段训练和单帧基线三条替代解释",
+  "把数据开放、伦理、alpha 约束、损失函数、伪标签帧数、CaDIS 类别选择写成论文未说明",
+  "CaDIS 小节写明伪标签在 CaDIS 上降低效果"
+ ]
+}

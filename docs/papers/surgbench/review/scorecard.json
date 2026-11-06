@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "db88f9aa9e3ac1d38b21ac3ac0e9ca27888c0e9f57a0b3887669b1171b662ddc",
+      "note_snapshot": "review_rounds/round1_SurgBench_A_Unified_Large_Scale_Benchmark_for_Surgical_Video_Analysis.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.2,
+      "verdict": "第 1 轮原版流程笔记(自评)。证据链完整:来源表、分类体系、主结果表、分布外与混合预训练都有图表。D2=7:构建流程有,但四阶段精炼每阶段的数据量与比例没有交代为论文未说明。D5=7:与 Endo-FM、GSViT、Surg-3M 的比较只在表里,没有写清各自新在哪里。D6=6:我的笔记偏短。D7=7:Figure 1 放在机制流程之后,与正文顺序略错位。D9=5:研究问题没有核心观点速览,主结果表后缺少逐项意义说明,小节之间没有过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头先写本节要回答的问题,数字后补一句意义",
+        "把论文未说明的内容(四阶段各自数据量、分类头结构、Top-3 算法、测试视频去重、方差、全参数微调)统一写成 论文未说明",
+        "补写 T5 随机初始化 Top-3 0.799 最高、T1 大模型略低于标准版等反例",
+        "展开与 Endo-FM、GSViT、Surg-3M 的定位",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "4e59ab994acfa92a9501a035acd14cea2ffe39dab17d32dedcf38652646f2e15",
+      "note_snapshot": "review_rounds/round2_SurgBench_A_Unified_Large_Scale_Benchmark_for_Surgical_Video_Analysis.md",
+      "report_sha256": "ee8a7d4f95e7ee20bab50f0e600f5b0bcc0849401252771608b4dd8ae752355f",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成,6 条修订写入笔记与报告;笔记与报告数字核对无未匹配项,3 个推导或图像读数登记在 number_exceptions.json。D4=9:明确列出测试视频去重、分类头结构、规模口径、大模型混杂、近分布迁移五条边界并给出理由。无法修复的限制:四阶段精炼比例、分类头结构、Top-3 算法、方差、全参数微调均为论文未说明;正文逐类结果表显示为 Table ??;Table 7、8 裁图被拒,保留占位;数据只能申请获取。D3 未到 9:Table 2 只在图中给出,正文未逐行列出 16 个来源的帧数。",
+      "fixes": []
+    }
+  ]
+}

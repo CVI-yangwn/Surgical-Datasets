@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Cataract-LMM: Large-Scale Multi-Source Multi-Task Benchmark for Deep Learning in Surgical Video Analysis</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>两家医院 3,000 个白内障手术视频，四层标注，第一次能在白内障数据上做站点留出评测</h1>
+<div class="sub">Cataract-LMM: Large-Scale Multi-Source Multi-Task Benchmark for Deep Learning in Surgical Video Analysis</div>
+<div class="meta">Mohammad Javad Ahmadi、Hamid D. Taghirad 等，K.N. Toosi 理工大学、德黑兰医科大学 Farabi 与 Noor 眼科医院、阿尔伯塔大学 | arXiv 2510.16371 v3，Scientific Data 13 卷，2026</div>
+<div><span class="chip">数据集论文</span><span class="tag">白内障手术</span><span class="tag">阶段识别</span><span class="tag">实例分割</span><span class="tag">器械跟踪</span><span class="tag">技能评估</span><span class="tag">跨中心泛化</span></div>
+<div class="one">Cataract-LMM 用两家德黑兰眼科医院的 3,000 个超声乳化手术视频，在 150 到 170 个视频上提供阶段、实例分割、撕囊跟踪和技能评分四层标注；基线显示换医院后性能明显下降，路径长度与技能分数负相关，但时长的影响没有被分离。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2510.16371" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cataract-lmm/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>白内障手术是全球最常见的眼科手术，但公开数据集几乎都来自单一医院。</strong> 模型在一家医院训练，学到的可能是那家医院的光照和显微镜色调，换一家就不灵。</p>
+<p>已有的白内障数据集各有侧重。CATARACTS 有 50 个视频的阶段与器械存在；CaDIS 在其中 25 个视频上加了像素级分割；Cataract-1K 发布了 1,000 个视频，其中 56 个有阶段标注。它们都是单中心。</p>
+<p>论文还指出另一个缺口：没有数据集把器械运动轨迹和盲评的技能分数连在一起，而这是用运动学评估手术熟练度的前提。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口一：没有多中心的白内障手术数据</span><span class="i">缺口二：没有跟踪轨迹与技能分数的配对标注</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是 Cataract-LMM：3,000 个视频，来自 Farabi（2,930 个）和 Noor（70 个）两家医院，相机分别为 720×480 和 1920×1080。</p>
+<p>在子集上叠了四层标注：150 个视频的 13 类阶段，6,094 帧的 12 类实例分割，170 段撕囊片段的逐帧跟踪，同样 170 段的六指标技能评分。</p>
+<p><strong>最有信息量的结果是跨中心下降。</strong> 视频级阶段识别最好的 DINO-ASFormer，F1 从 79.98 降到 67.87；分割在 Noor 训练、Farabi 测试时，mAP 从 61.99 降到 47.12。</p>
+<p><strong>边界同样清楚：</strong> 所有结果只跑一次，域外阶段测试只有 21 个视频，路径长度与技能的关系没有控制时长。</p><div class="strip d"><span class="t">数据</span><span class="i">3,000 个视频，1,134.2 小时</span><span class="i">阶段 150 视频，分割 6,094 帧，跟踪与技能 170 段</span><span class="i">一致性：Kappa 0.924，mIoU 0.874，HOTA 90.2，ICC 0.87</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>数据集能外推多远，取决于来源。两家医院都在德黑兰，采集时间为 2021 年 12 月到 2025 年 3 月，术者从住院医师到主治专家都有。</p>
+<p><strong>两个站点的规模相差约 42 倍。</strong> 所谓跨中心，本质是在大站点上训练、在一个小站点上测试。阶段子集里 Noor 只有 21 个视频，全部被用作域外测试，所以阶段识别只能做单向迁移。</p>
+<p>标注子集不是纯随机抽样：基础病例随机抽取，再在资深医生监督下补充难例、反光遮挡帧和不同熟练度的病例。补充比例论文未说明，所以子集上的分数不能直接代表全量视频。</p>
+<figure class="fig"><img src="images/page_003_fig_table_1_review_repair1.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。与公开白内障数据集的对比。Cataract-LMM 是唯一一个多中心、同时有跟踪与技能标注的。</figcaption></figure></div><div class="card" id="s4"><h3><span class="num">4</span>四层标注怎样做出来</h3><p><strong>每层都给了一致性数字，这在手术数据集论文中不常见。</strong></p>
+<div class="tbl"><table><thead><tr><th>标注层</th><th>规模</th><th>标注者</th><th>一致性</th></tr></thead><tbody><tr><td>阶段</td><td>150 视频，13 类</td><td>3 名住院医师</td><td>Fleiss Kappa 0.924</td></tr><tr><td>实例分割</td><td>6,094 帧，12 类</td><td>8 名住院医师</td><td>校准集 mIoU 0.874</td></tr><tr><td>跟踪</td><td>170 段，469,118 帧</td><td>模型预标注加 8 名住院医师修正</td><td>HOTA 90.2</td></tr><tr><td>技能</td><td>170 段，6 指标</td><td>3 名眼科医生双盲</td><td>ICC 0.87</td></tr></tbody></table></div>
+<p>跟踪是半自动的：在分割子集上微调的 YOLO11-L 先出掩码，BoT-SORT 维持身份，尖端由最小二乘直线拟合求出，再由人工修正。DetA 82.7 低于 AssA 98.4，说明误差主要在掩码边界，身份关联基本不出错。</p>
+<p>技能量表从 GRASIS 和 ICO-OSCAR 改编六个可从视频判断的指标，每项 1 到 5 分。分歧超过 1 分时由资深顾问裁决，总分取六项平均。</p>
+<figure class="fig"><img src="images/page_008_fig_table_3_review_repair1.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。六指标技能量表及三档锚点，定义了技能分数到底测的是什么。</figcaption></figure>
+<p>下一节看这些标注怎样被拿来验证。</p></div><div class="card" id="s5"><h3><span class="num">5</span>验证协议</h3><p><strong>划分方式决定了结果能说明什么。</strong> 阶段识别按医院划分：训练 80、验证 26 个视频全部来自 Farabi，测试 23 个 Farabi 视频为域内、21 个 Noor 视频为域外。</p>
+<p>阶段模型分两类。片段级看 10 帧窗口，模拟术中实时；视频级看整场手术，用于术后索引。视频级比较了冻结的 DINO、CLIP 特征和微调的 ResNet50 特征。</p>
+<p>实例分割按视频 70/20/10 划分，比较 YOLO 系列、Mask R-CNN，以及用真值框提示的 SAM 与 SAM2。<strong>真值框给了 SAM 理想定位，所以它的分数是上界。</strong></p>
+<p>技能分类用 K 均值把总分切成两组（63 段对 107 段），7 个视频模型做二分类。运动学分析用累计尖端路径长度：</p>
+<p>$$L=\sum_{t=1}^{T-1}\lVert P_{t+1}-P_t\rVert_2$$</p>
+<p>$L$ 随可见帧数 $T$ 增长，是否对时长归一化，论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>换医院后，所有阶段识别模型都下降，但下降幅度差别很大。</strong></p>
+<div class="tbl"><table><thead><tr><th>模型</th><th>域内 F1</th><th>域外 F1</th></tr></thead><tbody><tr><td>MViT-B（片段级）</td><td>77.1</td><td>57.6</td></tr><tr><td>DINO-ASFormer（视频级）</td><td>79.98</td><td>67.87</td></tr><tr><td>CLIP-ASFormer（视频级）</td><td>72.71</td><td>65.38</td></tr><tr><td>CLIP-MS-TCN（视频级）</td><td>67.10</td><td>62.89</td></tr><tr><td>ResNet50-ASFormer（视频级）</td><td>74.61</td><td>60.93</td></tr></tbody></table></div>
+<p>CLIP 特征域内不强，但域外最稳。论文由此认为，在一家医院上微调卷积网络会过拟合站点外观。</p>
+<figure class="fig"><img src="images/page_016_fig_table_9_review_repair1.png" alt="Table 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 9。视频级模型的域内与域外结果，冻结特征与微调特征可在同一时序模型下直接比较。</figcaption></figure>
+<p><strong>分割上，器械是主要难点。</strong> YOLOv11-L 的 12 类 mAP 为 73.9，SAM 为 56.0；瞳孔 90.5，套管针只有 58.4。跨中心时，Farabi 训练到 Noor 测试从 70.45 降到 61.19，反向从 61.99 降到 47.12。</p>
+<p>技能二分类中，TimeSformer 的 F1 为 83.90，R3D-18 为 83.58，两者几乎相同。路径长度对分数的回归斜率为 -5,803.8，低技能组平均 13,724.6 像素，高技能组 7,124.7 像素。</p><div class="strip d"><span class="t">数据</span><span class="i">阶段：DINO-ASFormer 域内 F1 79.98，域外 67.87</span><span class="i">分割：YOLOv11-L mAP 73.9，SAM 56.0</span><span class="i">技能：TimeSformer F1 83.90，CNN-GRU 68.57</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><p><strong>冻结特征更鲁棒，只在 CLIP 上稳定成立。</strong> DINO 配 MS-TCN 时，F1 从 78.53 降到 61.60，降幅比微调 ResNet50 配 MS-TCN 还大。每个配置只跑一次，域外只有 21 个视频，几个点的差异可能是随机波动。</p>
+<p><strong>监督模型优于 SAM，说明的是领域微调有用，不是标注好坏。</strong> 标注质量的真正证据是一致性数字，不是模型分数。</p>
+<p><strong>路径长度可能只是时长的代理。</strong> 分数最低的区间平均 137.77 秒，最高区间 26.30 秒，片段越长路径越长。论文没有给相关系数、显著性或时长归一化后的结果，所以目前只能说两者同向变化。</p>
+<p><strong>反向迁移降得更多，未必只是器械外观不同。</strong> Noor 训练帧来自较少视频，且目标在低分辨率的 Farabi 画面里更小，论文没有做实验分离这两个因素。</p><div class="strip h"><span class="t">亮点</span><span class="i">跨中心下降是可信的，具体模型排序不可信</span><span class="i">路径长度与技能的关系没有排除时长混杂</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>相对已有数据集新在哪里</h3><div class="tbl"><table><thead><tr><th>对比对象</th><th>Cataract-LMM 新增</th><th>没有超过的地方</th></tr></thead><tbody><tr><td>CATARACTS</td><td>第二站点，实例分割、跟踪、技能</td><td>主站点 720×480 低于其 1920×1080</td></tr><tr><td>CaDIS</td><td>实例级掩码，两站点，三种粒度</td><td>分割帧数只多约 30%</td></tr><tr><td>Cataract-1K</td><td>视频数三倍，新增跟踪与技能</td><td>同样只覆盖一个国家</td></tr></tbody></table></div>
+<p><strong>真正独有的是站点留出评测，以及同一批撕囊片段上跟踪与技能的配对。</strong> 其余是规模增加。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>文件名里的 S1、S2 标出医院，跨中心划分可直接构造。</li><li>引用 SAM 分数时写明是真值框提示的上界。</li><li>Table 12 与 Table 13 的 12 类结果不一致（73.9 对 73.19），论文未说明原因。</li><li>技能测试集约 26 段，一段分错就影响约 4 个百分点；比较模型时应做多次划分。</li><li>运动学量是像素单位，两站点分辨率不同，用之前先做尺度和时长归一化。</li><li>论文未说明：术者级别在各子集中的分布、跟踪修正者与评分者是否重叠、K 均值分组与 3.7 分阈值的关系。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>Cataract-LMM 的独特价值是两站点留出评测和撕囊跟踪与技能的配对</div><div>带标注的只有 150 到 170 个视频，3,000 个原始视频适合自监督预训练</div><div>跨中心下降真实存在，冻结特征的优势只在 CLIP 上稳定</div><div>路径长度结论需要先控制时长</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>四层标注都报告了一致性数字</li><li>发布结构清楚，原始视频全部公开，许可为 CC-BY 4.0</li><li>协议细节和超参数完整，基线代码公开</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>两站点规模悬殊，且同在一座城市</li><li>所有基线单次运行，没有方差</li><li>技能分组阈值由数据决定，路径长度分析未控制时长</li><li>跟踪子集没有跟踪模型基线</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>控制时长后，路径长度是否仍与技能分数相关？</li><li>增加 Noor 训练视频后，反向迁移的下降会缩小多少？</li><li>Mask R-CNN 组织类异常高、器械类异常低的原因是什么？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 60bf587c</span><span class="s">6.0 分</span></div><p>第 1 轮原版流程笔记（自评）。四层标注、四个任务的主结果表都在，证据链完整。H3=fail：数字核对有 9 个未匹配值（推导出的降幅、参数量换算、斜率千分位写法、DOI 片段），尚未登记来源。D2=7：跟踪与技能的协议有，但 K 均值分组与 3.7 分阈值、像素单位对后续结论的影响没有写进流程。D4=7：深度分析提出时长混杂与小测试集，但没有逐条写出受影响的结论。D5=6：定位散在创新点与深度分析，没有逐项与 Cataract-1K、CaDIS、CATARACTS 比较。D7=7：Table 14 只有文字表，无图。D8=7：摘要一段超过 300 字。D9=6：研究问题已有核心观点速览，但各节开头没有先写本节要回答的问题，结果小节多处数字后缺少意义说明，小节之间缺少过渡。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:fail H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>用 lint_report.py --mode note 登记推导数字的来源，消除 H3 失败</li><li>各节开头先写本节要回答的问题，结果小节的数字后补一句意义</li><li>在深度分析中加一段逐项定位：相对 Cataract-1K、CaDIS、CATARACTS 各新在哪里</li><li>把 K 均值与 3.7 分阈值、像素单位写成会改变结论的协议细节，并写清论文未说明之处</li><li>Insight Pass 中逐项核对中心论断，把挑战结果写回笔记</li><li>摘要翻译按句拆段，避免超长段落</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 7a55c240 · 文稿 ae792c1b</span><span class="s">8.3 分</span></div><p>第 2 轮（自评）。完成 Insight Pass（9 个知识点、11 个细节问题、4 个挑战），修订写回笔记与报告。H3 通过：推导值、单位换算和 DOI 片段已登记在 number_exceptions.json。D4=9：冻结特征鲁棒性只在 CLIP 上成立、SAM 对比不能证明标注质量、路径长度未控制时长、反向迁移的替代解释都已写明。D5=8：新增与 CATARACTS、CaDIS、Cataract-1K 的逐项对比表。无法修复的限制：论文不提供方差、技能测试集段数和术者分布，笔记中以论文未说明标出；Table 14 没有可用裁图，只保留文字表。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-06</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>
