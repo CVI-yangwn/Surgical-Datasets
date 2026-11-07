@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "1710129421a9967e55f0911c3e00e566fe97c3c52127ce5637314b2cdb570faa",
+      "note_snapshot": "review_rounds/round1_Challenges_in_Multi_centric_Generalization_Phase_and_Step_Recognition_in_Roux_en_Y_Gastric_Bypass_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.1,
+      "verdict": "第 1 轮自评：两中心来源、划分、本体、七组实验和表 2 至表 4 主数字齐全，9 张图表已插入。D2=7：未说明 MTMS-TCN 输入输出维度以外的训练细节缺口（学习率、批大小等论文未说明）。D4=7：边界只列了四条，未讨论按视频平均 F1 与缺失类别的关系有多大影响。D6=6：复用建议偏短。D9=5：研究问题末尾缺少核心观点速览，多数小节直接罗列数字，节末没有过渡，数字后缺少含义。H3 未做数字核对。",
+      "fixes": [
+        "按 insight pass 三轮补齐知识点、细节问答和质疑并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明问题，数字后补含义，节末加过渡",
+        "把训练超参、斯特拉斯堡外科医生人数、缺失类别计分方式、显著性检验等缺口写成论文未说明",
+        "补充实验 6 低于实验 1 的解读与对 TeCNO 和 MTMS-TCN 互有胜负的讨论",
+        "用 lint_report.py --mode note 做数字核对"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "8c37d2ad3e0f61b0ab1c32277086905982e59ed80b9af305ddf4ca26c4961b15",
+      "note_snapshot": "review_rounds/round2_Challenges_in_Multi_centric_Generalization_Phase_and_Step_Recognition_in_Roux_en_Y_Gastric_Bypass_Surgery.md",
+      "report_sha256": "875278819da92ac3ad5078ec49cca65762230ac6612caf90b52eb3a2f21abb3a",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评：加入核心观点速览；各节以问题开头、数字后补含义、节末有过渡；训练超参数、斯特拉斯堡外科医生人数、划分分层规则、缺失类别计分方式和显著性检验均写为论文未说明；深度分析加入外观差异（CNN 同样掉点）与样本量两个替代解释，并指出合并训练在伯尔尼上略低于中心内训练。笔记与报告数字核对均无未匹配项。D5=7：定位只对比作者列举的 Cholec80、Bypass40、HeiChole，论文没有给出更多多中心流程数据集的定量对比，无法补齐。Fig 3 因自动裁剪未通过视觉检查保留占位。",
+      "fixes": []
+    }
+  ]
+}

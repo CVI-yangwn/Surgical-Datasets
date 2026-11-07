@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>GynSurg: A Comprehensive Gynecology Laparoscopic Surgery Dataset</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>一份把动作、副作用、器械和解剖标签放在一起的妇科腹腔镜数据集</h1>
+<div class="sub">GynSurg: A Comprehensive Gynecology Laparoscopic Surgery Dataset</div>
+<div class="meta">Sahar Nasirihaghighi, Negin Ghamsarian, Leonie Peschek, Matteo Munari, Heinrich Husslein, Raphael Sznitman, Klaus Schoeffmann（克拉根福大学、伯尔尼大学、维也纳医科大学） | arXiv 2506.11356 预印本</div>
+<div><span class="chip">数据集</span><span class="tag">妇科腹腔镜</span><span class="tag">动作识别</span><span class="tag">器械分割</span><span class="tag">解剖分割</span><span class="tag">SAM</span></div>
+<div class="one">GynSurg 用 152 个带动作与副作用时间标签的视频和 12,362 帧器械与解剖分割掩码建立了妇科腹腔镜多任务基线，但标注质量、划分方式和多任务价值都没有在论文中得到验证。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 9 条论文未说明</span><span class="tag">反向检验 5 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2506.11356" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/gynsurg/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>妇科腹腔镜录像用于术中导航，也用于术后记录、教学和复盘，但录像量远超人工回看的能力。已有研究分别做过器械检测、解剖分割、动作识别，用的公开数据却各管一块。</p>
+<p>同组早先的 GLENDA、GynLap4、SurgicalActions160 主要做分类或检测；SurgAI 系列只标 2 类解剖结构；AutoLaparo 任务多，但只有 21 个视频。<strong>缺的是一份把动作、术中副作用、器械和解剖放在一起、规模足够的妇科数据。</strong></p>
+<p>GynSurg 想填的就是这个空缺。接下来先给出它的整体答案。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>做法是把两家医院的录像分成三个子集：时间标注、像素标注、不标注。</strong></p>
+<ul><li>动作子集：152 个视频，四类动作加 Rest，另有出血、烟雾两个二分类。</li><li>分割子集：15 个子宫切除视频、12,362 帧，21 类器械、4 类解剖结构。</li><li>未标注子集：75 个子宫切除视频。</li><li>基线：动作识别 ResNet-LSTM 平均 76.99；器械分割 DeepLabV3 平均 Dice 75.64；解剖约 52，输卵管不到 23。</li></ul>
+<p><strong>边界：</strong> 标注者与一致性没有报告，划分单位没写明，四类标签没有联合实验。</p>
+<p>下面逐个子集看数据从哪来、每类有多少。</p><div class="strip h"><span class="t">亮点</span><span class="i">唯一同时含动作识别与器械加解剖分割的妇科数据</span><span class="i">“多任务”目前只是标签齐全，没有联合实验</span></div><div class="strip d"><span class="t">数据</span><span class="i">152 个动作视频，选自 600 多台手术</span><span class="i">12,362 帧分割掩码 = 11,352 器械帧 + 1,010 解剖帧</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p>动作子集选自维也纳医科大学和多伦多医科大学的 600 多台手术，30 fps、1920 × 1080。分割子集与未标注子集全部来自多伦多，分割帧分辨率 750 × 480。</p>
+<p>两家医院各贡献多少、选片标准、伦理审批，论文未说明。许可为 CC BY-NC-ND，禁止商业使用。<strong>分割子集只有一家医院，跨中心结论无从验证。</strong></p>
+<div class="tbl"><table><thead><tr><th>数据集</th><th>任务</th><th>规模</th></tr></thead><tbody><tr><td>AutoLaparo</td><td>阶段、运动、分割</td><td>21 个视频</td></tr><tr><td>GLENDA</td><td>检测</td><td>25,682 帧</td></tr><tr><td>GynLap4</td><td>分类</td><td>30,682 帧等四个子集</td></tr><tr><td>GynSurg</td><td>动作、分割</td><td>152 个视频；12,362 帧</td></tr></tbody></table></div>
+<p>按帧数，GynLap4 和 GLENDA 都比 GynSurg 的分割子集大。<strong>“最大”只在视频数加任务覆盖上成立。</strong></p>
+<p>来源清楚了，下一个问题是类别有多不平衡。</p></div><div class="card" id="s4"><h3><span class="num">4</span>动作与副作用：类别极不均衡</h3><figure class="fig"><img src="images/page_002_fig_table_2_review_repair1.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。各类动作与副作用的病例数、片段数、3 秒切片数与总时长。</figcaption></figure>
+<p>视频被切成 3 秒、重叠 1 秒的切片作为样本。切断只出现在 8 个病例中；Rest 总时长 24,067 秒，却只有 1,100 个切片，采样规则论文未说明。</p>
+<p>正文称穿针“在病例数上占优”（48 例），但表中吸引冲洗有 51 例，穿针只在总时长上占优。<strong>切断只有 8 例，后面关于切断的结论都只靠这几个病例。</strong></p>
+<figure class="fig"><img src="images/page_002_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。六类时间标签的示例帧。</figcaption></figure>
+<p>时间标签之外，另一半数据是像素掩码。</p><div class="strip d"><span class="t">数据</span><span class="i">穿针总时长 7,036 秒，吸引冲洗只有 722 秒</span><span class="i">副作用子集的视频数论文未说明</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>分割子集：长尾很重</h3><figure class="fig"><img src="images/page_003_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。器械与解剖结构的实例数。</figcaption></figure>
+<p>抓钳 2,864 次，trocar 只有 8 次；辅助工具中线头碎片与缝线占大半。解剖结构中子宫 475 次、输卵管 146 次。</p>
+<p>评测前作者剔除稀有类、合并近似类：器械留 7 类（四种缝合器械并成一类），辅助工具留 4 类，解剖剔除泛指器官留 3 类。合并规则里出现的 <code>in-cannula</code> 不在图 2 中，来源论文未说明。</p>
+<p>标注者是谁、几人、一致性如何，论文未说明。<strong>没有一致性，就分不清低分来自模型还是标签。</strong></p>
+<p>接下来看两套训练协议。</p></div><div class="card" id="s6"><h3><span class="num">6</span>训练协议</h3><p>动作识别比较四个网络：VGG16 加 Transformer、VGG16 加 LSTM、ResNet50 加 LSTM、ResNet3D-18。小批量做类均衡采样，SGD 学习率 0.005、多项式衰减，批大小 16。轮数一处写 40、一处写 30，以哪个为准论文未说明。</p>
+<p>分割比较十个网络加 SAM，输入 256 × 256，80 轮、批大小 4。损失是交叉熵与对数 Dice 的加权：</p>
+<p>$$\mathcal{L}=\lambda\, CE - (1-\lambda)\log\frac{2\sum X_{true}\odot X_{pred}+\sigma}{\sum X_{true}+\sum X_{pred}+\sigma}$$</p>
+<p>其中 $\lambda=0.8$，$\sigma=1$。两套协议都用四折交叉验证，但划分单位正文没写，只说编号在 GitHub。</p>
+<p>SAM 有两种提示：网格撒点，或用<strong>真值掩码的质心</strong>作单点提示（SAM-PP）。后者推理时需要已知目标位置。</p>
+<p>协议讲清了，下面看分数。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>模型</th><th>电凝</th><th>穿针</th><th>吸引冲洗</th><th>切断</th><th>Rest</th><th>平均</th></tr></thead><tbody><tr><td>VGG-LSTM</td><td>51.72</td><td>93.10</td><td>61.38</td><td>68.36</td><td>48.76</td><td>68.40</td></tr><tr><td>ResNet-LSTM</td><td>56.14</td><td>92.74</td><td>74.81</td><td>84.28</td><td>56.82</td><td>76.99</td></tr><tr><td>VGG-Transformer</td><td>49.13</td><td>94.68</td><td>62.79</td><td>75.64</td><td>24.33</td><td>69.29</td></tr><tr><td>ResNet3D</td><td>45.11</td><td>99.54</td><td>91.51</td><td>12.27</td><td>57.15</td><td>58.46</td></tr></tbody></table></div>
+<p>穿针全部超过 90，电凝与切断常互相混淆，因为器械相似且都产生烟雾。<strong>平均列不是五类算术平均</strong>，算法论文未说明。</p>
+<p>正文说 ResNet-LSTM 出血准确率 92.65%，表中没有这个数；它等于出血 88.26 与非出血 97.04 的平均，是类平均准确率。</p>
+<figure class="fig"><img src="images/page_006_fig_table_7_review.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。器械分割 Dice。</figcaption></figure>
+<p>器械分割 DeepLabV3 平均 75.64，双极钳与闭合切割器超过 80，剪刀最高 57.62。辅助工具里 trocar 套管全部低于 20。解剖分割整体只有约 50，输卵管 16.04 到 22.31。</p>
+<figure class="fig"><img src="images/page_006_fig_table_9_review_repair1.png" alt="Table 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 9。三种 SAM 变体的 Dice。</figcaption></figure>
+<p>SAM-PP 粉碎器达 90.48，子宫 85.72，高出最好的全自动 CNN 二十多个点。<strong>这个差距来自真值位置提示，不说明 SAM 的分割能力更强。</strong></p>
+<p>分数读完了，问题是这些分数能支持哪些结论。</p><div class="strip d"><span class="t">数据</span><span class="i">动作：ResNet-LSTM 平均 76.99，ResNet3D 切断 12.27</span><span class="i">器械：DeepLabV3 平均 75.64；解剖：UPerNet 平均 52.08</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>ResNet-LSTM 最好未经检验。</strong> 它的吸引冲洗标准差 29.01，模型间差距可能落在折间波动内。</li><li><strong>穿针高分可能有泄漏。</strong> 切片重叠 1 秒，若按切片划分，相邻切片同时进入训练与测试；论文没有按视频划分的结果来排除。</li><li><strong>多任务价值没有实验。</strong> 分割视频全来自多伦多，与动作视频是否同一批手术论文未说明，也没有联合训练。</li><li><strong>统一超参数。</strong> 所有网络共用一套设置，排名只在这套设置下成立。</li><li><strong>分辨率影响未测。</strong> 输入都缩到 256 × 256，细长的输卵管和小目标在这个尺度上像素很少。</li></ul>
+<p>这些疑点决定了复用时要先核对什么。</p><div class="strip h"><span class="t">亮点</span><span class="i">动作识别更像“认器械”，器械独特的类容易，共用器械的类难</span><span class="i">SAM-PP 只能当作给定位置时的参考</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ol><li>从 GitHub 取四折编号，确认同一视频不跨折。</li><li>按论文的类别合并规则重建掩码，先弄清 <code>in-cannula</code>。</li><li>动作识别同时报告逐类准确率与 F1，不只看平均列。</li><li>切断只有 8 例，任何关于切断的结论都要标出样本量。</li></ol></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>器械分割子集类别多、合并规则清楚，可直接作为妇科器械分割的测试集</div><div>动作子集极不均衡，切断只有 8 例</div><div>正文的副作用“准确率”是两类准确率平均</div><div>SAM-PP 用了真值位置，不能与全自动模型直接比</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>首次把动作、出血烟雾、器械、解剖四类标签放进一份妇科数据</li><li>统一协议下给出十余个网络的基线，划分编号与掩码代码公开</li><li>附带 75 个未标注视频，可做自监督</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>标注者人数、资历与一致性全部缺失</li><li>四折划分单位、表 4 平均列算法、训练轮数在正文中不清楚或矛盾</li><li>分割子集只有一家医院、15 个视频</li><li>多任务卖点没有任何联合实验</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>动作视频与分割视频是否来自同一批手术</li><li>按视频划分后，穿针与 Rest 的分数会下降多少</li><li>两家医院之间的跨中心泛化表现如何</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 b752fc60</span><span class="s">7.2 分</span></div><p>第 1 轮自评：数据来源、表 2 统计、类别整理、两套训练协议与表 4 到表 9 齐全，并核出正文 92.65 等于两类准确率平均。D2=7：时间标注与像素标注的人员与流程论文本身很薄，笔记只能照写。D4=7：边界集中在深度分析和局限，没有逐条接到对应结果。D9=5：缺核心观点速览，研究问题只有两段，多数小节直接罗列数字，节末没有过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 补齐知识点、细节问答与质疑，并写回笔记</li><li>在研究问题末尾加入核心观点速览，补足背景</li><li>每节开头写明要回答的问题，数字后补含义，节末加过渡</li><li>把标注者、副作用子集视频数、划分单位、动作与分割视频是否重叠逐项写成论文未说明并说明影响</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 fa129c9b · 文稿 be23bd93</span><span class="s">8.3 分</span></div><p>第 2 轮自评：insight pass 核出正文 92.65 等于两类准确率平均、表 4 平均列不等于五类平均、穿针与吸引冲洗病例数矛盾、40 与 30 轮矛盾、in-cannula 来源不明，并把标注者、副作用子集视频数、划分单位、动作与分割视频是否重叠、伦理逐项写成论文未说明。加入核心观点速览、每节开头问题与节末过渡，补上按切片划分可能抬高穿针分数、SAM-PP 依赖真值位置两条替代解释。数字核对无未匹配项，表 2 图像内数字与一个推导值登记在 number_exceptions.json。D2=8 而非更高：论文对标注流程的描述本身很薄，笔记只能写出缺口。D1=8：没有标注一致性或跨中心实验，证据链只能到基线分数。D9 从 5 升到 8，D4 从 7 升到 9，因为边界逐条接到了对应结果。表 1、表 8 两次裁剪均失败，以 Markdown 表代替。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

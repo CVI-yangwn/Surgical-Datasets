@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "b752fc60b9d874f6b3cd0b65f314c46ff7e824f52367e0734dc55ee8c796a888",
+      "note_snapshot": "review_rounds/round1_GynSurg_A_Comprehensive_Gynecology_Laparoscopic_Surgery_Dataset.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.2,
+      "verdict": "第 1 轮自评：数据来源、表 2 统计、类别整理、两套训练协议与表 4 到表 9 齐全，并核出正文 92.65 等于两类准确率平均。D2=7：时间标注与像素标注的人员与流程论文本身很薄，笔记只能照写。D4=7：边界集中在深度分析和局限，没有逐条接到对应结果。D9=5：缺核心观点速览，研究问题只有两段，多数小节直接罗列数字，节末没有过渡。H3 未做数字核对。",
+      "fixes": [
+        "按 insight pass 补齐知识点、细节问答与质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览，补足背景",
+        "每节开头写明要回答的问题，数字后补含义，节末加过渡",
+        "把标注者、副作用子集视频数、划分单位、动作与分割视频是否重叠逐项写成论文未说明并说明影响",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "fa129c9b98ada36391c03c0dfcdec21dc57da71d6f9b0c25b753ab562fc04363",
+      "note_snapshot": "review_rounds/round2_GynSurg_A_Comprehensive_Gynecology_Laparoscopic_Surgery_Dataset.md",
+      "report_sha256": "be23bd931c87250e2adae09bf9eae89190544af1596b79286031da00ad81c2a6",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评：insight pass 核出正文 92.65 等于两类准确率平均、表 4 平均列不等于五类平均、穿针与吸引冲洗病例数矛盾、40 与 30 轮矛盾、in-cannula 来源不明，并把标注者、副作用子集视频数、划分单位、动作与分割视频是否重叠、伦理逐项写成论文未说明。加入核心观点速览、每节开头问题与节末过渡，补上按切片划分可能抬高穿针分数、SAM-PP 依赖真值位置两条替代解释。数字核对无未匹配项，表 2 图像内数字与一个推导值登记在 number_exceptions.json。D2=8 而非更高：论文对标注流程的描述本身很薄，笔记只能写出缺口。D1=8：没有标注一致性或跨中心实验，证据链只能到基线分数。D9 从 5 升到 8，D4 从 7 升到 9，因为边界逐条接到了对应结果。表 1、表 8 两次裁剪均失败，以 Markdown 表代替。",
+      "fixes": []
+    }
+  ]
+}

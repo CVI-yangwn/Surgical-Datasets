@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "02aeb156b5f775604e57cf8368e435f127030eace0fd5956b1fb247c6a16ba1a",
+      "note_snapshot": "review_rounds/round1_PitVis_2023_Challenge_Workflow_Recognition_in_videos_of_Endoscopic_Pituitary_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮自评：三项任务、数据采集与标注、指标公式、表 5 至表 8 主结果都有，深度分析指出跨队比较不是消融、验证集高估器械。D5=7：与腹腔镜数据集的对比只停在定性，没有说明 PitVis 规模相对已有公开数据集的位置。D6=7：复用建议没有说明如何处理步骤 11、13 和体外帧。D7=7：小节未编号，表 2、表 3 只有占位与部分转写。D9=6：研究问题末尾缺核心观点速览，多数小节直接罗列事实，数字后缺含义，节末无过渡。H3 尚未做数字核对。",
+      "fixes": [
+        "按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明要回答的问题，关键数字后补一句含义，节末加过渡",
+        "把 Edit-score 归一化、标注一致性、CAIR-POLYU-HK 带 TCN 仍低分的原因等缺口写成 论文未说明",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "2a95b0e62dc3724947473e393a30635d8e669c10e76d0664c7f694d85bfd798c",
+      "note_snapshot": "review_rounds/round2_PitVis_2023_Challenge_Workflow_Recognition_in_videos_of_Endoscopic_Pituitary_Surgery.md",
+      "report_sha256": "b8156c80b596cc9248877c0fe5eef8a5f67399e5bee671b74015d8b3513869a4",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评：加入核心观点速览、各节问题开头与过渡；Edit-score 归一化、标注一致性、CAIR-POLYU-HK 低分原因、排名稳定性写为论文未说明；复算发现 SANO 任务三降幅与表格不符并写入笔记；数字核对无未匹配项（两处差值与补零写法登记为例外）。D7=7：笔记沿用固定节名未编号，表 2、表 3 自动提取没有图像资产，表 4 与图 12 一次修复后仍有裁切缺陷，只能保留占位加转写，这是无法在本流程内修复的限制。",
+      "fixes": []
+    }
+  ]
+}

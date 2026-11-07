@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "cc64ff4f5aca95cfae6851cd37d29e34812126da1819bdabe5f25e3651c13182",
+      "note_snapshot": "review_rounds/round1_Advancing_Surgical_VQA_with_Scene_Graph_Knowledge.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 6,
+        "D5": 6,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.0,
+      "verdict": "第 1 轮自评：数据来源、构建四步、偏差检验表、主结果、拆分表、Cholec80-VQA 结果与消融齐全，九张图表入文。D4=6：边界只在局限中罗列，数据与模型同源、上界版本计数反常未给理由与影响。D5=6：与 CLEVR、GQA 的关系和与 Cholec80-VQA 的差别写得简略。D6=6：复用建议只有三条短句。D9=5：各节直接罗列，缺核心观点速览，数字后少有含义，缺节末过渡。H3 未做数字核对。",
+      "fixes": [
+        "按 insight pass 补齐知识点、细节问答与质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明问题，数字后补含义，节末加过渡",
+        "把训练集自动标签误差、多数类基线、上界计数反常、模板数与 40 的对应等逐项写成论文未说明并说明影响",
+        "深度分析补充纯语言模型残余准确率的解读与数据模型同源的检验办法",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "aef1667bc8e92c8552f86bcbcbce882ce82e2fcffd6d2f200a104f71675f2c66",
+      "note_snapshot": "review_rounds/round2_Advancing_Surgical_VQA_with_Scene_Graph_Knowledge.md",
+      "report_sha256": "a907fcc91278f4f3487ad09d9e17e6070e19ca3c14d3f691b16cde6886634c1e",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评：insight pass 补出构建用检测器与模型检测器不同、训练集自动标签错误率、颜色取值、答案集大小、超参数与重复次数、多数类基线和上界版本计数反常，均写成论文未说明并说明影响。加入核心观点速览、各节开头问题与节末过渡，偏差检验后补了 Cholec80-VQA 高准确率低 F 值的解读，深度分析写入数据与模型同源的替代解释和可区分证据，消融后注明没有参数对齐对照。数字核对无未匹配项，推导差值登记在 number_exceptions.json。D5=7：论文只与两个手术问答数据集和 CLEVR 思路对比，笔记无法从原文补出与其他场景图数据（如 4D-OR）的定量比较。D2=8：模型隐藏维度、答案集等实现细节论文未给。D4 从 6 升到 9、D9 从 5 升到 8，因为边界逐条给出理由，叙事顺序已按讨论顺序重排。",
+      "fixes": []
+    }
+  ]
+}

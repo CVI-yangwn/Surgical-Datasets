@@ -1,0 +1,42 @@
+{
+ "knowledge_points": [
+  {"term": "视觉问答", "plain": "给一张图和一个自然语言问题，模型输出答案；本文从固定答案集中选一个。", "where": "sec:introduction", "needed_for": "理解为什么结果是分类指标"},
+  {"term": "问题条件偏差", "plain": "只读问题、不看图像就能答对，说明数据集没有逼模型看图。", "where": "sec:introduction", "needed_for": "表 2 的纯语言对照实验"},
+  {"term": "场景图", "plain": "节点是画面中的物体及其属性，边是物体之间的空间或动作关系。", "where": "sec:model", "needed_for": "问题如何生成"},
+  {"term": "动作三元组", "plain": "CholecT45 的 <器械, 动作, 目标> 标注，例如抓钳抓持胆囊。", "where": "sec:introduction", "needed_for": "动作类问题的答案来源"},
+  {"term": "CLEVR 问题引擎", "plain": "按模板与场景图填参数自动出题，并用场景图算出答案。", "where": "sec:model", "needed_for": "规模与可控复杂度"},
+  {"term": "推理步数分档", "plain": "零跳、单跳、双条件分别涉及零个、一个、两个物体关系。", "where": "sec:model", "needed_for": "表 4 的复杂度拆分"},
+  {"term": "RoIAlign", "plain": "按检测框从特征图中取出每个物体的固定大小特征。", "where": "sec:model", "needed_for": "消融中的 ROI 一列"},
+  {"term": "上界版本", "plain": "用数据集里的框标签代替检测器输出，衡量检测误差的影响。", "where": "sec:models", "needed_for": "表 3 与表 4 的 oracle 列"}
+ ],
+ "detail_questions": [
+  {"question": "训练与测试如何划分？", "answer": "沿用 CholecT45：40 段视频训练，5 段测试。", "evidence": ["sec:model"], "status": "resolved"},
+  {"question": "训练集场景图是否人工修正？", "answer": "只有测试视频的框和类别人工修正，训练集保留模型输出。", "evidence": ["sec:model"], "status": "resolved"},
+  {"question": "训练集自动场景图的错误率有多大？", "answer": "论文未报告检测器或分割模型在训练帧上的精度。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "构建场景图的检测器与模型里的检测器是同一个吗？", "answer": "构建用的检测器引用 YOLOv5 并在 m2cai16-tool-locations 上训练；模型里的 YOLOv7 在本数据集训练集的框上训练。", "evidence": ["sec:model", "sec:references"], "status": "resolved"},
+  {"question": "空间关系与位置属性如何计算？", "answer": "空间关系比较两物体质心；位置把画面分成九块，按物体所在块赋值。", "evidence": ["sec:model", "sec:dataset-2"], "status": "resolved"},
+  {"question": "颜色属性如何确定？", "answer": "论文只列出颜色是属性之一，未说明取值方法。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "删掉了哪些带偏差的模板？", "answer": "只举了“肝有几个”这类例子，未列出被删模板清单。", "evidence": ["sec:introduction", "sec:model"], "status": "partly"},
+  {"question": "答案集有多大？", "answer": "论文未给出答案类别数。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "纯语言模型在本数据集上约 52 的准确率意味着什么？", "answer": "论文未给多数类或先验基线，无法判断这部分来自偏差还是来自答案分布。", "evidence": ["sec:methods"], "status": "not_stated"},
+  {"question": "Cholec80-VQA 上纯语言模型准确率 83.3 为何很高？", "answer": "其 Fscore 只有 24.4，说明高准确率主要来自答案分布不均，论文据此认为其偏差较低。", "evidence": ["sec:methods"], "status": "resolved"},
+  {"question": "上界版本为何在计数题上只有 24.2？", "answer": "论文未解释。", "evidence": ["sec:models"], "status": "not_stated"},
+  {"question": "训练超参数与重复次数？", "answer": "论文未给学习率、轮数和重复运行次数，也没有置信区间。", "evidence": ["sec:models"], "status": "not_stated"},
+  {"question": "附录写平均问题长度 38.9 词是否正确？", "answer": "与表 1 的 12.8 词矛盾，38.9 是每场景问题数，属笔误。", "evidence": ["sec:dataset", "sec:dataset-2"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "SSG-VQA 的问题条件偏差更低", "alternative": "纯语言模型准确率低只是因为答案空间更大、题目更难，偏差并未消失；视觉模型只比它高 6.4 个点。", "separating_evidence": "按模板统计的答案先验基线或多数类基线。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "场景知识提升复杂问题回答", "alternative": "问题由检测框构成的场景图派生，模型读到同类框坐标，提升部分来自读回生成过程。", "separating_evidence": "测试集问题由人工修正的图生成，模型用独立检测器；可比较检测质量不同的设置。论文只有上界版本一组对照。", "in_paper": true, "verdict": "partly_supported"},
+  {"claim": "SIM 与 RoIAlign 互补", "alternative": "增益来自更多输入令牌和参数，而非结构本身。", "separating_evidence": "参数量对齐的对照与多次运行方差。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "瓶颈在视觉理解而非文本生成", "alternative": "固定答案集的分类设置本就让生成式模型无优势。", "separating_evidence": "开放式答案的评测。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览",
+  "数据来源写明构建用检测器与模型检测器不同",
+  "训练集自动标签错误率、颜色取值方法、答案集大小、超参数与重复次数写成论文未说明",
+  "偏差检验后补充 Cholec80-VQA 高准确率低 F 值的解读和缺少多数类基线的影响",
+  "深度分析加入数据与模型同源的替代解释及可区分它的证据",
+  "消融后注明没有参数对齐对照，互补结论未与参数增加区分",
+  "上界版本计数反常写成论文未说明"
+ ]
+}

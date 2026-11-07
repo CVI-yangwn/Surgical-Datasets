@@ -1,0 +1,160 @@
+{
+ "knowledge_points": [
+  {
+   "term": "eTSA",
+   "plain": "经鼻孔进入、在内镜下切除垂体腺瘤的微创手术。",
+   "where": "sec:introduction",
+   "needed_for": "理解术野窄、镜头畸变、频繁退镜这些难点"
+  },
+  {
+   "term": "在线识别",
+   "plain": "预测某一帧时只能用这一帧和之前的帧，不能看未来。",
+   "where": "sec:introduction",
+   "needed_for": "解释为什么双向时序模型和离线平滑被排除"
+  },
+  {
+   "term": "宏平均 F1",
+   "plain": "每类单独算 F1 再等权平均，少数类和主导类同样重要。",
+   "where": "sec:introduction",
+   "needed_for": "理解器械分数为何低，排名为何由少数类决定"
+  },
+  {
+   "term": "Edit-score",
+   "plain": "把逐帧标签压成片段序列后，按编辑距离衡量预测片段与真值片段的差异。",
+   "where": "sec:introduction",
+   "needed_for": "理解后四名步骤分数断崖的原因"
+  },
+  {
+   "term": "时序平滑函数",
+   "plain": "在线后处理，新类别要持续若干帧才允许切换。",
+   "where": "sec:methods",
+   "needed_for": "理解 TSO-NCT 与 UNI-ANDES-23 的 Edit-score 提升"
+  },
+  {
+   "term": "多标签器械",
+   "plain": "同一秒可有 0、1 或 2 件器械，需要逐类独立判断。",
+   "where": "sec:dataset",
+   "needed_for": "理解为何器械不用 Edit-score"
+  },
+  {
+   "term": "建议划分",
+   "plain": "组织方建议的 20 个训练视频与 5 个验证视频，按类别约 4:1。",
+   "where": "sec:introduction",
+   "needed_for": "解读表 8 的验证集基准"
+  }
+ ],
+ "detail_questions": [
+  {
+   "question": "为什么删掉步骤 11 和 13？",
+   "answer": "它们只出现在 2 个和 1 个训练视频中，样本不足，评测时剔除这些帧。",
+   "evidence": [
+    "sec:dataset"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "Edit-score 怎样归一化到 0 到 100？",
+   "answer": "正文只写成编辑距离的倒数，归一化方式没有给出，需查评测代码。",
+   "evidence": [
+    "sec:introduction"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "标注者之间一致性多高？",
+   "answer": "只描述了多轮标注与核对，没有一致性统计。",
+   "evidence": [
+    "sec:dataset"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "CAIR-POLYU-HK 用了时序卷积网络，为何 Edit-score 仍只有 1.1？",
+   "answer": "论文只说前几名有时序传播，没有解释这一队的失败原因。",
+   "evidence": [
+    "sec:methods",
+    "sec:data"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "为何器械不计 Edit-score？",
+   "answer": "器械使用变化频繁且被无器械和吸引器主导，短暂错判会被重罚，多标签也无法用单一序列表示。",
+   "evidence": [
+    "sec:introduction"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "训练与测试的器械分布为何不同？",
+   "answer": "测试视频录于 2018 至 2021，训练录于 2021 至 2022，作者归因于器械供应和术式随时间变化。",
+   "evidence": [
+    "sec:dataset"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "验证到测试的器械落差来自过拟合还是时间偏移？",
+   "answer": "作者解释为对少数类过拟合，没有做实验分开两种原因。",
+   "evidence": [
+    "sec:data"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "各队的训练成本是否可比？",
+   "answer": "不可比，训练时长从 2 到 88 小时，GPU 和轮数都不同。",
+   "evidence": [
+    "sec:methods"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "任务三相对单任务的增减（+0.4、+4.9、−1.4、−4.5）能否从表格复算？",
+   "answer": "UNI-ANDES-23 可复算：步骤综合分 48.3 到约 48.65，器械 27.5 到 32.4。SANO 复算不符：步骤综合分前后都是约 20.5，器械 41.6 到 36.2 相差 5.4，与正文的 −1.4、−4.5 不一致，原因论文未说明。",
+   "evidence": [
+    "sec:data"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "排名是否稳定？",
+   "answer": "只给均值和标准差，没有自助法或排名稳定性分析。",
+   "evidence": [
+    "sec:data"
+   ],
+   "status": "not_stated"
+  }
+ ],
+ "challenges": [
+  {
+   "claim": "时空与多任务模型比纯空间单任务模型高出 50% 以上（步骤）和 10% 以上（器械）",
+   "alternative": "差距来自各队工程投入、骨干、预训练和训练时长的不同，而不是时序或多任务本身。",
+   "separating_evidence": "同一骨干、同一训练预算下加与不加时序解码器、单任务与多任务的受控对比。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "最佳模型在验证集和测试集上一致，说明泛化良好",
+   "alternative": "步骤分布稳定所以排名一致；器械分数下降约 47 说明存在明显分布偏移。",
+   "separating_evidence": "按录制时间划分的验证集，或在测试期分布相近的视频上评测。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "时序平滑提升了时序一致性",
+   "alternative": "提升可能主要来自 Edit-score 对短暂跳变的计分方式，帧级准确并未同步提升。",
+   "separating_evidence": "同一模型有无平滑的 Macro-F1 与 Edit-score 对比。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  }
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览",
+  "把 Edit-score 归一化、标注一致性、CAIR-POLYU-HK 的低分原因、排名稳定性写成 论文未说明",
+  "在任务三处注明 UNI-ANDES-23 的增益可复算，SANO 的降幅与表格不符",
+  "验证集一节明确过拟合与时间偏移两种解释未被分开",
+  "跨队比较一节加入受控对比缺失的说明",
+  "各节开头补问题、数字后补含义、节末加过渡"
+ ]
+}

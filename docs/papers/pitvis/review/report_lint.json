@@ -1,0 +1,18 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/PitVis_2023_Challenge_Workflow_Recognition_in_videos_of_Endoscopic_Pituitary_Surgery/reading_report.md",
+  "mode": "report",
+  "report_sha256": "b8156c80b596cc9248877c0fe5eef8a5f67399e5bee671b74015d8b3513869a4",
+  "number_exceptions": {
+    "0.1": "表 6 中 SDS-HD 41.7 与 SANO 41.6 之差",
+    "1.1": "表 5 中 CAIR-POLYU-HK 的 Edit-score，原文写作 01.1±00.3"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

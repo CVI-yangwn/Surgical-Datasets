@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Advancing Surgical VQA with Scene Graph Knowledge</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>用场景图自动出题的手术视觉问答数据集 SSG-VQA 及其参考模型</h1>
+<div class="sub">Advancing Surgical VQA with Scene Graph Knowledge</div>
+<div class="meta">Kun Yuan, Manasi Kattel, Joël L. Lavanchy, Nassir Navab, Vinkle Srivastav, Nicolas Padoy（斯特拉斯堡大学 ICube、斯特拉斯堡 IHU、慕尼黑工业大学 CAMP） | arXiv 2312.10251，IPCAI 2024（IJCARS）</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">视觉问答</span><span class="tag">场景图</span><span class="tag">腹腔镜胆囊切除</span><span class="tag">CholecT45</span></div>
+<div class="one">SSG-VQA 在 CholecT45 的 45 段胆囊切除视频上用检测、分割和动作三元组建立场景图，再用 40 个模板生成 960k 个需要看图才能答的问答，配套模型借助检测框把 mAP 提到 54.9，但训练标签由模型自动生成，题目也只是模板语言。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 13 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2312.10251" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/ssg-vqa/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">11 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术视觉问答要模型看懂“谁在哪、谁在对谁做什么”，已有数据集却问不出这类问题。</strong> EndoVis-18-VQA 和 Cholec80-VQA 规模小，题目多是“某器械是否出现”。</p>
+<p>更麻烦的是问题条件偏差：只读问题不看图也能答对。已有模型又只看全局图块，不知道物体在哪。论文想补上数据和模型两头的缺口。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的思路是：让题目和答案都从同一张场景图里来。</p>
+<ul><li>检测与分割给出物体框，质心比较给出空间关系，三元组给出动作关系。</li><li>问题引擎用 40 个模板生成 960k 题，分五类题型、三档推理步数。</li><li>按阶段和器械抽帧，删去能从问题推出答案的模板，并用纯语言模型对照。</li><li>参考模型 SSG-VQA-Net 读入检测框，mAP 54.9。</li></ul>
+<p><strong>边界：</strong> 训练集标签是模型自动生成的，只有 5 段测试视频人工修正；模型读的框与出题的框同源。</p><div class="strip h"><span class="t">亮点</span><span class="i">题目与答案由场景图自动生成，复杂度可控</span><span class="i">纯语言对照实验揭穿了 EndoVis-18-VQA 的偏差</span></div><div class="strip d"><span class="t">数据</span><span class="i">25k 场景，960k 题，501k 不重复题</span><span class="i">平均 12.8 词，每场景 38.9 题</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p>视频与划分沿用 CholecT45：40 段训练，5 段测试，全部是腹腔镜胆囊切除。器械框来自在 m2cai16-tool-locations 上训练的检测器，解剖框来自在 CholecSeg8k 上训练的分割模型。</p>
+<p><strong>测试集的框和类别经人工修正，训练集保留模型输出。</strong> 训练帧上的检测错误率论文未说明，因此训练标签噪声有多大无从判断。</p>
+<figure class="fig"><img src="images/page_002_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。同一画面上 SSG-VQA 与 Cholec80-VQA 的题目对比，以及三个数据集的题目类别分布。</figcaption></figure>
+<p>下一节看题目怎样从这些框里长出来。</p></div><div class="card" id="s4"><h3><span class="num">4</span>题目怎样生成</h3><p><strong>难点是让自动出的题既多样，又必须看图。</strong></p>
+<ol><li>场景图：节点是器械和解剖，属性为颜色、位置、类型；位置按九宫格赋值，空间关系比较质心，动作关系取自三元组。</li><li>问题引擎：扩展 CLEVR 引擎，40 个模板，按场景图填入颜色、位置、类型、名称、关系五类参数，答案由图算出。</li><li>采样与平衡：按阶段和器械出现标签抽帧，删除带偏差的模板与无效问题。</li></ol>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。目标检测、场景图生成、问题生成、采样与平衡四段流程。</figcaption></figure>
+<p>题目分五类：查询物体、查询属性、查询关系、存在判断、计数。按推理步数再分零跳、单跳、双条件三档。颜色怎样取值、答案集多大，论文未说明。</p></div><div class="card" id="s5"><h3><span class="num">5</span>规模对比</h3><div class="tbl"><table><thead><tr><th>指标</th><th>EndoVis-18-VQA</th><th>Cholec80-VQA</th><th>SSG-VQA</th></tr></thead><tbody><tr><td>场景数</td><td>2k</td><td>21k</td><td>25k</td></tr><tr><td>问题数</td><td>11k</td><td>43k</td><td>960k</td></tr><tr><td>不重复问题</td><td>17</td><td>51</td><td>501k</td></tr><tr><td>平均长度（词）</td><td>5.8</td><td>2.0</td><td>12.8</td></tr></tbody></table></div>
+<p><strong>不重复问题从 51 个增至 501k 个，模型很难靠记住句式答题。</strong> 附录正文把每场景 38.9 题误写成平均长度 38.9 词，应以表格为准。</p></div><div class="card" id="s6"><h3><span class="num">6</span>参考模型</h3><p><strong>已有模型不知道物体在哪，SSG-VQA-Net 把框的位置和类别直接送进去。</strong></p>
+<ul><li>文本：分词器得到问题嵌入。</li><li>视觉：ResNet18 特征图加 YOLOv7 检测框，区域池化得到物体特征。</li><li>场景：框的类别和坐标经线性层编码，再经两层交叉注意力，让问题词挑出相关节点。</li></ul>
+<p>三路拼接后经自注意力编码器与平均池化，从答案集中选答案。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。三路输入与场景嵌入交互模块。</figcaption></figure></div><div class="card" id="s7"><h3><span class="num">7</span>这份数据真的需要看图吗</h3><figure class="fig"><img src="images/page_006_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。纯语言模型与视觉语言模型在三个数据集上的结果。</figcaption></figure>
+<p>在 EndoVis-18-VQA 上，纯语言模型的召回率与 F 值高于视觉语言模型，<strong>答案能从问题推出。</strong> 在本数据集上，纯语言模型准确率 52.3，比 VisualBert Resmlp 低 6.4 个点。</p>
+<p>这支持“需要看图”，但没有证明偏差已消除：多数类基线论文未说明，52.3 里有多少来自答案分布无法判断。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>模型</th><th>准确率</th><th>mAP</th><th>F 值</th></tr></thead><tbody><tr><td>VisualBert</td><td>55.0</td><td>47.9</td><td>54.8</td></tr><tr><td>VisualBert Resmlp</td><td>58.7</td><td>51.8</td><td>57.7</td></tr><tr><td>SurgicalGPT</td><td>58.5</td><td>49.4</td><td>57.8</td></tr><tr><td>SSG-VQA-Net</td><td>60.7</td><td>54.9</td><td>60.3</td></tr><tr><td>上界版本</td><td>62.8</td><td>56.3</td><td>62.3</td></tr></tbody></table></div>
+<p><strong>所有模型准确率都在 52 到 63 之间，数据集远未饱和。</strong> 上界版本只高 1.4 个 mAP，检测误差不是主要瓶颈。</p>
+<figure class="fig"><img src="images/page_006_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。按题型与推理步数拆分的 mAP。</figcaption></figure>
+<p>提升集中在需要定位的题：双条件题比 VisualBERTMLP 高 8.1，计数题比 VisualBERT 高 7.3。存在判断题反而低于 VisualBERTMLP（73.9 对 76.4）。</p><div class="strip d"><span class="t">数据</span><span class="i">双条件题：23.4、30.9、39.0、41.4</span><span class="i">消融 mAP：47.9、51.0、52.5、54.9</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>为什么有效，又可能不是</h3><figure class="fig"><img src="images/page_007_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。场景嵌入交互模块与区域池化的四种组合。</figcaption></figure>
+<p>两个模块各带来约 3 到 5 个点，叠加后达 54.9。<strong>但没有参数量对齐的对照，也没有多次运行，</strong>增益与“多了输入和参数”尚未区分。</p>
+<p>更大的替代解释是同源：题目由检测框构成的场景图派生，模型又读入同类框。测试集人工修正、模型另训 YOLOv7，能部分回应；真正区分需要独立来源的框。</p>
+<p>上界版本计数题只有 24.2，比检测器版本低 12.7 个点，原因论文未说明。</p></div><div class="card" id="s10"><h3><span class="num">10</span>结果没说什么</h3><ul><li>不说明临床问答能力：题目是 40 个模板的组合，不是医生的提问。</li><li>不说明生成式问答：答案是固定集合上的分类，所以“瓶颈在视觉而非文本生成”只在分类设置下成立。</li><li>不说明其他术式与时序：只有胆囊切除单帧图像。</li><li>不说明差距是否稳定：学习率、轮数、重复次数论文未说明。</li></ul></div><div class="card" id="s11"><h3><span class="num">11</span>复现要注意什么</h3><ul><li>只把人工修正的测试集当金标准。</li><li>报告结果时注明是否读入检测框，以及检测器的训练数据。</li><li>按题型和推理步数分开报告，并补一个多数类基线。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>场景图加模板能大规模出题，答案由图算出，复杂度可控</div><div>新数据集先做纯语言对照，EndoVis-18-VQA 就此暴露偏差</div><div>物体级框信息让定位类题目明显提升，存在判断题例外</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>规模与多样性远超已有手术问答数据，代码和数据公开</li><li>偏差检验和按推理步数拆分让评测可诊断</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>训练标签是模型自动输出，错误率未报告</li><li>题目与模型输入同源，缺少可区分的对照</li><li>无方差、无多数类基线，附录有笔误</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>多数类基线在本数据集上是多少？</li><li>上界版本为何在计数题上大幅下降？</li><li>换成医生的真实提问，模型排名是否保持？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 cc64ff4f</span><span class="s">7.0 分</span></div><p>第 1 轮自评：数据来源、构建四步、偏差检验表、主结果、拆分表、Cholec80-VQA 结果与消融齐全，九张图表入文。D4=6：边界只在局限中罗列，数据与模型同源、上界版本计数反常未给理由与影响。D5=6：与 CLEVR、GQA 的关系和与 Cholec80-VQA 的差别写得简略。D6=6：复用建议只有三条短句。D9=5：各节直接罗列，缺核心观点速览，数字后少有含义，缺节末过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>6</b></span><span>D5 <b>6</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 补齐知识点、细节问答与质疑，并写回笔记</li><li>在研究问题末尾加入核心观点速览</li><li>每节开头写明问题，数字后补含义，节末加过渡</li><li>把训练集自动标签误差、多数类基线、上界计数反常、模板数与 40 的对应等逐项写成论文未说明并说明影响</li><li>深度分析补充纯语言模型残余准确率的解读与数据模型同源的检验办法</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 aef1667b · 文稿 a907fcc9</span><span class="s">8.2 分</span></div><p>第 2 轮自评：insight pass 补出构建用检测器与模型检测器不同、训练集自动标签错误率、颜色取值、答案集大小、超参数与重复次数、多数类基线和上界版本计数反常，均写成论文未说明并说明影响。加入核心观点速览、各节开头问题与节末过渡，偏差检验后补了 Cholec80-VQA 高准确率低 F 值的解读，深度分析写入数据与模型同源的替代解释和可区分证据，消融后注明没有参数对齐对照。数字核对无未匹配项，推导差值登记在 number_exceptions.json。D5=7：论文只与两个手术问答数据集和 CLEVR 思路对比，笔记无法从原文补出与其他场景图数据（如 4D-OR）的定量比较。D2=8：模型隐藏维度、答案集等实现细节论文未给。D4 从 6 升到 9、D9 从 5 升到 8，因为边界逐条给出理由，叙事顺序已按讨论顺序重排。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

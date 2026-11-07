@@ -1,0 +1,34 @@
+{
+  "knowledge_points": [
+    {"term": "LRYGB", "plain": "腹腔镜 Roux-en-Y 胃旁路术，先做胃小囊，再做两处肠吻合的减重手术。", "where": "sec:preamble", "needed_for": "理解阶段顺序和中心间技术差异"},
+    {"term": "阶段与步骤", "plain": "阶段是手术的大段落，步骤是阶段内更细的操作，每个步骤隶属于某个阶段。", "where": "sec:introduction", "needed_for": "理解为何缺一个阶段就缺一串步骤"},
+    {"term": "Cohen's kappa", "plain": "去掉随机一致后的标注者一致程度，1 为完全一致。", "where": "sec:introduction", "needed_for": "判断标签可信度"},
+    {"term": "MTMS-TCN", "plain": "多任务因果时序卷积网络，只看过去帧，同时输出阶段和步骤。", "where": "sec:model", "needed_for": "理解时序模型受流程顺序影响"},
+    {"term": "空洞卷积", "plain": "卷积核隔几帧取一次，层数加深时感受野按指数扩大。", "where": "sec:model", "needed_for": "理解模型如何看长时间依赖"},
+    {"term": "按视频平均", "plain": "先在每个视频内对各类别算指标，再对所有视频取平均。", "where": "sec:dataset", "needed_for": "理解伯尔尼类别稀疏为何拉低 F1"},
+    {"term": "跨中心评估", "plain": "在一家医院的数据上训练，在另一家医院的数据上测试，不做微调。", "where": "sec:dataset", "needed_for": "理解实验 4 和 5"}
+  ],
+  "detail_questions": [
+    {"question": "划分依据是什么？", "answer": "按视频时长划分为 40/10/20，具体分层规则论文未说明。", "evidence": ["sec:introduction"], "status": "partly"},
+    {"question": "kappa 是在本数据集上算的吗？", "answer": "不是，96% 与 81% 引自作者先前的本体论文。", "evidence": ["sec:introduction"], "status": "resolved"},
+    {"question": "训练超参数有哪些？", "answer": "只给出 Adam、30 与 200 个周期和 ImageNet 初始化；学习率、批大小、损失权重论文未说明。", "evidence": ["sec:model"], "status": "not_stated"},
+    {"question": "斯特拉斯堡有几名外科医生？", "answer": "伯尔尼为三名，斯特拉斯堡人数论文未说明。", "evidence": ["sec:introduction"], "status": "not_stated"},
+    {"question": "视频内缺失的类别如何计入平均？", "answer": "只说先按类别再按视频平均，缺失类别是否计零论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+    {"question": "为什么跨中心只测两个模型？", "answer": "论文直接只报 CNN 与 MTMS-TCN，没有给出原因。", "evidence": ["sec:model-4"], "status": "not_stated"},
+    {"question": "合并训练在伯尔尼上是否更好？", "answer": "阶段 F1 60.63 低于中心内 62.40，步骤 46.82 低于 47.99；只在斯特拉斯堡上略高。", "evidence": ["sec:model-4", "sec:model-2"], "status": "resolved"},
+    {"question": "是否有显著性检验？", "answer": "只报均值与标准差，没有检验。", "evidence": ["sec:model-2", "sec:model-4"], "status": "not_stated"},
+    {"question": "TeCNO 与 MTMS-TCN 谁更好？", "answer": "互有胜负，斯特拉斯堡阶段 F1 TeCNO 80.70 高于 79.87，伯尔尼则 MTMS-TCN 更高。", "evidence": ["sec:model-2", "sec:model-3"], "status": "resolved"}
+  ],
+  "challenges": [
+    {"claim": "跨中心掉点来自手术流程差异。", "alternative": "掉点主要来自画面外观差异，如分辨率 720 × 576 与 854 × 480、器械和光照。", "separating_evidence": "固定流程只换外观，或对齐外观后再测；比较单帧 CNN 与时序模型的相对掉点。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "合并训练使模型学会所有变化而无性能退化。", "alternative": "测试中心在训练集中出现过，这只是同分布结果；伯尔尼上实际略有下降。", "separating_evidence": "留出第三中心测试。", "in_paper": false, "verdict": "partly_supported"},
+    {"claim": "伯尔尼更难是因为类别分布偏斜。", "alternative": "伯尔尼视频更短、训练帧更少，单纯样本量也会降分。", "separating_evidence": "对斯特拉斯堡按帧数下采样到相同规模再训练。", "in_paper": false, "verdict": "not_separated"}
+  ],
+  "revisions": [
+    "研究问题末尾加入核心观点速览",
+    "关键结果补充实验 6 低于实验 1 的解读",
+    "深度分析加入外观与样本量两个替代解释",
+    "局限中写明训练超参数、斯特拉斯堡外科医生人数、缺失类别计分方式论文未说明",
+    "我的笔记补充复现前要检查的事项"
+  ]
+}

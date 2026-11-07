@@ -1,0 +1,15 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/Challenges_in_Multi_centric_Generalization_Phase_and_Step_Recognition_in_Roux_en_Y_Gastric_Bypass_Surgery/reading_report.md",
+  "mode": "report",
+  "report_sha256": "875278819da92ac3ad5078ec49cca65762230ac6612caf90b52eb3a2f21abb3a",
+  "number_exceptions": {},
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Challenges in Multi-centric Generalization: Phase and Step Recognition in Roux-en-Y Gastric Bypass Surgery</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>两家医院、140 例胃旁路手术：换一家医院，手术流程识别模型还剩多少</h1>
+<div class="sub">Challenges in Multi-centric Generalization: Phase and Step Recognition in Roux-en-Y Gastric Bypass Surgery</div>
+<div class="meta">Joël L. Lavanchy, Sanat Ramesh 等；巴塞尔大学 Clarunis、斯特拉斯堡 IHU 与 ICube、伯尔尼大学医院 | arXiv 2312.11250，IJCARS 2024</div>
+<div><span class="chip">数据集与基准</span><span class="tag">手术流程识别</span><span class="tag">多中心</span><span class="tag">胃旁路</span><span class="tag">阶段与步骤</span></div>
+<div class="one">两家医院各 70 例胃旁路视频用同一套 12 阶段、46 步骤标签标注，单中心训练的模型跨中心阶段 F1 只有 33 到 39，合并训练后回到接近中心内的水平。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 9 条，其中 5 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2312.11250" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/multibypass140/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术流程识别是让系统知道“现在做到哪一步”。这类模型几乎都在单一医院的数据上训练和测试。</p>
+<p><strong>问题在于，不同医院做同一台手术，流程并不一样。</strong> 单中心测试分数高，并不能说明模型换一家医院还能用。<code>Cholec80</code>、<code>Bypass40</code> 都是单中心；多中心的 <code>HeiChole</code> 只有 33 例胆囊切除。阶段和步骤联合识别此前没有多中心数据。</p>
+<p>所以论文要先造一份两中心、标签统一的数据，再回答模型能迁移多少。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li>数据：斯特拉斯堡和伯尔尼各 70 例腹腔镜 Roux-en-Y 胃旁路手术（LRYGB），同一套 12 阶段、46 步骤标签。</li><li>两中心流程确实不同：斯特拉斯堡平均每例 10 个阶段、33 个步骤，伯尔尼 8 个阶段、27 个步骤。</li><li><strong>单中心训练换中心后几乎失效</strong>：MTMS-TCN 跨中心阶段 F1 为 33.10 和 39.05。</li><li>合并两中心训练后，在两个测试集上阶段 F1 回到 60.63 和 81.93。</li><li>边界：测试中心在训练时都见过，这不等于能泛化到第三家医院。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">统一标签空间是做跨中心比较的前提</span><span class="i">合并训练的好结果只对见过的中心成立</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据：两家医院差在哪里</h3><p>这一节回答：两个子集在画面和流程上是否可比。</p>
+<div class="tbl"><table><thead><tr><th>子集</th><th>分辨率</th><th>平均时长</th><th>1 fps 帧数</th></tr></thead><tbody><tr><td>StrasBypass70</td><td>统一为 854 × 480</td><td>111±33 分钟</td><td>464,794</td></tr><tr><td>BernBypass70</td><td>720 × 576</td><td>73±20 分钟</td><td>305,907</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_002_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。两中心各阶段样例帧与阶段转移图。</figcaption></figure>
+<p><strong>差异集中在三个阶段</strong>：斯特拉斯堡常规做网膜分离（P3）和两处系膜缺损关闭（P7、P9），伯尔尼不常规做。阶段和步骤是层级关系，缺一个阶段就缺一串步骤，所以伯尔尼平均少 2 个阶段、6 个步骤，手术短 38 分钟。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 4。两中心各步骤出现在多少个视频里。</figcaption></figure>
+<p>两名有 10 年以上经验的外科医生标注，kappa 为阶段 96%、步骤 81%。这组数字引自作者先前的本体论文，本数据集自身的一致性论文未说明。</p>
+<p>标签清楚之后，接着看基准怎么设计。</p><div class="strip d"><span class="t">数据</span><span class="i">140 个视频，每中心按时长划分为 40/10/20</span><span class="i">12 个阶段，46 个步骤</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>基准协议：七组实验隔离了什么</h3><p>这一节回答：模型怎么读视频，每组实验在比什么。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。第一阶段 ResNet-50 提取单帧特征，第二阶段 MTMS-TCN 处理特征序列，同时输出阶段和步骤。</figcaption></figure>
+<p>MTMS-TCN 是多任务因果时序卷积网络：只看过去帧，用空洞卷积扩大时间视野。ResNet-50 训练 30 个周期，时序模型训练 200 个周期。学习率和批大小论文未说明。</p>
+<div class="tbl"><table><thead><tr><th>编号</th><th>训练</th><th>测试</th></tr></thead><tbody><tr><td>1 / 2 / 3</td><td>伯尔尼 / 斯特拉斯堡 / 合并</td><td>同一来源</td></tr><tr><td>4 / 5</td><td>伯尔尼 / 斯特拉斯堡</td><td>另一家中心</td></tr><tr><td>6 / 7</td><td>合并</td><td>伯尔尼 / 斯特拉斯堡</td></tr></tbody></table></div>
+<p><strong>测试集固定，只换训练来源</strong>，所以表 4 和表 2 中同一测试集的行可以直接比较。指标先在每个视频内按类别平均，再对视频平均。</p></div><div class="card" id="s5"><h3><span class="num">5</span>结果：中心内已有差距</h3><p>这一节回答：不换中心时两个子集难度差多少。</p>
+<figure class="fig"><img src="images/page_007_fig_table_2_review_repair1.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。阶段识别基准。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>模型</th><th>伯尔尼阶段 F1</th><th>斯特拉斯堡阶段 F1</th></tr></thead><tbody><tr><td>CNN</td><td>42.38</td><td>71.13</td></tr><tr><td>TeCNO</td><td>59.22</td><td>80.70</td></tr><tr><td>MTMS-TCN</td><td>62.40</td><td>79.87</td></tr></tbody></table></div>
+<p>CNN 在伯尔尼上准确率低 8%，F1 却低 28%。<strong>准确率差距小、F1 差距大，说明问题集中在少见类别上。</strong> TeCNO 和 MTMS-TCN 互有胜负，多任务结构的优势并不稳定。</p>
+<figure class="fig"><img src="images/page_007_fig_table_3_review_repair1.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。步骤识别基准，最好的 F1 也只有 58.13。</figcaption></figure>
+<p>中心内已经有差距，换中心后更大。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果：换中心后掉了多少</h3><figure class="fig"><img src="images/page_008_fig_table_4_review_repair1.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。跨中心评估。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>实验</th><th>MTMS-TCN 阶段 F1</th><th>中心内参照</th></tr></thead><tbody><tr><td>伯尔尼 → 斯特拉斯堡</td><td>33.10</td><td>79.87</td></tr><tr><td>斯特拉斯堡 → 伯尔尼</td><td>39.05</td><td>62.40</td></tr><tr><td>合并 → 伯尔尼</td><td>60.63</td><td>62.40</td></tr><tr><td>合并 → 斯特拉斯堡</td><td>81.93</td><td>79.87</td></tr></tbody></table></div>
+<p><strong>跨中心时阶段 F1 只剩中心内的四成到六成</strong>，步骤 F1 只有 23 左右。合并训练后，斯特拉斯堡略高于中心内，伯尔尼略低。作者写成“没有退化”，但伯尔尼上的小幅下降说明流程较少的中心在混合训练里略吃亏。</p>
+<figure class="fig"><img src="images/page_009_fig_fig_5_review.png" alt="Fig 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 5。最好与最差视频的阶段真值和预测，错误集中在流程非常规的视频。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">跨中心步骤 F1：23.81 与 23.23</span><span class="i">合并训练步骤 F1：46.82 与 58.35</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>深入分析：掉点来自哪里</h3><p>作者给出两个原因：外观差异影响 CNN，流程差异影响时序模型。<strong>论文没有把两者分开。</strong></p>
+<p>我的判断：单帧 CNN 跨中心同样大幅掉点，阶段 F1 为 32.72，而 CNN 不看时间顺序。这提示外观差异本身就能造成大部分掉点，流程差异的独立贡献可能被高估。</p>
+<p>还有一个替代解释是样本量。伯尔尼训练集 166,431 帧，斯特拉斯堡 253,913 帧，论文没有等量对照。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li>不能外推到第三家医院：只有两个中心，做不了留一中心外测试。</li><li>不能说多任务时序模型一定更好：TeCNO 和 MTMS-TCN 互有胜负。</li><li>不能说差距显著：逐视频标准差常在 10 个点以上，没有显著性检验。</li><li>视频内缺失类别如何计分论文未说明，伯尔尼的 F1 含义因此不确定。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>以公开代码确认超参数和划分。</li><li>同时报告准确率和 F1，两者差距能暴露少见类别问题。</li><li>用伯尔尼测试时标明训练集是否含伯尔尼数据。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>同一术式在两家医院流程不同，单中心模型换中心后阶段 F1 降到 33 到 39</div><div>合并训练在见过的中心上接近中心内结果</div><div>外观、流程和样本量三个因素没有被拆开</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>两中心各 70 例，规模对称，标签统一</li><li>七组实验在固定测试集上只换训练来源，读数直接</li><li>数据、划分和代码公开</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>只有两个中心，无法测未见中心</li><li>跨中心只测两个模型，没有显著性检验</li><li>kappa 来自先前论文，不是本数据集</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>加入第三家医院后，合并训练还能保持吗</li><li>外观归一化能单独缩小多少差距</li><li>无标注多中心数据的自监督预训练收益多大</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 17101294</span><span class="s">7.1 分</span></div><p>第 1 轮自评：两中心来源、划分、本体、七组实验和表 2 至表 4 主数字齐全，9 张图表已插入。D2=7：未说明 MTMS-TCN 输入输出维度以外的训练细节缺口（学习率、批大小等论文未说明）。D4=7：边界只列了四条，未讨论按视频平均 F1 与缺失类别的关系有多大影响。D6=6：复用建议偏短。D9=5：研究问题末尾缺少核心观点速览，多数小节直接罗列数字，节末没有过渡，数字后缺少含义。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补齐知识点、细节问答和质疑并写回笔记</li><li>在研究问题末尾加入核心观点速览</li><li>每节开头写明问题，数字后补含义，节末加过渡</li><li>把训练超参、斯特拉斯堡外科医生人数、缺失类别计分方式、显著性检验等缺口写成论文未说明</li><li>补充实验 6 低于实验 1 的解读与对 TeCNO 和 MTMS-TCN 互有胜负的讨论</li><li>用 lint_report.py --mode note 做数字核对</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 8c37d2ad · 文稿 87527881</span><span class="s">8.2 分</span></div><p>第 2 轮自评：加入核心观点速览；各节以问题开头、数字后补含义、节末有过渡；训练超参数、斯特拉斯堡外科医生人数、划分分层规则、缺失类别计分方式和显著性检验均写为论文未说明；深度分析加入外观差异（CNN 同样掉点）与样本量两个替代解释，并指出合并训练在伯尔尼上略低于中心内训练。笔记与报告数字核对均无未匹配项。D5=7：定位只对比作者列举的 Cholec80、Bypass40、HeiChole，论文没有给出更多多中心流程数据集的定量对比，无法补齐。Fig 3 因自动裁剪未通过视觉检查保留占位。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

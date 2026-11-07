@@ -1,0 +1,30 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/GynSurg_A_Comprehensive_Gynecology_Laparoscopic_Surgery_Dataset/reading_report.md",
+  "mode": "report",
+  "report_sha256": "be23bd931c87250e2adae09bf9eae89190544af1596b79286031da00ad81c2a6",
+  "number_exceptions": {
+    "114": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "144": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "212": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "275": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "304": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "321": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "354": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "510": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "722": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "790": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "848": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "948": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "977": "表 2 段数、切片与时长列（PDF 第 2 页表格图像，文本抽取未带出该单元格）",
+    "73.0": "推导值：表 4 ResNet-LSTM 五类 (56.14+92.74+74.81+84.28+56.82)/5 = 72.96"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

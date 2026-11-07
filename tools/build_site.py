@@ -29,6 +29,7 @@ CATALOG = [
         {'name': 'EndoBench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2505.23601', 'data': 'https://huggingface.co/datasets/Saint-lsy/EndoBench', 'task': '多模态大模型视觉问答评测', 'size': '', 'source': '', 'slug': 'endobench', 'note': 'EndoBench'},
         {'name': 'Kvasir-SEG', 'year': 2019, 'paper': 'https://arxiv.org/abs/1911.07069', 'data': '', 'task': '息肉分割', 'size': '', 'source': '', 'slug': 'kvasir-seg', 'note': 'Kvasir_SEG'},
         {'name': 'PolypGen', 'year': 2021, 'paper': 'https://arxiv.org/abs/2106.04463', 'data': 'https://doi.org/10.7303/syn26376615', 'task': '息肉检测与分割（跨中心泛化）', 'size': '超过 300 名患者', 'source': '六个中心', 'slug': 'polypgen', 'note': 'A_multi_centre'},
+        {'name': 'PitVis', 'year': 2024, 'paper': 'https://arxiv.org/abs/2409.01184', 'data': 'https://doi.org/10.5522/04/26531686', 'task': '内镜垂体手术步骤 / 器械识别', 'size': '25 个公开视频 + 8 个私有测试视频', 'source': '英国国立神经病学与神经外科医院', 'slug': 'pitvis', 'note': 'PitVis'},
         {'name': 'EndoSLAM', 'year': 2020, 'paper': 'https://arxiv.org/abs/2006.16670', 'data': 'https://github.com/CapsuleEndoscope/EndoSLAM', 'task': '内镜视觉里程计与深度估计', 'size': '', 'source': '', 'slug': 'endoslam', 'note': 'EndoSLAM'},
     ]),
     ('laparoscopic', '🩻 腹腔镜', 'Laparoscopic', [
@@ -44,6 +45,8 @@ CATALOG = [
         {'name': 'ROBUST-MIS', 'year': 2021, 'paper': 'https://arxiv.org/abs/2003.10299', 'data': 'https://www.synapse.org/#!Synapse:syn18779624/wiki/592660', 'task': '器械二值 / 多实例检测与分割', 'size': '30 台手术（10,040 帧）', 'source': '海德堡大学医院', 'slug': 'robust-mis', 'note': 'Comparative_validation_of_multi_instance'},
         {'name': 'DSAD', 'year': 2023, 'paper': 'https://www.nature.com/articles/s41597-022-01719-2', 'data': 'https://doi.org/10.6084/m9.figshare.21702600', 'task': '腹部解剖结构语义分割（11 类）', 'size': '13,195 张图像（32 台手术）', 'source': '德累斯顿大学医院机器人直肠手术', 'slug': 'dsad', 'note': 'The_Dresden_Surgical_Anatomy'},
         {'name': 'D4D', 'year': 2026, 'paper': 'https://arxiv.org/abs/2603.02985', 'data': 'https://doi.org/10.25532/OPARA-1033', 'task': '形变软组织 4D 重建 / 深度估计评测', 'size': '98 段序列（30 万+ 帧）', 'source': '猪尸体开腹，达芬奇立体内镜 + 结构光', 'slug': 'd4d', 'note': 'The_Dresden_Dataset_for_4D'},
+        {'name': 'MultiBypass140', 'year': 2024, 'paper': 'https://arxiv.org/abs/2312.11250', 'data': 'https://github.com/CAMMA-public/MultiBypass140', 'task': '胃旁路阶段与步骤识别（跨中心泛化）', 'size': '140 个视频', 'source': '斯特拉斯堡与伯尔尼两家医院', 'slug': 'multibypass140', 'note': 'Challenges_in_Multi_centric'},
+        {'name': 'GynSurg', 'year': 2025, 'paper': 'https://arxiv.org/abs/2506.11356', 'data': 'https://ftp.itec.aau.at/datasets/GynSurge/', 'task': '妇科动作识别 / 出血烟雾检测 / 语义分割', 'size': '152 个动作视频 + 12,362 帧掩码', 'source': '维也纳与多伦多两所医科大学', 'slug': 'gynsurg', 'note': 'GynSurg'},
         {'name': 'PhaKIR', 'year': 2025, 'paper': 'https://arxiv.org/abs/2511.06549', 'data': 'https://doi.org/10.5281/zenodo.15740619', 'task': '阶段识别 / 器械关键点 / 器械实例分割', 'size': '8 个视频（485,875 帧阶段标注）', 'source': '三家德国医院', 'slug': 'phakir', 'note': 'Video_Dataset_for_Surgical_Phase'},
     ]),
     ('robotic', '🤖 机器人手术', 'Robotic', [
@@ -59,6 +62,7 @@ CATALOG = [
     ]),
     ('multimodal', '💬 多模态与问答', 'Multimodal', [
         {'name': 'Surgical-VQA', 'year': 2022, 'paper': 'https://arxiv.org/abs/2206.11053', 'data': '', 'task': '手术场景视觉问答', 'size': '', 'source': 'EndoVis 2018 与 Cholec80', 'slug': 'surgical-vqa', 'note': 'Surgical_VQA'},
+        {'name': 'SSG-VQA', 'year': 2024, 'paper': 'https://arxiv.org/abs/2312.10251', 'data': 'https://github.com/CAMMA-public/SSG-VQA', 'task': '基于场景图的手术视觉问答', 'size': '96 万问答（2.5 万场景）', 'source': 'CholecT45', 'slug': 'ssg-vqa', 'note': 'Advancing_Surgical_VQA'},
         {'name': 'SVL（SurgVLP）', 'year': 2023, 'paper': 'https://arxiv.org/abs/2307.15220', 'data': 'https://github.com/CAMMA-public/SurgVLP', 'task': '手术视频-语言预训练', 'size': '', 'source': '手术讲解视频', 'slug': 'svl', 'note': 'Learning_Multi'},
         {'name': 'SurgBench', 'year': 2025, 'paper': 'https://arxiv.org/abs/2506.07603', 'data': '', 'task': '手术视频基础模型预训练与多任务评测', 'size': '5300 万帧（22 种术式）', 'source': '16 个来源整合', 'slug': 'surgbench', 'note': 'SurgBench'},
         {'name': 'SurgAtlas', 'year': 2026, 'paper': 'https://arxiv.org/abs/2606.25905', 'data': 'https://huggingface.co/datasets/filbel/SurgAtlas', 'task': '手术视频-语言预训练与推理问答', 'size': '15,291 个视频（2,391 小时）', 'source': 'YouTube', 'slug': 'surgatlas', 'note': 'SurgAtlas'},
