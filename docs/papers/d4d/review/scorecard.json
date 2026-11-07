@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "56ea935504eca3c71b5cc9cf4e4b4e6e9c9fcd1309e59d7ca6be8a832d9d34bc",
+      "note_snapshot": "review_rounds/round1_The_Dresden_Dataset_for_4D_Reconstruction_of_Non_Rigid_Abdominal_Surgical_Scenes.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.7,
+      "verdict": "第一轮基线：数据来源、采集循环、构建四步和 Table 2 位姿质量齐全，图表全部插入。D6 复用建议偏少，未说明评测时如何处理遮挡区与位姿残差；D7 深度分析里堆放了五张流程图，离开了它们支撑的方法段落；D9 缺少核心观点速览，多数小节没有开头的问题句和收尾过渡；H3 数字未跑核对。",
+      "fixes": [
+        "在研究问题末尾补 ### 核心观点速览",
+        "把 Figure 2/3/4/6 移到方法主线对应步骤旁",
+        "数字核对并写例外文件",
+        "把论文未说明的空白（手眼标定残差、结构光精度、369 与 540 口径、光度基线缺失）统一写作论文未说明并说明影响",
+        "深度分析各小节补开头问题与收尾过渡",
+        "补充 Table 2 距离为点云中位距离的含义与 Specimen 0 全部剔除原因未说明"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "a416078ab539d25b2de37421d431d65a63801e61694fe8b1fadc4bc592a0fc26",
+      "note_snapshot": "review_rounds/round2_The_Dresden_Dataset_for_4D_Reconstruction_of_Non_Rigid_Abdominal_Surgical_Scenes.md",
+      "report_sha256": "028a69b00921fc1b1fe65f5b965ab656001fdfec8a5b68ded35a41c634015254",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮：加入核心观点速览；Figure 2/3/4/5/6/9 移到构建流程各步旁；数字核对通过（DOI 片段与约 14% 派生值列入例外）；结构光精度、手眼标定残差、369 与 540 口径、标本 0 剔除原因、几何指标定义、光度基线共六处写作论文未说明；新增整理后位姿可能对评价指标过拟合的质疑。无法修复的限制：论文本身没有任何方法定量基线，D2 只能描述数据构建流程而非方法；作者元数据由正文首页手工补入，arXiv API 未返回。",
+      "fixes": []
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "output_language": "zh-CN",
+  "knowledge_points": [
+    {"term": "多视角帧", "plain": "同一时刻三台相机拍到的全部彩色和深度图像算一帧。", "where": "sec:data", "needed_for": "732 帧对应 2196 张单视角图，规模判断依赖它"},
+    {"term": "RGB-D", "plain": "每个像素既有颜色也有到相机的距离。", "where": "sec:data", "needed_for": "三维标注靠深度反投影"},
+    {"term": "反投影", "plain": "用相机内参和深度把二维像素点变回三维坐标。", "where": "sec:data", "needed_for": "三维初始化步骤"},
+    {"term": "PCK", "plain": "预测关键点离真值足够近（按人的尺度）的比例。", "where": "sec:results", "needed_for": "表 2 的解读"},
+    {"term": "MPJPE", "plain": "三维中每个关节预测位置与真值的平均距离。", "where": "sec:results", "needed_for": "表 3 的解读"},
+    {"term": "AP 与 AR", "plain": "目标检测的平均精度与平均召回，按交并比阈值平均。", "where": "sec:results", "needed_for": "表 4、表 5 的解读"},
+    {"term": "自顶向下与自底向上", "plain": "前者先找人再找关节，后者先找所有关节再组装成人。", "where": "sec:evaluation-2", "needed_for": "解释 AlphaPose 与 OpenPose 的差距"},
+    {"term": "支撑视图数", "plain": "一个人在几个相机里可见。", "where": "sec:data", "needed_for": "表 3 分层与视图数混杂论证"}
+  ],
+  "detail_questions": [
+    {"question": "732 帧是如何从四天录像中采样的？", "answer": "论文只说 sampled from four days，采样间隔与规则论文未说明。相邻帧可能高度相似，影响有效样本量。", "evidence": ["sec:data"], "status": "not_stated"},
+    {"question": "为什么二维姿态只有 2926 个而框有 4699 个？", "answer": "患者只标框；工作人员需在至少一个视角中上半身超过 50% 可见才标姿态。", "evidence": ["sec:data"], "status": "resolved"},
+    {"question": "三维标注有多少人参与、一致性如何？", "answer": "论文未说明标注员人数、修正比例和一致性。", "evidence": ["sec:data"], "status": "not_stated"},
+    {"question": "有没有训练/测试划分？", "answer": "论文没有给出划分，所有基线都直接在全部数据上测试。", "evidence": ["sec:results", "sec:conclusions"], "status": "resolved"},
+    {"question": "Deep3DPS 是否与其他方法条件相同？", "answer": "不同。它用深度，并在同一手术室另一 RGB-D 数据集上微调。", "evidence": ["sec:data"], "status": "resolved"},
+    {"question": "为什么旧版 RTPose 比新版 OpenPose 好很多？", "answer": "论文只说 RTPose shows better results，原因论文未说明。", "evidence": ["sec:data"], "status": "not_stated"},
+    {"question": "MV3DReg 的二维输入从哪来？", "answer": "来自 OpenPose 实现，所以三维误差包含二维检测误差。", "evidence": ["sec:results"], "status": "resolved"},
+    {"question": "为什么由姿态推框只报 AP50？", "answer": "骨架外接框比真值框小，交并比高于 0.5 时 AP 必然低。", "evidence": ["sec:results"], "status": "resolved"},
+    {"question": "模糊后精度为何有时更高？", "answer": "作者解释为模糊后检测数更少；召回则总是下降。", "evidence": ["sec:results"], "status": "partly"},
+    {"question": "表 3 不同视图数的样本是不是同一批人？", "answer": "不是，是按可见视图数划分的不同人，论文没有做固定样本只减视图的对照。", "evidence": ["sec:data", "sec:results"], "status": "partly"}
+  ],
+  "challenges": [
+    {"claim": "多视角显著降低三维定位误差", "alternative": "只在一个视角可见的人本身遮挡更重、姿态更难，误差高是样本难度造成的。", "separating_evidence": "对三视图可见的同一批人只输入一个或两个视角再测。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "模糊对检测与姿态估计影响可以忽略", "alternative": "只对未在模糊图上训练的模型成立；在模糊图上训练可能学到捷径或丢失面部线索。", "separating_evidence": "在 O 与 B 上分别训练后交叉测试。", "in_paper": false, "verdict": "partly_supported"},
+    {"claim": "结果显示仍有很大提升空间", "alternative": "低分主要来自领域差异，在手术室数据上训练即可大幅提升，并非任务本身难。", "separating_evidence": "在 MVOR 划分上训练后的结果。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "MVOR 是首个真实临床多人多视角三维姿态数据集", "alternative": "作者只对比了列举的数据集，可能存在未公开或未列举的同类数据。", "separating_evidence": "系统检索当时公开数据集。", "in_paper": false, "verdict": "partly_supported"}
+  ],
+  "revisions": [
+    "研究问题末尾加入核心观点速览",
+    "采样方式、标注员人数与一致性、RTPose 优于 OpenPose 的原因写成 论文未说明",
+    "深度分析补充：低分可能主要来自领域差异，论文没有训练结果可区分",
+    "深度分析补充：模糊结论仅对未在模糊图上训练的模型成立",
+    "补全表 5 的 AR1 与 AR10 转写",
+    "每节开头加问题、节末加过渡"
+  ]
+}

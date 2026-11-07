@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "0a2b88946ce30da41e40cf27f968e1a1644334f131b2ef2d51da2ddfd4e28a74",
+      "note_snapshot": "review_rounds/round1_The_Dresden_Surgical_Anatomy_Dataset_for_Abdominal_Organ_Segmentation_in_Surgical_Data_Science.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 7,
+        "D2": 8,
+        "D3": 8,
+        "D4": 6,
+        "D5": 6,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 6.8,
+      "verdict": "第 1 轮自评：数据来源、四步构建流程、表 1 到表 3 与两张图齐全。D4=6：边界只在局限中列出，没有逐条给理由，表 3 以专家终稿为参照的偏差只写了一句。D5=6：只与四个图像级数据集对比，没有说明与器械分割数据的分工。D6=6：复用建议过短。D9=5：各节直接罗列事实，缺核心观点速览，数字后少有含义，缺过渡。H3 未做数字核对。",
+      "fixes": [
+        "按 insight pass 补齐知识点、细节问答与质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明问题，数字后补含义，节末加过渡",
+        "把标注者分工、单人复核、许可矛盾、时间标注人数矛盾逐项写成论文未说明并说明影响",
+        "补充单器官掩码把其他结构记为背景对训练的影响，以及按手术划分的必要性",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "cde0c5827663fc841e27bdfad7546aad6af8480dbf5fd8acba69d5bded43b6ed",
+      "note_snapshot": "review_rounds/round2_The_Dresden_Surgical_Anatomy_Dataset_for_Abdominal_Organ_Segmentation_in_Surgical_Data_Science.md",
+      "report_sha256": "8953a24961206f86a3202ede056a04e142386f4b062592c3c8b66e56c7ebd268",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评：insight pass 补齐了表 3 括号含义（归一化 Hausdorff 距离而非标准差）、六名标注者分工、聚合方式、近重复帧、许可矛盾与时间标注人数矛盾，均写成论文未说明。加入核心观点速览、每节开头问题与节末过渡，并把锚定效应对表 3 的影响、单器官掩码拼多类时的错误负样本写入深度分析。数字核对无未匹配项，图像内数字登记在 number_exceptions.json。D5=7：论文只与四个图像级数据集对比，笔记无法从原文补出与其他像素级解剖数据的定量比较。D1=8：论文没有模型基线，结果链只能到标注一致性。D4 从 6 升到 9，D9 从 5 升到 8，因为边界逐条给出理由且叙事顺序已按讨论顺序重排。",
+      "fixes": []
+    }
+  ]
+}

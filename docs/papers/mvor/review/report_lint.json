@@ -1,0 +1,22 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "/ssd3/yangwennuo/code/MNL/Surgical-Datasets/DeepPaperNote_output/手术数据集/MVOR_A_Multi_view_RGB_D_Operating_Room_Dataset_for_2D_and_3D_Human_Pose_Estimation/reading_report.md",
+  "mode": "report",
+  "report_sha256": "1bcce8dcf889d26562b3e4ac26962ac981aad313cc35233d8359976d69f54924",
+  "number_exceptions": {
+    "0.2": "推导值：表 2 头部 PCK 原图与模糊之差的最大值（OpenPose 多尺度 71.0/71.2，AlphaPose 87.5/87.7）",
+    "0.4": "推导值：表 2 平均 PCK 原图与模糊之差的最大值（AlphaPose 75.8/76.2）",
+    "503": "表 1 三视图人数，文本抽取丢失该行首列，已对照表 1 原图核实",
+    "426": "表 1 两视图人数，文本抽取丢失，已对照表 1 原图核实",
+    "132": "表 1 单视图人数，文本抽取丢失，已对照表 1 原图核实；503+426+132=1061 与正文三维姿态总数一致",
+    "495": "表 1 三视图头部可见数，文本抽取丢失，已对照表 1 原图核实"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

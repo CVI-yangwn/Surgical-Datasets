@@ -42,6 +42,8 @@ CATALOG = [
         {'name': 'CholecTrack20', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.07352', 'data': '', 'task': '多器械跟踪', 'size': '20 个视频', 'source': '', 'slug': 'cholectrack20', 'note': 'CholecTrack20'},
         {'name': 'CholecInstanceSeg', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.16039', 'data': '', 'task': '器械实例分割', 'size': '41.9k 帧（85 台手术）', 'source': 'Cholec80 与 CholecT50', 'slug': 'cholecinstanceseg', 'note': 'CholecInstanceSeg'},
         {'name': 'ROBUST-MIS', 'year': 2021, 'paper': 'https://arxiv.org/abs/2003.10299', 'data': 'https://www.synapse.org/#!Synapse:syn18779624/wiki/592660', 'task': '器械二值 / 多实例检测与分割', 'size': '30 台手术（10,040 帧）', 'source': '海德堡大学医院', 'slug': 'robust-mis', 'note': 'Comparative_validation_of_multi_instance'},
+        {'name': 'DSAD', 'year': 2023, 'paper': 'https://www.nature.com/articles/s41597-022-01719-2', 'data': 'https://doi.org/10.6084/m9.figshare.21702600', 'task': '腹部解剖结构语义分割（11 类）', 'size': '13,195 张图像（32 台手术）', 'source': '德累斯顿大学医院机器人直肠手术', 'slug': 'dsad', 'note': 'The_Dresden_Surgical_Anatomy'},
+        {'name': 'D4D', 'year': 2026, 'paper': 'https://arxiv.org/abs/2603.02985', 'data': 'https://doi.org/10.25532/OPARA-1033', 'task': '形变软组织 4D 重建 / 深度估计评测', 'size': '98 段序列（30 万+ 帧）', 'source': '猪尸体开腹，达芬奇立体内镜 + 结构光', 'slug': 'd4d', 'note': 'The_Dresden_Dataset_for_4D'},
         {'name': 'PhaKIR', 'year': 2025, 'paper': 'https://arxiv.org/abs/2511.06549', 'data': 'https://doi.org/10.5281/zenodo.15740619', 'task': '阶段识别 / 器械关键点 / 器械实例分割', 'size': '8 个视频（485,875 帧阶段标注）', 'source': '三家德国医院', 'slug': 'phakir', 'note': 'Video_Dataset_for_Surgical_Phase'},
     ]),
     ('robotic', '🤖 机器人手术', 'Robotic', [
@@ -63,6 +65,8 @@ CATALOG = [
         {'name': 'LEMON（Surg-3M）', 'year': 2025, 'paper': 'https://arxiv.org/abs/2503.19740', 'data': 'https://github.com/visurg-ai/LEMON', 'task': '手术视频自监督预训练 / 术式分类', 'size': '4K+ 视频（938 小时）', 'source': 'YouTube', 'slug': 'lemon', 'note': 'LEMON'},
     ]),
     ('or', '🏥 手术室', 'Operating room', [
+        {'name': 'MVOR', 'year': 2018, 'paper': 'https://arxiv.org/abs/1808.08180', 'data': 'https://github.com/CAMMA-public/MVOR', 'task': '手术室人员检测与 2D/3D 姿态估计', 'size': '732 个多视角帧', 'source': '斯特拉斯堡大学附属医院介入手术室', 'slug': 'mvor', 'note': 'MVOR'},
+        {'name': '4D-OR', 'year': 2022, 'paper': 'https://arxiv.org/abs/2203.11937', 'data': 'https://github.com/egeozsoy/4D-OR', 'task': '手术室语义场景图 / 3D 位姿 / 临床角色', 'size': '10 台手术（6734 帧）', 'source': '模拟全膝关节置换', 'slug': '4d-or', 'note': '4D_OR'},
         {'name': 'EgoExOR', 'year': 2025, 'paper': 'https://arxiv.org/abs/2505.24287', 'data': 'https://github.com/ardamamur/EgoExOR', 'task': '手术室场景图生成（第一人称 + 外部视角）', 'size': '94 分钟（84,553 帧）', 'source': '模拟脊柱手术', 'slug': 'egoexor', 'note': 'EgoExOR'},
     ]),
     ('notyet', '🕒 尚未公开', 'Not yet', [

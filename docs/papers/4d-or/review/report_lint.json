@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "261d40ac126bc855fe788f0f3731bea149c3a01d5d04471b2fa2b7a6f2038d69",
+  "number_exceptions": {
+    "0.01": "推导值：Table 3 (b) 0.66 减 (a) 0.65；也用作测试集上不可靠差距的量级描述",
+    "0.02": "推导值：Table 3 (e) 0.78 减 (d) 0.76；也用作测试集上不可靠差距的量级描述",
+    "0.06": "推导值：Table 3 (d) 0.76 减 (c) 0.70"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

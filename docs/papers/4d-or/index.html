@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>4D-OR: Semantic Scene Graphs for OR Domain Modeling</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>把手术室画成一张图：首个公开的 4D 手术室语义场景图数据集</h1>
+<div class="sub">4D-OR: Semantic Scene Graphs for OR Domain Modeling</div>
+<div class="meta">Ege Özsoy、Evin Pınar Örnek 等，慕尼黑工业大学、Google、约翰斯·霍普金斯大学 | arXiv 2203.11937，v1，2022-03-22；正式版见 MICCAI 2022</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术室感知</span><span class="tag">场景图生成</span><span class="tag">多视角 RGB-D</span><span class="tag">临床角色</span><span class="tag">模拟手术</span></div>
+<div class="one">4D-OR 用 6 路天花板 RGB-D 录了 10 台模拟全膝关节置换、共 6734 帧，逐帧标注 14 类人与设备之间的关系、位姿和临床角色；改造的 3DSSG 基线宏平均 F1 为 0.75，场景图用于角色预测达到 0.85。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2203.11937" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/4d-or/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术室里有多条并行的动作线，现有方法一次只看一条。</strong> 阶段识别、器械识别、人体位姿估计各管一块，没有人回答"谁在对谁做什么"。</p>
+<p>计算机视觉里有现成的表示：场景图。节点是人和物，边是关系，例如"主刀钻孔患者"。但已有场景图数据集都来自日常场景，交互简单。手术室这边，MVOR 只标了人体位姿，Sharghi 等人的数据只做阶段识别且不公开。</p>
+<p><strong>缺的是一个能监督手术室场景图生成的公开数据集。</strong> 这就是 4D-OR 要补的。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口：手术室没有公开的语义关系标注数据</span><span class="i">回答：用场景图描述整个手术室，并发布配套数据集</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案分三步：在模拟中心录 10 台全膝关节置换并逐帧标注场景图；在 3DSSG 上加图像分支、点云增强和一个代表小器械的虚拟节点，做出场景图生成基线；再把生成的场景图送进 Graphormer 预测每个人的临床角色。</p>
+<p><strong>头条结果：</strong> 场景图宏平均 F1 0.75，角色预测 0.85。<strong>边界：</strong> 只有一种术式、模拟环境、2 台手术做测试，论文未说明方差。</p><div class="strip d"><span class="t">数据</span><span class="i">10 台手术，6 路 RGB-D，1 帧每秒，6734 帧</span><span class="i">14 类关系，6/2/2 个 take 划分</span><span class="i">场景图宏平均 F1 0.75，角色预测 0.85</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p><strong>这一节回答：录了什么，标了什么。</strong> 10 台模拟全膝关节置换在医学模拟中心按典型流程录制，有医学专家指导。作者选这一术式，是因为它是有代表性的骨科手术，步骤和交互多样。</p>
+<p>6 台标定好的 Azure Kinect 装在天花板，1 帧每秒同步输出 RGB 和深度，合计 6734 帧，并提供整场的融合点云。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。左为融合点云与物体 3D 框、人体骨架和角色标签，右为 6 路 RGB 与深度。</figcaption></figure>
+<p>标注有四类：每个手术步骤的场景图关系；自动标注的人体 6D 位姿；设备的 3D 框；每个人的临床角色（患者、主刀、助手、巡回护士、麻醉师）。</p>
+<p><strong>正文缺的细节不少。</strong> 物体类别数、每帧三元组数都放在补充材料；场景图标注方式与一致性论文未说明，所以无法估计标签噪声和长尾关系的样本量。参演人数与单台时长论文也未说明。</p><div class="strip h"><span class="t">亮点</span><span class="i">4D 指 3D 点云加时间维度</span><span class="i">位姿是自动标注，场景图标注方式论文未说明</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>基线怎样生成场景图</h3><p><strong>这一节回答：从图像和点云到一张场景图要经过哪几步。</strong> 基线定义了这个数据集的评测协议，所以值得看清。</p>
+<figure class="fig"><img src="images/page_002_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。场景图生成管线：位姿预测、实例标签计算、场景图生成、角色预测。</figcaption></figure>
+<ol><li>位姿与检测：VoxelPose 从多视角图像估计 3D 人体位姿，Group-Free 从点云检测物体 3D 框。</li><li>实例标签：按位姿和框给点云中每个点标上属于哪个实例，再加一个虚拟节点 instrument 代表看不清的小器械。</li><li>关系预测：改造后的 3DSSG 分别编码单个物体点云和物体对点云的并集，拼接 EfficientNet-B5 图像全局特征，经图卷积传播后分类关系。</li><li>角色预测：把各帧中的人连成轨迹，用 Graphormer 给轨迹打分，再做唯一角色分配。</li></ol>
+<p>三处改造各有针对：图像补点云里缺失的小器械和反光物体；随机尺度、位置、朝向、亮度、色调增强模拟衣着和体型差异；crop-to-hand 把点云裁到手附近，用来区分切割、钻孔和锯。</p><div class="strip d"><span class="t">数据</span><span class="i">PointNet++ 特征，学习率 3e-5，物体 4000 点，关系 8000 点</span><span class="i">单卡推理 2.2 FPS，高于 1 帧每秒的采样率</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>评测协议</h3><p><strong>这一节回答：分数怎么算。</strong> 关系和角色都用逐类精确率、召回率、F1，再做不加权的宏平均。作者强调宏平均让切割、钻孔这类稀有关系与常见关系同权。</p>
+<p>一条关系算正确，要求两个实体都在场景中且关系预测正确。预测实体与真值实体如何匹配，论文未说明，这会影响不同方法之间结果是否可比。</p>
+<p>人体位姿用 PCP3D，物体检测用 IoU 阈值下的 AP。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>前置检测已接近饱和。</strong> 人体位姿 PCP3D 71.23，物体检测 AP 在 IoU@25 为 0.9893，在 IoU@50 为 0.9345。这组数字是后面"真值位姿帮助不大"的前提。</p>
+<figure class="fig"><img src="images/page_007_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。测试集上 14 类关系的精确率、召回率和 F1。</figcaption></figure>
+<p><strong>宏平均 F1 0.75，被动作类关系拉低。</strong> 能从几何关系读出的关系最好：躺在手术台上 0.99，靠近 0.93。需要识别手中器械或手部动作的最差：切割 0.49，触碰 0.51，清洁 0.57。</p>
+<p><strong>模型倾向于多报。</strong> 宏平均精确率 0.68，召回率 0.87；协助的召回率 0.93 而精确率只有 0.42。平衡损失给稀有关系加权，会推高这类过报。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。两个样例场景与对应的预测场景图。</figcaption></figure>
+<figure class="fig"><img src="images/page_008_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。启发式与 Graphormer 两种轨迹打分的角色预测结果。</figcaption></figure>
+<p><strong>场景图里带有角色信息。</strong> Graphormer 宏平均 F1 0.85，只数关系频次的启发式 0.74；差距主要在助手（0.98 对 0.71）和巡回护士（0.82 对 0.60）。麻醉师两种方法都差，Graphormer 只有 0.51，作者归因于遮挡。</p><div class="strip d"><span class="t">数据</span><span class="i">关系 F1：躺在手术台上 0.99，切割 0.49</span><span class="i">精确率 0.68，召回率 0.87</span><span class="i">角色：Graphormer 0.85，启发式 0.74，麻醉师 0.51</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>消融：两项改造各贡献多少</h3><p><strong>这一节回答：图像和增强谁在起作用。</strong> 表 3 自动裁剪失败，这里按原表重排。</p>
+<div class="tbl"><table><thead><tr><th>实验</th><th>图像</th><th>增强</th><th>真值位姿</th><th>F1</th></tr></thead><tbody><tr><td>(a)</td><td>否</td><td>否</td><td>否</td><td>0.65</td></tr><tr><td>(b)</td><td>是</td><td>否</td><td>否</td><td>0.66</td></tr><tr><td>(c)</td><td>否</td><td>是</td><td>否</td><td>0.70</td></tr><tr><td>(d)</td><td>是</td><td>是</td><td>否</td><td>0.76</td></tr><tr><td>(e)</td><td>是</td><td>是</td><td>是</td><td>0.78</td></tr></tbody></table></div>
+<p><strong>只加图像几乎没用，先加增强再加图像才明显。</strong> (a) 到 (b) 只高 0.01，(c) 到 (d) 高 0.06。论文正文说两者都显著提升，这和 (b) 行不一致。我的判断：只有 6 个训练 take 时，不加增强的模型可能已经过拟合，图像特征带不来新信息。论文没有验证这一解释。</p>
+<p>真值位姿 (e) 只比预测位姿 (d) 高 0.02，作者据此说方法可以用现成检测器。</p>
+<p>另有一处数字不一致：表 1 报告 0.75，而同一配置的 (d) 是 0.76；表 1 标题写线性损失加权，正文写平衡损失。论文没有解释。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><p><strong>真值位姿的结论依赖模拟环境。</strong> 物体检测 AP@50 已有 0.9345，手术室布局固定、光照稳定。在检测更差的真实手术室里，实例标签的错误会直接传到关系预测，论文没有实验能回答这时差距多大。</p>
+<p><strong>角色预测没有证明场景图是必要的。</strong> 患者和主刀只看站位和姿态也容易区分。论文没有直接从位姿轨迹预测角色的对照，所以分不开"场景图提供了关键信息"与"位姿已经足够"。</p>
+<p><strong>单一术式与 2 台测试手术限制了外推。</strong> 模型可能学会这一流程的固定站位和顺序；0.01 到 0.02 量级的差异，在没有方差的情况下不能下结论。</p>
+<p><strong>它不测时序推理，也不测器械识别。</strong> 基线逐帧独立预测，小器械被合并成一个虚拟节点。</p></div><div class="card" id="s9"><h3><span class="num">9</span>相对已有数据集新在哪里</h3><div class="tbl"><table><thead><tr><th>对象</th><th>它有什么</th><th>4D-OR 新增</th><th>没有超过的地方</th></tr></thead><tbody><tr><td>MVOR</td><td>真实手术多视角 RGB-D、人体位姿</td><td>语义关系、物体 3D 框、临床角色、时间序列</td><td>MVOR 来自真实手术</td></tr><tr><td>Sharghi 等人</td><td>机器人手术、两路 ToF、阶段识别</td><td>公开、6 路、关系级标注</td><td>论文未比较规模</td></tr><tr><td>通用场景图数据集</td><td>大规模日常场景关系</td><td>手术室、多人复杂交互</td><td>规模小得多</td></tr><tr><td>3DSSG</td><td>室内 3D 场景图方法</td><td>图像分支、增强、虚拟器械节点</td><td>方法主体沿用 3DSSG</td></tr></tbody></table></div>
+<p><strong>它的位置是手术室场景图这条路线的起点：</strong> 新增的是语义关系层，代价是放弃了真实手术数据。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现与比较前要核对什么</h3><ul><li>去补充材料确认物体类别与三元组统计，正文没有。</li><li>自己写清实体匹配规则，否则和别人的数字不可比。</li><li>报告宏平均的同时给逐类 F1，多次运行给方差。</li><li>只用 1 帧每秒的帧，不要假设有连续视频帧率的数据。</li><li>arXiv v1 写的是录用后公开，数据以 GitHub 仓库为准。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>4D-OR 是第一个公开的手术室语义场景图数据集，10 台模拟膝关节置换，6734 帧</div><div>基线宏平均 F1 0.75，几何关系容易，手部动作类关系难</div><div>图像分支只有和增强合用才见效</div><div>场景图带有角色信息，但必要性没有被证明</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>把手术室整体建模成场景图，问题定义清楚，后续工作可直接沿用</li><li>多视角 RGB-D、点云、位姿、角色和关系标注齐全</li><li>用宏平均评测，暴露稀有关系的短板</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>模拟环境、单一术式、测试只有 2 台手术，无方差</li><li>标注方式、一致性、物体类别等关键信息不在正文</li><li>表 1 与表 3 数字不一致，正文对图像收益的描述与表格不符</li><li>角色预测缺少不用场景图的对照</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>在真实手术室数据上，预测位姿退化后场景图性能下降多少？</li><li>直接从位姿轨迹预测角色能达到多少？</li><li>加入时序建模能否改善切割、触碰这类动作关系？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 622eb187</span><span class="s">7.6 分</span></div><p>第 1 轮原版流程笔记（模型自评）。证据链完整，三张表与消融都在，机制流程四步清楚。D5=7：定位表有，但没说明相对 MVOR 的规模对比只能用正文已有信息。D6=7：我的笔记缺少数据加载与划分层面的具体检查项。D7=7：Table 3 只能保留占位。D9=6：研究问题没有核心观点速览，多数小节开头没有本节问题，数字后缺少意义说明，小节结尾没有过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾补 ### 核心观点速览</li><li>各小节开头补本节要回答的问题，数字后补一句意义，小节结尾补过渡</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li><li>Insight Pass 挑战轮：核对图像收益依赖增强、真值位姿只高 0.02、角色预测是否需要场景图</li><li>把标注细节、实体匹配规则、演员人数、方差统一写成 论文未说明 并说明影响</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 908e9035 · 文稿 261d40ac</span><span class="s">8.3 分</span></div><p>第 2 轮自评（模型自我评审，非独立评分）。Insight Pass 三轮完成，5 条修订和 5 个论文未说明缺口已写入笔记与报告；笔记与报告数字核对无未匹配项，推导差值登记在 number_exceptions.json。新增核心观点速览、各节开头问题与结尾过渡、真值位姿结论依赖模拟检测质量的分析、角色预测缺少不用场景图对照的分析，并指出正文对图像收益的描述与 Table 3 (b) 行不一致、Table 1 与 Table 3 (d) 数字不一致。无法修复的限制：Table 3 自动裁剪得到的是 Table 2，保留占位并以 Markdown 表重排；物体类别与三元组统计、标注方式与一致性、实体匹配规则、参演人数、方差均为论文未说明。D2 未到 9：实例标签计算算法与 Graphormer 输入编码论文描述有限。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

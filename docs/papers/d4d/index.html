@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>The Dresden Dataset for 4D Reconstruction of Non-Rigid Abdominal Surgical Scenes</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>形变腹腔软组织的 4D 重建数据集：内镜视频配上形变前后的结构光几何</h1>
+<div class="sub">The Dresden Dataset for 4D Reconstruction of Non-Rigid Abdominal Surgical Scenes</div>
+<div class="meta">Reuben Docea、Stefanie Speidel 等 13 位作者，NCT/UCC Dresden、德累斯顿工业大学与香港中文大学 | arXiv 2603.02985（2026-03-03），Scientific Data 数据描述论文</div>
+<div><span class="chip">数据集论文</span><span class="tag">4D 重建</span><span class="tag">非刚性 SLAM</span><span class="tag">结构光</span><span class="tag">立体内镜</span><span class="tag">猪尸体</span></div>
+<div class="one">D4D 在 6 头猪尸体上用 da Vinci Xi 立体内镜和体外结构光相机采集了 98 段组织推拉序列，为每段提供操作前后的几何参照和整理后的位姿，但论文只验证了位姿质量，没有方法基线。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2603.02985" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/d4d/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>形变组织的 4D 重建一直没有几何真值，只能用光度指标打分。</strong> 图像引导手术要把术前 CT 配到术中三维表面上，而组织一被推拉，按刚性假设建的表面图就失效了。非刚性建图需要把已离开视野的区域也更新到当前状态。</p>
+<p>已有内镜数据各缺一块。SCARED 与 SERV-CT 有几何真值但场景静止；EndoMapper 与 StereoMIS 有真实视频但没有高质量几何。EndoNeRF 的作者甚至写道，受临床法规限制，不可能采集深度真值。于是一大批神经渲染与高斯泼溅方法只报告 PSNR、SSIM、LPIPS。</p>
+<p>光度好不等于几何对。D4D 要补的是：形变场景下，与视频配对的几何参照。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口：形变组织没有可配对的几何参照</span><span class="i">后果：4D 重建只能比光度</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案是一套受控采集。猪尸体开腹后，立体内镜拍组织被推拉的全过程，体外的结构光相机在操作前、后各拍一次点云，光学追踪把两者放进同一坐标系。</p>
+<p><strong>三类序列对应三种考察目标</strong>：整段形变测端到端鲁棒性，分步形变测形变幅度，移动相机测视野外形变。150 段采集筛到 98 段核心序列。</p>
+<p><strong>边界同样清楚</strong>：几何参照只有起止两刻；技术验证只证明了位姿配准的一致性；没有任何重建方法的定量基线。</p><div class="strip d"><span class="t">数据</span><span class="i">98 段核心序列，超过 300,000 帧，369 个点云</span><span class="i">整段 49、分步 39、移动相机 10</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据怎么采</h3><p>数据于 2025 年 2 月到 9 月在 NCT Dresden 实验手术室采集。da Vinci Xi 立体内镜分辨率 894 × 714，几何由 Zivid 2+ M60 结构光相机提供，Polaris 光学追踪跟踪两台相机上的标记，三路数据以 ROS2 时间戳同步。</p>
+<figure class="fig"><img src="images/page_009_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。仰卧位猪尸体、da Vinci 机械臂与前景的 Zivid 结构光相机。腹腔已开放，结构光从体外拍摄。</figcaption></figure>
+<p><strong>每个片段是一个"拍点云、操作、再拍点云"的循环。</strong> 结构光拍摄时内镜灯关闭、场景静止；之后开灯，医生推或拉组织；最后再关灯拍一次。这样设计是为了避免内镜光源压低结构光的信噪比，代价是中间过程没有几何。</p>
+<p>采集前已转为开放手术并关掉室内灯光。这让结构光能从体外拍到组织，但也意味着没有气腹，和真实微创手术不同。</p><div class="strip h"><span class="t">亮点</span><span class="i">几何只在静止的起止两刻</span><span class="i">开放手术、尸体组织</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>规模与筛选</h3><p>150 段采集经过稳定性、图像质量和帧率检查，保留 98 段。另有 30 段质量存疑序列单独发布，未做完整后处理。</p>
+<figure class="fig"><img src="images/page_008_fig_table_1_review_repair1.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。按标本统计的过滤前与保留后片段数及三类序列分布。标本 0 的 24 段全部未保留。</figcaption></figure>
+<p><strong>移动相机序列只有 10 段</strong>，作者推荐按标本 5 折交叉验证，每折只剩一两段这类序列。标本 0 为何全部剔除，论文未说明。</p>
+<p>所有发布图像、掩码和立体深度统一缩放到 640 × 512，原始分辨率数据也一并提供。</p><div class="strip d"><span class="t">数据</span><span class="i">150 段采集，98 段保留，30 段存疑另发</span><span class="i">标本 4 贡献 32 段，标本 0 为 0 段</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>位姿怎么整理出来</h3><p>追踪给出的名义位姿并不准：按它渲染的点云与内镜图像对不上。作者的整理分三步。</p>
+<ol><li>把结构光点云重投影到内镜视角，用 LightGlue 匹配特征，PnP+RANSAC 估计纠正变换；失败时人工给对应点。</li><li>在起止结构光点云与立体深度点云之间做 ICP；相机几乎静止，所以目检后为整段序列挑一个最合适的对齐。</li><li>ICP 仍不理想时，用带人工选区的半自动区域 ICP。</li></ol>
+<figure class="fig"><img src="images/page_012_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。名义位姿（左）与 PnP-RANSAC 纠正后（右）的叠加对比。左图器械边缘的重影就是名义位姿的残差。</figcaption></figure>
+<figure class="fig"><img src="images/page_013_fig_figure_6_review.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 6。标准 ICP 失败时使用的半自动区域 ICP 示例。</figcaption></figure>
+<p><strong>最终的整理后位姿是人工参与挑选的结果。</strong> 器械掩码由 SAM-Track 与 SAM2 半自动生成，结构光侧人工标注；立体深度由 IGEV++ 生成。</p><div class="strip h"><span class="t">亮点</span><span class="i">名义位姿有残差，需特征匹配纠正</span><span class="i">整理后位姿含人工判断</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>技术验证只有一张表：立体深度点云到结构光点云的最近邻距离，比较三组位姿，N = 540 个点云。</p>
+<div class="tbl"><table><thead><tr><th>各点云统计量的均值</th><th>名义位姿</th><th>整理后位姿</th><th>ICP</th></tr></thead><tbody><tr><td>中位距离 (mm)</td><td>5.63</td><td>2.37</td><td>2.70</td></tr><tr><td>&lt;1 mm 内点 (%)</td><td>8.60</td><td>33.90</td><td>26.02</td></tr><tr><td>&lt;3 mm 内点 (%)</td><td>30.65</td><td>57.89</td><td>55.74</td></tr><tr><td>&lt;10 mm 内点 (%)</td><td>73.56</td><td>85.71</td><td>86.68</td></tr></tbody></table></div>
+<p><strong>整理后位姿在细阈值下最好</strong>，中位距离从 5.63 mm 降到 2.37 mm，说明纠正把配准误差从厘米级压到毫米级。到 10 mm 阈值 ICP 略高，作者的解读是整理后位姿让表面贴得最紧；我的推断是 ICP 把更多点拉进粗容差但局部错位。</p>
+<figure class="fig"><img src="images/page_014_fig_figure_7_review.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。三组位姿在三个阈值下的内点比例分布。ICP 在 1 mm 下有一条拖到接近 0 的长尾。</figcaption></figure>
+<p>即使用整理后位姿，1 mm 内点也只有约三分之一。</p><div class="strip d"><span class="t">数据</span><span class="i">中位距离均值：整理后 2.37 mm，名义 5.63 mm</span><span class="i">&lt;1 mm 内点：整理后 33.90%，ICP 26.02%</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li><strong>距离里混着两种误差。</strong> IGEV++ 立体深度误差和位姿误差没有分开，结构光本身的精度论文未说明。2.37 mm 只是配准链条的综合一致性。</li><li><strong>评价可能循环。</strong> 整理后位姿是按目视和距离挑出来的，又用同类距离评价，需要独立标记点才能排除这一点，论文没有提供。</li><li><strong>没有方法基线。</strong> 只有 ForPlane 在一段序列上的定性点云；摘要提到的光度基线，正文没有表格。</li><li><strong>口径不一致。</strong> 摘要写 369 个点云，Table 2 写 540 个，论文未说明关系。</li><li><strong>遮挡区精度未单独报告。</strong> 可见区与遮挡区的参照是否同样可靠，论文未说明。</li></ul>
+<figure class="fig"><img src="images/page_016_fig_figure_10_review.png" alt="Figure 10" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 10。ForPlane 在一段序列上提取的初始与结束状态点云，是全文唯一的方法示例。</figcaption></figure></div><div class="card" id="s8"><h3><span class="num">8</span>和已有数据比新在哪</h3><div class="tbl"><table><thead><tr><th>数据集</th><th>几何真值</th><th>场景是否形变</th></tr></thead><tbody><tr><td>SCARED</td><td>结构光关键帧</td><td>否</td></tr><tr><td>SERV-CT</td><td>CT 视差</td><td>否</td></tr><tr><td>EndoMapper</td><td>无高质量几何</td><td>是</td></tr><tr><td>StereoMIS</td><td>无高质量几何</td><td>是</td></tr><tr><td>D4D</td><td>结构光起止点云</td><td>是</td></tr></tbody></table></div>
+<p><strong>D4D 第一次把形变和几何参照放进同一份数据。</strong> 代价是开放腹腔与尸体组织，以及中间过程没有几何。结构光与内镜视角不同，这让被遮挡区域在原理上也能评测。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复用前要核对什么</h3><ul><li>标本 5 的左右图像流曾被对调，后处理已纠正，但 <code>tf/</code> 中的位姿仍对应右相机。</li><li>用 <code>curated_camera_pose_{start,end}.txt</code> 对齐到起止点云；具体几何误差指标论文未说明，需要自己写清楚。</li><li>调参时在标本 1 到 5 上按 4:1 做 5 折留一，避免同一头猪跨越训练与测试。</li><li>30 段存疑序列不要与核心 98 段混用。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>D4D 是目前少有的、形变组织场景下带几何参照的内镜数据</div><div>几何只有起止两刻，整理后位姿的综合一致性约 2.37 mm</div><div>论文没有方法基线，用它的人需要自己定义几何指标</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>采集循环和三类序列设计清楚，目标明确</li><li>位姿整理流程公开，并给出三组位姿的对比</li><li>数据、加载代码和项目页都公开</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>开放手术、尸体组织，缺少气腹与生理运动</li><li>位姿误差与立体深度误差未分离，结构光精度未报告</li><li>没有任何重建方法的定量结果</li><li>移动相机序列只有 10 段</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>现有 4D 重建方法在三类序列上的几何误差能否拉开差距</li><li>用独立标记点测量时，整理后位姿的误差是多少</li><li>369 与 540 两个点云数量如何对应</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 56ea9355</span><span class="s">7.7 分</span></div><p>第一轮基线：数据来源、采集循环、构建四步和 Table 2 位姿质量齐全，图表全部插入。D6 复用建议偏少，未说明评测时如何处理遮挡区与位姿残差；D7 深度分析里堆放了五张流程图，离开了它们支撑的方法段落；D9 缺少核心观点速览，多数小节没有开头的问题句和收尾过渡；H3 数字未跑核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾补 ### 核心观点速览</li><li>把 Figure 2/3/4/6 移到方法主线对应步骤旁</li><li>数字核对并写例外文件</li><li>把论文未说明的空白（手眼标定残差、结构光精度、369 与 540 口径、光度基线缺失）统一写作论文未说明并说明影响</li><li>深度分析各小节补开头问题与收尾过渡</li><li>补充 Table 2 距离为点云中位距离的含义与 Specimen 0 全部剔除原因未说明</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 a416078a · 文稿 028a69b0</span><span class="s">8.5 分</span></div><p>第二轮：加入核心观点速览；Figure 2/3/4/5/6/9 移到构建流程各步旁；数字核对通过（DOI 片段与约 14% 派生值列入例外）；结构光精度、手眼标定残差、369 与 540 口径、标本 0 剔除原因、几何指标定义、光度基线共六处写作论文未说明；新增整理后位姿可能对评价指标过拟合的质疑。无法修复的限制：论文本身没有任何方法定量基线，D2 只能描述数据构建流程而非方法；作者元数据由正文首页手工补入，arXiv API 未返回。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

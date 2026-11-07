@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>MVOR: A Multi-view RGB-D Operating Room Dataset for 2D and 3D Human Pose Estimation</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>真实介入手术室里的多视角彩色加深度人体姿态数据集</h1>
+<div class="sub">MVOR: A Multi-view RGB-D Operating Room Dataset for 2D and 3D Human Pose Estimation</div>
+<div class="meta">Vinkle Srivastav, Thibaut Issenhuth, Abdolrahim Kadkhodamohammadi, Michel de Mathelin, Afshin Gangi, Nicolas Padoy（斯特拉斯堡大学 ICube；斯特拉斯堡大学附属医院） | arXiv 1808.08180，MICCAI-LABELS 2018</div>
+<div><span class="chip">数据集</span><span class="tag">手术室</span><span class="tag">人体姿态估计</span><span class="tag">多视角</span><span class="tag">RGB-D</span></div>
+<div class="one">MVOR 用三台吊装相机在真实介入手术室采了 732 个同步多视角帧并标注二维与三维上半身姿态，现成方法在这里明显掉点，而匿名化模糊几乎不影响结果。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 3 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/1808.08180" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/mvor/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术室是姿态估计最难的场景之一：设备多，医护人员穿宽松手术衣，几个人挤在手术床边互相遮挡。作者先前的工作已经发现，最先进的方法在手术室数据上性能明显下降。</p>
+<p><strong>问题在于没有合适的公开数据来衡量这种下降。</strong> <code>COCO</code>、<code>MPII</code> 只有二维；<code>Human3.6M</code>、<code>HumanEva</code>、<code>IXMAS</code> 有三维，但都是单人受控场景；<code>MultiHumanOR</code> 是手术室多视角数据，却由演员模拟。</p>
+<p>MVOR 要补的就是这块：真实临床介入中录制、带多人三维姿态的多视角数据。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li>数据：一间介入手术室，三台吊装相机，四天录制，732 个同步多视角帧，附标定参数和以手术床为参照的全局坐标系。</li><li>标注：4699 个人体框，2926 个二维和 1061 个三维上半身姿态，每个姿态 10 个关键点。</li><li>基线：现成方法都没在 MVOR 上训练。二维最好平均 <code>PCK</code> 约 76，三维单视图误差 27.0 cm，检测最好 <code>AP</code> 0.523。</li><li>匿名化：原图和模糊图结果几乎一样。</li><li>边界：没有训练/测试划分，标注一致性论文未说明。</li></ul>
+<p><strong>所以 MVOR 实际上是一份跨域测试集。</strong> 下面先看数据怎么采。</p></div><div class="card" id="s3"><h3><span class="num">3</span>数据怎么采</h3><p>三台 Asus Xtion Pro 相机用关节臂吊在天花板上，对着手术床周围，以 20 FPS、640x480 同步录制彩色和深度。手术包括椎体成形术和肺活检。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。介入手术室布置，黄圈为三台相机。</figcaption></figure>
+<p>每台相机的内参用标定板求得，相机之间和到全局坐标系的变换按两步法求得。732 帧是从四天录像中采样出来的，<strong>采样间隔论文未说明</strong>，相邻帧可能很像，有效样本量也许小于帧数。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。同一时刻的三个视角，除患者外有三个人。</figcaption></figure>
+<p>采集讲完，接下来是标签。</p><div class="strip d"><span class="t">数据</span><span class="i">732 个多视角帧，三台相机</span><span class="i">20 FPS，640x480</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>标签怎么做</h3><p>所有人都标框；只有在至少一个视角中上半身可见超过 50% 的工作人员才标姿态。<strong>患者只有框没有姿态</strong>，所以二维姿态 2926 个，比框少约四成。</p>
+<p>三维标注分两步：先在每个视角画二维骨架，用深度反投影到三维并对可见关节取平均；再由标注员检查投影，必要时直接在三维中修正。修正之所以必要，是因为深度有误差，各视角的二维标注也因角度和遮挡不一致。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 4。标注工具同时显示三个视角和三维点云，关节可在二维或三维中移动。</figcaption></figure>
+<p><strong>标注员人数、修正比例和一致性论文未说明</strong>，标签噪声有多大无从判断。</p>
+<figure class="fig"><img src="images/page_003_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。三维标注中每人和各部位在几个视角可见。</figcaption></figure>
+<p>三维姿态里在三视角、两视角、单视角可见的分别是 503、426、132 人。腕部最难看到。</p><div class="strip h"><span class="t">亮点</span><span class="i">三维标签由二维反投影平均后人工在三维校正</span><span class="i">患者没有姿态标注</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>匿名化怎么做</h3><p>患者面部和裸露部位完全模糊；医护人员戴口罩时只模糊眼部，否则整张脸模糊。作者想尽量少模糊，以免影响算法。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。左为模糊示例，右为 10 个上半身关键点。</figcaption></figure>
+<p>10 个关键点里只有头部靠近模糊区域，所以对姿态的影响理应很小。结果也确认了这一点。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p><strong>二维。</strong> <code>AlphaPose</code> 平均 <code>PCK</code> 75.8，<code>Deep3DPS</code> 75.6，旧版 <code>RTPose</code> 73.7，新版 <code>OpenPose</code> 默认只有 57.0。所有方法都是腕部和髋部最差，而这正是手术室里最常被挡住的部位。</p>
+<figure class="fig"><img src="images/page_008_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。分部位 PCK，O 为原图，B 为模糊图。</figcaption></figure>
+<p><strong>三维。</strong> <code>MV3DReg</code> 平均误差单视图 27.0 cm、两视图 18.3 cm、三视图 10.0 cm。腕部三视图下仍有 14.4 cm，对判断手是否接触器械来说仍然太大。</p>
+<figure class="fig"><img src="images/page_008_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。按支撑视图数的三维平均每关节误差（cm）。</figcaption></figure>
+<p><strong>检测。</strong> <code>Faster-RCNN</code> 的 <code>AP</code> 0.523、<code>AP50</code> 0.802，最好。由骨架推出的框中 <code>AlphaPose</code> 最好，<code>AP50</code> 0.540，仍低于专门的检测器。</p>
+<figure class="fig"><img src="images/page_009_fig_table_4_review_repair1.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。两种检测器的 AP 与 AR。</figcaption></figure>
+<p>这些数字能支持什么结论，要看它们和哪些因素混在一起。</p><div class="strip d"><span class="t">数据</span><span class="i">二维最好平均 PCK：75.8（原图）/ 76.2（模糊）</span><span class="i">三维：27.0 → 18.3 → 10.0 cm</span><span class="i">检测最好 AP50：0.802</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么会这样（深入分析）</h3><p><strong>低分测的是迁移，不是上限。</strong> 所有方法都没在 MVOR 上训练，<code>Deep3DPS</code> 只在同一手术室的另一份数据上微调过。“仍有很大提升空间”这句话，论文无法区分是任务本身难，还是模型没适配；要区分它需要在 MVOR 划分上训练的结果，论文没有。</p>
+<p><strong>视图数和样本难度混在一起。</strong> 表 3 三行是不同的人。只在一个视角可见的人本来就被挡得更重，所以 27.0 到 10.0 cm 的下降不能全算在视图数上。能分开二者的实验是：对三视图可见的同一批人只给一个视角再测，论文没做。</p>
+<p><strong>自顶向下在拥挤场景里占优。</strong> <code>AlphaPose</code> 先检测人再估计姿态，只用彩色图就追平了用深度且见过同一手术室的 <code>Deep3DPS</code>。我的判断：这说明先找人能减少关节错配，但两者条件不对等，不能据此排序。</p><div class="strip h"><span class="t">亮点</span><span class="i">低分来自领域差异还是任务难度，论文无法区分</span><span class="i">视图数分层的误差下降混入了样本难度</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li>模糊无影响只对“在模糊图上测试”成立；在模糊图上训练会不会学到捷径，论文没检验。检测器受模糊影响稍大，<code>Faster-RCNN</code> 的 <code>AP50</code> 从 0.802 降到 0.756。</li><li>新版 <code>OpenPose</code> 为何比旧版 <code>RTPose</code> 低 16 个点以上，论文未说明。</li><li>“首个真实临床数据集”只是相对作者列举的数据集，没有系统检索。</li><li>下半身和患者姿态没有标注，相关应用无法用 MVOR 验证。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>没有官方划分。若要在 MVOR 上训练，按天或按手术划分，避免相邻帧泄漏。</li><li>三维误差按支撑视图数分层报告，并写明二维输入来自哪个检测器，因为 <code>MV3DReg</code> 的误差包含 <code>OpenPose</code> 的误差。</li><li>写明方法是否在 MVOR 或同一手术室数据上训练过，否则和论文基线不可比。</li><li>由骨架推框时只比 <code>AP50</code>，框偏小会让高交并比下的精度失真。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>MVOR 是一份小规模、真实介入手术室的多视角跨域测试集，不是训练集。</div><div>二维反投影平均再三维校正的标注流程值得在其他多视角 RGB-D 场景复用。</div><div>发布前在原图和匿名化图像上各跑一遍基线，是医疗视觉数据公开时值得照搬的做法。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>首次把真实介入过程中的遮挡与杂物带进多人三维姿态评测。</li><li>标定参数与全局坐标系一起发布，多视角方法可以直接用。</li><li>用数字说明了匿名化的代价。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>732 帧、单中心、四天录制，规模小且无划分。</li><li>只有上半身 10 个关键点，患者无姿态。</li><li>标注员人数和一致性论文未说明；基线条件不对等。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>在 MVOR 上训练后，二维和三维误差能降到多少？</li><li>固定同一批人只减少视图数，三维误差会怎么变？</li><li>在模糊图上训练的模型，换到原图上是否仍然一样好？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 866e7ae1</span><span class="s">7.6 分</span></div><p>第 1 轮自评：采集设置、标注规模、表 1 至表 4 已插图，主结果有对照表，深度分析指出了视图数与难度混杂、基线条件不对等。D5=7：只与作者列举的数据集对比，没有说明 MVOR 相对 MultiHumanOR 在规模和标注上的具体差别。D6=7：复用建议偏少，没有给出自行划分的具体做法。D7=7：小节未编号，表 5 只有占位与部分转写。D9=6：研究问题末尾缺少核心观点速览，多数小节直接罗列事实，节末没有过渡。H3 未做数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记</li><li>在研究问题末尾加入核心观点速览</li><li>每节开头写明要回答的问题，数字后补一句含义，节末加过渡</li><li>把采样方式、标注员人数、标注一致性、RTPose 优于 OpenPose 的原因等缺口写成 论文未说明 并说明影响</li><li>补全表 5 转写（AR1、AR10）</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 c036d190 · 文稿 1bcce8dc</span><span class="s">8.2 分</span></div><p>第 2 轮自评：加入核心观点速览，各节以问题开头、节末有过渡；表 5 全部转写；采样方式、标注员人数与一致性、RTPose 优于 OpenPose 的原因均写为论文未说明；深度分析补充了领域差异与任务难度不可区分、视图数与样本难度混杂、模糊结论只对测试成立三条边界。数字核对无未匹配项，表 1 的 503/426/132/495 因文本抽取丢失登记为例外并对照原图核实。D5=7：定位仍只基于作者列举的数据集，论文没有给出与 MultiHumanOR 的规模或标注对比，无法补齐。表 5 与 Fig 5 因裁剪质量保留占位。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

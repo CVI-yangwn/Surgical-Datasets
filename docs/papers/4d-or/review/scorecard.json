@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "622eb187d87a0bacd6ded2202c38d8b4da03bf44b3fe7f94fd3ad3ed51fe281c",
+      "note_snapshot": "review_rounds/round1_4D_OR_Semantic_Scene_Graphs_for_OR_Domain_Modeling.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮原版流程笔记（模型自评）。证据链完整，三张表与消融都在，机制流程四步清楚。D5=7：定位表有，但没说明相对 MVOR 的规模对比只能用正文已有信息。D6=7：我的笔记缺少数据加载与划分层面的具体检查项。D7=7：Table 3 只能保留占位。D9=6：研究问题没有核心观点速览，多数小节开头没有本节问题，数字后缺少意义说明，小节结尾没有过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾补 ### 核心观点速览",
+        "各小节开头补本节要回答的问题，数字后补一句意义，小节结尾补过渡",
+        "用 lint_report.py --mode note 做数字核对并登记推导值",
+        "Insight Pass 挑战轮：核对图像收益依赖增强、真值位姿只高 0.02、角色预测是否需要场景图",
+        "把标注细节、实体匹配规则、演员人数、方差统一写成 论文未说明 并说明影响"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "908e90356a0e1a5251c5ae95f2abbd655192fa3bd84bc36ff2efd3561861bc10",
+      "note_snapshot": "review_rounds/round2_4D_OR_Semantic_Scene_Graphs_for_OR_Domain_Modeling.md",
+      "report_sha256": "261d40ac126bc855fe788f0f3731bea149c3a01d5d04471b2fa2b7a6f2038d69",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评（模型自我评审，非独立评分）。Insight Pass 三轮完成，5 条修订和 5 个论文未说明缺口已写入笔记与报告；笔记与报告数字核对无未匹配项，推导差值登记在 number_exceptions.json。新增核心观点速览、各节开头问题与结尾过渡、真值位姿结论依赖模拟检测质量的分析、角色预测缺少不用场景图对照的分析，并指出正文对图像收益的描述与 Table 3 (b) 行不一致、Table 1 与 Table 3 (d) 数字不一致。无法修复的限制：Table 3 自动裁剪得到的是 Table 2，保留占位并以 Markdown 表重排；物体类别与三元组统计、标注方式与一致性、实体匹配规则、参演人数、方差均为论文未说明。D2 未到 9：实例标签计算算法与 Graphormer 输入编码论文描述有限。",
+      "fixes": []
+    }
+  ]
+}

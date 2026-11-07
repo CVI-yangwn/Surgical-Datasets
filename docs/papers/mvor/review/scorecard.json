@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "866e7ae1257aa84779400d2dff062ce909bfc258cbb88f23fa72b4b62cc0019f",
+      "note_snapshot": "review_rounds/round1_MVOR_A_Multi_view_RGB_D_Operating_Room_Dataset_for_2D_and_3D_Human_Pose_Estimation.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮自评：采集设置、标注规模、表 1 至表 4 已插图，主结果有对照表，深度分析指出了视图数与难度混杂、基线条件不对等。D5=7：只与作者列举的数据集对比，没有说明 MVOR 相对 MultiHumanOR 在规模和标注上的具体差别。D6=7：复用建议偏少，没有给出自行划分的具体做法。D7=7：小节未编号，表 5 只有占位与部分转写。D9=6：研究问题末尾缺少核心观点速览，多数小节直接罗列事实，节末没有过渡。H3 未做数字核对，记为 unknown。",
+      "fixes": [
+        "按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明要回答的问题，数字后补一句含义，节末加过渡",
+        "把采样方式、标注员人数、标注一致性、RTPose 优于 OpenPose 的原因等缺口写成 论文未说明 并说明影响",
+        "补全表 5 转写（AR1、AR10）",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "c036d1903323145099d9f3eb84cda1e89ff96b16881455aa2ea1f9ef12c0b55a",
+      "note_snapshot": "review_rounds/round2_MVOR_A_Multi_view_RGB_D_Operating_Room_Dataset_for_2D_and_3D_Human_Pose_Estimation.md",
+      "report_sha256": "1bcce8dcf889d26562b3e4ac26962ac981aad313cc35233d8359976d69f54924",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评：加入核心观点速览，各节以问题开头、节末有过渡；表 5 全部转写；采样方式、标注员人数与一致性、RTPose 优于 OpenPose 的原因均写为论文未说明；深度分析补充了领域差异与任务难度不可区分、视图数与样本难度混杂、模糊结论只对测试成立三条边界。数字核对无未匹配项，表 1 的 503/426/132/495 因文本抽取丢失登记为例外并对照原图核实。D5=7：定位仍只基于作者列举的数据集，论文没有给出与 MultiHumanOR 的规模或标注对比，无法补齐。表 5 与 Fig 5 因裁剪质量保留占位。",
+      "fixes": []
+    }
+  ]
+}

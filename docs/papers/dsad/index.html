@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>The Dresden Surgical Anatomy Dataset for Abdominal Organ Segmentation in Surgical Data Science</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>32 台机器人直肠手术中 11 类腹部解剖结构的像素级分割：DSAD 数据集说明</h1>
+<div class="sub">The Dresden Surgical Anatomy Dataset for Abdominal Organ Segmentation in Surgical Data Science</div>
+<div class="meta">Matthias Carstens, Franziska M. Rinner, Sebastian Bodenstedt 等 8 人（德累斯顿工业大学附属医院、德累斯顿国家肿瘤疾病中心等） | Scientific Data 10:3（2023），Data Descriptor</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">解剖分割</span><span class="tag">机器人手术</span><span class="tag">直肠手术</span><span class="tag">弱标签</span></div>
+<div class="one">DSAD 从 32 台机器人直肠手术中抽出 13195 张图像，为 11 类腹部结构做三人分割、STAPLE 合并和专家复核，另附逐帧弱标签与 1430 张多器官图像，但论文不给划分和模型基线，质量证据也以同一专家终稿为参照。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://www.nature.com/articles/s41597-022-01719-2" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/dsad/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>机器人手术画面信息很多，判断画面里是哪段肠、哪条血管却要靠经验。</strong> 作者认为自动识别解剖结构可以在术中提醒易损结构，降低并发症。</p>
+<p>训练这类模型需要像素级标签。论文列出的已有公开数据，Cholec80、LapGyn4、SurgAI 和海德堡结直肠数据集，多为图像级标签，只说明结构是否出现；像素级标注又主要集中在器械。<strong>缺的是一份覆盖多个腹部器官、每类规模足够的解剖分割数据。</strong></p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>DSAD 的答案是：在 32 台达芬奇直肠手术视频上抽帧，为 11 类结构做三人分割，用 <code>STAPLE</code> 合并，再由一名医生复核修改。</p>
+<ul><li>每类 1023 到 1430 张图，来自 20 到 23 台手术，每台每类最多 100 帧。</li><li>每张单器官图只标一个结构；1430 张胃图像另标全部可见结构。</li><li>每张图都有 11 类可见性弱标签。</li><li>合并结果与终稿的 F1 多在 0.9 以上，输尿管最低为 0.87。</li></ul>
+<p><strong>边界同样重要：</strong> 单中心、单术式，没有模型基线和划分，表 3 的参照是同一专家的终稿。</p><div class="strip h"><span class="t">亮点</span><span class="i">图像数大体均衡，类别不平衡来自像素面积</span><span class="i">公开三份原始标注和合并结果，可直接研究标注噪声</span></div><div class="strip d"><span class="t">数据</span><span class="i">32 台手术，13195 张单器官图像，14625 帧分割</span><span class="i">图像分辨率 1920 × 1080，不做预处理</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>图像从哪来</h3><p>所有图像来自德累斯顿一家医院 2019 年 2 月到 2021 年 2 月的 32 台机器人直肠手术，内镜为达芬奇 <code>Xi/X</code>（直径 8 mm、30° 角）。患者 26 例（81.3%）为男性，31 例（96.9%）为直肠癌，平均年龄 63 ± 9 岁。</p>
+<figure class="fig"><img src="images/page_002_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。32 名患者的基本特征、术式与分期。</figcaption></figure>
+<p><strong>这决定了画面以盆腔和下腹部为主。</strong> 肝、胃、脾等上腹器官只在部分步骤出现，所以表 2 中肝在个别手术里只有 5 张图。</p></div><div class="card" id="s4"><h3><span class="num">4</span>标签长什么样</h3><div class="tbl"><table><thead><tr><th>标签</th><th>范围</th><th>含义</th></tr></thead><tbody><tr><td>单器官分割</td><td>13195 张</td><td>每张只有一个结构为白色</td></tr><tr><td>多器官分割</td><td>1430 张胃图像</td><td>每个可见结构一张掩码</td></tr><tr><td>弱标签</td><td>全部图像</td><td>11 类结构是否可见</td></tr></tbody></table></div>
+<p><strong>单器官掩码里，别的器官即使在画面中也记为背景。</strong> 所以单器官子集是 11 个独立的二值任务，真正的多类分割只有 1430 张图。</p>
+<figure class="fig"><img src="images/page_003_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。每台手术每类结构的图像数、分段数中位数与平均背景占比。</figcaption></figure>
+<p>平均背景占比从腹壁的 74% 到肠静脉、输尿管的 99%。图像数相差不大，难度差异主要来自目标面积。</p><div class="strip d"><span class="t">数据</span><span class="i">胰分段数中位数为 3（范围 1 到 10），最容易被分成多块</span><span class="i">每个手术文件夹含 5 到 91 对图像与掩码</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>标注流程</h3><figure class="fig"><img src="images/page_004_fig_fig_1_review_repair1.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。时间标注、抽帧、三人分割、自动合并、专家复核，以及弱标签的标注与复核。</figcaption></figure>
+<ol><li>一名医学生标出肝、胰、脾、胃、输尿管出现的时间段；其他五类手工剪片段。</li><li>每类至少 20 台手术，每台等间隔抽最多 100 帧，只剔除完全不可用的帧，保留烟雾和出血。</li><li>三名医学生在 <code>3D Slicer</code> 中逐像素分割，三份掩码用 <code>STAPLE</code> 等权合并。</li><li>一名有三年微创经验的医生在 <code>CVAT</code> 上选出最合适的一份并修改。</li></ol>
+<p><strong>抽帧规则的作用是防止少数手术主导某一类。</strong> 帧间隔多大、是否去除近重复帧，论文未说明，这会影响有效样本量。</p></div><div class="card" id="s6"><h3><span class="num">6</span>表 3 说了什么</h3><figure class="fig"><img src="images/page_006_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。各标注者与合并结果相对终稿的 F1，括号内是归一化 Hausdorff 距离，不是标准差。</figcaption></figure>
+<p>合并结果在 12 行中有 11 行 F1 达到 0.91 以上，脾为 1（0）。输尿管合并 F1 为 0.87，但距离只有 0.03，差异集中在细长边界上。单人分歧更大：肠系膜下动脉 A1 只有 0.62，多器官子集 A5 只有 0.73，距离 0.22。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_2_review_repair1.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。原图、三人轮廓加合并、终审分割；输尿管和血管的轮廓分歧最明显。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">越细的结构，标注越不一致</span><span class="i">合并结果普遍比单人更接近终稿</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li><strong>没有模型基线。</strong> 划分和分割实验在 Kolbinger 等人的另一篇预印本里。</li><li><strong>没有独立的一致性。</strong> 只有一名专家，没有第二人从零标注。</li><li><strong>没有跨域证据。</strong> 单中心、单术式、单一机器人内镜。</li><li><strong>没有说明聚合方式。</strong> 表 3 按图平均还是按像素汇总，论文未说明。</li></ul></div><div class="card" id="s8"><h3><span class="num">8</span>一个替代解释</h3><p>作者用“合并 F1 高于单人”支持 <code>STAPLE</code> 融合。<strong>但终稿是专家在合并结果上修改的，还可以直接选用它。</strong> 从现成掩码出发修改，结果自然接近它，这是锚定效应。单人分数低，也可能只是因为合并结果是专家最常选的候选。</p>
+<p>要分开这两种解释，需要隐藏合并结果的复核，或第二位专家独立标注。论文没有这项证据，所以表 3 只能说明终稿没有被大幅重画，不能给出标签噪声的上限。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复用要注意什么</h3><ul><li>按手术编号划分；手术 03 一台就跨全部 11 类。</li><li>不要把 11 个文件夹的掩码直接拼成多类标签，会制造错误负样本；用弱标签屏蔽，或只用多器官子集。</li><li>细长结构同时报告 Dice 和边界指标。</li><li>许可同时写“非商业”和 CC-BY，商业用途前向作者确认。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>按论文的定位，DSAD 补的是多器官腹部解剖的像素级分割数据</div><div>单器官子集是 11 个二值任务，多类分割只有 1430 张</div><div>表 3 测的是专家修改幅度，不是独立一致性</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>每类图像来自至少 20 名患者，规模均衡</li><li>公开三份原始标注、合并结果与处理脚本</li><li>保留烟雾、出血等真实干扰，不做预处理</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心、单术式、单设备</li><li>无基线、无划分，可学性要看后续论文</li><li>只有一名复核专家；许可与时间标注人数前后矛盾</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>第二位专家独立标注时，一致性会降到多少？</li><li>在腹腔镜或其他中心的画面上，模型性能会下降多少？</li><li>六名标注者如何分配到各结构？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 0a2b8894</span><span class="s">6.8 分</span></div><p>第 1 轮自评：数据来源、四步构建流程、表 1 到表 3 与两张图齐全。D4=6：边界只在局限中列出，没有逐条给理由，表 3 以专家终稿为参照的偏差只写了一句。D5=6：只与四个图像级数据集对比，没有说明与器械分割数据的分工。D6=6：复用建议过短。D9=5：各节直接罗列事实，缺核心观点速览，数字后少有含义，缺过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>7</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>6</b></span><span>D5 <b>6</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 补齐知识点、细节问答与质疑，并写回笔记</li><li>在研究问题末尾加入核心观点速览</li><li>每节开头写明问题，数字后补含义，节末加过渡</li><li>把标注者分工、单人复核、许可矛盾、时间标注人数矛盾逐项写成论文未说明并说明影响</li><li>补充单器官掩码把其他结构记为背景对训练的影响，以及按手术划分的必要性</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 cde0c582 · 文稿 8953a249</span><span class="s">8.2 分</span></div><p>第 2 轮自评：insight pass 补齐了表 3 括号含义（归一化 Hausdorff 距离而非标准差）、六名标注者分工、聚合方式、近重复帧、许可矛盾与时间标注人数矛盾，均写成论文未说明。加入核心观点速览、每节开头问题与节末过渡，并把锚定效应对表 3 的影响、单器官掩码拼多类时的错误负样本写入深度分析。数字核对无未匹配项，图像内数字登记在 number_exceptions.json。D5=7：论文只与四个图像级数据集对比，笔记无法从原文补出与其他像素级解剖数据的定量比较。D1=8：论文没有模型基线，结果链只能到标注一致性。D4 从 6 升到 9，D9 从 5 升到 8，因为边界逐条给出理由且叙事顺序已按讨论顺序重排。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

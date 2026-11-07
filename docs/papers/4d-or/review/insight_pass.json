@@ -1,0 +1,37 @@
+{
+  "knowledge_points": [
+    {"term": "语义场景图", "plain": "节点是人和物、边是它们之间关系的图，例如主刀-钻孔-患者。", "where": "sec:methodology", "needed_for": "理解数据集标注和全部关系评测"},
+    {"term": "3DSSG", "plain": "从带实例标签的 3D 点云预测物体与关系类别的图神经网络方法。", "where": "sec:methodology", "needed_for": "理解 Table 3 (a) 的起点和作者的改造"},
+    {"term": "实例标签计算", "plain": "根据预测的人体位姿和物体框，给点云中每个点标上属于哪个人或物。", "where": "sec:methodology", "needed_for": "理解为什么真值位姿只带来 0.02 提升"},
+    {"term": "虚拟节点 instrument", "plain": "一个不对应具体几何的节点，统一代表看不清的小器械。", "where": "sec:methodology", "needed_for": "理解 Hold、Cut 等关系的判断方式"},
+    {"term": "宏平均 F1", "plain": "先算每类的 F1 再不加权平均，稀有类和常见类同权。", "where": "sec:experiments", "needed_for": "理解 0.75 为何被低频关系拉低"},
+    {"term": "PCP3D", "plain": "预测肢体两端点都落在真值附近的比例，衡量 3D 人体位姿。", "where": "sec:experiments", "needed_for": "判断场景图输入质量"},
+    {"term": "Graphormer", "plain": "一种用自注意力处理图结构的网络，这里用来从场景图序列预测角色。", "where": "sec:methodology", "needed_for": "理解角色预测的 0.85"},
+    {"term": "take", "plain": "一次完整录制，这里每个 take 是一台模拟手术。", "where": "sec:experiments", "needed_for": "理解 6/2/2 划分和测试集大小"}
+  ],
+  "detail_questions": [
+    {"question": "数据集里有多少物体类别、每帧多少三元组？", "answer": "正文只列出 14 类关系，物体类别和三元组统计放在补充材料。", "evidence": ["sec:methodology", "sec:experiments"], "status": "not_stated"},
+    {"question": "场景图标注是人工还是自动？一致性如何？", "answer": "正文只说人体位姿是自动标注，场景图标注方式与一致性没有说明。", "evidence": ["sec:methodology"], "status": "not_stated"},
+    {"question": "关系判定时预测实体如何与真值实体匹配？", "answer": "只说两个实体都在场景中且关系正确才算正确，匹配规则未说明。", "evidence": ["sec:experiments"], "status": "not_stated"},
+    {"question": "模拟手术由几人参演、每台多长？", "answer": "没有给出人数和单台时长，只有总帧数 6734 和 1 帧每秒。", "evidence": ["sec:methodology"], "status": "not_stated"},
+    {"question": "测试结果有没有方差？", "answer": "没有，只报告单次结果，测试集 2 个 take。", "evidence": ["sec:experiments"], "status": "not_stated"},
+    {"question": "Table 1 的 0.75 与 Table 3 (d) 的 0.76 为何不同？", "answer": "两者都是图像加增强加预测位姿，论文没有解释差异；Table 1 标题写线性损失加权，正文写平衡损失。", "evidence": ["sec:experiments"], "status": "partly"},
+    {"question": "为什么选全膝关节置换？", "answer": "作者认为它是有代表性的骨科手术，包含不同步骤和交互。", "evidence": ["sec:methodology"], "status": "resolved"},
+    {"question": "为什么用宏平均？", "answer": "宏平均不受样本量影响，切割、钻孔这类稀有关系对理解场景很重要。", "evidence": ["sec:experiments"], "status": "resolved"},
+    {"question": "麻醉师角色为什么差？", "answer": "作者归因于麻醉师经常至少部分被遮挡。", "evidence": ["sec:experiments"], "status": "resolved"},
+    {"question": "数据是否公开？", "answer": "arXiv v1 写的是录用后公开，项目仓库在 GitHub。", "evidence": ["sec:preamble"], "status": "partly"}
+  ],
+  "challenges": [
+    {"claim": "图像和增强都显著提升场景图生成", "alternative": "图像本身几乎没用，提升主要来自增强，图像只在增强后起作用或者只是随机波动", "separating_evidence": "多次运行的方差，以及增强后单独去掉图像的多种子对比", "in_paper": false, "verdict": "partly_supported"},
+    {"claim": "方法可以依赖现成的位姿预测", "alternative": "模拟环境中检测几乎饱和（物体 AP 0.9345），所以真值与预测差别小；真实手术室检测更差时结论不一定成立", "separating_evidence": "在检测质量更低的数据上重复 (d) 与 (e) 的对比", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "场景图对角色预测有用", "alternative": "角色主要由站位和位姿决定，直接从位姿轨迹预测也能达到相近效果，场景图不是必要的中间表示", "separating_evidence": "不用场景图、直接用位姿或图像的角色预测基线", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "4D-OR 能支撑手术室语义理解研究", "alternative": "单一术式、模拟环境、2 个测试 take，模型可能只学会这一流程的固定站位与顺序", "separating_evidence": "跨术式或真实手术数据上的测试", "in_paper": false, "verdict": "partly_supported"}
+  ],
+  "revisions": [
+    "研究问题末尾新增核心观点速览，写明头条结果与它的边界",
+    "消融小节明确写出只加图像仅高 0.01，并标注我的判断与论文说法的差别",
+    "深度分析新增真值位姿结论依赖模拟环境检测质量的分析",
+    "深度分析新增角色预测缺少不用场景图的对照这一点",
+    "物体类别与三元组统计、标注方式与一致性、实体匹配规则、参演人数、方差五处统一写成论文未说明并说明影响"
+  ]
+}

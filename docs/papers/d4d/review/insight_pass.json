@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "结构光相机", "plain": "向场景投射已知图案再三角化，得到稠密点云的深度相机", "where": "sec:methods", "needed_for": "理解几何参照从哪来、为何只能在关灯静止时采集"},
+  {"term": "4D 重建", "plain": "随时间变化的三维重建，即为每个时刻恢复形变后的表面", "where": "sec:abstract", "needed_for": "理解数据集要评测的任务"},
+  {"term": "非刚性 SLAM", "plain": "相机边移动边建图，同时允许场景本身形变", "where": "sec:abstract", "needed_for": "理解移动相机序列的用途"},
+  {"term": "手眼标定", "plain": "求追踪标记与相机光心之间的固定变换", "where": "sec:methods", "needed_for": "理解名义位姿为何有残差"},
+  {"term": "PnP+RANSAC", "plain": "由二维到三维对应点估计相机位姿，并剔除错误匹配", "where": "sec:methods", "needed_for": "理解位姿纠正步骤"},
+  {"term": "ICP 与区域 ICP", "plain": "反复寻找最近点并求刚体变换来对齐两片点云；区域版只用人工选定的区域", "where": "sec:methods", "needed_for": "理解 curated 与 ICP 两组位姿的区别"},
+  {"term": "内点比例", "plain": "立体深度点中，到结构光点云最近邻距离小于阈值的点所占比例", "where": "sec:acknowledgements", "needed_for": "读懂 Table 2"},
+  {"term": "光度指标", "plain": "PSNR、SSIM、LPIPS 只比较渲染图像与真实图像的像素或感知相似度", "where": "sec:abstract", "needed_for": "理解为何需要几何真值"}
+ ],
+ "detail_questions": [
+  {"question": "Table 2 的距离到底在测什么", "answer": "立体深度点云每点到结构光点云最近邻的距离，每个点云取中位数后再对 540 个点云求均值等统计", "evidence": ["sec:methods", "sec:acknowledgements"], "status": "resolved"},
+  {"question": "结构光相机本身的测量精度是多少", "answer": "论文未说明，因此无法把 Table 2 的距离拆分为参照误差、立体深度误差和位姿误差", "evidence": ["sec:methods"], "status": "not_stated"},
+  {"question": "手眼标定残差有多大", "answer": "只说渲染点云与内镜图像不完全重合，没有数值；Table 2 的 Nominal 行是间接反映", "evidence": ["sec:methods"], "status": "partly"},
+  {"question": "为什么 10 mm 阈值下 ICP 高于 curated", "answer": "作者只说 curated 在细阈值下对齐最紧；ICP 可能让更多点落入粗容差但局部错位，论文没有进一步分析", "evidence": ["sec:methods"], "status": "partly"},
+  {"question": "摘要的 369 个点云和 Table 2 的 N = 540 是什么关系", "answer": "论文未说明，读者无法确认 Table 2 是否覆盖了质量存疑序列", "evidence": ["sec:abstract", "sec:acknowledgements"], "status": "not_stated"},
+  {"question": "标本 0 的 24 段为何全部未保留", "answer": "论文只给了总体筛选标准，未说明标本 0 的具体原因", "evidence": ["sec:methods", "sec:acknowledgements"], "status": "not_stated"},
+  {"question": "摘要提到的光度视图合成基线在哪里", "answer": "正文只给出评测建议和 ForPlane 定性点云，没有光度或几何数值基线", "evidence": ["sec:abstract", "sec:methods"], "status": "not_stated"},
+  {"question": "为什么每段序列只用一个对齐", "answer": "内镜在采集中几乎静止，所以目检后选最合适的一个对齐用于整段", "evidence": ["sec:methods"], "status": "resolved"},
+  {"question": "交叉验证如何划分", "answer": "在标本 1 到 5 的 98 段核心序列上按 4:1 划分，5 折留一", "evidence": ["sec:methods"], "status": "resolved"},
+  {"question": "视野外形变如何评测", "answer": "理想做法是点对应但难以获得；作者建议评估器械移开后露出的已观测区域", "evidence": ["sec:methods"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "curated 位姿更准确", "alternative": "curated 位姿是人工按目视和距离挑选的，Table 2 用的又是同一类距离，可能只是对评价指标过拟合", "separating_evidence": "用独立标记点或留出区域评估位姿误差", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "数据可评测被遮挡区域的几何", "alternative": "结构光与内镜视角不同只保证有覆盖，不保证遮挡区参照精度与可见区相当", "separating_evidence": "分别报告可见区与遮挡区的配准残差", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "三类序列能区分方法在形变幅度和视野外更新上的能力", "alternative": "没有任何方法的定量结果，序列难度差异可能被位姿残差淹没", "separating_evidence": "多种方法在三类序列上的几何误差与方差", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览，写明只验证了位姿质量",
+  "把 Figure 2、3、4、6 移到机制流程对应步骤旁",
+  "在关键结果中说明 curated 的优势只在 1 mm 与 3 mm 阈值成立，并写出 ICP 在 10 mm 反超的可能原因属于推断",
+  "把结构光精度、369 与 540 口径、标本 0 剔除原因、光度基线缺失写作论文未说明并说明影响",
+  "在深度分析加入 curated 位姿可能对评价指标过拟合的质疑"
+ ]
+}

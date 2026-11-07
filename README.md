@@ -4,8 +4,8 @@
 
 **手术视频与内镜公开数据集整理 · 附中文论文精读**
 
-[![Papers](https://img.shields.io/badge/精读论文-41-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
-[![Datasets](https://img.shields.io/badge/数据集-41-8b5cf6)](#-数据集总览)
+[![Papers](https://img.shields.io/badge/精读论文-45-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
+[![Datasets](https://img.shields.io/badge/数据集-45-8b5cf6)](#-数据集总览)
 [![Reading](https://img.shields.io/badge/在线阅读-GitHub%20Pages-b84fa3)](https://cvi-yangwn.github.io/Surgical-Datasets/)
 
 [📚 在线阅读全部精读](https://cvi-yangwn.github.io/Surgical-Datasets/) · [📊 数据集总览](#-数据集总览) · [🔍 精读是怎么做的](#-精读是怎么做的)
@@ -46,7 +46,7 @@
 </details>
 
 <details open>
-<summary><b>🩻 腹腔镜 Laparoscopic</b>（11 篇）</summary>
+<summary><b>🩻 腹腔镜 Laparoscopic</b>（13 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
@@ -60,6 +60,8 @@
 | **CholecTrack20** | 同一个器械框标三套身份：手术器械多视角跟踪数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholectrack20/) · [📝 笔记](docs/papers/cholectrack20/note.md) |
 | **CholecInstanceSeg** | 在 85 段胆囊切除术视频上补一层七类器械实例分割标注 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholecinstanceseg/) · [📝 笔记](docs/papers/cholecinstanceseg/note.md) |
 | **ROBUST-MIS** | ROBUST-MIS 2019：在真实结直肠手术画面上，比较器械分割算法的最差情况与跨术式泛化 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/robust-mis/) · [📝 笔记](docs/papers/robust-mis/note.md) |
+| **DSAD** | 32 台机器人直肠手术中 11 类腹部解剖结构的像素级分割：DSAD 数据集说明 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/dsad/) · [📝 笔记](docs/papers/dsad/note.md) |
+| **D4D** | 形变腹腔软组织的 4D 重建数据集：内镜视频配上形变前后的结构光几何 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/d4d/) · [📝 笔记](docs/papers/d4d/note.md) |
 | **PhaKIR** | 同一批完整胆囊切除手术上同时标阶段、器械实例掩码和关键点:8 个视频、三家医院 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/phakir/) · [📝 笔记](docs/papers/phakir/note.md) |
 
 </details>
@@ -95,10 +97,12 @@
 </details>
 
 <details open>
-<summary><b>🏥 手术室 Operating room</b>（1 篇）</summary>
+<summary><b>🏥 手术室 Operating room</b>（3 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
+| **MVOR** | 真实介入手术室里的多视角彩色加深度人体姿态数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mvor/) · [📝 笔记](docs/papers/mvor/note.md) |
+| **4D-OR** | 把手术室画成一张图：首个公开的 4D 手术室语义场景图数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/4d-or/) · [📝 笔记](docs/papers/4d-or/note.md) |
 | **EgoExOR** | 让手术室里的每个人戴上眼镜：自我视角加天花板视角的同步数据集与场景图基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egoexor/) · [📝 笔记](docs/papers/egoexor/note.md) |
 
 </details>
@@ -158,6 +162,8 @@
 | CholecTrack20 | 2023 | [arXiv](https://arxiv.org/abs/2312.07352) |  | 多器械跟踪 | 20 个视频 |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholectrack20/) |
 | CholecInstanceSeg | 2024 | [arXiv](https://arxiv.org/abs/2406.16039) |  | 器械实例分割 | 41.9k 帧（85 台手术） | Cholec80 与 CholecT50 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholecinstanceseg/) |
 | ROBUST-MIS | 2021 | [arXiv](https://arxiv.org/abs/2003.10299) | [链接](https://www.synapse.org/#!Synapse:syn18779624/wiki/592660) | 器械二值 / 多实例检测与分割 | 30 台手术（10,040 帧） | 海德堡大学医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/robust-mis/) |
+| DSAD | 2023 | [论文](https://www.nature.com/articles/s41597-022-01719-2) | [figshare](https://doi.org/10.6084/m9.figshare.21702600) | 腹部解剖结构语义分割（11 类） | 13,195 张图像（32 台手术） | 德累斯顿大学医院机器人直肠手术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/dsad/) |
+| D4D | 2026 | [arXiv](https://arxiv.org/abs/2603.02985) | [链接](https://doi.org/10.25532/OPARA-1033) | 形变软组织 4D 重建 / 深度估计评测 | 98 段序列（30 万+ 帧） | 猪尸体开腹，达芬奇立体内镜 + 结构光 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/d4d/) |
 | PhaKIR | 2025 | [arXiv](https://arxiv.org/abs/2511.06549) | [链接](https://doi.org/10.5281/zenodo.15740619) | 阶段识别 / 器械关键点 / 器械实例分割 | 8 个视频（485,875 帧阶段标注） | 三家德国医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/phakir/) |
 
 ### 🤖 机器人手术 Robotic
@@ -188,6 +194,8 @@
 
 | 数据集 | 年份 | 论文 | 数据 | 任务 | 规模 | 来源 | 精读 |
 | :-- | :--: | :--: | :--: | :-- | :-- | :-- | :--: |
+| MVOR | 2018 | [arXiv](https://arxiv.org/abs/1808.08180) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/CAMMA-public/MVOR) | 手术室人员检测与 2D/3D 姿态估计 | 732 个多视角帧 | 斯特拉斯堡大学附属医院介入手术室 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mvor/) |
+| 4D-OR | 2022 | [arXiv](https://arxiv.org/abs/2203.11937) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/egeozsoy/4D-OR) | 手术室语义场景图 / 3D 位姿 / 临床角色 | 10 台手术（6734 帧） | 模拟全膝关节置换 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/4d-or/) |
 | EgoExOR | 2025 | [arXiv](https://arxiv.org/abs/2505.24287) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/ardamamur/EgoExOR) | 手术室场景图生成（第一人称 + 外部视角） | 94 分钟（84,553 帧） | 模拟脊柱手术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egoexor/) |
 
 ### 🕒 尚未公开 Not yet

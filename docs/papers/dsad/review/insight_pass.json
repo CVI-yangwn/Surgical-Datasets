@@ -1,0 +1,40 @@
+{
+ "knowledge_points": [
+  {"term": "语义分割", "plain": "给图像中每个像素一个类别标签，而不是只说整张图里有什么。", "where": "sec:preamble", "needed_for": "理解 DSAD 与 Cholec80 等图像级数据的区别"},
+  {"term": "弱标签", "plain": "只标注某结构在整张图里是否可见，不标位置。", "where": "sec:background", "needed_for": "理解 weak_labels.csv 能做什么，不能做什么"},
+  {"term": "时间标注", "plain": "在视频时间轴上标出某器官出现的起止时刻，用来决定从哪里抽帧。", "where": "sec:methods", "needed_for": "理解为什么五类结构需要手工剪片段"},
+  {"term": "STAPLE", "plain": "一种把多名标注者的分割按估计的可靠度合并成一份参考分割的期望最大化算法，本文给每人相同权重。", "where": "sec:background", "needed_for": "理解合并掩码从何而来"},
+  {"term": "F1 分数", "plain": "两份分割重叠面积占两者平均面积的比例，等同于 Dice 系数。", "where": "sec:background", "needed_for": "读懂表 3"},
+  {"term": "归一化 Hausdorff 距离", "plain": "两份分割边界上最远一对对应点的距离，再除以图像对角线长度。", "where": "sec:background", "needed_for": "理解输尿管 F1 低但距离小的含义"},
+  {"term": "单器官二值掩码", "plain": "每张图只有一个目标结构为白色，其他一切包括别的器官都为黑色。", "where": "sec:background", "needed_for": "判断能否直接训练多类分割"},
+  {"term": "按患者划分", "plain": "同一台手术的所有图像只能放在训练集或测试集一侧。", "where": "sec:background", "needed_for": "避免同一患者泄漏导致的虚高结果"}
+ ],
+ "detail_questions": [
+  {"question": "13195 和 14625 两个总数为什么不同？", "answer": "13195 是单器官图像总数；1430 张胃图像另做多器官分割，13195 加 1430 为 14625 帧分割。", "evidence": ["sec:preamble", "sec:background"], "status": "resolved"},
+  {"question": "表 3 括号里是标准差吗？", "answer": "不是。表注说明每格是 F1，括号内是归一化 Hausdorff 距离。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "表 3 的数值是逐图平均吗？", "answer": "论文未说明聚合方式，也没有给出离散度。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "每张图只有三人标注，表 3 为何出现 A1 到 A6？", "answer": "共有六名标注者轮流参与不同结构，每格的“—”表示该人未标此结构；具体如何分配论文未说明。", "evidence": ["sec:background", "sec:acknowledgements"], "status": "partly"},
+  {"question": "时间标注由几个人完成？", "answer": "正文写一名医学生，括号里却列出 MC 与 FMR 两人，前后矛盾。", "evidence": ["sec:methods"], "status": "partly"},
+  {"question": "专家复核有没有独立的第二人？", "answer": "只有一名有三年经验的医生复核，论文未报告第二位专家或复核者自身的一致性。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "弱标签的一致性如何？", "answer": "弱标签由一人标注、另一人复核，复核改动比例论文未说明。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "为什么用胃图像做多器官子集？", "answer": "胃画面常同时出现结肠、小肠、脾和腹壁。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "同一台手术的帧间隔多大，是否有近重复帧？", "answer": "只说最多 100 帧等间隔抽取，具体间隔与去重论文未说明。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "数据许可到底是什么？", "answer": "正文写“非商业使用”却标为 CC-BY，两者矛盾；论文未说明以哪一个为准。", "evidence": ["sec:background"], "status": "not_stated"},
+  {"question": "训练测试怎么划分？", "answer": "本文不给划分，推荐划分与分割实验在另一篇预印本中。", "evidence": ["sec:background"], "status": "resolved"},
+  {"question": "输尿管 F1 低是否意味着标注很差？", "answer": "作者认为 Hausdorff 距离仍小，差异集中在细长结构的少量边界像素。", "evidence": ["sec:background"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "合并结果与终稿 F1 多在 0.9 以上，说明标注质量高", "alternative": "专家是在合并结果上修改的，锚定效应会让终稿天然接近合并结果，高 F1 只说明改动少。", "separating_evidence": "第二位专家从零独立标注同一批图像，与终稿比较。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "单人 F1 低于合并结果，支持用 STAPLE 融合", "alternative": "专家看到的候选就包括合并结果，并可直接选它，合并占优可能来自选择流程。", "separating_evidence": "隐藏合并结果的复核，或在留出的独立参照上比较单人与合并。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "每类来自至少 20 名患者，数据具有多样性", "alternative": "患者多样但中心、术式、设备单一，域偏移才是部署的主要风险。", "separating_evidence": "在其他中心或其他术式数据上测试训练好的模型。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "数据可用于开发器官检测与分割算法", "alternative": "单器官掩码把其他器官记为背景，直接合并成多类标签会产生错误负样本。", "separating_evidence": "报告分割基线，并比较单器官与多器官子集训练的效果。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览",
+  "纠正括号含义：表 3 括号内是归一化 Hausdorff 距离，不是标准差",
+  "补写 A1 到 A6 分工、聚合方式、近重复帧、许可矛盾为论文未说明",
+  "在深度分析中写入锚定效应对表 3 的影响",
+  "补写单器官掩码作多类训练时的错误负样本问题与按手术划分建议",
+  "指出时间标注人数前后矛盾"
+ ]
+}
