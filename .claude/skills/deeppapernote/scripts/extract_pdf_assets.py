@@ -274,7 +274,14 @@ def extract_page_images(doc, page, page_number: int, images_dir: Path) -> list[d
         if xref in seen_xrefs:
             continue
         seen_xrefs.add(xref)
-        extracted = doc.extract_image(xref)
+        try:
+            extracted = doc.extract_image(xref)
+        except Exception:
+            # Some embedded images (e.g. JPX with alpha) cannot be exported by
+            # PyMuPDF; skip them, figure crops come from page rendering.
+            continue
+        if not extracted:
+            continue
         image_bytes = extracted.get("image")
         if not image_bytes:
             continue
