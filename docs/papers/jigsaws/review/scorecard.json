@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "f257b24e4cd3a5b746e96e0de4b016cfdfbc6f97cca2fe2277f5b611743e45b8",
+      "note_snapshot": "review_rounds/round1_JIGSAWS_Surgical_Activity_Dataset_for_Human_Motion_Modeling.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 7,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 6,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.1,
+      "verdict": "第 1 轮自评：数据模态、试次统计、手势词表、GRS 量表与 LOSO/LOUO 定义齐全，表 1 与表 3 已插图。D1=7：论文没有基线数值，关键结果一节只有规模统计，与深度分析的衔接弱。D4=7：边界列在局限里但没有逐条给理由。D5=6：没有与同时期其他手术数据集或通用动作数据集的定位。D6=7：复用建议偏短。D7=7：小节未编号，表 2 占位放在方法主线而非决策表的关键结果。D9=5：各节直接罗列事实，没有开头张力与数字后的含义，缺少核心观点速览。H3 未做数字核对，记为 unknown。",
+      "fixes": [
+        "按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明要回答的问题，数字后补一句含义，节末加过渡",
+        "把标注一致性、GRS 分布、自报分组人数等缺口逐项写成 论文未说明 并说明影响",
+        "补充 LOSO 下同一受试者跨折泄漏的分析与任务间手势子集差异",
+        "用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "a3e209e8df6daab4d145a45863f3433f2fc692eb76ed9f1de6093e596404c184",
+      "note_snapshot": "review_rounds/round2_JIGSAWS_Surgical_Activity_Dataset_for_Human_Motion_Modeling.md",
+      "report_sha256": "3c238f56c3cb7e959804eb592c59216bc9955c5e31abfa4f30b9a036fbba79d2",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮自评（模型自评）：insight pass 补齐了受试者列表漏写 G、夹爪变量两种说法、损坏试次归属、单人标注无一致性、只统一切分不统一指标等缺口，并加入技能分档与个人风格混淆的替代解释；加入核心观点速览，各节开头交代问题、节末给过渡；数字核对无未匹配项，103、40、17、4 为推导值已登记。无法修复的限制来自论文本身：论文不含任何基线数值，D1 停在 8；论文未与其他手术数据集比较，笔记只能说明相对纯视频数据的优势，D5 停在 7。Fig 2 自动裁剪未通过视觉检查、Table 2 无可用裁剪，均保留占位，Table 2 已转写为 Markdown 表。",
+      "fixes": []
+    }
+  ]
+}

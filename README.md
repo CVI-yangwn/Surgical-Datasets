@@ -4,8 +4,8 @@
 
 **手术视频与内镜公开数据集整理 · 附中文论文精读**
 
-[![Papers](https://img.shields.io/badge/精读论文-37-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
-[![Datasets](https://img.shields.io/badge/数据集-37-8b5cf6)](#-数据集总览)
+[![Papers](https://img.shields.io/badge/精读论文-41-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
+[![Datasets](https://img.shields.io/badge/数据集-41-8b5cf6)](#-数据集总览)
 [![Reading](https://img.shields.io/badge/在线阅读-GitHub%20Pages-b84fa3)](https://cvi-yangwn.github.io/Surgical-Datasets/)
 
 [📚 在线阅读全部精读](https://cvi-yangwn.github.io/Surgical-Datasets/) · [📊 数据集总览](#-数据集总览) · [🔍 精读是怎么做的](#-精读是怎么做的)
@@ -19,7 +19,7 @@
 每篇精读都包含：背景与动机、核心观点速览、数据与实验、深入分析，以及**论文没有说明或前后对不上的地方**。点开分组查看。
 
 <details open>
-<summary><b>👁️ 眼科 Ophthalmic</b>（5 篇）</summary>
+<summary><b>👁️ 眼科 Ophthalmic</b>（7 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
@@ -27,6 +27,8 @@
 | **OphNet** | 一个由 YouTube 眼科手术视频搭起来的三级标注基准，规模是真的，几个数字却对不上 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ophnet/) · [📝 笔记](docs/papers/ophnet/note.md) |
 | **CaDIS** | 给白内障手术视频补上整场景像素级标注:4670 帧、36 类、三种类别粒度 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cadis/) · [📝 笔记](docs/papers/cadis/note.md) |
 | **Cataract-LMM** | 两家医院 3,000 个白内障手术视频，四层标注，第一次能在白内障数据上做站点留出评测 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cataract-lmm/) · [📝 笔记](docs/papers/cataract-lmm/note.md) |
+| **Cataract-101** | 一家医院、四名医生、101 台白内障手术的公开阶段标注视频 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cataract-101/) · [📝 笔记](docs/papers/cataract-101/note.md) |
+| **CATARACTS** | 白内障手术视频的器械使用标注挑战赛：50 个视频、21 种器械、14 支队伍 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cataracts/) · [📝 笔记](docs/papers/cataracts/note.md) |
 | **Sankara-MSICS** | 第一个手法小切口白内障手术数据集,以及用手术阶段辅助器械分割的 ToolSeg | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sankara-msics/) · [📝 笔记](docs/papers/sankara-msics/note.md) |
 
 </details>
@@ -44,7 +46,7 @@
 </details>
 
 <details open>
-<summary><b>🩻 腹腔镜 Laparoscopic</b>（10 篇）</summary>
+<summary><b>🩻 腹腔镜 Laparoscopic</b>（11 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
@@ -57,15 +59,17 @@
 | **Endoscapes** | 一个面向胆囊切除术关键安全视野的分层标注数据集:201 个视频,CVS 标签多、框少、掩码更少 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endoscapes/) · [📝 笔记](docs/papers/endoscapes/note.md) |
 | **CholecTrack20** | 同一个器械框标三套身份：手术器械多视角跟踪数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholectrack20/) · [📝 笔记](docs/papers/cholectrack20/note.md) |
 | **CholecInstanceSeg** | 在 85 段胆囊切除术视频上补一层七类器械实例分割标注 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholecinstanceseg/) · [📝 笔记](docs/papers/cholecinstanceseg/note.md) |
+| **ROBUST-MIS** | ROBUST-MIS 2019：在真实结直肠手术画面上，比较器械分割算法的最差情况与跨术式泛化 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/robust-mis/) · [📝 笔记](docs/papers/robust-mis/note.md) |
 | **PhaKIR** | 同一批完整胆囊切除手术上同时标阶段、器械实例掩码和关键点:8 个视频、三家医院 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/phakir/) · [📝 笔记](docs/papers/phakir/note.md) |
 
 </details>
 
 <details open>
-<summary><b>🤖 机器人手术 Robotic</b>（8 篇）</summary>
+<summary><b>🤖 机器人手术 Robotic</b>（9 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
+| **JIGSAWS** | 达芬奇机器人台架任务的运动学、立体视频与手势、技能标注：JIGSAWS 数据集说明 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/jigsaws/) · [📝 笔记](docs/papers/jigsaws/note.md) |
 | **EndoVis 2017** | 给机器人手术器械分割建一个可信的考场：EndoVis 2017 挑战赛总结 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2017/) · [📝 笔记](docs/papers/endovis2017/note.md) |
 | **EndoVis 2018** | 从只分割器械到分割整个手术画面:EndoVis 2018 猪肾手术场景分割挑战 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2018/) · [📝 笔记](docs/papers/endovis2018/note.md) |
 | **SCARED** | 用结构光给猪尸体内镜视频配上深度真值：SCARED 挑战赛报告 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/scared/) · [📝 笔记](docs/papers/scared/note.md) |
@@ -127,6 +131,8 @@
 | OphNet | 2024 | [arXiv](https://arxiv.org/abs/2406.07471) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://minghu0830.github.io/OphNet-benchmark) | 阶段、器械、操作识别 | 2278 个视频 | YouTube | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ophnet/) |
 | CaDIS | 2019 | [arXiv](https://arxiv.org/abs/1906.11586) | [链接](https://cataracts-semantic-segmentation2020.grand-challenge.org/) | 白内障手术图像语义分割 |  |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cadis/) |
 | Cataract-LMM | 2025 | [arXiv](https://arxiv.org/abs/2510.16371) | [🤗](https://huggingface.co/datasets/mjahmadi/Cataract-LMM) | 阶段识别 / 实例分割 / 器械-组织交互跟踪 / 技能评估 | 3000 个视频 | 两家眼科医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cataract-lmm/) |
+| Cataract-101 | 2018 | [论文](https://doi.org/10.1145/3204949.3208137) | [链接](https://doi.org/10.5281/zenodo.1220951) | 白内障手术阶段识别（十阶段） | 101 个视频（14 小时） | 奥地利克拉根福医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cataract-101/) |
+| CATARACTS | 2019 | [论文](https://discovery.ucl.ac.uk/10068008/1/CATARACTS.pdf) | [链接](https://cataracts.grand-challenge.org) | 帧级器械使用识别（21 种器械） | 50 个视频 | 布雷斯特大学医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cataracts/) |
 | Sankara-MSICS | 2024 | [arXiv](https://arxiv.org/abs/2411.16794) |  | 小切口白内障器械分割 / 阶段识别 | 53 个视频（3527 帧像素标注） | Sankara 眼科医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sankara-msics/) |
 
 ### 🔬 内镜 Endoscopic
@@ -151,12 +157,14 @@
 | Endoscapes | 2023 | [arXiv](https://arxiv.org/abs/2312.12429) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/CAMMA-public/Endoscapes) | 分割 / 检测 / 关键安全视野评估 | 201 个视频 |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endoscapes/) |
 | CholecTrack20 | 2023 | [arXiv](https://arxiv.org/abs/2312.07352) |  | 多器械跟踪 | 20 个视频 |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholectrack20/) |
 | CholecInstanceSeg | 2024 | [arXiv](https://arxiv.org/abs/2406.16039) |  | 器械实例分割 | 41.9k 帧（85 台手术） | Cholec80 与 CholecT50 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/cholecinstanceseg/) |
+| ROBUST-MIS | 2021 | [arXiv](https://arxiv.org/abs/2003.10299) | [链接](https://www.synapse.org/#!Synapse:syn18779624/wiki/592660) | 器械二值 / 多实例检测与分割 | 30 台手术（10,040 帧） | 海德堡大学医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/robust-mis/) |
 | PhaKIR | 2025 | [arXiv](https://arxiv.org/abs/2511.06549) | [链接](https://doi.org/10.5281/zenodo.15740619) | 阶段识别 / 器械关键点 / 器械实例分割 | 8 个视频（485,875 帧阶段标注） | 三家德国医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/phakir/) |
 
 ### 🤖 机器人手术 Robotic
 
 | 数据集 | 年份 | 论文 | 数据 | 任务 | 规模 | 来源 | 精读 |
 | :-- | :--: | :--: | :--: | :-- | :-- | :-- | :--: |
+| JIGSAWS | 2014 | [论文](https://cirl.lcsr.jhu.edu/wp-content/uploads/dlm_uploads/2014/09/JIGSAWS.pdf) | [链接](https://cirl.lcsr.jhu.edu/research/hmm/datasets/jigsaws_release/) | 手势识别 / 技能评估 | 103 个试次（8 名医生） | 达芬奇台架任务 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/jigsaws/) |
 | EndoVis 2017 | 2019 | [arXiv](https://arxiv.org/abs/1902.06426) |  | 器械分割 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2017/) |
 | EndoVis 2018 | 2020 | [arXiv](https://arxiv.org/abs/2001.11190) |  | 手术场景分割 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2018/) |
 | SCARED | 2021 | [arXiv](https://arxiv.org/abs/2101.01133) |  | 双目匹配与三维重建 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/scared/) |

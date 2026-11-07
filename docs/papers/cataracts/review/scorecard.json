@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "0b91935dd45c8589e83b3e68de02e8ef3f59626f8fd10774f57ce11fdea4b84c",
+      "note_snapshot": "review_rounds/round1_CATARACTS_Challenge_on_Automatic_Tool_Annotation_for_cataRACT_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.9,
+      "verdict": "第一轮基线：证据链、协议和主结果表完整，机制流程用 DResSys 落到输入输出。D5 定位只对比了 M2CAI 与 EndoVis，没说清与 CaDIS、Cataract-1K 等后续数据在同一视频上的关系；D7 部分图放置偏离讨论段落；D9 部分小节缺少开头的问题句和收尾的过渡；H3 数字未跑核对。",
+      "fixes": [
+        "跑 lint_report --mode note 做数字核对并写例外文件",
+        "在核心观点速览补一句本条目与 CaDIS 的区别",
+        "分歧帧被排除这一点在评测协议处说明其后果并标注论文未说明分歧帧数量",
+        "深度分析各小节开头补一句问题，结尾补过渡",
+        "训练集验证划分未说明各队具体划分细节之处写作论文未说明",
+        "把人机比较只覆盖两种器械写进关键结果"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "74f46275868cac196eefca3f48dc161266e3cff281f253c8787be90ff3dd1647",
+      "note_snapshot": "review_rounds/round2_CATARACTS_Challenge_on_Automatic_Tool_Annotation_for_cataRACT_Surgery.md",
+      "report_sha256": "8f92fede5f1b3a28f92a9fa12880afe9305f36ad517fce75cb096caf0e3c9c5f",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮：数字核对通过（3 个元数据派生数字列入例外）；五处论文未说明的空白已写入笔记和报告；五条经验与人机比较的边界已标明。无法修复的限制：Table 5、Table 6 和 Figure 6 没有可用裁图，保留占位；论文没有受控消融，成功因素只能写成相关；本笔记依据作者存档接收稿，页码与期刊版可能不同。",
+      "fixes": []
+    }
+  ]
+}

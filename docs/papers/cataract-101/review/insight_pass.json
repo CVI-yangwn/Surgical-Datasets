@@ -1,0 +1,35 @@
+{
+  "knowledge_points": [
+    {"term": "超声乳化(phacoemulsification)", "plain": "用超声手柄把混浊晶状体核打碎吸出,再植入人工晶状体的现代白内障术式。", "where": "sec:introduction", "needed_for": "理解十个阶段的顺序和阶段 5 为何最长"},
+    {"term": "准标准化流程", "plain": "步骤顺序基本固定,但各医院对阶段划分不完全相同。", "where": "sec:introduction", "needed_for": "判断标签能否跨数据集对齐"},
+    {"term": "起始帧标注", "plain": "每条标注只记一个阶段从哪一帧开始,阶段持续到下一条标注。", "where": "sec:introduction", "needed_for": "把标注展开为逐帧标签,以及空闲期为何被并入"},
+    {"term": "经验等级 1/2", "plain": "1 是中等经验的助理医生,2 是高经验的主任医生,依据手术总量和职位划分。", "where": "sec:introduction", "needed_for": "表 1 和图 11/12 的分组对比"},
+    {"term": "动作期与空闲期", "plain": "Quellec 等把每个阶段分为真正操作的时间和器械在视野外准备的时间。", "where": "sec:introduction", "needed_for": "比较 Cataract-101 与 Quellec 等结果时的口径差异"},
+    {"term": "PAL 分辨率与 25 fps", "plain": "720x540 像素、每秒 25 帧,用于把帧数换算成秒。", "where": "sec:introduction", "needed_for": "发现表 1 平均时长列的换算问题"},
+    {"term": "箱线图", "plain": "用中位数、四分位箱和离群点展示一个阶段时长的分布。", "where": "sec:introduction", "needed_for": "读懂图 11/12 的方差结论"}
+  ],
+  "detail_questions": [
+    {"question": "为什么每台手术至少 11 段?", "answer": "阶段 2 粘弹剂注入在阶段 8 前重复一次,且共用同一编号,所以十阶段流程至少产生 11 条标注。", "evidence": ["sec:introduction"], "status": "resolved"},
+    {"question": "表 1 平均时长列的单位是否是秒?", "answer": "总帧数除以手术数再除以 25 得到 744、354、315、667 秒,是表中数值的 2.4 倍;表中数值等于每台帧数除以 60。论文没有解释,单位或换算有误。", "evidence": ["sec:introduction"], "status": "partly"},
+    {"question": "1266 条标注与表 1 阶段总数为何不同?", "answer": "表 1 四人阶段总数之和是 1173,与 1266 差 93 条,论文未说明。", "evidence": ["sec:introduction"], "status": "not_stated"},
+    {"question": "是否有标注一致性或复核?", "answer": "只说一名资深眼科医生标注,没有第二标注者或一致性数据。", "evidence": ["sec:abstract", "sec:introduction"], "status": "not_stated"},
+    {"question": "是否给出训练测试划分或基线?", "answer": "没有。论文只有描述统计,同组的单帧 CNN 工作没有在本文报告结果。", "evidence": ["sec:introduction", "sec:conclusion"], "status": "not_stated"},
+    {"question": "病例筛选标准和被剔除病例数?", "answer": "只说是无并发症的常规手术,筛选细节论文未说明。", "evidence": ["sec:introduction"], "status": "not_stated"},
+    {"question": "经验差异是否做了统计检验?", "answer": "没有检验,结论来自平均值和箱线图目测。", "evidence": ["sec:introduction"], "status": "resolved"},
+    {"question": "数据许可和伦理审批?", "answer": "只给 Zenodo 地址,许可、伦理与知情同意论文未说明。", "evidence": ["sec:introduction"], "status": "not_stated"},
+    {"question": "空闲期如何处理?", "answer": "格式只有起始帧,器械移出视野的时间只能并入相邻阶段;论文没有专门说明。", "evidence": ["sec:introduction"], "status": "partly"}
+  ],
+  "challenges": [
+    {"claim": "经验低的医生每个阶段约慢一倍", "alternative": "每组只有 2 人,差异可能来自个人习惯或分配到的病例难度,而不是经验等级。", "separating_evidence": "更多术者、按病例难度分层,或同一术者随时间变化的对比。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "经验低的医生更常重复阶段", "alternative": "差距不到一段,可能是标注者对助理医生手术切分更细,或个别手术拉高均值。", "separating_evidence": "每台手术阶段数的分布、哪些阶段被重复、第二标注者。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "数据集适合训练阶段识别模型", "alternative": "只有顺利手术且无官方划分,高准确率可能反映固定顺序和术者泄漏,而非识别能力。", "separating_evidence": "官方划分下的基线,以及按术者留一的结果。", "in_paper": false, "verdict": "partly_supported"}
+  ],
+  "revisions": [
+    "核心观点速览补充表 1 时长列口径问题的提示",
+    "数据章节明确写出起始帧展开为逐帧标签的规则",
+    "局限中把标注一致性、划分、许可、筛选写成 论文未说明 并说明影响",
+    "深度分析加入经验结论的替代解释(个人习惯、病例难度)和区分所需证据",
+    "关键结果中阶段重复结论补上分布缺失的说明",
+    "number_exceptions 登记 744、354、315、667、1173、93、2.4、2.1 等推导值"
+  ]
+}

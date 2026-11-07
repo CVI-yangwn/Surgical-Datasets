@@ -21,6 +21,8 @@ CATALOG = [
         {'name': 'OphNet', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.07471', 'data': 'https://minghu0830.github.io/OphNet-benchmark', 'task': '阶段、器械、操作识别', 'size': '2278 个视频', 'source': 'YouTube', 'slug': 'ophnet', 'note': 'OphNet'},
         {'name': 'CaDIS', 'year': 2019, 'paper': 'https://arxiv.org/abs/1906.11586', 'data': 'https://cataracts-semantic-segmentation2020.grand-challenge.org/', 'task': '白内障手术图像语义分割', 'size': '', 'source': '', 'slug': 'cadis', 'note': 'CaDIS'},
         {'name': 'Cataract-LMM', 'year': 2025, 'paper': 'https://arxiv.org/abs/2510.16371', 'data': 'https://huggingface.co/datasets/mjahmadi/Cataract-LMM', 'task': '阶段识别 / 实例分割 / 器械-组织交互跟踪 / 技能评估', 'size': '3000 个视频', 'source': '两家眼科医院', 'slug': 'cataract-lmm', 'note': 'Cataract_LMM'},
+        {'name': 'Cataract-101', 'year': 2018, 'paper': 'https://doi.org/10.1145/3204949.3208137', 'data': 'https://doi.org/10.5281/zenodo.1220951', 'task': '白内障手术阶段识别（十阶段）', 'size': '101 个视频（14 小时）', 'source': '奥地利克拉根福医院', 'slug': 'cataract-101', 'note': 'Cataract_101'},
+        {'name': 'CATARACTS', 'year': 2019, 'paper': 'https://discovery.ucl.ac.uk/10068008/1/CATARACTS.pdf', 'data': 'https://cataracts.grand-challenge.org', 'task': '帧级器械使用识别（21 种器械）', 'size': '50 个视频', 'source': '布雷斯特大学医院', 'slug': 'cataracts', 'note': 'CATARACTS'},
         {'name': 'Sankara-MSICS', 'year': 2024, 'paper': 'https://arxiv.org/abs/2411.16794', 'data': '', 'task': '小切口白内障器械分割 / 阶段识别', 'size': '53 个视频（3527 帧像素标注）', 'source': 'Sankara 眼科医院', 'slug': 'sankara-msics', 'note': 'Phase_Informed'},
     ]),
     ('endoscopic', '🔬 内镜', 'Endoscopic', [
@@ -39,9 +41,11 @@ CATALOG = [
         {'name': 'Endoscapes', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.12429', 'data': 'https://github.com/CAMMA-public/Endoscapes', 'task': '分割 / 检测 / 关键安全视野评估', 'size': '201 个视频', 'source': '', 'slug': 'endoscapes', 'note': 'The_Endoscapes'},
         {'name': 'CholecTrack20', 'year': 2023, 'paper': 'https://arxiv.org/abs/2312.07352', 'data': '', 'task': '多器械跟踪', 'size': '20 个视频', 'source': '', 'slug': 'cholectrack20', 'note': 'CholecTrack20'},
         {'name': 'CholecInstanceSeg', 'year': 2024, 'paper': 'https://arxiv.org/abs/2406.16039', 'data': '', 'task': '器械实例分割', 'size': '41.9k 帧（85 台手术）', 'source': 'Cholec80 与 CholecT50', 'slug': 'cholecinstanceseg', 'note': 'CholecInstanceSeg'},
+        {'name': 'ROBUST-MIS', 'year': 2021, 'paper': 'https://arxiv.org/abs/2003.10299', 'data': 'https://www.synapse.org/#!Synapse:syn18779624/wiki/592660', 'task': '器械二值 / 多实例检测与分割', 'size': '30 台手术（10,040 帧）', 'source': '海德堡大学医院', 'slug': 'robust-mis', 'note': 'Comparative_validation_of_multi_instance'},
         {'name': 'PhaKIR', 'year': 2025, 'paper': 'https://arxiv.org/abs/2511.06549', 'data': 'https://doi.org/10.5281/zenodo.15740619', 'task': '阶段识别 / 器械关键点 / 器械实例分割', 'size': '8 个视频（485,875 帧阶段标注）', 'source': '三家德国医院', 'slug': 'phakir', 'note': 'Video_Dataset_for_Surgical_Phase'},
     ]),
     ('robotic', '🤖 机器人手术', 'Robotic', [
+        {'name': 'JIGSAWS', 'year': 2014, 'paper': 'https://cirl.lcsr.jhu.edu/wp-content/uploads/dlm_uploads/2014/09/JIGSAWS.pdf', 'data': 'https://cirl.lcsr.jhu.edu/research/hmm/datasets/jigsaws_release/', 'task': '手势识别 / 技能评估', 'size': '103 个试次（8 名医生）', 'source': '达芬奇台架任务', 'slug': 'jigsaws', 'note': 'JIGSAWS'},
         {'name': 'EndoVis 2017', 'year': 2019, 'paper': 'https://arxiv.org/abs/1902.06426', 'data': '', 'task': '器械分割', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': 'endovis2017', 'note': '2017_Robotic'},
         {'name': 'EndoVis 2018', 'year': 2020, 'paper': 'https://arxiv.org/abs/2001.11190', 'data': '', 'task': '手术场景分割', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': 'endovis2018', 'note': '2018_Robotic'},
         {'name': 'SCARED', 'year': 2021, 'paper': 'https://arxiv.org/abs/2101.01133', 'data': '', 'task': '双目匹配与三维重建', 'size': '', 'source': 'MICCAI 挑战赛', 'slug': 'scared', 'note': 'Stereo_Correspondence'},

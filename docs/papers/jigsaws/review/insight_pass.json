@@ -1,0 +1,37 @@
+{
+ "knowledge_points": [
+  {"term": "达芬奇主从结构", "plain": "医生在控制台操作两个主操作手（MTM），机器人端的从操作臂（PSM）同步复现动作。", "where": "sec:introduction", "needed_for": "理解 76 维运动学为何同时包含主端和从端两组变量"},
+  {"term": "试次与超试次", "plain": "试次是某人做某任务的一遍；超试次 i 是某任务里所有人的第 i 遍。", "where": "sec:dataset-2", "needed_for": "理解 LOSO 每折留出的是什么"},
+  {"term": "手势（surgeme）", "plain": "产生可感知结果的最小有意识手术动作，用起止帧标注。", "where": "sec:dataset", "needed_for": "手势识别任务的标签空间"},
+  {"term": "分类与识别", "plain": "分类已知片段边界只给标签；识别要同时找边界并给标签。", "where": "sec:dataset-2", "needed_for": "比较后续论文的数字时区分设置"},
+  {"term": "OSATS 与 GRS", "plain": "OSATS 是结构化技能评估量表；这里的 GRS 是 6 个要素各 1 到 5 分的总和。", "where": "sec:dataset-2", "needed_for": "技能评估标签的取值范围与含义"},
+  {"term": "LOUO", "plain": "每折留出一名受试者的全部数据，测对新医生的泛化。", "where": "sec:dataset-2", "needed_for": "判断技能或手势模型是否只记住了个人风格"},
+  {"term": "复合 HMM", "plain": "每个手势一个小 HMM，按顺序拼接成整段试次的大 HMM，可用语法约束解码。", "where": "sec:dataset-2", "needed_for": "理解工具包的第一种方法与语言类比"},
+  {"term": "LDS 与 BoF", "plain": "LDS 把一段视频看作线性动态系统；BoF 把每帧表示为视觉词直方图。", "where": "sec:dataset-2", "needed_for": "理解视频工具与多核学习的组合"}
+ ],
+ "detail_questions": [
+  {"question": "8 名受试者各属哪一档经验？", "answer": "D、E 超过 100 小时；C、F 在 10 到 100 小时；B、G、H、I 少于 10 小时；均为自报。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "正文受试者列表为何只有 7 个字母？", "answer": "列表写作 B、C、D、E、F、H、I，漏写 G，但下一页把 G 归入少于 10 小时一档；原因论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "各任务实际可用多少试次？", "answer": "缝合 39、打结 36、穿针 28；损坏的分别为 1、4、12。", "evidence": ["sec:dataset"], "status": "resolved"},
+  {"question": "损坏试次属于哪些受试者？", "answer": "论文只给每个任务的损坏数量，没有说明属于谁，因此无法判断 LOUO 各折是否均衡。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "第 19 个变量是夹爪角度还是角速度？", "answer": "正文说夹爪角度 θ，表 1 写夹爪角速度，论文未澄清。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "手势标注者间一致性多高？", "answer": "只有一名标注员在外科医生指导下标注，没有重复标注或一致性统计。", "evidence": ["sec:dataset-2"], "status": "not_stated"},
+  {"question": "GRS 分数的分布如何，与自报经验是否一致？", "answer": "论文只给量表定义，没有报告分布或与经验分组的关系。", "evidence": ["sec:dataset-2"], "status": "not_stated"},
+  {"question": "评分医生是否知道受试者身份？", "answer": "评分医生对受试者身份设盲。", "evidence": ["sec:dataset-2"], "status": "resolved"},
+  {"question": "LOSO 与 LOUO 的折数分别是多少？", "answer": "LOSO 5 折，LOUO 8 折。", "evidence": ["sec:dataset-2"], "status": "resolved"},
+  {"question": "划分配套的评测指标是什么？", "answer": "论文只发布划分，没有定义手势识别或技能评估指标。", "evidence": ["sec:dataset-2"], "status": "not_stated"},
+  {"question": "能否用立体视频做三维重建？", "answer": "数据集不含相机标定参数，需要自行标定。", "evidence": ["sec:dataset"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "数据覆盖不同技能水平，可用于技能评估", "alternative": "自报时长分组可能与个人风格高度重合，模型学到的是“这是谁”而不是“技能多高”，每档只有 2 到 4 人更放大这一点。", "separating_evidence": "LOUO 下的技能分类结果，以及 GRS 与分组的相关性。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "手势标注可作为识别任务的真值", "alternative": "单人标注的边界带有个人习惯，模型间小差距可能落在标注噪声之内。", "separating_evidence": "第二名标注员的重复标注与边界一致性统计。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "LOSO 与 LOUO 提供标准化比较协议", "alternative": "只统一了切分不统一指标，不同论文仍可用不同指标和分类或识别设置，数字照样不可比。", "separating_evidence": "随划分一起发布的指标定义和参考基线。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览，明确论文不给基线数值",
+  "把受试者列表漏写 G、夹爪变量两种说法、损坏试次归属写成 论文未说明",
+  "在深度分析中补充技能分组与受试者身份混淆的替代解释，以及 LOSO 下同一受试者跨折出现",
+  "在评测协议中写明只统一切分不统一指标，并说明分类与识别两种设置",
+  "把单人标注、无一致性统计写入数据集真正测到了什么并说明影响"
+ ]
+}

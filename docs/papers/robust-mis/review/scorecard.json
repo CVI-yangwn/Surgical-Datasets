@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "2b92da4d4da6ab8c91b0ae1d83a1fa2e9b0c5bce924233039899dc6c6aa098e0",
+      "note_snapshot": "review_rounds/round1_Comparative_validation_of_multi_instance_instrument_segmentation_in_endoscopy_results_of_the_ROBUST_MIS_2019_challenge.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮自评（模型自评）：数据、标注流程、三阶段划分、指标与排名机制、第 3 阶段全部排名与跨阶段数字齐全。不足：研究问题末尾缺核心观点速览；三阶段下降没有讨论帧数和空帧比例的混杂；烟雾在结果节与讨论节前后矛盾未指出；稳健性排名 0.00 并列的含义只点到；与 EndoVis 前作及后续 HeiSurf 等的定位只有一句；各小节开头缺问题、结尾缺承接；DSC、NSD 等缩写在机制流程之前已使用；数字尚未跑 lint_report 核对。",
+      "fixes": [
+        "研究问题末尾加入 ### 核心观点速览",
+        "各小节开头点明问题、结尾加承接句",
+        "首次出现处定义 DSC、NSD、mAP、MI_DSC",
+        "深度分析加入三阶段下降的混杂因素与 5% 分位数并列 0.00 的含义",
+        "指出烟雾结论的前后矛盾",
+        "把 Insight Pass 的挑战轮结论和论文未说明项写入笔记",
+        "用 lint_report --mode note 核对全部数字并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "adf895dd470fd10d02ac727f48133b9c583348496eaba0e20fb70eb2b7d38257",
+      "note_snapshot": "review_rounds/round2_Comparative_validation_of_multi_instance_instrument_segmentation_in_endoscopy_results_of_the_ROBUST_MIS_2019_challenge.md",
+      "report_sha256": "4592d724877a934b1297eb8c4a926decac63582e3c4440a2fd4f5646c3fd1ef3",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评（模型自评）：加入核心观点速览、各节开头问题与承接句、首次出现处的指标定义、与 EndoVis 前作的对比表；Insight Pass 的挑战轮结论写入笔记与报告：三阶段下降混有帧数与空帧比例差异、检测任务 mAP 不随阶段单调下降、MI_DSC 漏检记 0 对器械数分层的影响、烟雾结论前后矛盾、训练流程优于结构只是假设。笔记与报告数字经 lint_report 核对均可在原文找到，仅期刊年份 2021 登记为例外。无法修复的限制：空帧计分、NSD 容差单位、阶段间差异检验均为论文未说明；Table 2、3、5 与 Figure 14 至 16、Table 7 因裁剪缺陷或无资源保留占位，数值以 Markdown 表重写。",
+      "fixes": []
+    }
+  ]
+}

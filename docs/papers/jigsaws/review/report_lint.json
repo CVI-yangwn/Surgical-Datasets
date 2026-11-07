@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "/ssd3/yangwennuo/code/MNL/Surgical-Datasets/DeepPaperNote_output/手术数据集/JIGSAWS_Surgical_Activity_Dataset_for_Human_Motion_Modeling/reading_report.md",
+  "mode": "report",
+  "report_sha256": "3c238f56c3cb7e959804eb592c59216bc9955c5e31abfa4f30b9a036fbba79d2",
+  "number_exceptions": {
+    "103": "可用试次之和 39+36+28",
+    "40": "计划试次 8 名受试者 x 5 次重复",
+    "17": "损坏试次之和 1+12+4",
+    "2014": "发表年份，来自出版信息",
+    "4": "LOSO 下同一受试者在训练集中剩余的试次数 5-1"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

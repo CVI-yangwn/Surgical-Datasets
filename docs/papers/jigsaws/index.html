@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>JHU-ISI Gesture and Skill Assessment Working Set (JIGSAWS): A Surgical Activity Dataset for Human Motion Modeling</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>达芬奇机器人台架任务的运动学、立体视频与手势、技能标注：JIGSAWS 数据集说明</h1>
+<div class="sub">JHU-ISI Gesture and Skill Assessment Working Set (JIGSAWS): A Surgical Activity Dataset for Human Motion Modeling</div>
+<div class="meta">Yixin Gao, S. Swaroop Vedula, Carol E. Reiley, Narges Ahmidi 等 14 人（约翰斯·霍普金斯大学、直觉外科公司等） | MICCAI 研讨会 M2CAI 2014</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">机器人手术</span><span class="tag">手势识别</span><span class="tag">技能评估</span><span class="tag">达芬奇</span></div>
+<div class="one">JIGSAWS 记录了 8 名不同经验的外科医生在达芬奇机器人上做缝合、打结、穿针的 76 维运动学和立体视频，附 15 类手势起止帧、改良 OSATS 技能评分和 LOSO/LOUO 划分，但论文不给基线数值，也不报告标注一致性。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://cirl.lcsr.jhu.edu/research/hmm/datasets/jigsaws_release/" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/jigsaws/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术技术欠佳与术后并发症有关，而评价技术长期靠专家目测。</strong> 论文引用的研究显示，技术失误是再手术和再入院最常见的原因，所以让外科医生更快、更客观地掌握技术能直接影响患者安全。</p>
+<p>约翰斯·霍普金斯大学的 Language of Surgery 项目把手术动作看作一种语言：基本动作按约束依次组合，于是可以借用语音识别的方法来切分和评价。<strong>做这类研究需要同一时间轴上的工具轨迹、视频和人工标注，当时没有公开的这类数据。</strong>本文就是把项目内部一次台架实验整理后公开。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份数据说明书，不含任何模型的数值结果。</strong></p>
+<ul><li>数据：8 名外科医生在达芬奇机器人上把缝合、打结、穿针各做 5 遍，可用试次共 103 个；每个试次有 76 维运动学和左右两路视频，逐帧同步。</li><li>标注：15 个手势的起止帧（单人标注），以及改良 <code>OSATS</code> 的 6 要素技能评分（单名外科医生，设盲）。</li><li>协议：<code>LOSO</code>（5 折）和 <code>LOUO</code>（8 折）两种交叉验证划分，加三种 <code>HMM</code> 与视频分析工具。</li><li>边界：没有基线、没有指标定义、没有标注一致性；技能分档是自报时长，每档 2 到 4 人。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">运动学直接来自机器人，不需要从视频估计</span><span class="i">手势起止帧可同时索引运动学和视频</span></div><div class="strip d"><span class="t">数据</span><span class="i">8 名受试者，3 个任务，每任务 5 遍</span><span class="i">可用试次：缝合 39、打结 36、穿针 28</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>信号从哪来</h3><p><strong>这一节回答：数据能不能直接拿来建模。</strong> 达芬奇系统由医生端的两个主操作手（<code>MTM</code>）、患者端的从操作臂（<code>PSM</code>）和带立体内镜的相机臂组成。作者经研究接口以 30 Hz 记录左右 <code>MTM</code> 和两个 <code>PSM</code>。</p>
+<p>每个操作臂 19 个变量：3 个位置、9 个旋转矩阵元素、3 个线速度、3 个角速度、1 个夹爪变量，4 个操作臂共 76 维，全部在同一坐标系下。</p>
+<figure class="fig"><img src="images/page_004_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。76 列运动学变量的列索引与含义。</figcaption></figure>
+<p>视频是左右两路，30 Hz、640 x 480，与运动学逐帧对齐。<strong>数据不含相机标定参数</strong>，想做三维重建要自己标定。夹爪变量在正文是角度、在表 1 是角速度，论文未说明以哪个为准。</p>
+<p>信号清楚了，下一个问题是任务和人。</p></div><div class="card" id="s4"><h3><span class="num">4</span>任务与受试者</h3><p>三个台架任务是外科培训课程的常见内容：缝合要沿切口进出针四次；打结是打一个单环结；穿针是从右到左穿过四个小金属环。做任务时不许移动相机，也不许用离合。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。从左到右为缝合、打结、穿针。</figcaption></figure>
+<p>受试者的经验是自报的：D、E 超过 100 小时，C、F 在 10 到 100 小时，其余四人少于 10 小时，全部右利手。<strong>每档只有 2 到 4 人</strong>，“专家对新手”的比较其实是几个人之间的比较。</p>
+<p>每人每任务 5 遍，每遍平均约两分钟。损坏试次为缝合 1、打结 4、穿针 12，<strong>穿针可用样本比缝合少约三成</strong>。损坏的试次属于谁论文未说明。</p><div class="strip d"><span class="t">数据</span><span class="i">30 Hz，76 维运动学</span><span class="i">640 x 480 立体视频</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>标签怎么定</h3><p><strong>手势标签</strong>来自 15 个手势的共享词表，例如推针穿过组织、把针从左手交到右手、双手拉线。词表与一名心外科医生商定，由一名标注员看视频记下每段手势的起止帧；除试次末尾少量帧外，每帧都有标签。</p>
+<p><strong>技能标签</strong>是改良 <code>OSATS</code> 的全局评分：6 个要素各 1 到 5 分求和，由一名妇科外科医生对受试者身份设盲后逐试次打分。</p>
+<figure class="fig"><img src="images/page_007_fig_table_3_review_repair1.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。6 个评分要素及 1、3、5 分的锚点描述。</figcaption></figure>
+<p><strong>两类标签都只来自一个人，论文未报告一致性。</strong>这意味着模型之间几帧的边界差异或一两分的评分差异，可能落在标注噪声之内。</p></div><div class="card" id="s6"><h3><span class="num">6</span>划分与工具</h3><ul><li><code>LOSO</code>：超试次 $i$ 是某任务所有人的第 $i$ 遍，5 折，每折留一个超试次。</li><li><code>LOUO</code>：8 折，每折留出一名受试者，测对新医生的泛化。</li></ul>
+<p><strong>论文只统一了切分，没有统一指标。</strong>不同论文即使用同一套折，也可能在“分类”（已知边界）或“识别”（同时切分）设置下用不同指标报告。</p>
+<p>工具包提供三种方法：手势子 <code>HMM</code> 拼接成复合 <code>HMM</code> 并用语法约束解码；稀疏字典观测的 <code>HMM</code>；视频上的 <code>LDS</code>、视觉词袋和多核学习组合。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><ul><li>没有任何基线数值，不知道哪种方法在哪个划分上更好。</li><li>自报分档与 <code>GRS</code> 是否一致，<code>GRS</code> 的分布如何，论文未说明。</li><li>只有台架任务，不能代表真实手术里的视野变化、组织形变和遮挡。</li><li>受试者列表正文漏写了 G，与 8 人的说法不一致。</li></ul></div><div class="card" id="s8"><h3><span class="num">8</span>一个替代解释</h3><p><strong>用自报分档训练的技能分类器，可能只是记住了某个人的动作风格。</strong>每档 2 到 4 人，<code>LOSO</code> 下同一受试者的其他 4 遍都在训练集里，模型可以借个人风格得分（推断）。</p>
+<p>能区分两种解释的是 <code>LOUO</code> 下的技能结果和 <code>GRS</code> 与分档的相关性，本文都没给。所以评估技能时应以 <code>LOUO</code> 为主，并写明标签来源。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与复用要注意什么</h3><ul><li>按表 1 列索引切分各操作臂，注意 <code>PSM1</code> 是右侧、<code>PSM2</code> 是左侧。</li><li>同时报告 <code>LOSO</code> 与 <code>LOUO</code>，写明分类还是识别设置、用什么指标。</li><li>先看夹爪变量的数值范围再决定把它当角度还是角速度。</li><li>穿针只有 28 个试次，跨任务比较时要考虑样本量差异。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>JIGSAWS 是同步运动学加视频的台架手术数据，标签有手势起止帧和技能评分两层</div><div>论文只给数据和切分，不给基线和指标</div><div>技能评估优先看 <code>LOUO</code>，并区分自报分档与 <code>GRS</code></div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>运动学直接来自机器人，与视频逐帧同步</li><li>手势词表、评分量表和划分定义写得清楚，可直接复现读取</li><li>评分医生对受试者身份设盲</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>8 名受试者，每个技能档 2 到 4 人</li><li>手势和技能标签都只来自一个人，没有一致性统计</li><li>只有台架任务，没有相机标定，没有基线</li><li>文本存在受试者列表和夹爪变量两处不一致</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>第二名标注员会改变多少手势边界？</li><li>自报分档与 <code>GRS</code> 的相关性有多高？</li><li>损坏的 17 个试次集中在哪些受试者？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 f257b24e</span><span class="s">7.1 分</span></div><p>第 1 轮自评：数据模态、试次统计、手势词表、GRS 量表与 LOSO/LOUO 定义齐全，表 1 与表 3 已插图。D1=7：论文没有基线数值，关键结果一节只有规模统计，与深度分析的衔接弱。D4=7：边界列在局限里但没有逐条给理由。D5=6：没有与同时期其他手术数据集或通用动作数据集的定位。D6=7：复用建议偏短。D7=7：小节未编号，表 2 占位放在方法主线而非决策表的关键结果。D9=5：各节直接罗列事实，没有开头张力与数字后的含义，缺少核心观点速览。H3 未做数字核对，记为 unknown。</p><div class="dims"><span>D1 <b>7</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>6</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记</li><li>在研究问题末尾加入核心观点速览</li><li>每节开头写明要回答的问题，数字后补一句含义，节末加过渡</li><li>把标注一致性、GRS 分布、自报分组人数等缺口逐项写成 论文未说明 并说明影响</li><li>补充 LOSO 下同一受试者跨折泄漏的分析与任务间手势子集差异</li><li>用 lint_report.py --mode note 做数字核对，推导值登记到 number-exceptions</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 a3e209e8 · 文稿 3c238f56</span><span class="s">8.2 分</span></div><p>第 2 轮自评（模型自评）：insight pass 补齐了受试者列表漏写 G、夹爪变量两种说法、损坏试次归属、单人标注无一致性、只统一切分不统一指标等缺口，并加入技能分档与个人风格混淆的替代解释；加入核心观点速览，各节开头交代问题、节末给过渡；数字核对无未匹配项，103、40、17、4 为推导值已登记。无法修复的限制来自论文本身：论文不含任何基线数值，D1 停在 8；论文未与其他手术数据集比较，笔记只能说明相对纯视频数据的优势，D5 停在 7。Fig 2 自动裁剪未通过视觉检查、Table 2 无可用裁剪，均保留占位，Table 2 已转写为 Markdown 表。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "1a450027437a671c45b56588f5560d81a4b307a27d7b4d9e2585eddccea13eb9",
+      "note_snapshot": "review_rounds/round1_Cataract_101_Video_Dataset_of_101_Cataract_Surgeries.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮原版流程笔记(自评)。证据链完整,表 1 口径问题已核出。D2=7:构建流程四步写清了输入输出,但标注规则(起始帧到阶段的展开)缺一句明确说明。D5=7:相关路线有表,但没有说明 Cataract-101 与同期 CATARACTS 等数据集的差异只能由读者自行核对。D7=7:四张阶段示例图和两张箱线图保留占位。D9=7:研究问题和数据章节有开场问题,方法主线和局限缺少收尾过渡,部分数字后没有'意味着什么'。H3 未做数字核对。",
+      "fixes": [
+        "按 Insight Pass 补知识点、细节问题和对经验结论的挑战",
+        "把论文未说明的标注一致性、划分、许可等统一写成 论文未说明 并说明影响",
+        "研究问题补核心观点速览中的边界句,数据章节补起始帧展开规则",
+        "关键结果中表 1 时长口径的推导值登记到 number_exceptions",
+        "各节结尾补过渡句,数字后补一句意义",
+        "用 lint_report.py --mode note 做数字核对"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "400b4160a78649d3940571ac05acd28cdc28cb11dee63018168e38630b4eb73a",
+      "note_snapshot": "review_rounds/round2_Cataract_101_Video_Dataset_of_101_Cataract_Surgeries.md",
+      "report_sha256": "15fe26fa2bd4560be4e59f3d30bfb10c78d5d6c142a73b41157e96f64c89a52b",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 9,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮(自评)。Insight Pass 的修订已写入笔记和报告:起始帧展开规则、经验结论的替代解释、标注一致性与划分与许可写为论文未说明。数字核对无未匹配项;表 1 整数单元格因源文本抽取丢失,已在 PDF 文本层核对并登记,推导值(744、354、315、667、1173、93 等)登记来源。D5=7 无法再提高:论文只把相关工作分为两条方法路线,没有与同期数据集逐项对比,笔记不能替论文补这张表。D7=8:四张阶段示例图和两张箱线图仍是占位,箱线图裁图被视觉检查拒绝。",
+      "fixes": []
+    }
+  ]
+}

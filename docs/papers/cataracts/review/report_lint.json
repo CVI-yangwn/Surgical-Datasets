@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/CATARACTS_Challenge_on_Automatic_Tool_Annotation_for_cataRACT_Surgery/reading_report.md",
+  "mode": "report",
+  "report_sha256": "8f92fede5f1b3a28f92a9fa12880afe9305f36ad517fce75cb096caf0e3c9c5f",
+  "number_exceptions": {
+    "10.1016": "DOI 10.1016/j.media.2018.11.008 的前缀，来自期刊元数据",
+    "1900": "摘要 19 million interventions per year 换写为 1900 万例",
+    "2019": "期刊正式出版年份，来自 DOI 元数据；PDF 为 2018-11-13 接收稿"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

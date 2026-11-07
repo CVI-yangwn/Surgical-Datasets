@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/Comparative_validation_of_multi_instance_instrument_segmentation_in_endoscopy_results_of_the_ROBUST_MIS_2019_challenge/reading_report.md",
+  "mode": "report",
+  "report_sha256": "4592d724877a934b1297eb8c4a926decac63582e3c4440a2fd4f5646c3fd1ef3",
+  "number_exceptions": {
+    "2021": "期刊版发表年份，来自 Medical Image Analysis 元数据（arXiv 2003.10299 期刊版信息），预印本正文无此年份"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Cataract-101 – Video Dataset of 101 Cataract Surgeries</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>一家医院、四名医生、101 台白内障手术的公开阶段标注视频</h1>
+<div class="sub">Cataract-101 – Video Dataset of 101 Cataract Surgeries</div>
+<div class="meta">Klaus Schoeffmann, Mario Taschwer, Stephanie Sarny, Bernd Münzer, Manfred Jürgen Primus, Doris Putzgruber(克拉根福大学、克拉根福医院眼科、格拉茨医科大学) | MMSys&#x27;18 数据集论文,DOI 10.1145/3204949.3208137</div>
+<div><span class="chip">数据集论文</span><span class="tag">白内障手术</span><span class="tag">手术阶段识别</span><span class="tag">手术视频数据集</span><span class="tag">术者经验</span></div>
+<div class="one">Cataract-101 公开了 101 台无并发症白内障手术的完整录像和十阶段起始帧标注,并附术者经验等级;它是可直接使用的阶段识别材料,但没有划分、基线和一致性评估。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 9 条，其中 5 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://doi.org/10.1145/3204949.3208137" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/cataract-101/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>眼科手术很难"围观学习"。</strong> 腔镜手术的画面投在大屏上,一群学员可以同时看;眼科医生通过显微镜操作,显微镜只允许多一名学员从附加目镜跟看。白内障手术又要求很精细的动作,教学因此受限。</p>
+<p>显微镜上加装的摄像机可以录下整台手术。录像除了教学,还能做术后研究:某种并发症是否和器械动作有关,器械在眼内停留多久,不同人工晶状体展开要多长时间。这些问题需要能自动分析视频的系统,系统需要公开数据来训练和评估。</p>
+<p>已有方法不少,Lalys 等、Charriere 等、Quellec 等都做过白内障阶段识别,但各用各的数据。<strong>论文要补的是一份大家都能拿到的数据。</strong></p>
+<p>下一节先给出这份数据的全貌。</p><div class="strip h"><span class="t">亮点</span><span class="i">显微镜只允许一名旁观者,录像是多人学习和术后分析的主要途径</span><span class="i">作者认为当时没有公开的白内障手术视频数据</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>Cataract-101 把一家医院的日常白内障手术录像整理成带阶段标注的公开数据集。</p>
+<ul><li><strong>数据</strong>:克拉根福医院 9 个月内的 101 台无并发症手术,4 名医生;2 名主任医生共 56 台,2 名助理医生共 45 台。</li><li><strong>标注</strong>:一名资深眼科医生按十个阶段标出起始帧,共 1266 条,存为三个 CSV 文件。</li><li><strong>分析</strong>:助理医生的手术和各阶段时长约为主任医生的两倍,方差更大,重复阶段更多。</li><li><strong>边界</strong>:单中心、单人标注、没有划分和基线;经验结论只是两人对两人的描述统计。</li></ul>
+<p><strong>它是一份可用的原始材料,而不是一个定好协议的基准。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">101 台手术,14 小时 2 分 5 秒,1,263,116 帧</span><span class="i">720x540,25 fps,8.4 GiB</span><span class="i">1266 条阶段标注,10 个阶段</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>视频从哪里来</h3><p>数据能外推到哪里,取决于来源。全部视频来自奥地利克拉根福医院眼科,只收常规手术,即没有并发症的超声乳化手术。四名术者按手术总量和职位分级:术者 1 和 4 为等级 1(助理医生),术者 2 和 3 为等级 2(主任医生)。</p>
+<div class="tbl"><table><thead><tr><th>项目</th><th>数值</th></tr></thead><tbody><tr><td>视频数</td><td>101</td></tr><tr><td>总时长</td><td>14 小时 2 分 5 秒</td></tr><tr><td>总帧数</td><td>1,263,116</td></tr><tr><td>分辨率与帧率</td><td>720x540,25 fps</td></tr><tr><td>编码</td><td>H.264/AVC,码率约 1.25 MBit/s</td></tr><tr><td>总存储</td><td>8.4 GiB</td></tr></tbody></table></div>
+<p><strong>8.4 GiB 的体量让下载和全量训练的门槛都很低。</strong> 代价是分辨率不高,细小器械尖端的像素很少。病人信息、设备型号、伦理审批和筛选标准论文未说明,这限制了偏差分析。</p>
+<p>下一节看十个阶段怎么定义。</p></div><div class="card" id="s4"><h3><span class="num">4</span>十个阶段与一个特殊规则</h3><p>论文按克拉根福医院的流程定义十个阶段:切口、粘弹剂注入、撕囊、水分离、超声乳化、灌注抽吸、抛光后囊、植入人工晶状体、吸除粘弹剂、角膜水密与抗生素。作者称这是"准标准化"流程:顺序基本固定,但各医院划分可能不同。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_3_review_repair1.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。撕囊阶段的四个时刻,撕囊镊夹住前囊瓣做环形撕开。</figcaption></figure>
+<figure class="fig"><img src="images/page_003_fig_figure_8_review_repair1.png" alt="Figure 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 8。植入人工晶状体阶段的四个时刻,推注器把折叠晶状体送入囊袋。</figcaption></figure>
+<p><strong>阶段 2 在每台手术中出现两次,但共用同一个编号。</strong> 粘弹剂注入在阶段 8 之前要再做一次,作者认为两次在画面上无法区分。后果有两个:每台手术至少 11 段;阶段编号不再单调递增,假设"阶段只前进"的序列模型需要特殊处理。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_2_review_repair1.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。粘弹剂注入阶段的四个时刻,细套管从切口伸入前房。</figcaption></figure>
+<figure class="fig"><img src="images/page_003_fig_figure_9_review_repair1.png" alt="Figure 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 9。吸除粘弹剂阶段的四个时刻,和灌注抽吸用相近的抽吸器械。</figcaption></figure>
+<p>Figure 2 和 Figure 9 放在一起看,能看出只靠单帧很难区分细套管类阶段,时间位置是重要线索。</p><div class="strip h"><span class="t">亮点</span><span class="i">阶段 2 两次出现共用编号,阶段序列不是单调的</span><span class="i">超声乳化、灌注抽吸、吸除粘弹剂器械相近,单帧易混</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>标注是怎么存的</h3><p>标注由三个分号分隔的 CSV 组成:</p>
+<ul><li><code>annotations.csv</code>:1266 条,每条是视频编号、阶段起始帧、阶段编号。</li><li><code>phases.csv</code>:阶段编号到名称的映射。</li><li><code>videos.csv</code>:每个视频的帧数、帧率、术者编号和经验等级。</li></ul>
+<p><strong>只有起始帧,没有结束帧。</strong> 一个阶段持续到下一条标注开始,最后一段持续到视频结束,展开后每一帧恰好一个标签。这也意味着器械移出视野的准备时间被并入相邻阶段,和 Quellec 等单独标注空闲期的做法不同,跨论文比较要先对齐口径。</p>
+<p>标注只由一名资深医生完成,是否复核、一致性多高论文未说明。模型在阶段边界附近的错误,因此无法判断是模型问题还是标签问题。</p>
+<p>下一节看论文唯一的定量分析。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><p>论文没有训练模型,关键结果是按术者的统计。</p>
+<div class="tbl"><table><thead><tr><th>术者</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>经验等级</td><td>1</td><td>2</td><td>2</td><td>1</td></tr><tr><td>手术数</td><td>25</td><td>24</td><td>32</td><td>20</td></tr><tr><td>平均时长/台(表中标为秒)</td><td>310</td><td>147</td><td>131</td><td>277</td></tr><tr><td>平均阶段数/台</td><td>12.16</td><td>11.25</td><td>11.25</td><td>11.95</td></tr></tbody></table></div>
+<p><strong>助理医生的平均时长约为主任医生的两倍。</strong> 图 11 和图 12 的箱线图也显示,助理医生几乎每个阶段时长都更长、更分散,超声乳化最为明显。</p>
+<p><strong>助理医生的平均阶段数更多。</strong> 因为 11 是下限,主任医生平均只多出约 0.25 段,助理医生多出约 1 段。差距不到一段,每台手术的分布和被重复的阶段论文未说明,无法排除少数手术拉高均值。</p><div class="strip d"><span class="t">数据</span><span class="i">主任医生 56 台,助理医生 45 台</span><span class="i">平均阶段数 12.16 与 11.95 对 11.25</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>表 1 的两处出入</h3><p>我按正文数字核对了表 1,发现两处论文没有解释的出入。</p>
+<p><strong>平均时长一列不是秒。</strong> 四人总帧数之和等于正文的 1,263,116 帧,按 25 fps 正好是 14 小时 2 分 5 秒。但每台帧数除以 25 得到约 744、354、315、667 秒,都是表中数值的 2.4 倍;表中数值恰好等于每台帧数除以 60。我的判断:单位或换算有误,真实平均时长约 12 分钟(助理医生)和 5 到 6 分钟(主任医生)。两组之比约 2.1,不影响"约两倍"的结论。</p>
+<p><strong>阶段总数之和是 1173,而发布文件有 1266 条。</strong> 差 93 条。表内平均阶段数与阶段总数除以手术数一致,表格自洽,差额来源论文未说明。复用时应以 CSV 重新统计。</p>
+<p>下一节讨论这些数字能证明什么。</p><div class="strip h"><span class="t">亮点</span><span class="i">表 1 时长列比按帧率换算的真实秒数小 2.4 倍</span><span class="i">表 1 阶段总数与发布标注差 93 条</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><p><strong>"经验导致时长翻倍"没有被证明。</strong> 每组只有 2 人,差异可能来自个人习惯,也可能来自病例分配。区分这些解释需要更多术者、按病例难度分层,或同一术者随时间变化的录像,论文都没有。我只把它读作"经验字段与时长相关"。</p>
+<p><strong>数据集适合阶段识别,但难度没有被量化。</strong> 论文没有划分、指标和基线。只有顺利手术、顺序固定,而且按视频随机划分时同一术者会同时出现在训练和测试中,高准确率可能部分来自顺序先验和术者泄漏。</p>
+<p><strong>它不能用于并发症检测、器械定位和跨中心泛化。</strong> 只收无并发症病例,没有空间标注,只有一家医院一套设备。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>自己固定划分并公开划分文件,报告是否跨术者。</li><li>用 CSV 重算时长和阶段数,不要直接引用表 1 的时长列。</li><li>说明阶段 2 是否合并,以及空闲期如何处理。</li><li>数据许可论文未说明,商业或再分发用途需另行确认。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>Cataract-101 是 101 台顺利白内障手术的完整录像加十阶段起始帧标注,附术者经验等级</div><div>阶段 2 两次出现共用编号,每台手术至少 11 段</div><div>表 1 时长列与帧率换算差 2.4 倍,阶段总数与 1266 条标注差 93 条</div><div>经验结论是每组 2 人的描述统计,只能读作相关</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>完整手术视频,标注到帧,格式简单</li><li>记录术者编号和经验等级,为经验研究留下接口</li><li>体量小、可直接下载,上手门槛低</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心、四名术者、只含无并发症手术</li><li>单人标注,无一致性评估</li><li>无划分、无指标、无基线</li><li>表 1 存在口径问题且未解释</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>表 1 时长列的真实口径是什么</li><li>1266 与 1173 的差额来自哪里</li><li>拆分阶段 2 的两次出现后,时序模型能否区分</li><li>按术者留一划分下,阶段识别准确率会下降多少</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 1a450027</span><span class="s">7.6 分</span></div><p>第 1 轮原版流程笔记(自评)。证据链完整,表 1 口径问题已核出。D2=7:构建流程四步写清了输入输出,但标注规则(起始帧到阶段的展开)缺一句明确说明。D5=7:相关路线有表,但没有说明 Cataract-101 与同期 CATARACTS 等数据集的差异只能由读者自行核对。D7=7:四张阶段示例图和两张箱线图保留占位。D9=7:研究问题和数据章节有开场问题,方法主线和局限缺少收尾过渡,部分数字后没有'意味着什么'。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 Insight Pass 补知识点、细节问题和对经验结论的挑战</li><li>把论文未说明的标注一致性、划分、许可等统一写成 论文未说明 并说明影响</li><li>研究问题补核心观点速览中的边界句,数据章节补起始帧展开规则</li><li>关键结果中表 1 时长口径的推导值登记到 number_exceptions</li><li>各节结尾补过渡句,数字后补一句意义</li><li>用 lint_report.py --mode note 做数字核对</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 400b4160 · 文稿 15fe26fa</span><span class="s">8.3 分</span></div><p>第 2 轮(自评)。Insight Pass 的修订已写入笔记和报告:起始帧展开规则、经验结论的替代解释、标注一致性与划分与许可写为论文未说明。数字核对无未匹配项;表 1 整数单元格因源文本抽取丢失,已在 PDF 文本层核对并登记,推导值(744、354、315、667、1173、93 等)登记来源。D5=7 无法再提高:论文只把相关工作分为两条方法路线,没有与同期数据集逐项对比,笔记不能替论文补这张表。D7=8:四张阶段示例图和两张箱线图仍是占位,箱线图裁图被视觉检查拒绝。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>9</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

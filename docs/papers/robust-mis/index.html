@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Comparative validation of multi-instance instrument segmentation in endoscopy: results of the ROBUST-MIS 2019 challenge</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>ROBUST-MIS 2019：在真实结直肠手术画面上，比较器械分割算法的最差情况与跨术式泛化</h1>
+<div class="sub">Comparative validation of multi-instance instrument segmentation in endoscopy: results of the ROBUST-MIS 2019 challenge</div>
+<div class="meta">Tobias Roß、Annika Reinke、Lena Maier-Hein 等 50 位作者，德国癌症研究中心、海德堡大学医院与 10 支参赛队 | arXiv 2003.10299（第 2 版），期刊版 Medical Image Analysis 2021</div>
+<div><span class="chip">数据集与挑战赛</span><span class="tag">器械分割</span><span class="tag">多实例分割</span><span class="tag">腹腔镜</span><span class="tag">挑战赛</span><span class="tag">稳健性</span></div>
+<div class="one">一场用 30 台结直肠手术 10,040 帧、三阶段测试和最差情况排名来检验器械分割的挑战赛，结论是二值分割已接近饱和，多实例分割在多器械画面中远未解决。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 3 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2003.10299" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/robust-mis/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>腹腔镜手术中，技能评估、增强现实等辅助功能都要先知道器械在哪里。商用追踪靠光学或电磁标记，需要额外硬件；只用视频做器械分割可以绕开硬件。</p>
+<p>难点在于验证。各组用自己的数据报告结果，很难比较。EndoVis 系列挑战提供了公共基准，但以往器械数据只有约 500 到 4,000 帧，多为干净画面，<strong>测不出算法遇到血液、烟雾、运动伪影时会不会失败，也测不出换一批患者、换一种手术还能不能用。</strong></p>
+<p>ROBUST-MIS 2019 是 MICCAI 2019 的 EndoVis 子挑战，就是为补这两个缺口而设。</p><div class="strip h"><span class="t">亮点</span><span class="i">以往器械分割基准小且干净，测不出稳健性和泛化</span><span class="i">本挑战专门针对这两点设计数据、划分和排名</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>这是一份挑战结果报告：发布 30 台结直肠手术的 10,040 帧标注，用三项任务、三阶段测试和两种排名比较 10 支队伍。</strong></p>
+<ul><li><strong>数据</strong>：一家医院、三种术式各 10 台，经外包初标和医学背景团队复核。</li><li><strong>评测</strong>：二值分割、多实例检测、多实例分割；测试分同患者、同术式新患者、新术式三阶段；排名分准确性与稳健性。</li><li><strong>结果</strong>：二值分割平均 Dice 约 0.88，与以往冠军相当；检测指标几乎饱和；多实例分割在器械多于 3 把时冠军平均只有 0.45。</li><li><strong>边界</strong>：三阶段只下降 3% 到 5%，且混有测试集构成差异；术式都属结直肠手术；失败模式是定性归纳。</li></ul><div class="strip d"><span class="t">数据</span><span class="i">10,040 帧，30 台手术，三种术式</span><span class="i">有效提交：二值 10、检测 6、多实例分割 7</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>视频在海德堡大学医院的一体化手术室采集，相机和光源固定为同一套 Karl Storz 设备，分辨率从 1920×1080 下采样到 960×540。三种术式是直肠切除、全结直肠切除和乙状结肠切除，各 10 台。</p>
+<p>抽帧先按 1 帧/秒得到 4,456 帧，再在手术阶段切换处补抽到 10,040 帧。<strong>超过一半的帧来自阶段切换附近</strong>，器械更换和多器械同框可能更常见（我的判断，论文没有给出两部分帧的对比）。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。二值分割与多实例检测/分割在易、中、难三档的输入帧与参考轮廓，可以看到烟雾、反光和器械交叉。</figcaption></figure>
+<p>标注分四步：外包初标；组织者发现不一致后制定协议；14 名工程师和 4 名医学生复核全部标注，模糊情形由小组给出共识；医学专家质控，最后由一名医学专家和一名工程师裁定。实例编号只在单帧内有效，不跨帧一致。</p><div class="strip h"><span class="t">亮点</span><span class="i">单中心、单一设备、三种相近术式</span><span class="i">实例编号不跨帧，不能直接用于追踪评测</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>任务与三阶段划分</h3><p>每个样本是 10 秒、250 帧的片段，只有末帧有标注。二值分割输出前景掩码；多实例分割用 1、2、… 区分实例；多实例检测只需粗略定位，提交格式相同。</p>
+<p>划分规则：乙状结肠切除全部留给第 3 阶段；其余每种术式最短的 2 台给第 2 阶段；剩下 16 台中每第 10 个标注帧给第 1 阶段，其余为训练。</p>
+<figure class="fig"><img src="images/page_006_fig_table_1_review_repair1.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。各阶段各术式的帧数与空帧比例（ef）。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>阶段</th><th>测什么</th><th>帧数</th><th>空帧</th></tr></thead><tbody><tr><td>训练</td><td></td><td>5,983</td><td>17%</td></tr><tr><td>第 1 阶段</td><td>同患者</td><td>663</td><td>15%</td></tr><tr><td>第 2 阶段</td><td>同术式新患者</td><td>514</td><td>13%</td></tr><tr><td>第 3 阶段</td><td>新术式</td><td>2,880</td><td>23%</td></tr></tbody></table></div>
+<p><strong>三个阶段的样本量和空帧比例差别很大</strong>，这会影响后面对泛化下降的解读。任务说明写末帧至少含一把器械，表中却有空帧，空帧怎么计分论文未说明。</p><div class="strip d"><span class="t">数据</span><span class="i">训练 5,983 帧，第 3 阶段 2,880 帧</span><span class="i">第 2 阶段只来自 4 台手术</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>指标与两种排名</h3><p>二值任务用 Dice 系数（DSC，衡量重叠）和归一化表面 Dice（NSD，衡量边界在容差内是否重合）。容差 $\tau=13$ 取自 5 名标注者在 100 张图上的差异，单位论文未说明。</p>
+<p>$$DSC(Y,\hat{Y})=\frac{2|Y\cap\hat{Y}|}{|Y|+|\hat{Y}|}$$</p>
+<p>多实例任务先用匈牙利算法把预测实例与参考实例一一配对，逐对计算 DSC 或 NSD，再在图内对实例取平均，得到 MI_DSC 与 MI_NSD。<strong>漏掉的实例得 0 分。</strong> 检测任务用交并比大于 0.3 算命中，在全部图像上算平均精度均值（mAP）。</p>
+<p>两种排名回答不同问题：</p>
+<ul><li><strong>准确性排名</strong>：每对算法做单侧 Wilcoxon 检验（显著性水平 0.05），按显著胜出比例排序，问"平均谁更好"。</li><li><strong>稳健性排名</strong>：取每个算法逐帧分数的 5% 分位数，问"最差的 5% 帧有多差"。</li></ul>
+<p>缺失结果记 0。测试数据不下发，参赛者提交 Docker 镜像，由组织者运行。</p><div class="strip h"><span class="t">亮点</span><span class="i">稳健性排名是这次挑战最有特色的设计</span><span class="i">多实例指标对漏检很敏感</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_013_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。二值分割第 3 阶段排名，左为准确性，右为稳健性。</figcaption></figure>
+<p>二值分割中，fisensee 拿下 DSC 准确性第一，haoyun 拿下 DSC 稳健性（0.52）和 NSD 两项排名。<strong>caresyntax、Djh、NCT、VIE 的 5% 分位数都是 0.00</strong>，即在至少 5% 的帧上完全失败；准确性第一的 fisensee 在稳健性上只排第 4。</p>
+<figure class="fig"><img src="images/page_014_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。多实例分割第 3 阶段的四个排名。</figcaption></figure>
+<p>多实例分割中，MI_DSC 准确性冠军是 fisensee，MI_NSD 准确性冠军是 Uniandes，两项稳健性冠军都是 www，分别只有 0.31 和 0.35。检测任务 6 支队伍的 mAP 在 0.94 到 1.00 之间，几乎没有区分度。</p>
+<figure class="fig"><img src="images/page_016_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。三个阶段的箱线图，左为二值分割，右为多实例分割。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>任务</th><th>第 1 阶段</th><th>第 2 阶段</th><th>第 3 阶段</th></tr></thead><tbody><tr><td>二值分割 DSC 中位数</td><td>0.88</td><td>0.87</td><td>0.85</td></tr><tr><td>多实例分割 MI_DSC 中位数</td><td>0.80</td><td>0.78</td><td>0.76</td></tr></tbody></table></div>
+<p>作者称这证实了"性能随域差距下降"，下降约 3% 与 5%。<strong>但检测任务不支持这个结论</strong>：附录表 7 中 VIE 从第 1 阶段 0.750 升到第 3 阶段 0.978。</p><div class="strip d"><span class="t">数据</span><span class="i">二值分割中位数 0.88 到 0.85</span><span class="i">多实例分割中位数 0.80 到 0.76</span><span class="i">检测 mAP 0.94 到 1.00</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>多实例为什么难</h3><figure class="fig"><img src="images/page_016_fig_figure_6_review.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 6。按画面中器械数分层的三阶段箱线图。</figcaption></figure>
+<p>准确性冠军的平均 MI_DSC 在 1、2、3、多于 3 把器械时分别是 0.82、0.71、0.62、0.45。二值分割几乎不受器械数影响。</p>
+<p>图 2 中多实例分数成簇，作者指出这些簇对应不同器械数。<strong>一部分下降来自指标本身</strong>：两把器械漏掉一把，该帧就落在 0.5 附近（我的判断）。论文没有把检测召回和配对后的分割质量分开报告，所以分不清是"找不到"还是"分不准"。</p>
+<figure class="fig"><img src="images/page_017_fig_figure_8_review.png" alt="Figure 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 8。器械彼此靠近的测试帧，部分队伍把一把器械拆成两个实例。</figcaption></figure>
+<p>作者查看最差和最好的 100 例后归纳：算法能处理反光、血液、不同光照；难在小、透明、相邻、交叉、遮挡、运动的器械和图像边缘。<strong>烟雾的说法前后矛盾</strong>：结果节列为难点，讨论节又说已稳健。</p><div class="strip h"><span class="t">亮点</span><span class="i">多实例分割随器械数单调下降</span><span class="i">失败模式是定性归纳，烟雾结论不一致</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>跨术式泛化的距离有限。</strong> 三种术式都是结直肠手术，作者自己说换到胆胰或上消化道手术可能下降更多。</li><li><strong>阶段间下降的原因没分开。</strong> 三阶段帧数与空帧比例不同，阶段差异的检验或置信区间论文未说明。</li><li><strong>"训练流程比结构更重要"只是假设。</strong> fisensee 同时用了 8 模型集成与大量增强，haoyun 用了预训练和 5 折交叉验证，没有受控对比。</li><li><strong>视频信息的价值没有被证明或否定。</strong> 只有 3 支队伍用了视频，都没有获益；只有末帧有标注、实例编号不跨帧，也不利于时序模型（我的判断）。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>排名靠得住吗</h3><p>图 4 用 1000 次自助抽样检验排名。准确性排名几乎不变；<strong>稳健性排名的区间明显更宽</strong>，作者解释为 5% 分位数本身不稳定。稳健性排名中相邻名次的差别不宜过度解读。</p>
+<figure class="fig"><img src="images/page_015_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。自助法气泡图，黑叉为中位名次，黑线为 95% 区间。</figcaption></figure>
+<p>Docker 提交杜绝了测试集过拟合和人工标注测试集；5 支队伍首次提交失败后获准重交，组织者核对过网络参数没有改动。www 队用 EndoVis 2017 数据目视检查，被列为灰色地带。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现与复用</h3><ul><li>用官方评测代码，尤其是匈牙利匹配、缺失记 0、图内先平均的规则。</li><li>空帧计分和 NSD 容差单位论文未说明，复现前先查代码。</li><li>三阶段划分可直接借鉴到其他手术数据。</li><li>960×540 下采样对小器械有影响，作者认为较小。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>三阶段划分把"记住患者"和"跨术式泛化"分开，值得复用</div><div>只看均值会漏掉偶尔完全失败的算法，稳健性排名能暴露它们</div><div>二值分割在这套数据上已接近饱和，检测任务阈值过松</div><div>多实例分割在多器械画面中远未解决，但部分下降来自指标计分方式</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>数据量和画面难度都超过以往 EndoVis 器械数据</li><li>首次设多实例检测和分割任务，并单独设最差情况排名</li><li>Docker 提交、公开评测代码、自助法稳定性分析，评测过程透明</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心、单设备、三种相近术式，跨机构泛化未测</li><li>阶段间下降没有统计检验，混有测试集构成差异</li><li>失败模式只有定性归纳，烟雾结论前后矛盾</li><li>检测任务指标饱和，几乎无法区分算法</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>稳健性排名对分位数选择（1%、5%、10%）有多敏感？</li><li>按患者或手术聚合而非按帧聚合，排名会怎样变化？</li><li>把检测召回和配对后分割质量分开后，多器械画面的下降主要来自哪一边？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 2b92da4d</span><span class="s">7.4 分</span></div><p>第 1 轮自评（模型自评）：数据、标注流程、三阶段划分、指标与排名机制、第 3 阶段全部排名与跨阶段数字齐全。不足：研究问题末尾缺核心观点速览；三阶段下降没有讨论帧数和空帧比例的混杂；烟雾在结果节与讨论节前后矛盾未指出；稳健性排名 0.00 并列的含义只点到；与 EndoVis 前作及后续 HeiSurf 等的定位只有一句；各小节开头缺问题、结尾缺承接；DSC、NSD 等缩写在机制流程之前已使用；数字尚未跑 lint_report 核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>研究问题末尾加入 ### 核心观点速览</li><li>各小节开头点明问题、结尾加承接句</li><li>首次出现处定义 DSC、NSD、mAP、MI_DSC</li><li>深度分析加入三阶段下降的混杂因素与 5% 分位数并列 0.00 的含义</li><li>指出烟雾结论的前后矛盾</li><li>把 Insight Pass 的挑战轮结论和论文未说明项写入笔记</li><li>用 lint_report --mode note 核对全部数字并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 adf895dd · 文稿 4592d724</span><span class="s">8.5 分</span></div><p>第 2 轮自评（模型自评）：加入核心观点速览、各节开头问题与承接句、首次出现处的指标定义、与 EndoVis 前作的对比表；Insight Pass 的挑战轮结论写入笔记与报告：三阶段下降混有帧数与空帧比例差异、检测任务 mAP 不随阶段单调下降、MI_DSC 漏检记 0 对器械数分层的影响、烟雾结论前后矛盾、训练流程优于结构只是假设。笔记与报告数字经 lint_report 核对均可在原文找到，仅期刊年份 2021 登记为例外。无法修复的限制：空帧计分、NSD 容差单位、阶段间差异检验均为论文未说明；Table 2、3、5 与 Figure 14 至 16、Table 7 因裁剪缺陷或无资源保留占位，数值以 Markdown 表重写。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

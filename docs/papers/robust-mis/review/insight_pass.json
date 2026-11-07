@@ -1,0 +1,39 @@
+{
+"knowledge_points":[
+{"term":"DSC（Dice 系数）","plain":"预测掩码与参考掩码的重叠程度，2 倍交集除以两者面积之和，满分 1。","where":"sec:methods","needed_for":"读懂表 4 和三阶段中位数"},
+{"term":"NSD（归一化表面 Dice）","plain":"只看两个掩码的边界，边界点落在容差 τ 以内算重合，τ 取自标注者间差异。","where":"sec:methods","needed_for":"理解 NSD 排名与 DSC 排名为何不同"},
+{"term":"匈牙利匹配","plain":"把预测实例和参考实例按重合度做一对一配对的最优分配算法，因为实例编号不必一致。","where":"sec:methods","needed_for":"理解多实例指标与漏检如何计分"},
+{"term":"MI_DSC","plain":"匹配后每个实例算 DSC，先在图内对实例取平均，再对图取平均；漏掉的实例得 0。","where":"sec:methods","needed_for":"理解按器械数分层的下降和图 2 的分数簇"},
+{"term":"显著性排名","plain":"每对算法做单侧 Wilcoxon 符号秩检验，按显著胜出的比例排序，不等于均值排序。","where":"sec:methods","needed_for":"读懂表 4 和表 6 的 Prop. Sign. 列"},
+{"term":"5% 分位数稳健性排名","plain":"把算法在全部测试帧上的分数排序，取第 5 百分位处的值，衡量最差情况。","where":"sec:methods","needed_for":"理解大量 0.00 并列"},
+{"term":"三阶段测试","plain":"同患者、同术式新患者、新术式，三种距离逐级增大的测试集。","where":"sec:methods","needed_for":"理解泛化结论"},
+{"term":"自助法排名稳定性","plain":"对测试帧有放回重抽 1000 次重新排名，看名次的分布有多宽。","where":"sec:results","needed_for":"读懂图 4"}
+],
+"detail_questions":[
+{"question":"10,040 帧中有多少来自 1 帧/秒的均匀采样？","answer":"4,456 帧，其余 5,584 帧在手术阶段切换处补抽，因此超过一半的帧集中在阶段切换附近。","evidence":["sec:methods"],"status":"resolved"},
+{"question":"任务说明写末帧至少含一把器械，为何表 1 有 13% 到 23% 的空帧？空帧怎么计分？","answer":"附录 B 的任务定义与表 1 的空帧比例不一致；空帧在 DSC、NSD 和 mAP 中如何计分论文未说明。","evidence":["sec:methods","sec:appendix"],"status":"not_stated"},
+{"question":"第 2 阶段为何只有 514 帧？","answer":"每种术式只取最短的 2 台手术，目的是保留尽量多的训练数据。","evidence":["sec:methods"],"status":"resolved"},
+{"question":"NSD 的容差 τ=13 的单位是什么？","answer":"论文只说由 5 名标注者在 100 张图上两两比较得出，单位论文未说明，按常规推断为像素。","evidence":["sec:methods"],"status":"not_stated"},
+{"question":"3% 和 5% 的下降如何算出？","answer":"二值分割中位数 0.88 到 0.85，多实例分割 0.80 到 0.76，按相对下降约为 3% 与 5%。","evidence":["sec:discussion"],"status":"resolved"},
+{"question":"多实例检测的 mAP 是否也随阶段下降？","answer":"没有：附录表 7 中 VIE 从第 1 阶段 0.750 升到第 3 阶段 0.978，Uniandes 第 2 阶段 0.833、第 3 阶段 1.000，不符合单调下降。","evidence":["sec:acknowledgements"],"status":"resolved"},
+{"question":"烟雾对算法是难点还是已解决？","answer":"结果节把含烟雾图像列为表现差的情形，讨论节要点又说最成功的算法对烟雾稳健，两处说法矛盾，论文未解释。","evidence":["sec:results","sec:discussion"],"status":"partly"},
+{"question":"阶段间差异是否有统计检验或置信区间？","answer":"三阶段只给出各队平均分的中位数、最小值和最大值，阶段间差异的检验论文未说明。","evidence":["sec:results"],"status":"not_stated"},
+{"question":"稳健性排名为何有多支队伍并列 0.00？","answer":"缺失结果记 0，且这些算法在至少 5% 的帧上 DSC 为 0；完全漏检和完全没输出无法区分。","evidence":["sec:methods","sec:results"],"status":"partly"},
+{"question":"数据集能否公开获取？","answer":"挑战期间仅限参赛使用，作者表示之后将以非商业用途公开；具体许可论文未说明。","evidence":["sec:appendix"],"status":"partly"},
+{"question":"为什么 fisensee 准确性强而稳健性弱？","answer":"它靠连通域分实例，作者观察到器械多数时候不接触；器械接触或交叉时会合并成一个实例，论文没有给出这一机制的分层证据。","evidence":["sec:results","sec:methods-2"],"status":"partly"}
+],
+"challenges":[
+{"claim":"性能随训练与测试的域差距增大而下降","alternative":"三阶段的帧数、空帧比例和器械数分布不同，第 3 阶段空帧比例 23%、帧数最多，下降可能来自测试集构成而非术式差异；检测任务也不单调。","separating_evidence":"按器械数和空帧分层后再比较三阶段，或给出阶段间差异的置信区间。","in_paper":false,"verdict":"partly_supported"},
+{"claim":"多实例分割未解决，难度随器械数增加","alternative":"MI_DSC 对漏检实例记 0 再对实例平均，器械多时一次漏检就拉低大量分数，下降部分是指标定义造成的。","separating_evidence":"把检测召回与已匹配实例的分割质量分开报告。","in_paper":false,"verdict":"partly_supported"},
+{"claim":"训练流程和数据增强比网络结构更重要","alternative":"胜出的 fisensee 同时用了 8 模型集成和大量增强，haoyun 用了预训练和 5 折交叉验证，结构、集成和预训练混在一起。","separating_evidence":"同一结构下替换增强与训练流程的受控对比。","in_paper":false,"verdict":"not_separated"},
+{"claim":"顶尖算法对反光、血液和烟雾稳健","alternative":"结论来自最差和最好 100 例的定性查看，没有伪影标签统计；且烟雾在两节中说法相反。","separating_evidence":"按伪影类型标注测试帧并分层报告分数。","in_paper":false,"verdict":"not_separated"}
+],
+"revisions":[
+"研究问题末尾加核心观点速览",
+"关键结果的三阶段对比后写明测试集构成的混杂与检测任务不单调",
+"深度分析加入 MI_DSC 漏检记 0 对器械数分层结果的影响",
+"深度分析指出烟雾结论前后矛盾，局限中写明伪影结论是定性的",
+"把空帧计分、τ 单位、阶段差异检验写成论文未说明",
+"架构与训练一节写明作者结论是假设、未做受控对比"
+]
+}

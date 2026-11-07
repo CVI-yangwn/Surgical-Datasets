@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "器械使用", "plain": "器械接触眼球才算在用，只出现在画面里不算", "where": "sec:introduction", "needed_for": "理解为何标签不是可见性，以及标注员的分歧集中在接触时刻"},
+  {"term": "概率参考标准", "plain": "两名专家都说未用记 0，都说在用记 1，意见不一记 0.5", "where": "sec:introduction", "needed_for": "理解 AUC 为何要忽略部分帧"},
+  {"term": "Cohen kappa", "plain": "扣除偶然一致后的两人一致程度，1 为完全一致", "where": "sec:introduction", "needed_for": "读懂 Table 1 中持针器 0.630 的含义"},
+  {"term": "每器械 AUC 再平均", "plain": "每种器械按置信度排序算 ROC 曲线下面积，21 种等权平均", "where": "sec:introduction", "needed_for": "理解二值输出失分和稀有器械左右排名"},
+  {"term": "DeLong 置信区间", "plain": "对相关 ROC 曲线面积估计方差的方法，这里用于判断相邻名次是否可分", "where": "sec:results", "needed_for": "读懂 Table 7 最后一行"},
+  {"term": "多标签与多类", "plain": "多标签允许一帧有多个正类，多类假定每帧只有一个", "where": "sec:introduction", "needed_for": "理解 LCCV-Cataract 的失败"},
+  {"term": "链式马尔可夫随机场", "plain": "把每帧标签当节点，相邻节点倾向取相同值的概率模型", "where": "sec:introduction", "needed_for": "理解冠军的时间平滑"},
+  {"term": "同等敏感度下的特异度相对下降", "plain": "把算法阈值调到与专家同样敏感，看误报多了多少", "where": "sec:results", "needed_for": "读懂 Table 8 的人机差距"}
+ ],
+ "detail_questions": [
+  {"question": "为何不提供验证集", "answer": "论文只说由参赛者自己从训练集划分，没有给出理由", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "被忽略的 0.5 帧占测试集多少", "answer": "论文只给出 kappa，没有报告分歧帧数量或比例", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "Table 1 的使用占比基于哪部分数据", "answer": "训练子集，并忽略裁决后仍有分歧的帧", "evidence": ["sec:introduction"], "status": "resolved"},
+  {"question": "置信区间如何从每器械合成到平均", "answer": "每器械用 DeLong 法，再假设器械独立，用均方根合成半径", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "TROLIS 为何能用测试帧", "answer": "用三个 ResNet-50 前向推理挑出 1,200 帧测试图做稀有器械负样本，未用测试标签", "evidence": ["sec:introduction"], "status": "resolved"},
+  {"question": "人机比较覆盖多少器械", "answer": "Figure 7 只展示棉签和 Troutman 镊；Table 8 给 21 种器械平均与标准误，没有逐器械值", "evidence": ["sec:results"], "status": "partly"},
+  {"question": "各队计算时间是多少", "answer": "只有各队自报的每秒数帧，无法在统一条件下比较", "evidence": ["sec:results"], "status": "partly"},
+  {"question": "哪些队伍按测试反馈改了验证划分", "answer": "论文只说有几支队伍，没有点名", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "数据许可和获取方式", "answer": "只给出挑战网址，正文没有说明许可条款", "evidence": ["sec:introduction"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "五个因素与名次正相关", "alternative": "强队本来经验更多、提交次数更多，五个因素只是投入多的副产品", "separating_evidence": "同一队伍内只改一个因素的前后对比", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "顶级方案接近人类专家", "alternative": "平均掩盖了难器械上的大差距，且分歧帧排除让人机比较偏向算法", "separating_evidence": "逐器械的特异度下降，以及计入分歧帧的评测", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "任务几乎已解决", "alternative": "单中心单设备上的高分来自数据同质，换医院即下降", "separating_evidence": "外部中心或不同设备的测试集", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "二值输出降低 AUC", "alternative": "这些队伍的模型本身较弱", "separating_evidence": "同一模型连续分数与二值输出的对比", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "评测协议处补写分歧帧数量论文未说明及其后果",
+  "数据划分处补写不提供验证集的理由论文未说明",
+  "挑战设计小节补写改划分的队伍论文未说明",
+  "发布与许可补写许可条款论文未说明",
+  "五条经验处说明缺少同队单因素对比",
+  "人机比较处写明只有平均没有逐器械值",
+  "核心观点速览补一句与 CaDIS 的区别"
+ ]
+}
