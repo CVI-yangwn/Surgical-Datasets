@@ -1,0 +1,35 @@
+{
+  "knowledge_points": [
+    {"term": "OMG-LLaVA", "plain": "在 LLaVA 上接通用分割编码器与像素解码器的多模态模型，可同时输出文字和掩码。", "where": "sec:data", "needed_for": "理解为何只有它有分割分数"},
+    {"term": "§ 号模型", "plain": "在除 MAVIS 外全部基准数据上只训练一次、不再逐集微调的单一模型。", "where": "sec:method", "needed_for": "读懂表 2 每组的第二、四行"},
+    {"term": "精确匹配准确率", "plain": "预测字符串与真值完全一致才算对，不认同义词。", "where": "sec:data", "needed_for": "解释动作识别掉点"},
+    {"term": "mIoU", "plain": "各器械类别交并比的平均。", "where": "sec:data", "needed_for": "分割结果"},
+    {"term": "stage", "plain": "MAVIS 新增的、高于阶段的流程层级，如前壁打结、后壁打结。", "where": "sec:data", "needed_for": "表 3 的新任务迁移"},
+    {"term": "LS / RAS / MST", "plain": "腹腔镜、机器人辅助、显微外科训练三类手术域。", "where": "sec:related-work", "needed_for": "跨域结论"},
+    {"term": "LoRA", "plain": "只训练低秩增量矩阵的参数高效微调。", "where": "sec:data", "needed_for": "训练设置"}
+  ],
+  "detail_questions": [
+    {"question": "训练、验证、测试如何划分，是否按视频切分？", "answer": "论文未说明。", "evidence": ["sec:data", "sec:evaluation-results"], "status": "not_stated"},
+    {"question": "每帧生成几个问题？", "answer": "原文说每帧配一个模板，又说流程与计数总会生成，实际数量论文未说明。", "evidence": ["sec:data"], "status": "not_stated"},
+    {"question": "MAVIS 的标注一致性如何？", "answer": "只说与作者中的显微外科医生合作，人数与一致性论文未说明。", "evidence": ["sec:data"], "status": "not_stated"},
+    {"question": "动作标签是否做过跨数据集同义合并？", "answer": "没有，结果中 IDLE 与 STILL、RETRACTION 与 PULL 仍各自独立，作者以此解释掉点。", "evidence": ["sec:method-2"], "status": "resolved"},
+    {"question": "迁移实验两组微调轮数是否一致？", "answer": "LLaVA 3 轮，OMG-LLaVA 1 轮；只训 MAVIS 的对照组轮数论文未说明。", "evidence": ["sec:method-2"], "status": "partly"},
+    {"question": "不微调直接在 MAVIS 上测的结果？", "answer": "论文未说明，表 3 只有再微调结果。", "evidence": ["sec:method-2"], "status": "not_stated"},
+    {"question": "LLaVA 两种配置学习率为何不同？", "answer": "逐集 2e-4，基准 2e-5，理由未给出。", "evidence": ["sec:data"], "status": "partly"},
+    {"question": "Cholec80 只标阶段，计数答案从哪来？", "answer": "表 1 未勾器械类标注，但表 2 有计数；来源论文未说明。", "evidence": ["sec:data", "sec:method"], "status": "not_stated"},
+    {"question": "MAVIS 分布是否均衡？", "answer": "缝合 48.5%，翻转 5.3%，作者称均衡但数字不支持。", "evidence": ["sec:data"], "status": "resolved"},
+    {"question": "是否报告方差或多次运行？", "answer": "没有，均为单次结果。", "evidence": ["sec:method", "sec:method-2"], "status": "resolved"}
+  ],
+  "challenges": [
+    {"claim": "统一训练的单一模型与逐集微调表现接近。", "alternative": "统一训练只在小数据集上靠借用监督获益，大数据集与动作任务上普遍掉点，平均下来才显得接近。", "separating_evidence": "逐格对比表 2，并给出方差。", "in_paper": true, "verdict": "partly_supported"},
+    {"claim": "基准训练帮助迁移到未见数据集。", "alternative": "LLaVA 的提升来自多训了 3 轮或学到问答格式，而非手术视觉表征；OMG-LLaVA 的下降同样可能来自只训 1 轮。", "separating_evidence": "统一轮数，并加一个只在通用数据上做同等指令微调的对照。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "动作掉点源于不同数据集的同义标签命名冲突。", "alternative": "动作样本本身少，统一训练时被阶段、计数等大任务稀释。", "separating_evidence": "合并同义标签后重算，或给出混淆矩阵。", "in_paper": false, "verdict": "not_separated"}
+  ],
+  "revisions": [
+    "关键结果中把作者的“差异不大”逐格拆成更好、持平、更差三类",
+    "迁移小节写明两组轮数不同、对照组轮数论文未说明",
+    "数据小节写明划分方式、标注一致性、每帧问题数、Cholec80 计数来源均论文未说明",
+    "动作冲突小节补充“样本稀释”这一替代解释",
+    "深度分析补充与 EndoBench 等纯评测集的定位差异"
+  ]
+}

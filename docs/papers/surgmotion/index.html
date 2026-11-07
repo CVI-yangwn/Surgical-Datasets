@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgMotion: A Video-Native Foundation Model for Universal Understanding of Surgical Videos</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>在 3,658 小时多专科手术视频上做潜空间运动预测的视频基础模型</h1>
+<div class="sub">SurgMotion: A Video-Native Foundation Model for Universal Understanding of Surgical Videos</div>
+<div class="meta">Jinlin Wu, Felix Holm 等；香港科学创新研究院、慕尼黑工业大学、中国科学院自动化研究所等 | arXiv 2602.05638（v5）</div>
+<div><span class="chip">方法论文</span><span class="tag">手术视频</span><span class="tag">自监督预训练</span><span class="tag">V-JEPA</span><span class="tag">基础模型</span><span class="tag">工作流识别</span></div>
+<div class="one">在 V-JEPA 上加运动加权、亲和蒸馏和方差正则，用多专科语料预训练，冻结后在 8 个工作流集全部第一，但没有消融，收益无法归因。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 9 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2602.05638" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgmotion/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术视频预训练多沿用 VideoMAE 式的像素重建。作者认为手术画面里烟雾、反光、液体流动造成大量不可预测的像素变化，重建目标把容量浪费在这些噪声上，而有用的器械与组织交互很稀疏。</p>
+<p><strong>另一个瓶颈是数据窄。</strong> 已有手术模型的预训练语料多是单一术式或内镜，难以跨专科泛化。</p>
+<p>SurgMotion 同时从目标函数和数据两头下手。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>思路</strong>：保留 V-JEPA 的潜空间掩码预测，预测被遮区域在教师编码器里的特征，而不是像素。</li><li><strong>三个改动</strong>：只对运动最强的 3 个掩码词元加权回归；对齐掩码词元间的相似度结构；惩罚特征维度方差过小。</li><li><strong>数据</strong>：SurgMotion-15M，正文称 3,658 小时、50 个来源，神经外科 2,860.85 小时占绝大多数；语料不公开。</li><li><strong>结果</strong>：冻结骨干后 8 个工作流集全部第一，PitVis F1 75.53 对 65.22。</li><li><strong>边界</strong>：没有消融，没有同数据对照，9 个下游集与预训练来源同名。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">新内容全部集中在三项损失，其余沿用 V-JEPA</span><span class="i">领先幅度在少见专科大、在常见腹腔镜和结肠镜集小</span></div><div class="strip d"><span class="t">数据</span><span class="i">3,658 小时、50 个来源</span><span class="i">8 个工作流集全部第一</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>语料是怎么拼起来的</h3><figure class="fig"><img src="images/page_006_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。SurgMotion-15M 的数据来源与规模。</figcaption></figure>
+<p>语料按专科汇编公开数据集，再加网络与机构视频。<strong>神经外科 2,860.85 小时</strong>，其余专科多在几十到两百多小时，结肠镜 30,000 段只有 45.00 小时。</p>
+<p>为抵消偏斜，采样权重取 $1/(N_d|D_s|)$，让每个专科、每个数据集的采样质量相等。</p>
+<p>表 1 小时数加起来约 3,707.7，视频数 45,817，都和正文的 3,658 小时、45,757 个视频对不上；50 个来源只点名 15 个。<strong>语料构成无法从论文复核。</strong></p></div><div class="card" id="s4"><h3><span class="num">4</span>三项损失各做什么</h3><figure class="fig"><img src="images/page_007_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。预训练框架与下游探测评测。</figcaption></figure>
+<p><strong>运动加权回归</strong>：用像素的时间差分加空间邻域差分给掩码词元打运动分，只取前 3 个，用 $(1+w_i)$ 加权的 ℓ1 回归教师特征。按公式字面，其他掩码词元不产生回归梯度，是否如此需查代码。</p>
+<p><strong>亲和自蒸馏</strong>：学生与教师各自在掩码词元之间算温度 0.1 的 softmax 相似度分布，用 KL 对齐，只在掩码集内算，避免背景主导。</p>
+<p><strong>方差正则 SFDR</strong>：逐维标准差低于阈值就罚。阈值取值论文未说明；引言说还有协方差项，公式里没有。</p>
+<p>总目标为 $\mathcal L=\mathcal L_{motion}+0.1\,\mathcal L_{st}+0.3\,\mathcal L_{var}$。</p></div><div class="card" id="s5"><h3><span class="num">5</span>训练与评测协议</h3><p>两阶段：16 帧训练 200 轮，再用 64 帧继续 80 轮，全程 1 fps，4 张 H800。</p>
+<p>评测时冻结骨干，接 4 层、16 头的注意力探测头，同时训练 16 组超参取最好。<strong>13 个对比模型走同一流程</strong>，这让分数可比；但选最好用的是哪个划分，论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>数据集</th><th>SurgMotion F1</th><th>最强基线 F1</th></tr></thead><tbody><tr><td>Cholec80</td><td>84.17</td><td>81.22</td></tr><tr><td>EgoSurgery</td><td>50.72</td><td>36.34</td></tr><tr><td>PitVis</td><td>75.53</td><td>65.22</td></tr><tr><td>OphNet</td><td>51.22</td><td>39.99</td></tr><tr><td>PMLR50</td><td>85.65</td><td>68.68</td></tr></tbody></table></div>
+<p>工作流识别 8 集全胜，少见专科领先超过 10 个点，腹腔镜三集只领先几个点。</p>
+<figure class="fig"><img src="images/page_013_fig_table_6_review.png" alt="Table 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 6。CholecT50 三元组识别。</figcaption></figure>
+<p>三元组 AP-IVT 39.54 对 36.85；动词提升 3.8 点、器械提升 4.4 点，幅度相近。技能评估误差降低约 26%。</p>
+<p>稠密任务领先很小：Kvasir 上 DINOv3-H 0.9019 反而更高，C3VD 的 RMSE 1.88 对 1.91。</p><div class="strip d"><span class="t">数据</span><span class="i">PitVis F1 75.53 对 65.22</span><span class="i">CholecT50 AP-IVT 39.54</span><span class="i">JIGSAWS 平均绝对误差 2.649 对 3.5962</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>为什么有效</h3><p>作者的解释是潜空间目标避开了像素噪声，运动加权把梯度集中在器械上。</p>
+<p><strong>但有三个变量同时变化</strong>：目标函数、数据量与覆盖、64 帧长输入。VideoMAE 基线没在 SurgMotion-15M 上训练，所以胜过它不能证明潜空间目标更好。</p>
+<p>我的判断：领先最大的集恰是语料覆盖而基线少见的专科，更像数据覆盖的效应。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li>三个损失各自贡献：没有消融，论文未说明。</li><li>数据规模的作用：图 1(c) 是跨模型散点，不是同一模型的规模扫描。</li><li>是否见过测试视频：9 个下游集与表 1 来源同名，去重情况论文未说明。</li><li>显著性：全是单次结果，没有方差。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>表格疑点：EndoMamba 在表 5 与表 6 的六个数字完全相同；AVOS 上六个基线同为 48.34 与 8.15；基准数 17 与逐集计数 19 不符。</li><li>仓库有 ViT-L 和 ViT-G 两个权重，表中结果对应哪个论文未说明。</li><li>要验证方法本身，需在同一语料上训练原版 V-JEPA 和 VideoMAE 做对照。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SurgMotion 的权重是目前覆盖专科最广的手术视频冻结特征。</div><div>专科与数据集双重反比采样可以直接照搬到多源医疗视频汇编。</div><div>引用它的分数前，先确认测试视频不在预训练来源里。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>统一协议下比较 13 个模型、19 个数据集，覆盖面很广。</li><li>公开了权重、评测代码和各数据集预处理脚本。</li><li>方法改动小而清楚，容易在 V-JEPA 代码上复现。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>没有任何消融或同数据对照，创新点无法单独验证。</li><li>语料不公开，表 1 合计与正文不一致。</li><li>多处表格数字疑似录入错误，基线异常值未讨论。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>去掉三个损失中任一项，各下游指标掉多少？</li><li>在与预训练严格去重的测试集上，优势是否保留？</li><li>σ0 取多少，Top-K 是否真的只回归 3 个词元？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 518047ab</span><span class="s">7.1 分</span></div><p>第 1 轮自评：数据来源表、三项损失公式、两阶段训练设置、表 2 至表 9 主结果齐全，局限点出无消融与数据不公开。D4=7：训练测试重叠只提了一句，没有逐个列出重叠数据集。D5=6：与 V-JEPA、EndoFM、GSViT 的差异没有单独成节。D6=6：复用建议只有三条，缺具体检查方法。D9=5：研究问题末尾没有核心观点速览，多数小节直接罗列数字，数字后缺含义，节末无过渡。表 6 与表 5 中 EndoMamba 数字重复、AVOS 多基线同值等疑点未展开。H3 尚未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>6</b></span><span>D6 <b>6</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记</li><li>在研究问题末尾加入核心观点速览</li><li>每节开头写明要回答的问题，关键数字后补一句含义，节末加过渡</li><li>逐个列出与预训练来源重叠的下游数据集，并把探测选模划分、σ0 取值、Web 与机构视频时长等缺口写成 论文未说明</li><li>新增相对已有工作的定位小节</li><li>指出表 5/表 6 EndoMamba 同值、表 1 合计与 3,658 不一致等数字疑点</li><li>用 lint_report.py --mode note 做数字核对</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 5442f612 · 文稿 05cfff1a</span><span class="s">8.3 分</span></div><p>第 2 轮自评：补入核心观点速览、各节开头问题与节末过渡；逐个列出与预训练同名的 9 个下游集；写明表 1 合计与正文不一致、EndoMamba 两表同值、AVOS 六基线同值、17 与 19 基准计数不符、SFDR 协方差项缺失、Top-K 只回归 3 个词元等疑点；新增相对已有工作的定位表。数字核对无未匹配项，5 个图内或推导数字登记在 number_exceptions。无法修复的限制：论文没有消融与方差，D2、D4 的结论只能写成未分离；Table 7 与 Figure 4 裁切失败，保留占位并转写关键数字。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

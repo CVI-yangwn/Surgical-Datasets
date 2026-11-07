@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "/ssd3/yangwennuo/code/MNL/Surgical-Datasets/DeepPaperNote_output/手术数据集/SurgSkill_Bench_A_Benchmark_for_Multimodal_Surgical_Skill_Assessment/reading_report.md",
+  "mode": "report",
+  "report_sha256": "0c10aa905846b4816f712add7753eb1748d1e29cc8302924d20ff9863d763a1b",
+  "number_exceptions": {
+    "0.5": "AUROC 随机判别水平的通用参照值，不是论文数字",
+    "150": "派生：214 段的 90% 约 193 段，五折每折训练约 4/5，约 154 段，取约 150",
+    "357": "来自图 2 右侧统计面板（Selected Key-Frames K = 357），图中文字未进入正文抽取",
+    "3600": "来自图 2 右侧统计面板（Total Original Frames N = 3600），图中文字未进入正文抽取"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

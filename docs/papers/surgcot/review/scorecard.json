@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "9ed49a460fb77856daa138c3aedcef26f2f0310d56582b5e2675704a54ae4203",
+      "note_snapshot": "review_rounds/round1_SurgCoT_Advancing_Spatiotemporal_Reasoning_in_Surgical_Videos_through_a_Chain_of_Thought_Benchmark.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮原版流程笔记(自评)。表 1、表 2、表 3 与构建四步、三阶段链都在。D2=7:构建流程没有说清问答文本由谁生成,三阶段子问题在评测时是否回填标准答案只写了未说明,没写对表 3 的影响。D5=7:定位表缺 EndoBench 等视频问答基准,也没说明 SurgCoT 的规模单位混杂。D7=7:Figure 1 放在方法主线的条件链里,按讲述顺序应在研究问题之后更早出现。D9=5:研究问题没有核心观点速览;各节开头未点出要回答的问题;数字后多数没有意义说明;小节末尾无过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头写本节要回答的问题,数字后补一句意义,小节末尾加过渡",
+        "把子问题回填方式未说明对表 3 的影响写清",
+        "补充已发布数据的划分与格式核查结论,并在局限中对应",
+        "用 lint_report.py --mode note 做数字核对并登记推导值",
+        "深度分析补上 BL 设置下的纯文本先验问题与 CAO 区分度的关系"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "72a08f1f2ed8302433c0f8b2bfb3942d6a8368f0d962696936b502c3063a8996",
+      "note_snapshot": "review_rounds/round2_SurgCoT_Advancing_Spatiotemporal_Reasoning_in_Surgical_Videos_through_a_Chain_of_Thought_Benchmark.md",
+      "report_sha256": "bfe23fde15006ef9d2b64cb268e8e5f97d56c6ca739b514e95fcb2a4332c4df5",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评。完成多轮思考(7 个知识点、10 个细节问题、4 个质疑)与讲述顺序修订:研究问题加核心观点速览,各节开头点明问题、结尾加过渡。数字核对无未匹配项,推导值、图内文字与外部核查值登记在 number_exceptions.json。新增:Claude 13.44 的口径、表 2 平均列与五维平均不一致、子问题评分更严与视频输入差异两条替代解释、已发布数据按问题而非按视频划分。不可修复的限制:Fig 3 与 Table 2 裁剪失败只能保留占位;选项数、随机基线、视频输入方式等论文未说明,只能标注;外部核查依据 2026-11-07 的数据快照。",
+      "fixes": []
+    }
+  ]
+}

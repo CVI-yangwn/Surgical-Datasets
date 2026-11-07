@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgMLLMBench: A Multimodal Large Language Model Benchmark Dataset for Surgical Scene Understanding</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>六个手术数据集合成一套问答加分割的训练集：一个模型能否通吃三个手术域</h1>
+<div class="sub">SurgMLLMBench: A Multimodal Large Language Model Benchmark Dataset for Surgical Scene Understanding</div>
+<div class="meta">Tae-Min Choi, Tae Kyeong Jeong, Garam Kim 等；三星研究院、韩国科学技术研究院、高丽大学医学院 | arXiv 2511.21339，预印本</div>
+<div><span class="chip">数据集与基准</span><span class="tag">手术多模态大模型</span><span class="tag">视觉问答</span><span class="tag">器械分割</span><span class="tag">显微外科</span></div>
+<div class="one">作者把五个公开手术数据集和新采集的显微吻合数据 MAVIS 统一成 561,418 帧、带模板问答与像素分割的训练评测集，统一训练的单一模型在部分数据集上接近逐集微调，但动作识别因标签命名冲突大幅掉点，迁移到新数据集只对 LLaVA 有效。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 5 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2511.21339" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgmllmbench/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">11 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>腹腔镜和机器人手术中，外科医生只能看内窥镜的二维画面。镜头会转、会缩放、会被器械挡住，随时弄清“现在做到哪一步、每把器械在干什么”并不容易。</p>
+<p>多模态大模型被寄望成为术中助手：回答提问，同时在画面上标出器械。<strong>但现有数据撑不起这个目标。</strong> EndoChat、LLaVA-Surg 有大量问答，没有阶段和步骤标签；Surgical-LLaVA 有阶段标签，空间监督只有边界框；GraSP 任务齐全，却只有一种手术。各数据集的标签名也互不相同。</p>
+<p>所以论文要做的是：把多个来源合成一套标签字段统一、同时带流程标签和像素分割的数据，看一个模型能否在三个手术域上都用。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li>数据：Cholec80、EndoVis2018、AutoLaparo、GraSP、MISAW 加上新采集的 MAVIS，共 561,418 帧、112.80 小时，覆盖腹腔镜、机器人辅助、显微外科训练三个域。</li><li>问答由五类固定模板生成，评分用精确字符串匹配，分割用 mIoU。</li><li>统一训练的单一模型在小数据集的计数上更好，在 Cholec80 阶段、GraSP 多项和动作识别上更差。</li><li><strong>动作标签没有做语义合并</strong>，LLaVA 统一训练后 GraSP 动作从 39.95 跌到 2.95。</li><li>留出 MAVIS 的迁移实验里，LLaVA 受益，OMG-LLaVA 全面退化。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">这是格式统一的多源合集，标签语义并未统一</span><span class="i">“单一模型不掉点”只对部分格子成立</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据：六个来源各提供什么</h3><p>这一节回答：每个任务实际由哪些数据撑着。</p>
+<figure class="fig"><img src="images/page_004_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。六个来源的标注覆盖、时长、帧数和手术域。</figcaption></figure>
+<p><strong>各任务的标注量差了一个数量级。</strong> 阶段有 559,182 帧，器械动作只有 31,872 帧，分割 25,221 帧。stage 这一层只来自 MAVIS。原始 MISAW 没有分割，作者补入约 3,000 张。</p>
+<p>两处需要读者自己留意：表 1 把 AutoLaparo（腹腔镜子宫切除）归为机器人辅助手术；Cholec80 只勾了阶段，却在表 2 中有计数结果。论文对两处都未解释。</p>
+<p>训练、验证、测试的划分方式论文未说明。若按帧随机切，相邻帧几乎一样，测试分数会偏高。</p>
+<p>来源清楚之后，看新采集的 MAVIS。</p><div class="strip d"><span class="t">数据</span><span class="i">561,418 帧，112.80 小时</span><span class="i">动作 31,872 帧，分割 25,221 帧</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>MAVIS：显微吻合的完整流程</h3><p>这一节回答：新数据录了什么、标到多细。</p>
+<figure class="fig"><img src="images/page_004_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。MAVIS 采集与标注流程。</figcaption></figure>
+<p>MAVIS 记录 1 mm 人工血管的前后壁完整吻合，19 个视频由三名显微外科医生分别主刀 7、7、5 个，1920 × 1080、1 FPS，共 10,652 帧。标注分三级：6 个大阶段、4 个阶段、8 类步骤，另有 8 类像素分割。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_3_review_repair1.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。MAVIS 各层级与器械类别分布。</figcaption></figure>
+<p><strong>作者称分布均衡，图中数字不支持。</strong> 缝合占 48.5%，翻转只有 5.3%。标注者人数和一致性论文未说明，所以步骤标签的噪声上限无从判断。</p>
+<p>有了数据，下一步是把标注变成问答。</p></div><div class="card" id="s5"><h3><span class="num">5</span>构建与评测协议</h3><p>这一节回答：异构标注怎么变成可训练的问答样本，分数怎么算。</p>
+<figure class="fig"><img src="images/page_001_fig_figure_1_review_repair1.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。SurgMLLMBench 总览与五类问题。</figcaption></figure>
+<ol><li>统一格式：视频拆帧，按 COCO 风格写入统一字段，缺失项留空。</li><li>生成问答：五类问题，即流程、器械数量、器械类型、器械动作、数据来源；问题里带数据集标识。</li><li>配对掩码：分割标注作为 OMG-LLaVA 的像素级监督。</li></ol>
+<p>作者不用 GPT 生成问题，换来答案确定、可精确评分，代价是问法单一。每帧实际生成几个问题，论文未说明。</p>
+<p><strong>精确匹配不认同义词。</strong> 合并多个命名体系后，“意思对、名字错”会被记为错误。</p>
+<p>基线是 LLaVA（只能出文字）和 OMG-LLaVA（能出掩码），都用 LoRA 训练一轮。LLaVA 逐集微调和统一训练的学习率相差十倍，理由论文未说明。</p>
+<p>协议清楚之后，看主表。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果：统一训练到底掉没掉点</h3><p>这一节回答：一个模型在全部数据上训练，是否不如逐集训练。</p>
+<figure class="fig"><img src="images/page_007_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。逐集微调与统一指令微调（§）对比。</figcaption></figure>
+<p>逐格看有三种情况：</p>
+<ul><li><strong>更好</strong>：LLaVA 在 EndoVis2018 计数从 58.88 升到 78.38，AutoLaparo 计数从 57.21 升到 82.56。小数据集借到了别处的计数监督。</li><li><strong>持平</strong>：MISAW 阶段、Cholec80 计数、EndoVis2018 分割。</li><li><strong>更差</strong>：OMG-LLaVA 的 Cholec80 阶段从 76.51 跌到 55.78，AutoLaparo 分割从 59.57 跌到 44.97。</li></ul>
+<p>作者把差异概括为“不大”。按表格，这个说法对 LLaVA 的阶段和计数大体成立，对 OMG-LLaVA 和动作任务不成立。</p>
+<p>最大的掉点出在动作识别。</p><div class="strip d"><span class="t">数据</span><span class="i">Cholec80 阶段（OMG-LLaVA）：76.51 → 55.78</span><span class="i">AutoLaparo 计数（LLaVA）：57.21 → 82.56</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>动作识别为何跌到 2.95</h3><p>这一节回答：统一训练的 LLaVA 在 GraSP 动作上为何几乎全错。</p>
+<p>作者的解释是同义标签冲突：IDLE 与 STILL、RETRACTION 与 PULL 在不同数据集里是不同名字。图 5 中 GraSP 真值为 PULL，模型答了 EndoVis2018 的 RETRACTION。</p>
+<figure class="fig"><img src="images/page_008_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。分割对比、交互式流程识别与动作识别示例。</figcaption></figure>
+<p><strong>这个解释只有示例支撑。</strong> 混淆矩阵论文未说明。另一种解释同样成立：动作样本少，被阶段和计数等大任务稀释。合并同义标签后重算才能区分两者。</p>
+<p>动作之外，统一训练对新数据集有没有用，要看留出的 MAVIS。</p></div><div class="card" id="s8"><h3><span class="num">8</span>迁移到 MAVIS：一个受益，一个退化</h3><p>这一节回答：在基准上训练过的模型，换到新数据后是否更容易学。</p>
+<figure class="fig"><img src="images/page_007_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。MAVIS 上从基准初始化与只训 MAVIS 的对比。</figcaption></figure>
+<p>LLaVA 用基准权重初始化后四项都提升，stage 从 67.67 到 75.70，计数从 54.67 到 68.47。stage 是基准里没有的任务，这说明学到的东西能迁移到新任务。</p>
+<p><strong>OMG-LLaVA 五项全降</strong>，stage 从 62.84 跌到 43.90，分割从 53.96 跌到 36.89。作者归因于像素解码器难以跨域迁移，但没有实验验证。两组微调轮数也不同（LLaVA 3 轮，OMG-LLaVA 1 轮），只训 MAVIS 的对照组轮数论文未说明。</p>
+<p>这也是再微调后的迁移；不微调直接测的结果论文未说明。</p></div><div class="card" id="s9"><h3><span class="num">9</span>深入分析：这个基准测到了什么</h3><p><strong>文字部分本质上是多个分类任务换了问答外壳。</strong> 固定模板提问、离散标签作答、字符串精确匹配，它不测开放描述、多轮推理或同义回答。标题里的“交互式推理”是应用定位，不是实验测到的能力。</p>
+<p>分割部分与传统分割基准一致。真正新增的“同一模型出答案也出掩码”，论文没有检查两者是否一致，例如说有两个器械时是否也分出两个掩码。</p>
+<p>“统一分类体系”实际停在字段层。字段对齐了，字段里的标签名没有对齐，这直接造成动作掉点。</p>
+<p>我的判断：相对 EndoBench 这类纯评测集，本文的价值更多在“能拿来训”，而不是作为独立考卷；EndoBench 本文未讨论，这一比较是补充的。</p></div><div class="card" id="s10"><h3><span class="num">10</span>结果没说什么</h3><ul><li>没说明问答形式比专用分类或分割模型损失多少精度，因为没有专用模型参照。</li><li>没说明差异是否稳定，所有结果单次运行、无方差。</li><li>没说明迁移收益来自手术视觉表征还是多训几轮，轮数未对齐。</li><li>没说明测试帧是否与训练帧来自同一视频，划分方式未给。</li><li>MAVIS 是人工血管训练场景，不代表真实患者手术。</li></ul></div><div class="card" id="s11"><h3><span class="num">11</span>复现要注意什么</h3><ul><li>先确认各来源的划分是否按视频切分。</li><li>合并动作标签前建同义词表，或改用语义匹配评分。</li><li>比较统一训练与逐集训练时逐格看，并对齐学习率和轮数。</li><li>数据集在 Hugging Face 以 CC-BY-NC-4.0 公开，原始帧仍受各来源许可约束。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SurgMLLMBench 是字段统一、标签名未统一的多源手术问答加分割合集</div><div>统一训练在小数据集计数上获益，在动作和部分阶段任务上明显掉点</div><div>迁移到 MAVIS 只对 LLaVA 成立，OMG-LLaVA 全面退化</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>同时提供阶段、步骤、动作和像素分割，跨三个手术域</li><li>新采集的 MAVIS 覆盖显微吻合完整流程，带三级流程标签</li><li>数据已在 Hugging Face 公开</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>动作标签没有跨数据集语义合并，精确匹配放大了这个问题</li><li>划分方式、标注一致性、每帧问题数均未说明</li><li>只有两个基线、单次运行，迁移实验轮数未对齐</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>合并同义动作标签后，GraSP 与 MISAW 的动作准确率能恢复多少</li><li>去掉问题中的数据集标识，统一模型表现会怎样</li><li>不微调直接在 MAVIS 上测，统一模型的零样本结果如何</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 543ec1a6</span><span class="s">7.4 分</span></div><p>第一轮笔记证据链完整，表 2、表 3 逐格列出并与作者结论对照；数字尚未经 lint_report 核对（H3 unknown）。D2 构建流程对“标签统一”具体做到哪一步只有推断；D5 与 EndoBench 等评测集的定位只在 plan 中，正文较薄；D8 仍保留较多英文标签名；D9 多个小节结尾缺少过渡，部分数字后缺少“这意味着什么”。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>7</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>研究问题背景段补充术中场景的具体张力并收束到核心观点速览</li><li>深度分析补充与 EndoBench、Surgical-VQA 类纯评测集的定位差异</li><li>把 MAVIS 训练/测试划分、标注一致性、每帧问题数等未说明项统一写为论文未说明并说明影响</li><li>关键结果各小节结尾加过渡句，数字后加含义</li><li>运行数字核对，派生差值列入例外文件</li><li>核对 Cholec80 计数标签来源与 AutoLaparo 归类的表述是否过度推断</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 02e1e262 · 文稿 a964b199</span><span class="s">8.5 分</span></div><p>第二轮按洞察三步修订：表 2 逐格拆为更好、持平、更差；迁移实验写明轮数未对齐；划分、标注一致性、每帧问题数、Cholec80 计数来源均写为论文未说明；补充样本稀释这一替代解释与定位比较。数字核对通过，Figure 3 图中百分比与许可版本号列入例外文件。无法修复的限制：论文缺少方差、混淆矩阵与专用模型参照，相关结论只能标为未区分；Figure 4 无独立裁剪，保留占位。分数为模型自评。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

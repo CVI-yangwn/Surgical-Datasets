@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "指代分割", "plain": "按一句文字描述，把对应物体在每帧中的像素区域分割出来。", "where": "sec:introduction", "needed_for": "理解任务输入输出与三种表达设定"},
+  {"term": "无目标表达", "plain": "描述的器械根本不在视频里，正确输出是全程为空。", "where": "sec:related-work", "needed_for": "理解无目标列为何分数极低"},
+  {"term": "J 与 F", "plain": "J 是掩码 IoU，F 是边界轮廓的准确度，J&F 是二者平均。", "where": "sec:related-work", "needed_for": "读懂表 3 与消融"},
+  {"term": "无目标二值判分", "plain": "整段输出全空记 1，否则记 0。", "where": "sec:related-work", "needed_for": "判断 Cascade-RSVIS 无目标领先的来源"},
+  {"term": "SAM 2 记忆机制", "plain": "把已分割帧编码成记忆，后续帧通过记忆注意力读取目标外观。", "where": "sec:related-work", "needed_for": "理解 CGS 如何利用上下文帧"},
+  {"term": "存在分数与 IoU 分数", "plain": "SAM 2 解码器对每帧预测的目标是否存在、掩码质量多高。", "where": "sec:related-work", "needed_for": "理解 TCM 的选帧规则"},
+  {"term": "1 fps 抽帧", "plain": "所有 RSVIS 数据都每秒取一帧，相邻帧间隔一秒。", "where": "sec:introduction", "needed_for": "正确理解 1.09M 帧的含义"}
+ ],
+ "detail_questions": [
+  {"question": "无目标表达是怎么构造的？", "answer": "只给出定义，未说明构造方式与难度控制。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "每个来源数据集贡献多少段视频？", "answer": "表 9 给出各来源帧数，合计 3,536 段，抽取文本里没有逐来源的视频数。", "evidence": ["sec:appendix"], "status": "partly"},
+  {"question": "专家是否是外科医生？", "answer": "专家指从事相关研究的学生，未提外科医生参与。", "evidence": ["sec:related-work"], "status": "resolved"},
+  {"question": "标注一致性如何检查？", "answer": "外部专家重标 50 段，IoU 0.93；没有检查表达本身。", "evidence": ["sec:appendix"], "status": "resolved"},
+  {"question": "训练测试如何防泄漏？", "answer": "同一原始长视频的片段只进一侧；是否沿用来源官方划分未说明。", "evidence": ["sec:related-work"], "status": "partly"},
+  {"question": "基线是否单独调参、是否多次运行？", "answer": "只说都在训练集上重训，超参与方差未说明。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "为什么多目标分数普遍高于单目标？", "answer": "论文没有解释，也没有按掩码面积分层的结果。", "evidence": ["sec:evaluation-results"], "status": "not_stated"},
+  {"question": "推理时 TCM 选帧的范围是全片还是片段？", "answer": "推理切成 8 帧片段分别处理再合并；片段间身份如何保持未说明。", "evidence": ["sec:experiments", "sec:methods"], "status": "partly"},
+  {"question": "消融是否控制了训练量？", "answer": "单独 TCM 训 18 轮，完整模型再训 CGS 24 轮，未做等训练量对照。", "evidence": ["sec:experiments", "sec:framework"], "status": "resolved"},
+  {"question": "数据何时、在哪发布？", "answer": "称将托管在 GitHub 和/或 Hugging Face，没有链接和时间。", "evidence": ["sec:methods"], "status": "not_stated"},
+  {"question": "按来源、术式、部件与整件拆分的结果？", "answer": "没有给出。", "evidence": ["sec:evaluation-results"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "已有方法在 LD-RSVIS 上很差说明手术指代分割很难", "alternative": "低分可能主要来自跨来源域差、部件级小目标或无目标二值判分，而不是语言理解难", "separating_evidence": "按来源、目标大小、部件与整件分层的结果", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "Cascade-RSVIS 的级联设计带来 6.7 J&F", "alternative": "增益部分来自多训练的 24 轮和更多参数", "separating_evidence": "等训练轮数、等参数量的单阶段对照", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "Cascade-RSVIS 无目标 30.6 说明它更会判断目标不存在", "alternative": "它的存在分数阈值整段置空的规则恰好契合整段全空才得分的评分", "separating_evidence": "帧级误检率或对基线加同样置空规则后的对比", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "LD-RSVIS 能区分在旧基准上打平的方法", "alternative": "差距可能来自训练数据量而不是测试难度", "separating_evidence": "同一方法在两种训练集下分别测试", "in_paper": true, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在评测指标后补一句：无目标领先与置空规则契合，应补帧级误检率",
+  "在基线表现中写明多目标高于单目标论文未说明原因，推断需验证",
+  "在深度分析中把低分来源拆成三种未分离的解释",
+  "在方法提升的归因中写明级联消融未控制训练轮数",
+  "在与已有基准对比中补逐一定位",
+  "在迁移小节写明旧基准结果是在各自训练集上训练"
+ ]
+}

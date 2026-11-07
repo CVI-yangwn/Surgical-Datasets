@@ -1,0 +1,39 @@
+{
+ "output_language": "zh-CN",
+ "knowledge_points": [
+  {"term": "语义锚定时刻", "plain": "讲解者明确把某个语义线索与当前画面对应起来的一段时间窗，是每道题的出处。", "where": "sec:related-work", "needed_for": "题目覆盖范围只限于讲解口述内容这一边界"},
+  {"term": "干扰项", "plain": "选择题中的错误选项；如果它们与正确答案在长度或风格上不同，模型不看画面也能挑出答案。", "where": "sec:related-work", "needed_for": "阶段二为何要做检索增强与多模型混合"},
+  {"term": "盲测", "plain": "把视频去掉，只给模型题目和选项，看它能否答对。", "where": "sec:related-work", "needed_for": "阶段三删题规则与 MG 指标"},
+  {"term": "盲微调猜测器", "plain": "只用题目和选项、不用视频训练过的模型，用来发现微调后才学得到的语言捷径。", "where": "sec:method-4", "needed_for": "表 8 中 FT 列远高于 OS 列的解释"},
+  {"term": "一致性分数", "plain": "同一猜测器无图答 5 次中答对的比例，达到 3/5 即删题。", "where": "sec:method-4", "needed_for": "区分稳定可解与碰巧猜中"},
+  {"term": "多模态增益 MG", "plain": "有图准确率减无图准确率，衡量成绩有多少来自画面。", "where": "sec:models", "needed_for": "SUREON 测视觉推理这一中心论断"},
+  {"term": "Holm–Bonferroni 校正", "plain": "多次两两比较时按 p 值从小到大逐级收紧显著性阈值，控制整体误报。", "where": "sec:evaluation-2", "needed_for": "前三名差异不显著的判断"},
+  {"term": "伪标签", "plain": "由模型自动生成、未经人工核验的标注。", "where": "sec:evaluation", "needed_for": "SUREON-DB 不能当临床真值"}
+ ],
+ "detail_questions": [
+  {"question": "为什么一致性阈值取 3/5、重复 5 次？", "answer": "论文说明多次查询是为避免把碰巧猜中当作可解；为何取 3/5 与 5 次没有做敏感性分析，论文未说明。", "evidence": ["sec:method-4"], "status": "partly"},
+  {"question": "盲测删了多少训练数据？", "answer": "可盲测的 161,667 条中删去 100,532 条（62.2%），保留 61,135 条；SM 不参与筛选全部保留，合计 76,061。", "evidence": ["sec:method-4"], "status": "resolved"},
+  {"question": "猜测器只用 Qwen 家族，换家族会删掉不同的题吗？", "answer": "作者只用未参与筛选的 Gemma-4-31B 测了无图准确率（强化前后 23.2% 与 22.9%），没有用其他家族重新筛一遍比较被删集合的重叠，论文未说明。", "evidence": ["sec:method-4", "sec:evaluation"], "status": "partly"},
+  {"question": "表 3 中 SUREON-VLM 为 48.2，表 19 最终配置 mix1→mix2 为 45.10，为什么不同？", "answer": "两表均称是在 SUREON 上的准确率，论文没有解释差异来源（是否不同检查点、不同题目子集或不同解码设置），论文未说明。", "evidence": ["sec:model", "sec:data"], "status": "not_stated"},
+  {"question": "人类基线是否代表专家上限？", "answer": "不是。5 名医生每题一人作答、不匹配专科，自报有把握的只占 31.4%。", "evidence": ["sec:evaluation-2"], "status": "resolved"},
+  {"question": "SM 的大模型评审可靠吗？", "answer": "44 条样本上与人类多数票一致 79.1%；10 个分歧中 6 个是评审判错而人类接受，说明评审更严格。", "evidence": ["sec:model-5"], "status": "resolved"},
+  {"question": "为什么用 6 个干扰项而非 3 个？", "answer": "表 8 中 6 个干扰项的 LLM-Mix 在零样本与微调两种条件下平均无图准确率最低（0.501）。", "evidence": ["sec:method-4"], "status": "resolved"},
+  {"question": "帧数上限 8 帧是否限制了长时程题？", "answer": "长时程片段中位 80.6 秒仍只抽 8 帧，作者没有做帧数消融，论文未说明。", "evidence": ["sec:evaluation-2", "sec:related-work"], "status": "not_stated"},
+  {"question": "公开基准上的对比是否同条件？", "answer": "不是。商业与其他手术模型只做帧级，部分数字取自原论文；SUREON-VLM 另报片段级。", "evidence": ["sec:model-5"], "status": "resolved"},
+  {"question": "专家拒绝的原因有哪些？", "answer": "有理由的 178 个拒绝中，22.5% 含糊或多解，14.6% 不准确，9.6% 片段过短，9.6% 画面中不可见；其余原因的占比论文未说明。", "evidence": ["sec:method-4"], "status": "partly"},
+  {"question": "数据是否可以直接下载？", "answer": "伦理部分说发布问答、时间窗与元数据，许可 CC BY-NC-SA 4.0，视频不重新分发；数据卡显示需登录并经人工审核。", "evidence": ["sec:data"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "SUREON 测的是视觉推理而非语言先验", "alternative": "筛选只针对 Qwen3-VL-8B 的可学捷径，更强的语言模型仍能无图答对相当部分题，SUREON 分数里混有语言先验。", "separating_evidence": "用多个家族的强模型重做盲测筛选并比较删除集合；或报告商业模型无图准确率与随机的差距。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "筛选后的训练数据让模型更依赖视觉", "alternative": "训练与评测同源，模型学到的是该流程的出题与干扰项风格，无图时被系统误导，从而抬高 MG。", "separating_evidence": "在独立构建、未经同一流程的手术视频推理基准上比较三阶段数据训练出的模型的 MG。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "手术视觉推理远未解决，连外科医生也只有 64.9", "alternative": "64.9 部分反映专科不匹配和讲解者口述答案的个人表述，而非题目本身的视觉难度。", "separating_evidence": "按专科匹配医生作答，或每题多人作答并报告一致性。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加入核心观点速览，点出盲测筛选、MG 与同源评测这一边界",
+  "把表 3 的 48.2 与表 19 的 45.10 不一致写成论文未说明",
+  "把阈值 3/5 与重复 5 次的选择写成论文未说明的敏感性",
+  "把帧数上限对长时程题的影响写成论文未说明",
+  "在深度分析中把训练评测同源列为未被排除的替代解释",
+  "在人类基线一节补充自报把握比例，说明 64.9 是跨专科下界"
+ ]
+}

@@ -1,0 +1,22 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/SurgMLLMBench_A_Multimodal_Large_Language_Model_Benchmark_Dataset_for_Surgical_Scene_Understanding/reading_report.md",
+  "mode": "report",
+  "report_sha256": "a964b1995074a610fde24df821ac04e2f806ed515e6e3b3f9bee90882b9e526a",
+  "number_exceptions": {
+    "34": "Figure 3(a) 柱高读数：BACK-SIDE TYING 约 34%，图中数值，正文未写",
+    "36.4": "Figure 3(d) 环形图标注：Knot tying 36.4%",
+    "48.5": "Figure 3(d) 环形图标注：Suturing 48.5%",
+    "5.3": "Figure 3(d) 环形图标注：Flip 5.3%",
+    "9.8": "Figure 3(d) 环形图标注：Cut 9.8%",
+    "4.0": "Hugging Face 数据集页面许可 CC-BY-NC-4.0 的版本号，不是论文数值"
+  },
+  "section_count": 11,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

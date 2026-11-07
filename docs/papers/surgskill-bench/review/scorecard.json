@@ -1,0 +1,69 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "adf3dd4f089cd2616f1a01f32d9dfc88330c6d04bb1903cfd74f0937e8dc48a4",
+      "note_snapshot": "review_rounds/round1_SurgSkill_Bench_A_Benchmark_for_Multimodal_Surgical_Skill_Assessment.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 6,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.7,
+      "verdict": "首轮笔记证据链完整，两张主表与采样、评语结论对应清楚；D5 偏低，与已有技能数据集的对比依赖背景知识且论文未引用；D9 部分小节结尾缺少过渡；数字核对尚未运行。",
+      "fixes": [
+        "运行 Insight Pass，补充对评语泄露与关键帧收益的质疑",
+        "核对全文数字，派生数（约 150 段、约三分之一、约 0.03）写入例外表",
+        "为关键结果与深度分析小节补过渡句",
+        "数据集定位处标明背景知识来源"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "12f00a4783fd2985d846b0974150367db262097548566de6e81b3168b21d9cbd",
+      "note_snapshot": "review_rounds/round2_SurgSkill_Bench_A_Benchmark_for_Multimodal_Surgical_Skill_Assessment.md",
+      "report_sha256": "0c10aa905846b4816f712add7753eb1748d1e29cc8302924d20ff9863d763a1b",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.4,
+      "verdict": "第二轮补入 Insight Pass 的替代解释（受训者外观泄露、评语即分数、注意力图基线不明），各节补过渡句，数字核对全部通过，派生数与图中数字写入例外表。D5 为 7：论文本身没有与已有技能数据集对比，笔记中的 JIGSAWS 定位来自背景知识并已注明，无法从原文补全。D2 为 8：融合模块的残差与前馈细节论文只有文字描述。",
+      "fixes": []
+    }
+  ]
+}

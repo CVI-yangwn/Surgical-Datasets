@@ -1,0 +1,17 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "reading_report.md",
+  "mode": "report",
+  "report_sha256": "d0feab8102430c4e5ee443c611af1cffc7b9348d4c1f6269ae7cca8010a497f2",
+  "number_exceptions": {
+    "4.0": "CC BY 4.0 许可版本号，取自 Hugging Face 数据集页面而非论文正文"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

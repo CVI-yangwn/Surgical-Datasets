@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>MM-OR: A Large Multimodal Operating Room Dataset for Semantic Understanding of High-Intensity Surgical Environments</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>不止看画面：首个支持多模态场景图生成的大规模手术室数据集</h1>
+<div class="sub">MM-OR: A Large Multimodal Operating Room Dataset for Semantic Understanding of High-Intensity Surgical Environments</div>
+<div class="meta">Ege Özsoy、Chantal Pellegrini、Nassir Navab 等，慕尼黑工业大学、慕尼黑机器学习中心 | arXiv 2503.02579，v1，2025-03-04；官方仓库注明录用于 CVPR 2025</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术室感知</span><span class="tag">场景图生成</span><span class="tag">多模态</span><span class="tag">全景分割</span><span class="tag">机器人膝关节置换</span></div>
+<div class="one">MM-OR 在一间模拟手术室录了 17 台约 90 分钟的机器人膝关节置换，同步多视角 RGB-D、细节视角、音频与转写、机器人日志和红外跟踪，标注 25,277 个时间点的全景分割与场景图；MM2SG 用全部模态加时序得到 0.529 的宏平均 F1，但切割、缝合等稀有动作仍为 0。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 7 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2503.02579" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/mm-or/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术室要回答"谁在对什么做什么"，但公开数据既少又只有画面。</strong> 采集受准入、隐私和硬件不能干扰手术的限制，已有外部视角数据集要么不公开，要么规模小。</p>
+<p>同组的 4D-OR 是此前最大的公开手术室数据集，也是唯一带场景图的，但只有 6,743 个时间点、一天录完、演员不是医务人员，没有分割，也没有音频和机器信号。</p>
+<p><strong>而手术室里很多信息不在画面上</strong>：锤击声、口头指令、机器人进入了哪一步、标定工具在哪里。MM-OR 要补的就是这一块。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口：手术室缺少规模足够、包含非视觉信号的公开数据</span><span class="i">回答：同步七类传感器，标注分割、场景图和下游任务</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的答案分三步：在模拟手术室由真实外科医生对膝关节模型做 17 台机器人膝关节置换，同步七类传感器到 1 帧每秒；给 25,277 个时间点标注全景分割和场景图，另加机器人阶段、下一动作、无菌破坏三个下游任务；提出 MM2SG，把每种模态编码成令牌交给大语言模型生成三元组。</p>
+<p><strong>头条结果：</strong> 全模态加时序 0.529，高于 ORacle 的 0.472。<strong>边界：</strong> 一间手术室、一类术式、4 个测试 take、没有方差；稀有动作仍完全失败。</p><div class="strip d"><span class="t">数据</span><span class="i">92,983 个时间点，25,277 个标注，约 500GB</span><span class="i">5 路 RGB-D、3 路细节相机、3 个麦克风</span><span class="i">宏平均 F1：PSG 0.328，ORacle 0.472，MM2SG 0.529</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p><strong>这一节回答：录了什么手术，用了哪些传感器。</strong> 录制内容是机器人辅助的全膝与部分膝关节置换，跨多天、不同主刀和团队。患者是包在泡沫里、接在人体模型上的医用级膝关节模型，每次换新。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_2_review_repair1.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。录制布局与传感器，灰色圆圈中的数字是传感器数量。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>模态</th><th>设备</th><th>价值</th></tr></thead><tbody><tr><td>多视角 RGB-D</td><td>5 台 Kinect</td><td>3D 点云与整场视角</td></tr><tr><td>细节视角</td><td>3 台 PTZ 相机</td><td>看清器械与手部</td></tr><tr><td>低曝光 RGB</td><td>跟踪系统相机</td><td>无影灯下不过曝</td></tr><tr><td>音频与转写</td><td>3 个佩戴式麦克风，Whisper v3</td><td>器械声与口头交流</td></tr><tr><td>日志与屏幕</td><td>机器人内部日志与录屏</td><td>机器人阶段与状态</td></tr><tr><td>红外跟踪</td><td>基座、标定阵列、膝部跟踪器</td><td>空间位置</td></tr></tbody></table></div>
+<p><strong>所有模态统一到 1 帧每秒</strong>，秒级以下的动作细节不在数据里。参与者人数论文未说明。</p><div class="strip h"><span class="t">亮点</span><span class="i">真实外科医生、模拟患者，真实度提升主要在人员行为</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>标了什么、怎样标</h3><p><strong>这一节回答：每个时间点上能学到什么。</strong> 全景分割在三路视角上完成：首帧点击，Segment Anything 生成掩码，AOT 传播，人工修正；高动作段逐帧、低动作段每 5 帧。每个有分割的时间点都有人工场景图，平均 8 个节点、10 条边。</p>
+<p>每个标注一人完成、一人复核，一致性论文未说明，所以无法估计标签噪声。</p>
+<p>关系分布极不均衡：CloseTo 67,148 次，最少的 Cementing 只有 48 次。<strong>宏平均 F1 的高低主要取决于这些少见动作。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">平均 8 个节点、10 条边，最多 16 个节点、20 条边</span><span class="i">划分：9 训练、3 验证、4 测试 take</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>数字对不上的地方</h3><p><strong>这一节回答：复用前要先核对什么。</strong> Table 6 四行时间点之和为 66,996，标注之和为 19,253，都小于正文的 92,983 与 25,277。9、3、4 个 take 合计 16，与 17 台全长录制差一台。短片段数量在正文中出现 22 和 20 两种写法。这些差异论文未说明。</p>
+<p><strong>测试集只有 4 个 take、2,960 个标注</strong>，0.01 级别的差距不足以下结论。</p></div><div class="card" id="s6"><h3><span class="num">6</span>MM2SG 怎样读多种模态</h3><p><strong>这一节回答：七类输入怎样变成一张场景图。</strong></p>
+<figure class="fig"><img src="images/page_005_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。MM2SG 架构：各模态经专用编码器投影，语言模型生成三元组。</figcaption></figure>
+<ol><li>图像经 CLIP 编码与图像池化，取 576 个令牌；点云、音频、每个分割掩码各编码成 1 个令牌。</li><li>转写、机器人日志、跟踪数据直接写成文本。</li><li>此前预测的场景图压缩成"记忆场景图"文本，提供时序。</li><li>大语言模型（LLaVA-7B，Vicuna-7B）自回归生成三元组。</li></ol>
+<p>训练时每种模态以 50% 概率丢弃，并把部分模态换成场景图相似样本的同类模态。<strong>训练集约 20% 来自 4D-OR</strong>，基线是否同样如此论文未说明。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><figure class="fig"><img src="images/page_006_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。逐步增加模态的场景图生成结果。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>配置</th><th>宏平均 F1</th></tr></thead><tbody><tr><td>PSG</td><td>0.328</td></tr><tr><td>ORacle</td><td>0.472</td></tr><tr><td>加其他相机</td><td>0.484</td></tr><tr><td>加点云</td><td>0.494</td></tr><tr><td>加音频与转写</td><td>0.484</td></tr><tr><td>加日志与跟踪</td><td>0.502</td></tr><tr><td>加预测分割</td><td>0.520</td></tr><tr><td>加时序</td><td>0.529</td></tr></tbody></table></div>
+<p><strong>总体上升，但不单调</strong>：加音频与转写这一步下降了 0.010。真值分割换掉预测分割几乎没用（0.519 对 0.520），分割质量不是瓶颈。</p>
+<p>增强消融：无增强 0.436，加丢弃 0.469，再加混合 0.520。<strong>增强的贡献不小于全部模态。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">增强：0.436、0.469、0.520</span><span class="i">丢弃率验证：0.671、0.728、0.733、0.718</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>长尾与其他任务</h3><p><strong>这一节回答：模型在哪里失败。</strong> 宏平均 0.529，加权平均 0.703。Cutting 与 Suturing 的 F1 为 0。按频率分组，MM2SG 在 tail 组 0.262，ORacle 0.120，head 组两者几乎相同。</p>
+<p>分割基线 DVIS++ 联合训练的离线设定最好，MM-OR 上 67.5/67.0/66.4；但单帧和在线设定在窗口 0 上，联合训练反而更低。</p>
+<p>下游任务：无菌破坏 0.550，下一动作 0.354，机器人阶段 0.569。类别数和多数类基线论文未说明，<strong>这些数字只说明任务可做</strong>。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li>模态递增的趋势是否稳定：没有方差，4 个测试 take。</li><li>tail 增益来自多模态还是来自联合 4D-OR 训练：没有分离。</li><li>多模态混合本身的作用：缺少只用混合的一行。</li><li>在真实手术上是否成立：所有数据来自同一间模拟手术室，没有迁移实验。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>相对已有数据集新在哪里</h3><div class="tbl"><table><thead><tr><th>数据集</th><th>非视觉模态</th><th>场景图</th><th>分割</th></tr></thead><tbody><tr><td>4D-OR</td><td>无</td><td>有</td><td>原版无</td></tr><tr><td>MVOR</td><td>无</td><td>无</td><td>无</td></tr><tr><td>EgoExo4D</td><td>音频、注视</td><td>无</td><td>无</td></tr><tr><td>MM-OR</td><td>音频、转写、日志、跟踪</td><td>有</td><td>有</td></tr></tbody></table></div>
+<p>MM-OR 是 4D-OR 的直接继任者，标注格式相同，可以联合训练。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>MM-OR 是目前唯一同时有非视觉模态、场景图和全景分割的公开手术室数据集，需填表申请下载</div><div>全模态加时序得到 0.529，但模态增益不单调，增强贡献不小于模态</div><div>长尾动作仍是主要难点，宏平均与加权平均要一起报告</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>七类传感器硬件同步，覆盖手术室特有的机器信号</li><li>真实外科医生操作，多天多团队</li><li>同时提供分割、场景图和三个下游任务标签，与 4D-OR 格式兼容</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>一间手术室、一类术式、模拟患者</li><li>测试仅 4 个 take，没有方差</li><li>划分统计与总数不一致，短片段数量前后不一</li><li>增强与长尾分析缺少关键对照</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>只用混合不用丢弃时 F1 是多少？</li><li>不用 4D-OR 训练时 tail 增益还剩多少？</li><li>在真实手术录像上，音频与日志的增益是否保持？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 b25e6056</span><span class="s">7.6 分</span></div><p>第 1 轮原版流程笔记（模型自评）。证据链完整，主表、增强消融、长尾分组和分割与下游结果都在，机制流程四步清楚。D5=7：与 EgoExo4D 等通用多模态数据集的对比只有一句。D6=7：缺少数据下载后的具体核对项。D9=6：多数小节开头没有本节问题，部分数字后缺少意义，小节结尾没有过渡。H3 尚未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>各小节开头补本节问题、数字后补意义、小节结尾补过渡</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li><li>Insight Pass 挑战轮：核对模态递增是否被方差淹没、tail 增益是否来自联合训练、真值分割无收益的含义</li><li>把一致性、参与者人数、划分差额、基线是否用前作数据统一写成 论文未说明</li><li>补与 EgoExo4D 的定位对比</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 24b5acf3 · 文稿 e2312610</span><span class="s">8.3 分</span></div><p>第 2 轮自评（模型自我评审，非独立评分）。Insight Pass 三轮完成，6 条修订与 6 个论文未说明缺口已写入笔记与报告；笔记与报告数字核对无未匹配项，推导值与文本抽取丢失的三个表格单元格登记在 number_exceptions.json。新增 EgoExo4D 定位、各节开头问题与结尾过渡、真实度只在人员行为层面的分析，并指出音频与转写一步下降、联合训练在部分分割设定下降、Table 6 之和与总数不符、短片段 22 与 20 不一致。无法修复的限制：Table 4、5、7、8、9 无可用裁剪，保留占位并以文字或 Markdown 表转写；一致性、参与者人数、方差、基线训练数据、下游类别数均为论文未说明。D2 未到 9：图像池化器与分割编码器的结构细节论文描述有限。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

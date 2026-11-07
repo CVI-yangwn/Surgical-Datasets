@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Colon-Bench: An Agentic Workflow for Scalable Dense Lesion Annotation in Full-Procedure Colonoscopy Videos</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>用大模型漏斗加医生把关做出的 14 类结肠镜病灶视频基准</h1>
+<div class="sub">Colon-Bench: An Agentic Workflow for Scalable Dense Lesion Annotation in Full-Procedure Colonoscopy Videos</div>
+<div class="meta">Abdullah Hamdi, Changchun Yang, Xin Gao；阿卜杜拉国王科技大学（KAUST） | arXiv 2603.25645（v3，2026-06-28；项目页标注 MICCAI 2026）</div>
+<div><span class="chip">数据集与基准</span><span class="tag">结肠镜</span><span class="tag">病灶检测</span><span class="tag">视频分割</span><span class="tag">视频问答</span><span class="tag">多模态大模型</span></div>
+<div class="one">在 REAL-COLON 60 段全程视频上用 Gemini 加 EdgeTAM 的漏斗和一名医生做出 528 个 14 类病灶窗口，前沿大模型定位远超 SAM 3，但真值与被测模型同源。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2603.25645" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/colon-bench/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>结肠镜是结肠癌早筛的主要手段，但一次检查可能长达两小时，病灶稀疏且常被模糊、粪水和贴壁镜头遮住。</p>
+<p><strong>公开数据几乎都只标息肉</strong>。Kvasir-SEG 与 PolypGen 是静态图，REAL-COLON 有 60 段全程视频和 351,264 个息肉框，却没有掩码和文本。多类病灶、带时空真值和临床文本的视频数据还不存在。</p>
+<p>人工逐帧标注昂贵又不一致。作者想知道：能否让大模型承担大部分标注，医生只做最后判断。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>做法</strong>：Gemini 系模型提议时间窗、复看、画框，EdgeTAM 跟踪出掩码，另一个智能体看带框视频复核，最后一名医生接受或拒绝。</li><li><strong>产物</strong>：528 个窗口、14 类病灶、300,132 个框、213,067 个掩码、133,289 词描述。</li><li><strong>结果</strong>：Gemini 3 系列在问答和分割上领先，SAM 3 的分割 mIoU 只有 2.5。</li><li><strong>边界</strong>：质量证据只有息肉替代标签，召回 48.6；真值由 Gemini 生成，Gemini 的领先无法与同源偏差分开。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">人工只做窗口级接受或拒绝，不改框和掩码</span><span class="i">规模扩展在类别、掩码和文本，帧数反而少于来源</span></div><div class="strip d"><span class="t">数据</span><span class="i">1,325 → 528 个窗口，保留率 39.8%</span><span class="i">医生拒绝 69 个，占展示窗口 11.6%</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>标注漏斗怎样运转</h3><figure class="fig"><img src="images/page_003_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 1。三阶段流程：视频级粗定位、片段级验证、帧与序列级标注跟踪，再经 AI 与人工复核。</figcaption></figure>
+<p>四步依次是：轻量 Gemini 把 60 秒短片划成时间窗并标记有无病灶；Gemini 3 Pro 复看每个窗口，给出首次清晰出现的时间和描述；Gemini 3 Flash 在该帧画框，EdgeTAM 向后跟踪出框和掩码；第二个智能体看带框视频，置信度不到 80% 就拒绝。</p>
+<figure class="fig"><img src="images/page_014_fig_table_5_review.png" alt="Table 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 5。各阶段的窗口、帧、时长和保留率。</figcaption></figure>
+<p><strong>删得最多的是验证这一步</strong>（−422 个窗口）。医生只拒绝 69 个，但他看到的已是两轮过滤后的结果，这个比例不能当作独立的标注一致性。</p>
+<p>最终窗口平均 878.9 帧，被拒的只有 414 到 509 帧。流程偏好留下长而描述充分的窗口，短暂一闪的病灶更容易丢。</p></div><div class="card" id="s4"><h3><span class="num">4</span>质量证据只覆盖息肉</h3><figure class="fig"><img src="images/page_015_fig_table_7_review.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。以 REAL-COLON 息肉框为替代标签，逐阶段的帧级与框级指标。</figcaption></figure>
+<p>验证让精度加 7.3、召回几乎不变；跟踪再加 10.2 精度，代价是召回降 17.2。最终精度 55.4、<strong>召回只有 48.6</strong>，框级 F1@.50 只有 27.8。</p>
+<p>医生复核前后框级指标完全不变，说明医生没有修框。其余 13 类病灶没有任何独立参照，作者也承认这些数字只用于质量控制。</p><div class="strip d"><span class="t">数据</span><span class="i">最终帧级 F1 51.8，特异度 94.4</span><span class="i">框级 mIoU 35.2</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>任务与去偏</h3><p>评测集由 1,597 个片段组成：分类 790（阴性 518）、检测 272、分割 264、有框问答 1,485 题、无提示问答 2,740 题。</p>
+<p>每个片段由 Gemini 3 生成三道五选一题。去偏分两步：用只看题干和正确答案的独立调用重写干扰项，再用纯文本盲测找出新捷径并回退。<strong>去偏后盲答仍有 44.6% 和 37.1%</strong>，随机水平是 20%。作者归因于病灶类型分布偏斜，但没有给出多数类基线。</p>
+<p>评测片段如何选取、微调过的 Colon-ViCLIP 训练是否与评测隔离，论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_006_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。所有模型在问答、分类和分割上的汇总。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>模型</th><th>问答 有框</th><th>问答 无提示</th><th>分类 F1</th><th>分割 mIoU</th></tr></thead><tbody><tr><td>Gemini 3 Pro</td><td>78.6</td><td>82.5</td><td>77.3</td><td>45.0</td></tr><tr><td>Gemini 3 Flash</td><td>76.6</td><td>76.0</td><td>70.5</td><td>48.3</td></tr><tr><td>GPT-5.4</td><td>59.4</td><td>70.8</td><td>77.8</td><td>34.5</td></tr><tr><td>Seed 1.6</td><td>62.9</td><td>72.0</td><td>69.4</td><td>12.6</td></tr><tr><td>Qwen3.5 397B</td><td>49.0</td><td>60.1</td><td>0.7</td><td>16.6</td></tr><tr><td>SAM 3</td><td>无</td><td>无</td><td>无</td><td>2.5</td></tr></tbody></table></div>
+<p><strong>GPT-5.4 不是标注模型，分割仍比 SAM 3 高 32.0 个点</strong>，说明前沿大模型确有定位能力。但 SAM 3 走文本提示，其他模型是画框后交给同一个 EdgeTAM，两者条件不同。</p>
+<p>几个 Qwen 大模型分类召回接近 0，准确率在 64.6% 到 65.6% 之间，与全判阴性（518/790）相同。它们的问答分数不差，所以这是提示与判断习惯不匹配，不是看不见病灶。</p>
+<p>有框问答中，6 个模型的准确率低于纯文本盲测的 44.6%。</p></div><div class="card" id="s7"><h3><span class="num">7</span>消融说明了什么</h3><figure class="fig"><img src="images/page_025_fig_table_14_review_repair1.png" alt="Table 14" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 14。三个模型用 1 到 7 帧检测框时的分割 mIoU 与 mDice。</figcaption></figure>
+<p>检测帧数从 1 加到 7，Gemini 3 Flash 的 mIoU 从 43.1 升到 54.4，作者取 3 帧折中。</p>
+<p>视频对单帧只测了 3 到 4 个模型，方向不一致：Seed 1.6 分类掉 22.4 个点，Gemini 3 Flash 反而升 1.6。有框问答中 59% 的题有时间描述，单帧仍能答对大部分。推断：多数题目不需要真正的时间推理。</p>
+<p>去掉框提示时，四个代表模型的变化在 −1.8 到 +0.6 之间。</p></div><div class="card" id="s8"><h3><span class="num">8</span>Colon-Skill 提示</h3><figure class="fig"><img src="images/page_028_fig_table_18_review.png" alt="Table 18" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 18。9 个模型加与不加技能提示的问答准确率。</figcaption></figure>
+<p>作者把多数模型共同答错的题交给大模型，总结成一页判读要点，加在提示前。9 个模型中 7 个两档都提升，最多 +9.7（Qwen3.5 397B，有框）。Molmo 2-8B 两档都下降。</p>
+<p><strong>技能从同一批题蒸馏又在同一批题上评测</strong>，没有留出集。它只说明“写进本基准的常见错误能提高本基准分数”。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li><strong>Gemini 领先的幅度不可全信</strong>：分割真值来自 Gemini 3 Flash 的框加 EdgeTAM，题目来自 Gemini 3，被测的 Gemini 加 EdgeTAM 流程在复现标注过程。论文没有独立人工子集来重算排名。</li><li><strong>528 个窗口不是病灶全集</strong>：约一半息肉帧缺失，短窗口被系统性删除。</li><li><strong>非息肉类别的质量未知</strong>：只有一名外科医生做窗口级判断，没有一致性指标。</li><li><strong>几处数字对不上</strong>：分割是 272 还是 264 个视频；图中出现的 Gemini 3.5 Flash 不在任何表格里；表 14 的 3 帧结果与表 11 相差 0.4 到 0.7 个点。论文都未说明。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>复现与复用要注意什么</h3><p>数据在 Hugging Face 门控发布（CC BY 4.0），代码在 GitHub。复用前先看三点：分类结果的准确率是否等于全判阴性；比较 Gemini 与其他模型时，用 REAL-COLON 人工息肉框复核；引用技能提示的提升时说明没有留出集。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>大模型提议、复看、跟踪、复核，人工只接受或拒绝，这一漏斗能低成本做出多类视频病灶标注</div><div>质量只在息肉上验证过，召回 48.6，框级 F1@.50 只有 27.8</div><div>前沿大模型定位远超 SAM 3，但 Gemini 的领先与标注同源无法分开</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>首个带 14 类病灶、掩码和临床文本的结肠镜视频基准，并公开数据、代码和全部提示词</li><li>逐阶段消融清楚显示每个过滤器的精度和召回代价</li><li>问答去偏流程有纯文本盲测结果，便于判断先验大小</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>真值、题目和领先模型同属 Gemini 家族，没有独立人工子集</li><li>只有一名医生，且只做窗口级判断</li><li>技能提示存在测试集泄漏；评测划分方式论文未说明</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>换用非 Gemini 模型做标注，排名会如何变化</li><li>非息肉类别在独立人工复核下的精度和召回是多少</li><li>技能提示在新视频或留出题目上是否仍有效</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 1d496379</span><span class="s">7.7 分</span></div><p>第一轮：证据链完整，四任务主表与流程消融均已转录，同源偏差与测试集泄漏已指出。D5 定位偏弱，只与表 1 数据集对比，未展开与 EndoBench、LDPolypVideo 的差异；D6 复用建议偏少；D7 关键结果小节较长且无过渡；D9 研究问题末尾缺核心观点速览，多数小节没有开头问题与结尾过渡。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各小节开头补一句要回答的问题，结尾补过渡</li><li>补 Insight Pass 中的 not_stated 缺口：Gemini 3.5 Flash 来源、272/264 不一致、划分方式</li><li>深度分析补与 EndoBench、REAL-COLON 的定位差异</li><li>我的笔记补具体的复用检查项</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 00c3ecb5 · 文稿 d0feab81</span><span class="s">8.5 分</span></div><p>第二轮：补了核心观点速览、各小节开头问题与过渡、与 REAL-COLON/EndoBench/Kvasir 的定位、复用检查项，并把 Insight Pass 的未说明项（划分方式、272/264、Gemini 3.5 Flash、表 14 与表 11 差异、GPT 视频输入）写进笔记和报告。无法修复的限制：论文没有独立人工子集，Gemini 同源偏差只能指出、无法量化；Fig 8/9/12/13 与 Table 8/13 裁图身份错配或质量不合格，保留占位。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

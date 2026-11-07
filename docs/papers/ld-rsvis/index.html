@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>LD-RSVIS: A Large-Scale and Diverse Benchmark for Referring Surgical Video Instrument Segmentation</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>支持无目标、单目标、多目标表达的大规模手术视频器械指代分割基准</h1>
+<div class="sub">LD-RSVIS: A Large-Scale and Diverse Benchmark for Referring Surgical Video Instrument Segmentation</div>
+<div class="meta">Zan Wang, Yunhe Feng, Dong Nie, Oluwatosin Oluwadare, Kewei Sha, Yan Huang, Heng Fan（北德克萨斯大学、Meta） | arXiv 2609.23067，预印本</div>
+<div><span class="chip">数据集</span><span class="tag">手术数据集</span><span class="tag">指代分割</span><span class="tag">视频分割</span><span class="tag">手术器械</span><span class="tag">SAM 2</span></div>
+<div class="one">LD-RSVIS 把 15 个公开手术视频数据集重切成 3,536 段并配上 58,666 条无目标、单目标、多目标描述与逐帧掩码，12 个已有方法总体 J&amp;F 都不超过 33.1，配套的 Cascade-RSVIS 达到 37.4，但数据尚未发布，低分来源也没有被拆开。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2609.23067" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/ld-rsvis/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术机器人要能听懂“左下方那把双极钳的尖端”，并在视频里把它分割出来。</strong> 这就是指代式手术视频器械分割：输入视频和一句描述，输出每帧中被描述器械的掩码。</p>
+<p>已有基准都太小，视频少于 350 段，测试集少于 100 段。它们还只有单目标表达，默认画面里必定有且只有一个目标。真实指令可能同时指两件器械，也可能指一件不在画面里的器械。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的回答是一个大一个数量级、三种指代设定齐全的新基准，外加一个参考方法。</p>
+<ul><li>从 15 个公开数据集挑选并切片，得到 3,536 段、1.09M 帧（1 fps），30 类器械、25 类术式。</li><li>专家写描述并标首帧，志愿者扩展成整段掩码，专家全体一致才通过。</li><li>58,666 条表达分为单目标、多目标、无目标三类；训练 2,853 段，测试 683 段。</li><li>12 个方法重训后总体 J&amp;F 在 19.7 到 33.1 之间；Cascade-RSVIS 为 37.4。</li></ul>
+<p><strong>边界：</strong> 数据未发布；无目标表达如何构造论文未说明；没有按来源或术式拆分的结果。</p><div class="strip h"><span class="t">亮点</span><span class="i">首个在手术领域同时考无目标、单目标、多目标的指代分割基准</span><span class="i">已有方法在单目标与无目标之间此消彼长</span></div><div class="strip d"><span class="t">数据</span><span class="i">3,536 段视频，1.09M 帧，58,666 条表达，3.85M 掩码</span><span class="i">测试表达：多目标 2,732，单目标 6,573，无目标 1,861</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p><strong>视频全部来自已有公开数据集，来源比以往的手术指代基准宽得多。</strong> 除了 EndoVis 这类分割数据，还有 Cholec80、HeiChole 等工作流数据，SurgVU 等活动识别数据，以及 SurgeYoutube 网络视频。</p>
+<p>帧数最多的是 MultiBypass140（202,350 帧）和 SurgeYoutube（153,307 帧）；两个 EndoVis 合计只有几千帧。术式几乎都是腹部手术。</p>
+<p>长视频不整段使用，而是切成互不重叠的代表性片段，平均 307.5 帧，按 1 fps 约 5 分钟。切片的具体规则论文未说明。</p></div><div class="card" id="s4"><h3><span class="num">4</span>标注怎样做</h3><figure class="fig"><img src="images/page_015_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。数据构建五步流程与多轮质控循环。</figcaption></figure>
+<p>专家（相关方向的学生）为每段视频写描述，并标出首帧掩码。志愿者小队把首帧掩码扩展成整段时空掩码，再交专家检查完整性、边界、时间一致性和目标身份。任何一位专家不同意就退回重标。</p>
+<p><strong>质量证据只有一项：</strong> 外部专家重标 50 段，与原掩码 IoU 0.93。它说明掩码几何一致，但没有检查描述是否唯一指向、无目标是否真的不存在。</p>
+<p>描述平均 25.7 词，常常同时写颜色、部件、位置、运动和操作对象。目标平均只占画面 6.4%。</p></div><div class="card" id="s5"><h3><span class="num">5</span>三种表达与评分</h3><ul><li><strong>单目标：</strong> 描述指向一个目标。</li><li><strong>多目标：</strong> 描述指向多于一个目标。</li><li><strong>无目标：</strong> 描述的器械不在视频里，正确输出是全程为空。</li></ul>
+<p>指标是 J（掩码 IoU）、F（轮廓精度）和二者平均 J&amp;F。无目标表达只有整段输出全空才记 1 分，否则记 0。</p>
+<p><strong>这条规则非常严苛：一帧误检，整条清零。</strong> 它会偏向那些先做整段存在判断的模型，这一点在第 9 节再展开。</p></div><div class="card" id="s6"><h3><span class="num">6</span>与已有基准对比</h3><figure class="fig"><img src="images/page_003_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。四个已有基准与 LD-RSVIS 的规模与支持设定对比。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>已有基准</th><th>它的特点</th><th>本基准新增</th></tr></thead><tbody><tr><td>EndoVis-RS</td><td>32 段，取自 EndoVis</td><td>来源扩到 15 个，器械 9 类到 30 类</td></tr><tr><td>Ref-EndoVis</td><td>25 段，修正掩码，含组织</td><td>只做器械与部件，规模大两个数量级</td></tr><tr><td>UniPVOS</td><td>扩展 Ref-EndoVis，含组织</td><td>加入多目标与无目标</td></tr><tr><td>Surg-IMotion</td><td>319 段，平均 67 帧，侧重运动</td><td>视频更长，设定更全</td></tr></tbody></table></div>
+<p>论文正文称后者为 Ref-IMotion，表 1 写作 Surg-IMotion，是同一工作。</p></div><div class="card" id="s7"><h3><span class="num">7</span>参考方法 Cascade-RSVIS</h3><figure class="fig"><img src="images/page_006_fig_figure_4_review_repair1.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。Cascade-RSVIS 的两阶段结构与多线索文本表示。</figcaption></figure>
+<p><strong>思路是先找出最有把握的几帧，再把它们当作示例去分割其余帧。</strong> 方法建在 SAM 2 上。</p>
+<ol><li>文本经 RoBERTa 编码，词特征、句子特征和 3 个可学习查询特征拼成多线索表示。</li><li>第一阶段逐帧预测掩码、IoU 分数和存在分数；若最大存在分数小于 0，整段输出为空；否则按 IoU 取前 3 帧。</li><li>第二阶段把这 3 帧编码成记忆，按 IoU 分数的 softmax 加权融合，再注入每帧特征并结合文本解码。</li></ol>
+<p>训练分两段：先训第一阶段 18 轮，冻结后训第二阶段 24 轮。推理时切成 8 帧片段，25 fps，峰值显存 16 GB，总参数 292M。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果说了什么</h3><figure class="fig"><img src="images/page_008_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。13 个方法在测试集四个子集上的结果。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>方法</th><th>总体</th><th>多目标</th><th>单目标</th><th>无目标</th></tr></thead><tbody><tr><td>ReSurgSAM2</td><td>28.3</td><td>31.1</td><td>28.0</td><td>26.1</td></tr><tr><td>ReferMo</td><td>31.8</td><td>38.5</td><td>38.2</td><td>12.4</td></tr><tr><td>FlowRVS</td><td>33.1</td><td>38.7</td><td>38.8</td><td>16.2</td></tr><tr><td>Cascade-RSVIS</td><td>37.4</td><td>39.8</td><td>39.6</td><td>30.6</td></tr></tbody></table></div>
+<p><strong>单目标最强的通用方法，在无目标上最弱。</strong> FlowRVS、ReferMo 无目标只有 16.2 和 12.4；ReSurgSAM2 单目标只有 28.0，无目标却有 26.1。擅长“必定找出一个”的模型，往往在目标不存在时也硬找一个。</p>
+<p>Cascade-RSVIS 每个子集的 J&amp;F 都最高，但多目标 J 37.8 低于 ReferMo 的 40.6，多目标 F 41.8 低于 DsHmp 的 46.9。它的总体领先很大一部分来自无目标子集。</p>
+<p>消融中贡献最大的是级联：只用第一阶段 30.7，加上第二阶段 37.4。上下文帧数与查询数都在 3 时最好，IoU 加权融合比等权相加高 1.4。</p>
+<p>在两个已有基准上它也领先：Ref-EndoVis 两个子集 J&amp;F 80.6 和 82.6。</p><div class="strip d"><span class="t">数据</span><span class="i">已有方法总体 J&amp;F 最高 33.1，Cascade-RSVIS 37.4</span><span class="i">无目标：Cascade-RSVIS 30.6，已有方法最高 26.1</span><span class="i">级联消融：30.7 到 37.4</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><p><strong>低分可能有三种来源，论文没有把它们分开：</strong> 15 个来源之间的域差、部件级小目标、无目标的二值判分。要区分它们，需要按来源、目标大小、部件与整件分层的结果，论文未说明。</p>
+<p><strong>无目标领先可能部分来自规则契合。</strong> Cascade-RSVIS 在存在分数小于 0 时整段置空，正好对应“整段全空才得分”。如果给基线加上同样的置空规则，差距会缩小多少，论文没有实验。</p>
+<p><strong>级联的收益没有控制训练量。</strong> 完整模型在第一阶段 18 轮之后又训了 24 轮，没有等训练量的单阶段对照。所有结果也都是单次运行。</p>
+<p>多目标分数普遍高于单目标，例如 LMPM 38.2 对 22.4。论文未说明原因。我的判断是多目标常指多件大器械、掩码大，IoU 更容易拿分，这需要验证。</p></div><div class="card" id="s10"><h3><span class="num">10</span>复现要注意什么</h3><ul><li>数据和代码未发布，论文只说将托管在 GitHub 和/或 Hugging Face。</li><li>无目标判分要按“整条表达全程为空”实现，按片段判断会得到不同数字。</li><li>推理切成 8 帧片段，片段间如何合并、身份如何保持论文未说明。</li><li>视频许可受 15 个来源各自约束，网络视频来源能否再分发要单独确认。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>这是首个在手术领域同时考三种指代设定的基准，规模约为已有基准的 10 倍。</div><div>比较方法时把无目标子集单独看，总体 J&amp;F 会被二值判分放大。</div><div>“先挑高置信帧再当记忆”的思路可以直接迁移到其他基于 SAM 2 的视频分割任务。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>规模与设定的扩展实在，测试集 683 段，评测不再取决于少数视频。</li><li>12 个基线在同一训练集上重训，对比口径统一。</li><li>有外部重标的一致性检查，并在两个旧基准上验证了参考方法。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>数据未发布，无法复现任何数字。</li><li>无目标表达的构造方式、片段切分规则论文未说明。</li><li>没有按来源、术式、器械类别拆分的结果，难度来源不清。</li><li>标注者是学生而非外科医生，描述未经临床审核。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>无目标描述与真实器械的相似度如何控制？</li><li>部件级表达与整件表达的比例和性能差距各是多少？</li><li>用本基准训练的模型迁移到旧基准，能比在旧基准上训练提升多少？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 372a5849</span><span class="s">7.7 分</span></div><p>第一轮笔记结构完整，主表、消融、迁移和数据统计齐全。D5 定位只在研究问题与图注里零散提及，缺少与各已有基准逐一对照；D6 复用建议集中在我的笔记，缺少该复制、该核对、该避免的区分；D9 部分小节开头没有点明要回答的问题。H3 尚未跑数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>做 Insight Pass 三轮并把挑战结论写回笔记</li><li>在与已有基准对比小节补逐一定位</li><li>按叙事顺序给各小节加开头问题和收尾过渡</li><li>跑 lint_report --mode note 数字核对并列出派生数</li><li>撰写 reading_report.md</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 5553f12a · 文稿 65fff22d</span><span class="s">8.5 分</span></div><p>第二轮按 Insight Pass 补了逐一定位表、低分来源的三种未分离解释、无目标规则契合与级联未控制训练量等边界，各小节加了开头问题与过渡，数字核对无未匹配项（派生数已列入例外文件）。无法修复的限制：数据未发布，无目标构造方式、片段切分规则、分来源结果均为论文未说明；表 9 逐来源视频数未从文本中抽出。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

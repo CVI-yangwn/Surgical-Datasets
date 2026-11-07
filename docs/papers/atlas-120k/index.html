@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Surgical Anatomy Recognition with Context Learning using Foundation Representations</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>ATLAS-120k：14 种术式的整场景手术解剖分割数据集与上下文分割模型</h1>
+<div class="sub">Surgical Anatomy Recognition with Context Learning using Foundation Representations</div>
+<div class="meta">de Jong, Jaspers 等；埃因霍温理工大学、乌得勒支大学医学中心 | arXiv 2606.22124（2026，预印本）</div>
+<div><span class="chip">数据集与方法</span><span class="tag">手术解剖分割</span><span class="tag">视频语义分割</span><span class="tag">基础模型</span></div>
+<div class="one">用首帧精标加追踪传播做出 100 个视频、14 种术式、121,018 帧的整场景解剖分割数据，并用术式与阶段上下文查询把 ViT-L 基线的 mDice 从 0.35 提到 0.49。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2606.22124" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/atlas-120k/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>微创手术里，外科医生只能从有限视角看解剖，又没有触觉反馈。认错一根血管或胆管就可能造成严重损伤，所以实时解剖识别是术中引导的基础。</p>
+<p>难点有两处。<strong>现有解剖数据集都只覆盖 1 种术式</strong>：Endoscapes-Seg50 只有 493 帧，CholecSeg8k 来自 17 个胆囊切除视频，DSAD 多为单器官孤立分割。方法上，通用视频分割只追踪目标，不用外科医生依赖的术式和阶段信息。</p><div class="strip h"><span class="t">亮点</span><span class="i">解剖识别比器械分割、阶段识别研究得少，缺多术式整场景数据</span><span class="i">外科医生认解剖靠术式与阶段先验，通用模型没有这类输入</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>数据</strong>：从 GSViT 视频库取 100 个视频、14 种术式、502 个片段，标出 121,018 帧、42 类，含腹腔镜与机器人手术。</li><li><strong>标注</strong>：只精标每个片段首帧，追踪模型传播，人工纠错，外科医生审核首帧。</li><li><strong>模型</strong>：在 EoMT 的单编码器查询框架里加 1 个术式查询和 4 个阶段查询，参数从 315M 增到 318M。</li><li><strong>结果</strong>：ViT-L 版 AP 0.64、mDice 0.49、mVC24 0.79，单张 H100 每秒 64 帧。</li><li><strong>边界</strong>：对照协议不对等，标注质量没有统计，结果是单次运行。</li></ul><div class="strip d"><span class="t">数据</span><span class="i">121,018 帧，100 个视频，14 种术式</span><span class="i">42 类，训练合并为 30 类</span><span class="i">70/10/20 视频患者级划分</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p>视频来自 GSViT 公开手术视频库，统一降到 15 fps，分辨率从 480×640 到 1080×1920。多数片段短于 400 帧，也就是不到 30 秒。</p>
+<p><strong>术式分布是长尾</strong>：胆囊切除和半结肠切除占大头，肝切除和直肠固定只有约 2 个片段。所以总体分数主要反映高频术式。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。(a) 片段长度分布；(b) 各术式的片段数与帧数。</figcaption></figure></div><div class="card" id="s4"><h3><span class="num">4</span>12 万帧怎么标出来</h3><p>流程分四步：首帧精标、追踪模型传播、人工纠错并在约 10k、25k、50k 帧时微调追踪器、外科医生审核首帧。人工集中在 502 个首帧和纠错上，这是能做到 12 万帧的原因。</p>
+<p>代价是<strong>测试真值大部分也是传播出来的</strong>。传播帧的抽查误差和标注者间一致性论文未说明，所以无法判断真值本身有多准。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。各术式的示例帧与整场景标注，底部为类别图例。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">首帧精标加传播，把人工量压到片段数量级</span><span class="i">外科医生只审核首帧</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>ATLAS 模型怎么用上下文</h3><p>EoMT 把可学习查询直接拼进视觉编码器，每个查询输出一个类别和一张掩码。VidEoMT 把上一帧输出查询传到下一帧作短期记忆。ATLAS 再加两类上下文查询：</p>
+<ul><li>术式查询：经多层感知机预测术式，用交叉熵监督。</li><li>阶段查询：用 InfoNCE 对比损失训练，时间相邻帧为正样本；没有阶段标签。</li></ul>
+<p>所有查询与图像块在同一编码器做全局注意力，所以分割查询能直接读到术式信息。查询传播公式为 $Q_t = \mathrm{Linear}(\hat Q_{t-1}) + Q_0$。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。逐帧模型、加追踪查询的片段级模型、加上下文查询的术式级模型。</figcaption></figure></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>模型</th><th>AP</th><th>mDice</th><th>mVC24</th></tr></thead><tbody><tr><td>DINOv3 ViT-L 线性头</td><td>0.43</td><td>0.28</td><td>0.60</td></tr><tr><td>SAM3-UNet</td><td>0.48</td><td>0.35</td><td>0.64</td></tr><tr><td>SurgeNet-ca</td><td>0.51</td><td>0.32</td><td>0.49</td></tr><tr><td>ATLAS ViT-S</td><td>0.52</td><td>0.31</td><td>0.66</td></tr><tr><td>ATLAS ViT-L</td><td>0.64</td><td>0.49</td><td>0.79</td></tr></tbody></table></div>
+<p>ATLAS ViT-L 六项指标全部最高。<strong>24M 参数的 ViT-S 版 AP 已高于 449M 的 SAM3-UNet</strong>，说明手术域预训练比通用分割预训练更重要。最好的 mDice 也只有 0.49，作者归因于 30 类的长尾。</p>
+<figure class="fig"><img src="images/page_008_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。15 个模型按预训练域分组的完整对比。</figcaption></figure></div><div class="card" id="s7"><h3><span class="num">7</span>消融拆开看</h3><div class="tbl"><table><thead><tr><th>配置</th><th>AP</th><th>mDice</th><th>mVC24</th></tr></thead><tbody><tr><td>EoMT ViT-L 基线</td><td>0.53</td><td>0.35</td><td>0.68</td></tr><tr><td>加域内预训练</td><td>0.57</td><td>0.43</td><td>0.74</td></tr><tr><td>加查询传播</td><td>0.59</td><td>0.36</td><td>0.71</td></tr><tr><td>加上下文查询</td><td>0.64</td><td>0.49</td><td>0.79</td></tr></tbody></table></div>
+<ul><li>上下文查询一步把 mDice 从 0.36 拉到 0.49，是最大增益。</li><li><strong>查询传播让 mDice 从 0.43 掉到 0.36</strong>，原因论文未说明。</li><li>相对"加域内预训练"那一行，最终 mDice 只净增 0.06。</li></ul><div class="strip d"><span class="t">数据</span><span class="i">AP 相对基线提升约 21%，参数增加不到 1%</span><span class="i">预训练消融：DINOv2 的 mDice 0.45 高于 DINOv3 的 0.42</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li>上下文查询的增益没有与"多出 5 个查询"的影响分开：没有单独去掉术式或阶段查询，也没有用打乱的术式标签做对照。</li><li>阶段查询学到的是外科阶段还是片段身份，论文没有验证。</li><li>推理时术式标签从哪来，论文未说明。</li><li>按术式的分数和多次运行方差论文未说明，0.01 到 0.02 的差距不宜当作排名依据。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><p>原始视频要自己用脚本从 YouTube 下载，属年龄限制内容，需要登录 cookie；掩码在 HuggingFace 上门控发布，许可为 CC BY-NC-SA 4.0。引入外部骨干前，要先查它的预训练数据是否含 GSViT 视频，否则会测试泄漏。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>ATLAS-120k 是目前少见的多术式整场景解剖分割数据，适合测跨术式泛化</div><div>术式上下文是值得做的方向，但证据只有单次消融</div><div>评测时同时看 AP、mDice 和 mVC，并按术式拆开报告</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>14 种术式、两种手术模态，覆盖面远超已有解剖数据集</li><li>标注流程可放大，并公开了标注平台和下载工具</li><li>模型增加的参数不到 1%，可实时运行</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>标注质量没有量化，测试真值多为传播帧</li><li>表 2 的对照协议与 ATLAS 不一致</li><li>查询传播导致 mDice 下降却未解释</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>传播帧相对人工复标的误差有多大</li><li>给术式查询喂错误标签，分割会退化多少</li><li>长尾术式在测试集中有多少片段，能否单独评测</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 adde7b81</span><span class="s">7.7 分</span></div><p>第一轮笔记结构完整、数字齐全，但部分小节开头缺少要回答的问题；数字未经逐项核对；创新点与一句话总结有轻微重复；定位小节未明确与 VidEoMT 的差异；术语首次出现时（如 mVC、InfoNCE）缺少定义。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>做 insight pass 三轮并把回答写进笔记</li><li>每个技术小节开头补一句要回答的问题</li><li>首次出现 mVC、InfoNCE、EoMT 时给出定义</li><li>补与 VidEoMT、DSAD 的对照定位</li><li>跑数字核对并列出派生数字</li><li>撰写 reading_report.md</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 1eca0182 · 文稿 19ea9045</span><span class="s">8.5 分</span></div><p>第 2 轮自评：补齐 insight pass 的论文未说明项（传播帧误差、查询传播致 mDice 下降原因、推理时术式来源、按术式分项与方差），增加与 VidEoMT、DSAD、SAM 系列的定位，节首问题与节末过渡齐全，数字核对无未匹配项。无法修复的限制：Table 3 图像裁剪表头被截，保留占位并以 Markdown 表转写；Figure 3a 无独立资产，并入 Fig 3；参数量列只在表格图像中，数字核对用 number_exceptions 登记来源。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

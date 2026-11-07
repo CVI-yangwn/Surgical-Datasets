@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "语义场景图", "plain": "节点是人、器械、设备，边是它们之间的关系，写成（主体，客体，谓词）三元组。", "where": "sec:related-work", "needed_for": "理解主任务和下游任务的输入"},
+  {"term": "时间点", "plain": "所有模态同步到 1 帧每秒后的一个采样时刻。", "where": "sec:supplementary-material", "needed_for": "理解 92,983 与 25,277 的含义"},
+  {"term": "宏平均 F1", "plain": "每个谓词单独算 F1 再等权平均，稀有关系与常见关系同权。", "where": "sec:experiments", "needed_for": "理解 0.529 为何远低于加权平均 0.703"},
+  {"term": "全景分割与 VPQ", "plain": "每个像素既分类别又分实例；VPQ 在时间窗口内衡量分割与跨帧一致性。", "where": "sec:experiments", "needed_for": "读懂 Table 2"},
+  {"term": "记忆场景图", "plain": "把此前预测的场景图压缩成文本作为时序上下文。", "where": "sec:model", "needed_for": "理解时序带来的 0.009 提升"},
+  {"term": "模态丢弃与多模态混合", "plain": "训练时随机去掉某些模态，或把它们换成场景图相似样本的同类模态。", "where": "sec:model", "needed_for": "理解 Table 4"},
+  {"term": "ORacle", "plain": "同组此前的手术场景图方法，用多视角图像和大视觉语言模型生成三元组。", "where": "sec:methodology", "needed_for": "理解 MM2SG 的起点和主要对照"},
+  {"term": "take", "plain": "一次录制单元，划分按 take 进行。", "where": "sec:experiments", "needed_for": "理解 9/3/4 划分与测试集大小"}
+ ],
+ "detail_questions": [
+  {"question": "标注员之间的一致性是多少？", "answer": "只说一人标注一人复核，没有一致性数字。", "evidence": ["sec:related-work", "sec:supplementary-material"], "status": "not_stated"},
+  {"question": "参与录制的外科医生和团队有多少人？", "answer": "只说多天、不同主刀和团队组成，没有人数。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "Table 6 各划分之和为何小于总数？", "answer": "时间点之和 66,996、标注之和 19,253，都小于 92,983 与 25,277，差额去向没有解释。", "evidence": ["sec:supplementary-material"], "status": "not_stated"},
+  {"question": "PSG 与 ORacle 是否也用了 4D-OR 联合训练？", "answer": "只说各自在 MM-OR 上微调，MM2SG 的训练集约 20% 来自 4D-OR。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "结果有没有多次运行方差？", "answer": "所有表格都是单次结果。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "下游任务各有多少类、简单基线是多少？", "answer": "只给了三个 F1，没有类别数和多数类基线。", "evidence": ["sec:method", "sec:results"], "status": "not_stated"},
+  {"question": "为什么丢弃率选 50%？", "answer": "验证集扫描 0%、25%、50%、75%，50% 最高 0.733。", "evidence": ["sec:supplementary-material", "sec:method-2"], "status": "resolved"},
+  {"question": "加入音频与转写为何下降？", "answer": "Table 1 中 0.494 降到 0.484，正文只说更多模态更好，没有讨论这一步。", "evidence": ["sec:model", "sec:results"], "status": "partly"},
+  {"question": "真值分割为何几乎无收益？", "answer": "Table 1 中预测分割 0.520，真值 0.519；加时序后 0.529 对 0.534。论文没有分析原因。", "evidence": ["sec:model"], "status": "partly"},
+  {"question": "短片段到底是 22 个还是 20 个？", "answer": "第 3 节与补充材料写 22，第 3.2 节写 20，没有解释。", "evidence": ["sec:related-work", "sec:supplementary-material"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "增加模态提高场景图生成", "alternative": "测试只有 4 个 take，0.01 级别的升降可能是随机波动，单调趋势只在端点成立。", "separating_evidence": "多随机种子或按 take 的置信区间。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "MM2SG 在稀有谓词上优势最大", "alternative": "tail 增益来自联合 4D-OR 训练带来的额外稀有样本，而不是多模态输入。", "separating_evidence": "不用 4D-OR 训练的 MM2SG，或同样联合训练的 ORacle。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "多模态混合增强有效", "alternative": "提升主要来自更强的正则化，任何一种随机替换都能达到。", "separating_evidence": "只用混合的配置，以及用随机样本而非相似样本替换的对照。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "MM-OR 比 4D-OR 更真实", "alternative": "主刀是真实医生，但患者、房间与 4D-OR 同样是模拟的，真实度提升只在人员行为层面。", "separating_evidence": "在真实手术录像上测试的迁移结果。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在关键结果中指出音频与转写一步下降、联合训练在部分设定下降",
+  "在深度分析中写明 tail 增益与联合 4D-OR 训练未分离",
+  "在规模与划分中写出 66,996 与 19,253 的差额以及 9/3/4 与 17 的不符",
+  "把一致性、人数、方差、基线训练数据、下游类别数写成 论文未说明",
+  "补与 EgoExo4D 的定位对比",
+  "各小节补开头问题与结尾过渡"
+ ]
+}

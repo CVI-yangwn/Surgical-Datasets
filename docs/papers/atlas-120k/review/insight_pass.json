@@ -1,0 +1,35 @@
+{
+  "knowledge_points": [
+    {"term": "EoMT", "plain": "只用视觉编码器做分割：把可学习查询拼进编码器输入，每个查询直接输出一个类别和一张掩码，不另设解码器。", "where": "sec:methods", "needed_for": "理解 ATLAS 为何只多出约 3M 参数"},
+    {"term": "VidEoMT 查询传播", "plain": "把上一帧的输出查询经线性层后加回初始查询，作为下一帧的查询，相当于短期记忆。", "where": "sec:methods", "needed_for": "表 3 第三行的含义"},
+    {"term": "上下文查询", "plain": "额外加入的术式查询和阶段查询，与分割查询一起做注意力，只用于提供全局信息。", "where": "sec:methods", "needed_for": "表 3 最后一步的增益"},
+    {"term": "InfoNCE", "plain": "一种对比损失：拉近正样本对的嵌入，推远其他样本。", "where": "sec:methods", "needed_for": "阶段查询如何在无阶段标签时训练"},
+    {"term": "mVC", "plain": "视频一致性：在 12 或 24 帧窗口里预测标签保持不变的像素比例，只算真值本身稳定且非背景的区域。", "where": "sec:dataset", "needed_for": "时间稳定性结论"},
+    {"term": "AP 与 mDice 的差别", "plain": "AP 按查询检测计分，对粗定位宽容；mDice 按类别平均像素重叠，小类与大类等权。", "where": "sec:dataset", "needed_for": "为何 AP50 高达 0.89 而 mDice 仅 0.49"},
+    {"term": "追踪传播标注", "plain": "人工只标片段首帧，其余帧由视频目标分割模型传播再人工纠错。", "where": "sec:dataset", "needed_for": "判断 12 万帧的标注可信度"}
+  ],
+  "detail_questions": [
+    {"question": "人工精标的帧有多少？", "answer": "每个片段只精标首帧，共 502 个片段，其余帧来自传播加纠错。", "evidence": ["sec:dataset"], "status": "resolved"},
+    {"question": "传播帧的标注误差或标注者间一致性是多少？", "answer": "论文未说明，只说传播错误被人工纠正、首帧经外科医生审核。", "evidence": ["sec:dataset"], "status": "not_stated"},
+    {"question": "42 类如何合并成 30 类？", "answer": "正文只说删去不在所有子集出现的类并合并相近类，具体映射未列出。", "evidence": ["sec:dataset"], "status": "partly"},
+    {"question": "为何加查询传播后 mDice 从 0.43 降到 0.36？", "answer": "论文未说明，正文只强调 AP 与 AP50 上升。", "evidence": ["sec:method"], "status": "not_stated"},
+    {"question": "阶段查询是否有阶段标签？", "answer": "没有，只用时间邻近帧做 InfoNCE 自监督。", "evidence": ["sec:methods"], "status": "resolved"},
+    {"question": "推理时术式标签需要外部提供吗？", "answer": "论文未说明；结构上术式由查询自行预测。", "evidence": ["sec:methods"], "status": "not_stated"},
+    {"question": "对照模型的头部和训练设置是否与 ATLAS 一致？", "answer": "只说明 DINOv2/v3 训线性层，其余对照的头部与训练轮数未说明。", "evidence": ["sec:dataset", "sec:model"], "status": "partly"},
+    {"question": "为什么排除 SurgeNetXL、LEMON、GSViT？", "answer": "它们的预训练数据与 ATLAS-120k 重叠。", "evidence": ["sec:dataset"], "status": "resolved"},
+    {"question": "是否有按术式的分项结果或多次运行方差？", "answer": "论文未说明，只报告整体单次结果。", "evidence": ["sec:model", "sec:method"], "status": "not_stated"},
+    {"question": "域内预训练是如何做的？", "answer": "按 [10] 的方法用 DINOv3 在 SurgeNet 数据上继续预训练，并排除 ATLAS-120k。", "evidence": ["sec:dataset", "sec:method"], "status": "resolved"}
+  ],
+  "challenges": [
+    {"claim": "上下文查询带来最大增益", "alternative": "增益可能来自多出 5 个查询和额外训练信号带来的正则，而非术式与阶段信息本身。", "separating_evidence": "分别去掉术式查询或阶段查询，或用打乱的术式标签训练。", "in_paper": false, "verdict": "not_separated"},
+    {"claim": "ATLAS 在全部指标上优于基础模型", "alternative": "对照只训线性头或 UNet 头且多为逐帧，优势可能来自更完整的训练流程与时序模块。", "separating_evidence": "同一头部和训练设置下替换骨干的对比；表 3 的 EoMT 基线部分提供了同框架对照。", "in_paper": true, "verdict": "partly_supported"},
+    {"claim": "ATLAS-120k 是高质量大规模数据集", "alternative": "帧数主要由传播贡献，若追踪器对细小结构有系统误差，模型分数会同时被高估。", "separating_evidence": "传播帧的人工复标抽样误差。", "in_paper": false, "verdict": "not_separated"}
+  ],
+  "revisions": [
+    "在标注协议与局限中写明传播帧误差论文未说明",
+    "在消融小节写明查询传播导致 mDice 下降且论文未说明原因",
+    "在深度分析中写明上下文查询的增益无法与查询数量或正则效应分开",
+    "在实现细节中写明推理时术式标签来源论文未说明",
+    "在局限中写明没有按术式分项与多次运行方差"
+  ]
+}

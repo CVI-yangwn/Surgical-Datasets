@@ -1,0 +1,26 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "/ssd3/yangwennuo/code/MNL/Surgical-Datasets/DeepPaperNote_output/手术数据集/MM_OR_A_Large_Multimodal_Operating_Room_Dataset_for_Semantic_Understanding_of_High_Intensity_Surgical_Environments/reading_report.md",
+  "mode": "report",
+  "report_sha256": "e231261082a080fdcf0131724db6537606c739c3f8cb1eeee9b5fcd6cd1bbc3b",
+  "number_exceptions": {
+    "0.005": "推导值：Table 8 中 50% 的 0.733 减 25% 的 0.728",
+    "0.01": "推导值：Table 1 相邻配置差的量级（如 0.494 减 0.484）",
+    "0.010": "推导值：Table 1 加入音频与转写后 0.494 减 0.484",
+    "0.018": "推导值：Table 1 加入日志与跟踪后 0.502 减 0.484",
+    "0.009": "推导值：Table 1 加时序后 0.529 减 0.520",
+    "66,996": "推导值：Table 6 四行时间点之和 37,612+11,053+13,606+4,725",
+    "19,253": "推导值：Table 6 四行标注之和 11,123+4,880+2,960+290",
+    "113": "第 13 页 Table 5 原表 Cleaning 计数；文本抽取丢失此单元格，已对照页面图像核对",
+    "132": "第 13 页 Table 5 原表 Suturing 计数；文本抽取丢失此单元格，已对照页面图像核对",
+    "290": "第 13 页 Table 6 原表 Short Clips 标注数；文本抽取丢失此单元格，已对照页面图像核对"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

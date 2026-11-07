@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "543ec1a6f1d35eb4394c551758e282bbac9a9dcd405ada5ce8580af4667de701",
+      "note_snapshot": "review_rounds/round1_SurgMLLMBench_A_Multimodal_Large_Language_Model_Benchmark_Dataset_for_Surgical_Scene_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 7,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 7,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第一轮笔记证据链完整，表 2、表 3 逐格列出并与作者结论对照；数字尚未经 lint_report 核对（H3 unknown）。D2 构建流程对“标签统一”具体做到哪一步只有推断；D5 与 EndoBench 等评测集的定位只在 plan 中，正文较薄；D8 仍保留较多英文标签名；D9 多个小节结尾缺少过渡，部分数字后缺少“这意味着什么”。",
+      "fixes": [
+        "研究问题背景段补充术中场景的具体张力并收束到核心观点速览",
+        "深度分析补充与 EndoBench、Surgical-VQA 类纯评测集的定位差异",
+        "把 MAVIS 训练/测试划分、标注一致性、每帧问题数等未说明项统一写为论文未说明并说明影响",
+        "关键结果各小节结尾加过渡句，数字后加含义",
+        "运行数字核对，派生差值列入例外文件",
+        "核对 Cholec80 计数标签来源与 AutoLaparo 归类的表述是否过度推断"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "02e1e262ae0742f1fe4eed21729e6417ff5d78856366d3c9534c85ba5958f498",
+      "note_snapshot": "review_rounds/round2_SurgMLLMBench_A_Multimodal_Large_Language_Model_Benchmark_Dataset_for_Surgical_Scene_Understanding.md",
+      "report_sha256": "a964b1995074a610fde24df821ac04e2f806ed515e6e3b3f9bee90882b9e526a",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮按洞察三步修订：表 2 逐格拆为更好、持平、更差；迁移实验写明轮数未对齐；划分、标注一致性、每帧问题数、Cholec80 计数来源均写为论文未说明；补充样本稀释这一替代解释与定位比较。数字核对通过，Figure 3 图中百分比与许可版本号列入例外文件。无法修复的限制：论文缺少方差、混淆矩阵与专用模型参照，相关结论只能标为未区分；Figure 4 无独立裁剪，保留占位。分数为模型自评。",
+      "fixes": []
+    }
+  ]
+}

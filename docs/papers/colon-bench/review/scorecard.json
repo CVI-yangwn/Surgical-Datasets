@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "1d496379c1dbfc8780252a76298a6dc87b53bb2d697431383eb5839c488244a4",
+      "note_snapshot": "review_rounds/round1_Colon_Bench_An_Agentic_Workflow_for_Scalable_Dense_Lesion_Annotation_in_Full_Procedure_Colonoscopy_Videos.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.7,
+      "verdict": "第一轮：证据链完整，四任务主表与流程消融均已转录，同源偏差与测试集泄漏已指出。D5 定位偏弱，只与表 1 数据集对比，未展开与 EndoBench、LDPolypVideo 的差异；D6 复用建议偏少；D7 关键结果小节较长且无过渡；D9 研究问题末尾缺核心观点速览，多数小节没有开头问题与结尾过渡。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各小节开头补一句要回答的问题，结尾补过渡",
+        "补 Insight Pass 中的 not_stated 缺口：Gemini 3.5 Flash 来源、272/264 不一致、划分方式",
+        "深度分析补与 EndoBench、REAL-COLON 的定位差异",
+        "我的笔记补具体的复用检查项"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "00c3ecb5e0a4acb1fa2ca73a1650b4f99fdcaa56d24d73d2e401226298b98666",
+      "note_snapshot": "review_rounds/round2_Colon_Bench_An_Agentic_Workflow_for_Scalable_Dense_Lesion_Annotation_in_Full_Procedure_Colonoscopy_Videos.md",
+      "report_sha256": "d0feab8102430c4e5ee443c611af1cffc7b9348d4c1f6269ae7cca8010a497f2",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮：补了核心观点速览、各小节开头问题与过渡、与 REAL-COLON/EndoBench/Kvasir 的定位、复用检查项，并把 Insight Pass 的未说明项（划分方式、272/264、Gemini 3.5 Flash、表 14 与表 11 差异、GPT 视频输入）写进笔记和报告。无法修复的限制：论文没有独立人工子集，Gemini 同源偏差只能指出、无法量化；Fig 8/9/12/13 与 Table 8/13 裁图身份错配或质量不合格，保留占位。",
+      "fixes": []
+    }
+  ]
+}

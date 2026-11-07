@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "adde7b81d657ede5efe55f7f913b1e5c61376b8944d2f03e198fb96660f03217",
+      "note_snapshot": "review_rounds/round1_Surgical_Anatomy_Recognition_with_Context_Learning_using_Foundation_Representations.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 7,
+        "D9": 7
+      },
+      "overall": 7.7,
+      "verdict": "第一轮笔记结构完整、数字齐全，但部分小节开头缺少要回答的问题；数字未经逐项核对；创新点与一句话总结有轻微重复；定位小节未明确与 VidEoMT 的差异；术语首次出现时（如 mVC、InfoNCE）缺少定义。",
+      "fixes": [
+        "做 insight pass 三轮并把回答写进笔记",
+        "每个技术小节开头补一句要回答的问题",
+        "首次出现 mVC、InfoNCE、EoMT 时给出定义",
+        "补与 VidEoMT、DSAD 的对照定位",
+        "跑数字核对并列出派生数字",
+        "撰写 reading_report.md"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "1eca018241b46bb87c172fd395fda40b6daa2478cf5fc9806b72869435bc9820",
+      "note_snapshot": "review_rounds/round2_Surgical_Anatomy_Recognition_with_Context_Learning_using_Foundation_Representations.md",
+      "report_sha256": "19ea9045ce41d93ba449a97e33cc31a9ba140d7f0e9631dec00c9479912061a8",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评：补齐 insight pass 的论文未说明项（传播帧误差、查询传播致 mDice 下降原因、推理时术式来源、按术式分项与方差），增加与 VidEoMT、DSAD、SAM 系列的定位，节首问题与节末过渡齐全，数字核对无未匹配项。无法修复的限制：Table 3 图像裁剪表头被截，保留占位并以 Markdown 表转写；Figure 3a 无独立资产，并入 Fig 3；参数量列只在表格图像中，数字核对用 number_exceptions 登记来源。",
+      "fixes": []
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "ed25286f3fb440c3a2e31820cc38eaed888420dc5e02572e55992a93671f8649",
+      "note_snapshot": "review_rounds/round1_SurgVLM_A_Large_Vision_Language_Model_and_Systematic_Evaluation_Benchmark_for_Surgical_Intelligence.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮原版流程笔记(自评)。证据链完整:数据来源、构建流程、评测协议、排行榜与分任务结果都有对应图表。D5=7:与 EndoBench、LLaVA-Med 的定位只在一张小表里,没有说清各自缺什么。D6=7:我的笔记缺少复现时具体要检查的步骤。D7=7:Figure 2 只能保留占位,Table S1 放在方法而决策表建议放在结果。D9=6:研究问题末尾没有核心观点速览,部分小节开头没有先提出要回答的问题,主结果表后的意义说明偏少。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各小节开头先写本节要回答的问题,关键数字后补一句意义",
+        "把论文未说明的内容(训练超参数、解释文本生成方式、arena 归一化、测试帧去重、LRSP-VQA 规模)统一写成 论文未说明 并说明影响",
+        "补写 72B MCQ 与 OV 在 EndoVis2018-VQA 上 75.02 对 63.46 的反差",
+        "用 lint_report.py --mode note 做数字核对并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "aa6d2656eaca9221fa42c48ff97bd515e9cf57a355647f6640ef7a3833f15a14",
+      "note_snapshot": "review_rounds/round2_SurgVLM_A_Large_Vision_Language_Model_and_Systematic_Evaluation_Benchmark_for_Surgical_Intelligence.md",
+      "report_sha256": "cbccb15d770baf9c61e7333ed0ef26884e7c682528a6e171ee7f2621fad047dd",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成,5 条修订写入笔记与报告;笔记与报告数字核对无未匹配项,5 个推导值或图像读数登记在 number_exceptions.json。D3=9:排行榜、6 个数据集的主指标、规模表和评测设置都带数据集名与单位。D4=9:列出域内同源、CVS 平衡准确率、规模与微调方式混淆、拒答未统计、测试帧去重五条边界并给出理由。无法修复的限制:训练超参数、解释文本生成方式、arena 归一化、视频级去重、LRSP-VQA 样本量均为论文未说明;Figure 2 与 Table S2 裁图被拒,前者保留占位;论文版 7B/32B/72B 权重未发布,数据仅部分发布。",
+      "fixes": []
+    }
+  ]
+}

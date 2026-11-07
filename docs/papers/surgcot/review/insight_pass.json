@@ -1,0 +1,37 @@
+{
+ "knowledge_points": [
+  {"term": "链式推理(CoT)", "plain": "让模型先写出中间推理步骤再给答案。", "where": "sec:abstract", "needed_for": "理解为什么要拆成 Q1 到 Q3 子问题"},
+  {"term": "五元组", "plain": "每道题含问题、选项、知识、线索、答案五个字段。", "where": "sec:framework-2", "needed_for": "理解 KE 与 FC 两种设置各多给了什么"},
+  {"term": "三阶段条件链", "plain": "视频级判断是否发生,片段级判断何时何处,帧级定位起点,上一级答案作为下一级前提。", "where": "sec:framework-2", "needed_for": "解读表 3 的子问题准确率"},
+  {"term": "BL、KE、FC", "plain": "基线只给视频和主问题;知识增强加知识和子问题;全上下文再加线索。", "where": "sec:experimental-results", "needed_for": "解读表 2 每个模型的三列"},
+  {"term": "五个推理维度", "plain": "动作先后、动作起点、器械-组织作用、微阶段边界、异常起点。", "where": "sec:framework-2", "needed_for": "解读各维度难度差异"},
+  {"term": "ASR", "plain": "自动语音识别,把术者讲解转成带时间戳的字幕。", "where": "sec:related-work", "needed_for": "理解证据挖掘和时间锚点的来源"},
+  {"term": "可供性", "plain": "器械对组织能产生的作用,如牵拉改善暴露。", "where": "sec:framework-2", "needed_for": "理解 AM 维度为何最难"}
+ ],
+ "detail_questions": [
+  {"question": "每题有几个选项,随机基线是多少?", "answer": "论文只说选项互斥并含干扰项,没有给数量,也没有随机基线。", "evidence": ["sec:framework-2", "sec:experimental-results"], "status": "not_stated"},
+  {"question": "视频如何送入各模型?", "answer": "只给出解码参数和硬件,抽帧数、分辨率、长视频截断都没有说明。", "evidence": ["sec:experimental-results"], "status": "not_stated"},
+  {"question": "Q2、Q3 的条件是标准答案还是模型自己的答案?", "answer": "构建时把 A1、A2 写入下一阶段输入,评测时用哪一种没有说明。", "evidence": ["sec:framework-2", "sec:experimental-results"], "status": "not_stated"},
+  {"question": "评测了 10 个还是 12 个模型?", "answer": "摘要和实验部分为 10 个,引言和贡献部分为 12 个,表中为 10 个。", "evidence": ["sec:abstract", "sec:framework", "sec:model"], "status": "resolved"},
+  {"question": "Claude 的 13.44 是线索带来的吗?", "answer": "74.10 到 87.54 是 BL 到 FC 的差,KE 到 FC 只有 8.67。", "evidence": ["sec:model", "sec:experimental-results"], "status": "resolved"},
+  {"question": "表 2 的平均分是五个维度的算术平均吗?", "answer": "BL 列吻合,KE 和 FC 列多数模型比五维平均高 0.2 到 2.0 个点,口径没有说明。", "evidence": ["sec:model"], "status": "partly"},
+  {"question": "问答文本由人写还是大模型生成?", "answer": "正文只说与临床专家一起按模板生成;Fig 2 出现 Gemini 和 ChatGPT 标志,用途没有说明。", "evidence": ["sec:related-work", "sec:framework-2"], "status": "not_stated"},
+  {"question": "双人标注的一致性有多高?", "answer": "只说有一致性指标和接受阈值,没有给出数值。", "evidence": ["sec:framework-2"], "status": "not_stated"},
+  {"question": "Fig 2 与正文的视频数为什么不同?", "answer": "图中为 5917、3515、2402,正文为 8917、2841,没有解释。", "evidence": ["sec:related-work"], "status": "not_stated"},
+  {"question": "数据去哪里下载?", "answer": "论文只给代码仓库地址,数据链接在仓库首页,指向 Hugging Face。", "evidence": ["sec:abstract"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "五元组标注提升推理准确率", "alternative": "知识和线索字段里直接写了答案或强提示,模型是在读提示而不是看视频", "separating_evidence": "只给文本不给视频的对照,或统计线索与答案的字面重合率", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "商用模型优于开源与医学模型", "alternative": "差距来自视频输入长度或帧数不同,而不是推理能力", "separating_evidence": "统一帧数与分辨率后的对比和多次运行的方差", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "主问题答对而中间步骤答错", "alternative": "子问题评分更严(精确时间点、框)或选项更多,准确率天然更低", "separating_evidence": "逐题统计主对子错的比例,并给出各级随机基线", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "线索能纠正模型错误", "alternative": "单个案例中线索与正确选项相同", "separating_evidence": "全集上 KE 错而 FC 对的题中,线索包含答案的比例", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览",
+  "关键结果说明 Claude 的 13.44 是 BL 到 FC 的差,KE 到 FC 为 8.67",
+  "关键结果说明表 2 平均分与五维平均在 KE、FC 列不一致",
+  "局限补上双人一致性数值、问答生成方式、选项数、视频输入方式为论文未说明",
+  "深度分析加入视频输入差异作为商用领先的替代解释",
+  "子问题部分加入评分更严这一替代解释"
+ ]
+}

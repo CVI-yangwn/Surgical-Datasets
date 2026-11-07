@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "518047ab2d774b8f117a3138064779f562073f51c4a40bdf82eefb62fe4421b4",
+      "note_snapshot": "review_rounds/round1_SurgMotion_A_Video_Native_Foundation_Model_for_Universal_Understanding_of_Surgical_Videos.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 6,
+        "D6": 6,
+        "D7": 7,
+        "D8": 8,
+        "D9": 5
+      },
+      "overall": 7.1,
+      "verdict": "第 1 轮自评：数据来源表、三项损失公式、两阶段训练设置、表 2 至表 9 主结果齐全，局限点出无消融与数据不公开。D4=7：训练测试重叠只提了一句，没有逐个列出重叠数据集。D5=6：与 V-JEPA、EndoFM、GSViT 的差异没有单独成节。D6=6：复用建议只有三条，缺具体检查方法。D9=5：研究问题末尾没有核心观点速览，多数小节直接罗列数字，数字后缺含义，节末无过渡。表 6 与表 5 中 EndoMamba 数字重复、AVOS 多基线同值等疑点未展开。H3 尚未做数字核对。",
+      "fixes": [
+        "按 insight pass 三轮补齐知识点、细节问答和对中心论断的质疑，并写回笔记",
+        "在研究问题末尾加入核心观点速览",
+        "每节开头写明要回答的问题，关键数字后补一句含义，节末加过渡",
+        "逐个列出与预训练来源重叠的下游数据集，并把探测选模划分、σ0 取值、Web 与机构视频时长等缺口写成 论文未说明",
+        "新增相对已有工作的定位小节",
+        "指出表 5/表 6 EndoMamba 同值、表 1 合计与 3,658 不一致等数字疑点",
+        "用 lint_report.py --mode note 做数字核对"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "5442f612b446a9aac0828879d3a5aef5a97e52b05a7a3ac32c3e761fea13ad7f",
+      "note_snapshot": "review_rounds/round2_SurgMotion_A_Video_Native_Foundation_Model_for_Universal_Understanding_of_Surgical_Videos.md",
+      "report_sha256": "05cfff1a05e1d118b3ed10b9569732cd90fbfa2f95b2490975b5f2105b3ad559",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评：补入核心观点速览、各节开头问题与节末过渡；逐个列出与预训练同名的 9 个下游集；写明表 1 合计与正文不一致、EndoMamba 两表同值、AVOS 六基线同值、17 与 19 基准计数不符、SFDR 协方差项缺失、Top-K 只回归 3 个词元等疑点；新增相对已有工作的定位表。数字核对无未匹配项，5 个图内或推导数字登记在 number_exceptions。无法修复的限制：论文没有消融与方差，D2、D4 的结论只能写成未分离；Table 7 与 Figure 4 裁切失败，保留占位并转写关键数字。",
+      "fixes": []
+    }
+  ]
+}

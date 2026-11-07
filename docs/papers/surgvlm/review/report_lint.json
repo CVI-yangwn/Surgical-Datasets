@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "/ssd3/yangwennuo/code/MNL/Surgical-Datasets/DeepPaperNote_output/手术数据集/SurgVLM_A_Large_Vision_Language_Model_and_Systematic_Evaluation_Benchmark_for_Surgical_Intelligence/reading_report.md",
+  "mode": "report",
+  "report_sha256": "cbccb15d770baf9c61e7333ed0ef26884e7c682528a6e171ee7f2621fad047dd",
+  "number_exceptions": {
+    "0.4": "推导值:CVS 评测 255 个样本,1/255 约为 0.4 个百分点",
+    "196": "推导值:76.86% × 255 ≈ 196 帧",
+    "112": "Table S1 图像中的窗口大小,文本层未抽出该表数值",
+    "1280": "Table S1 图像中的视觉编码器隐藏维度,文本层未抽出该表数值",
+    "7798": "Table 1 原文写作 7798.4K,数字解析器把它切分成 7798 与 4K"
+  },
+  "section_count": 8,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

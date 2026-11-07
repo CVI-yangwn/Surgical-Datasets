@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "372a584966fc823eedc239758028ba059517789ea2c24446a3c282a5551ce0ff",
+      "note_snapshot": "review_rounds/round1_LD_RSVIS_A_Large_Scale_and_Diverse_Benchmark_for_Referring_Surgical_Video_Instrument_Segmentation.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 8,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.7,
+      "verdict": "第一轮笔记结构完整，主表、消融、迁移和数据统计齐全。D5 定位只在研究问题与图注里零散提及，缺少与各已有基准逐一对照；D6 复用建议集中在我的笔记，缺少该复制、该核对、该避免的区分；D9 部分小节开头没有点明要回答的问题。H3 尚未跑数字核对。",
+      "fixes": [
+        "做 Insight Pass 三轮并把挑战结论写回笔记",
+        "在与已有基准对比小节补逐一定位",
+        "按叙事顺序给各小节加开头问题和收尾过渡",
+        "跑 lint_report --mode note 数字核对并列出派生数",
+        "撰写 reading_report.md"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "5553f12a879849cd71cac5f80def49bddc827614dba4ad5e0fbb2f9ed20e3e83",
+      "note_snapshot": "review_rounds/round2_LD_RSVIS_A_Large_Scale_and_Diverse_Benchmark_for_Referring_Surgical_Video_Instrument_Segmentation.md",
+      "report_sha256": "65fff22ddb796e7a06ec427a0e78269f562333dc456acb339b50f397fbbe6d20",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮按 Insight Pass 补了逐一定位表、低分来源的三种未分离解释、无目标规则契合与级联未控制训练量等边界，各小节加了开头问题与过渡，数字核对无未匹配项（派生数已列入例外文件）。无法修复的限制：数据未发布，无目标构造方式、片段切分规则、分来源结果均为论文未说明；表 9 逐来源视频数未从文本中抽出。",
+      "fixes": []
+    }
+  ]
+}

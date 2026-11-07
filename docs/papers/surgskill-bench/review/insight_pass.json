@@ -1,0 +1,37 @@
+{
+ "knowledge_points": [
+  {"term": "OSATS", "plain": "专家按结构化量表在多个维度上给手术操作打 1 到 5 分的评估标准。", "where": "sec:introduction", "needed_for": "六维回归目标的含义"},
+  {"term": "共识标签", "plain": "把两名以上评分者在同一维度的分数取平均，得到的连续值。", "where": "sec:introduction", "needed_for": "为何用回归而非分类，以及 kappa 的口径"},
+  {"term": "视频级划分", "plain": "同一视频的帧、分数、评语只进一份，但同一受训者的不同视频可以跨份。", "where": "sec:introduction", "needed_for": "结果只代表内部验证"},
+  {"term": "事后评语辅助预测", "plain": "把给分专家写的评语当输入，评语可能直接透露分数。", "where": "sec:introduction", "needed_for": "表 2 不能当作自动评估"},
+  {"term": "二次加权 kappa", "plain": "把预测取整后与取整均分比较的序数一致性，差得越远罚得越重。", "where": "sec:model", "needed_for": "表中 kappa 的解读"},
+  {"term": "中位数二分 AUROC", "plain": "按本数据集各维度中位数分高低两类后算的判别能力。", "where": "sec:introduction", "needed_for": "0.88 不是临床阈值"},
+  {"term": "CA-Frame", "plain": "用 InceptionV3 特征的余弦距离挑出画面变化大的帧，再从中抽 16 帧。", "where": "sec:methodology", "needed_for": "表 1 两组列的差别"},
+  {"term": "冻结骨干", "plain": "预训练视觉与文本编码器参数不更新，只训练投影层、融合与回归头。", "where": "sec:experiments", "needed_for": "比较的是表示本身"}
+ ],
+ "detail_questions": [
+  {"question": "受训者人数、任务种类、年资分布是多少？", "answer": "论文未说明，只说参与者与场次元数据不完整。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "评分者间一致性和分数分布是多少？", "answer": "论文未说明，结论里列为以后分析人类一致性。", "evidence": ["sec:introduction", "sec:conclusion"], "status": "not_stated"},
+  {"question": "均值预测基线的数字是多少？", "answer": "正文说加入了该基线，但两张表里都没有它的数字。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "独立 10% 测试集上的结果是多少？", "answer": "表中只有五折均值与标准差，测试集结果论文未说明。", "evidence": ["sec:introduction", "sec:model"], "status": "not_stated"},
+  {"question": "两种采样输入长度是否一致？", "answer": "一致，都是 16 帧，CA-Frame 只改变所选帧的时间位置。", "evidence": ["sec:methodology", "sec:experiments"], "status": "resolved"},
+  {"question": "CA-Frame 平均选多少帧？", "answer": "正文平均约 80 帧，原始 3000 多帧；图 2 示例写 3600 选 357，二者不一致。", "evidence": ["sec:methodology"], "status": "partly"},
+  {"question": "阈值 0.05 和帧数是否做了消融？", "answer": "没有，论文未说明阈值选择理由。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "为什么部分标准差为 0.00？", "answer": "论文未说明，SSL 关键帧与 V-JEPA 2 标准采样都出现。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "图 3 的通用视觉基线是哪个骨干？", "answer": "论文未说明。", "evidence": ["sec:model-2"], "status": "not_stated"},
+  {"question": "数据是否公开？", "answer": "只说代码以后公开，数据开放与否论文未说明。", "evidence": ["sec:preamble"], "status": "not_stated"},
+  {"question": "加评语后为何部分骨干变差？", "answer": "表 2 显示 VideoMAE 与 V-JEPA 2 标准采样下误差上升，作者只说增益不均匀，没有解释。", "evidence": ["sec:model", "sec:model-2"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "CA-Frame 提升了纯视频预测", "alternative": "标准采样下模型接近只输出均值，CA-Frame 的帧也可能带来受训者或场景的可识别特征，借视频级划分记住人而非技能。", "separating_evidence": "均值预测基线数字、按参与者划分的结果、随机采样与帧数消融。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "评语提供了额外的评分信号", "alternative": "评语中直接的好坏评价词就是分数的文字版，模型只是在读答案。", "separating_evidence": "去掉评价词或换由他人写评语后的对照。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "CA-Frame 加 SSL 的注意力更集中在器械和组织交互处", "alternative": "示例是挑选出来的，且通用基线未指明，差异可能来自骨干而非采样。", "separating_evidence": "随机抽样的定量注意力与标注区域重合度。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "关键帧收益一节加入受训者外观泄露的替代解释，并点出均值基线缺失使两种解释无法区分",
+  "评语辅助一节写明评价词即分数的替代解释，判定为尚未区分",
+  "定性图一节注明示例挑选且基线骨干论文未说明",
+  "局限中逐条写明论文未说明的项：受训者人数、评分者一致性、测试集结果、阈值消融、数据公开",
+  "数据集定位处标明 JIGSAWS 对比来自背景知识"
+ ]
+}

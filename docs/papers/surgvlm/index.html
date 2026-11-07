@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgVLM: A Large Vision-Language Model and Systematic Evaluation Benchmark for Surgical Intelligence</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>把 23 个公开手术数据集改写成问答对话,微调 Qwen2.5-VL 并组建 6 项评测</h1>
+<div class="sub">SurgVLM: A Large Vision-Language Model and Systematic Evaluation Benchmark for Surgical Intelligence</div>
+<div class="meta">Zhitao Zeng、Zhu Zhuo 等,新加坡国立大学、南洋理工大学、香港中文大学等 | arXiv 2506.02555,v1,预印本,2025-06-03</div>
+<div><span class="chip">基准与数据集论文</span><span class="tag">手术视觉语言模型</span><span class="tag">指令微调数据</span><span class="tag">多任务评测</span><span class="tag">Qwen2.5-VL</span><span class="tag">关键安全视野</span></div>
+<div class="one">SurgVLM 把 23 个公开手术数据集改写成约 7.79M 段对话来微调 Qwen2.5-VL,在每个数据集抽样组成的 6 项评测上把 arena 总分从 Gemini 2.0 Flash 的 191.70 提到 336.21,但评测与训练同源、基线全为零样本、CVS 平衡准确率仍接近随机。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 12 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2506.02555" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgvlm/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">8 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>通用视觉语言模型看不懂手术画面,也说不出外科医生要的答案。</strong>手术画面对比度低、有烟雾和出血、视野窄;通用模型的回答冗长,常列几种可能而不下结论。</p>
+<p>已有的手术问答数据又太小、太散:Cholec80-VQA、SSG-VQA 只覆盖一种术式,Surg-396K 只有 3 种术式、41.4K 帧。论文想要一个能同时做器械识别、相位识别和安全评估的单一模型,先得有一份统一的多任务数据。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口:跨术式、多任务、对话格式的手术训练数据,以及统一的评测协议</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>论文没有采集新数据,做的是"重组公开数据集加指令微调"。</strong>23 个数据集的类别标签被改写成约 7.79M 段对话,覆盖 16 种术式和 10 项任务;模型结构完全沿用 Qwen2.5-VL,7B、32B、72B 分别用全量、冻结和 LoRA 微调。</p>
+<p>结果上,arena 总分从最强基线 Gemini 2.0 Flash 的 191.70 提到 336.21,连 7B 也有 290.78。</p>
+<p><strong>边界:6 个评测数据集都在训练库里,基线全是零样本通用模型,四个数据模块没有消融,CVS 平衡准确率只有 51 左右。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">1.81M 帧,7.79M 段对话,16 种术式,23 个来源</span><span class="i">arena:SurgVLM-72B 336.21,Gemini 2.0 Flash 191.70,GPT-4o 118.71</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p>这一节回答:库有多大,规模集中在哪里。</p>
+<p>SurgVLM-DB 的来源包括胆囊切除(Cholec80、CholecT50、Endoscapes2023 等 6 个)、前列腺切除(GraSP、SAR-RARP 等 4 个)、眼科(Cataract-1K、CaDISv2、OphNet)、胃旁路 MultiBypass140、垂体 PitVQA 等。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。16 种术式对应的解剖部位与各部位的视频数,外环数字显示胆囊切除和胃旁路的视频最多。</figcaption></figure>
+<p><strong>规模高度集中。</strong>按附录逐个数据集的帧数相加,MultiBypass140 一家约占 40%;另有 5 种术式只由 LRSP-VQA 一个来源提供,而论文未说明它的样本量。总规模的说法也不一致:摘要写 1.81M 帧,2.1 节写 1.181M 帧。</p>
+<figure class="fig"><img src="images/page_002_fig_table_1_review_repair1.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。与已有手术多模态数据集的规模比较。对比对象是单个问答数据集,而 SurgVLM-DB 本身就包含其中几个。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">规模来自重组和模板扩写,不是新标注</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>标签怎样变成对话</h3><p>这一节回答:一个类别号怎样变成多段训练对话。四个模块串联,前一个的输出是后一个的输入。</p>
+<ol><li><strong>清洗与规范化:</strong>把 <code>other</code> 这类含糊标签改写成明确描述,按 NIH 术语统一同义词。</li><li><strong>跨任务关联:</strong>把相位与步骤、器械与动作拼进同一个回答。</li><li><strong>可解释答案:</strong>检索手术知识,为每个标签补一句解释。</li><li><strong>对话多样化:</strong>每项任务 100 到 200 个问法模板,同时生成单轮和多轮对话。</li></ol>
+<p><strong>论文未说明第 3 步的解释由什么生成、是否人工核查</strong>,所以无法判断解释文本本身的错误率,而这些文本会直接成为训练目标。四个模块也没有任何消融。</p>
+<figure class="fig"><img src="images/page_021_fig_figure_s1_review_repair1.png" alt="Figure S1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure S1。SurgVLM 的整体结构,即 Qwen2.5-VL 的视觉编码器、多模态融合与语言解码器,用统一自回归损失训练 10 项任务。</figcaption></figure></div><div class="card" id="s5"><h3><span class="num">5</span>评测协议</h3><p>这一节回答:怎样给模型打分,打分方式偏向谁。</p>
+<p>SurgVLM-Bench 用 6 个数据集:EndoVis2017 定位、EndoVis2018-VQA、Cholec80 相位、SAR-RARP50 动作、CholecT50 三元组、Endoscapes2023 CVS。<strong>每个数据集从官方测试集随机抽 1000 帧</strong>;CVS 是例外,只有 255 帧。</p>
+<p>基线全部用选择题(MCQ)协议;SurgVLM 另用开放词表(OV)协议,回答中必须含真值关键词才算对。arena 总分把 6 个主指标各归一化到 0 到 100 后相加,但论文未说明归一化公式,读者无法复算。</p><div class="strip d"><span class="t">数据</span><span class="i">每个数据集 1000 帧,CVS 255 帧</span><span class="i">arena 满分 600</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_009_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。arena 分数排行。16 个基线全部挤在 107.64 到 191.70 之间。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>数据集与指标</th><th>Gemini 2.0 Flash</th><th>7B</th><th>32B</th><th>72B(MCQ / OV)</th></tr></thead><tbody><tr><td>EndoVis2017 mIoU</td><td>19.90</td><td>34.00</td><td>48.40</td><td>59.00 / 59.40</td></tr><tr><td>EndoVis2018-VQA 准确率</td><td>47.05</td><td>59.67</td><td>59.72</td><td>75.02 / 63.46</td></tr><tr><td>Cholec80 相位准确率</td><td>38.89</td><td>70.30</td><td>71.20</td><td>69.66 / 76.40</td></tr><tr><td>SAR-RARP 动作准确率</td><td>24.40</td><td>45.80</td><td>40.10</td><td>43.10 / 42.90</td></tr><tr><td>CholecT50 三元组准确率</td><td>1.85</td><td>4.15</td><td>12.98</td><td>12.52 / 13.10</td></tr><tr><td>Endoscapes CVS 平均准确率</td><td>59.61</td><td>76.86</td><td>74.51</td><td>76.73 / 76.60</td></tr></tbody></table></div>
+<p><strong>相位识别翻倍、定位提升近三倍,说明领域指令微调对感知类任务很有效。</strong>但三元组准确率最高仍只有 13.10%,同一个 72B 在问答上 MCQ 为 75.02、OV 为 63.46,两种协议的分数不能混排。</p>
+<figure class="fig"><img src="images/page_012_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。器械定位、手术问答与关键安全视野的完整指标,CVS 一栏同时给出平均准确率与平衡准确率。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">7B 微调后已比最强闭源基线高约 100 分</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><p><strong>第一,不能说明泛化。</strong>6 个评测数据集都在训练库里,标签体系和问法一致;论文没有任何库外数据集的零样本测试,也未说明测试帧是否按视频去重。</p>
+<p><strong>第二,CVS 不能说明推理。</strong>SurgVLM 的平衡准确率在 51.33 到 54.12 之间,7B 三个子项都是 50.00,平均准确率高主要来自多数类。</p>
+<p><strong>第三,规模结论被微调方式混淆。</strong>7B 全量、32B 冻结、72B LoRA 同时改变了规模与微调方式;每个设置只跑一次,没有置信区间。</p>
+<p><strong>第四,闭源模型分数部分是拒答。</strong>GPT-4o 的 CVS 平均准确率只有 6.67,Figure 4 显示它在 CVS 和三元组示例上直接拒答;论文未说明拒答率。</p>
+<figure class="fig"><img src="images/page_010_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。典型回答对比,紫色文字是闭源模型触发安全过滤后的拒答。</figcaption></figure></div><div class="card" id="s8"><h3><span class="num">8</span>复现要注意什么</h3><ul><li>论文未说明学习率、轮数、LoRA 秩、任务混合比例、算力和抽样种子,训练无法照做。</li><li>公开版本与论文不一致:官方仓库把数据标为部分发布,放在 SurgSigma-DB 下;公开模型是基于 Qwen3.5-9B 的新变体,论文中的 7B、32B、72B 权重未发布。</li><li>23 个来源数据集各有许可,重组数据能否再分发论文未说明。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SurgVLM-DB 的价值在于把多源手术标注统一成规范术语加问答对话,做法可复用</div><div>SurgVLM-Bench 是域内抽样子集,分数不能和官方全测试集上的专用方法直接比较</div><div>评 CVS 这类不平衡二分类,要同时看平衡准确率</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>覆盖 16 种术式、10 项任务,是目前对话规模最大的手术指令数据之一</li><li>四个数据模块的设计清楚,示例完整,便于借鉴</li><li>给出 16 个通用模型在同一协议下的完整分项指标</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>评测与训练同源,基线全为零样本,没有手术专用模型对比</li><li>数据模块无消融,规模实验混入微调方式</li><li>文中规模、样本数、协议标注多处前后不一致</li><li>训练细节缺失,发布版本与论文不同</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>1000 帧测试样本与训练帧是否来自不同视频?</li><li>固定 72B 只换微调方式,结果差多少?</li><li>去掉跨任务关联或可解释答案,相位与动作识别会降多少?</li><li>在未进入训练库的数据集上零样本效果如何?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 ed25286f</span><span class="s">7.6 分</span></div><p>第 1 轮原版流程笔记(自评)。证据链完整:数据来源、构建流程、评测协议、排行榜与分任务结果都有对应图表。D5=7:与 EndoBench、LLaVA-Med 的定位只在一张小表里,没有说清各自缺什么。D6=7:我的笔记缺少复现时具体要检查的步骤。D7=7:Figure 2 只能保留占位,Table S1 放在方法而决策表建议放在结果。D9=6:研究问题末尾没有核心观点速览,部分小节开头没有先提出要回答的问题,主结果表后的意义说明偏少。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各小节开头先写本节要回答的问题,关键数字后补一句意义</li><li>把论文未说明的内容(训练超参数、解释文本生成方式、arena 归一化、测试帧去重、LRSP-VQA 规模)统一写成 论文未说明 并说明影响</li><li>补写 72B MCQ 与 OV 在 EndoVis2018-VQA 上 75.02 对 63.46 的反差</li><li>用 lint_report.py --mode note 做数字核对并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 aa6d2656 · 文稿 cbccb15d</span><span class="s">8.3 分</span></div><p>第 2 轮自评(模型自我评审,非独立评分)。Insight Pass 三轮完成,5 条修订写入笔记与报告;笔记与报告数字核对无未匹配项,5 个推导值或图像读数登记在 number_exceptions.json。D3=9:排行榜、6 个数据集的主指标、规模表和评测设置都带数据集名与单位。D4=9:列出域内同源、CVS 平衡准确率、规模与微调方式混淆、拒答未统计、测试帧去重五条边界并给出理由。无法修复的限制:训练超参数、解释文本生成方式、arena 归一化、视频级去重、LRSP-VQA 样本量均为论文未说明;Figure 2 与 Table S2 裁图被拒,前者保留占位;论文版 7B/32B/72B 权重未发布,数据仅部分发布。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

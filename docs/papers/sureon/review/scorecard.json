@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "317f9a4c7a712f604b1b0755a7b4d6121d38ed736a09fafd9af7484372eb4de5",
+      "note_snapshot": "review_rounds/round1_SUREON_A_Benchmark_and_Vision_Language_Model_for_Surgical_Reasoning.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.7,
+      "verdict": "第 1 轮自评：四阶段构建、盲测一致性公式、评测协议、表 3/4/5/8/19 主结果与消融都在，深度分析指出猜测器同源、训练评测同源和人类基线下界问题。D6=7：复用建议没有说明阈值与重复次数如何取。D7=7：小节未编号。D9=6：研究问题末尾缺核心观点速览，多数小节直接罗列事实、数字后缺含义、节末无过渡。H3 尚未做数字核对。",
+      "fixes": [
+        "按 insight pass 三轮补齐知识点、细节问答与对中心论断的质疑",
+        "在研究问题末尾加核心观点速览",
+        "各节开头写清本节要回答的问题，节末加过渡",
+        "主要数字后补一句含义",
+        "数字核对并处理派生数字",
+        "核对表 3 与表 19 数字不一致的表述"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "1a09a3000a76d1edb1a01a316ea79ef897051638147ae742dff2f578ac7a55df",
+      "note_snapshot": "review_rounds/round2_SUREON_A_Benchmark_and_Vision_Language_Model_for_Surgical_Reasoning.md",
+      "report_sha256": "0496440e127584c9200bb58f1904b8e124450ae5482fc0fd82db422b9d981a9c",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮自评：补了核心观点速览、各节开头的问题与节末过渡、关键数字后的含义；insight pass 的 6 项修订全部写入笔记与报告，阈值敏感性、帧数上限、表 3 与表 19 不一致三处写为论文未说明。数字核对无未匹配项，图像表中的数字在例外文件中注明来源。仍不能修的限制：表 3 主表裁剪混入正文只能保留占位并转写，表 18 显著性矩阵未插图；笔记小节按固定名称未编号，编号只在报告中。",
+      "fixes": []
+    }
+  ]
+}

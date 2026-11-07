@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SUREON: A Benchmark and Vision-Language Model for Surgical Reasoning</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>删掉“不看视频也能答对”的题之后，手术视觉推理还剩多难</h1>
+<div class="sub">SUREON: A Benchmark and Vision-Language Model for Surgical Reasoning</div>
+<div class="meta">Alejandra Perez, Anita Rau 等；Intuitive Surgical 联合斯特拉斯堡 IHU、巴塞尔大学等 | arXiv 2603.06570（v2，2026-10-30）</div>
+<div><span class="chip">数据集与基准</span><span class="tag">手术视频问答</span><span class="tag">视觉语言模型</span><span class="tag">盲测筛选</span><span class="tag">干扰项</span><span class="tag">基准</span></div>
+<div class="one">从讲解视频自动出题，再用无图猜测器删掉语言可解的题，得到 76,061 条训练问答和 340 道专家核验题；最好的模型 52.2，外科医生 64.9。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 2 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2603.06570" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/sureon/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术视觉语言模型的评测有一个隐患：<strong>很多题不看视频也能答对</strong>。模型可以靠流程常识或常见的器械与解剖搭配猜出答案，于是高分分不清是视觉推理还是背过的手术知识。</p>
+<p>已有基准大多把阶段、器械、动作标签改写成问答，标签空间封闭；从讲解视频出题的 SurgPub-Video、SurgCoT 等虽然更开放，但都没有检查纯文本模型能否答对。</p>
+<p>自动出题通常交给大模型，但大模型在手术画面上本来就差，让它给自己也答不好的题判卷是循环的；全部交给外科医生又不可扩展。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>原料</strong>：讲解视频里，讲解者会明确说出“此刻画面里的什么意味着什么”，作者把这样的时间段称为语义锚定时刻，每道题都从这里出。</li><li><strong>去捷径</strong>：干扰项按正确答案的风格重写；无图猜测器（含在答案分布上微调过的）多次作答，稳定答对就删；验证集再重抽干扰项直到最强猜测器答错。</li><li><strong>结果</strong>：<strong>Gemini 3.1 Pro 52.2、SUREON-VLM 48.2、GPT-5.1 46.8，外科医生 64.9</strong>；前三名差异不显著。</li><li><strong>边界</strong>：猜测器全是 Qwen 家族，训练库与基准同源，“更依赖视觉”只在同源评测上成立。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">自动生成的手术选择题有六成以上不看视频就能稳定答对</span><span class="i">多模态增益 MG 让每个模型都要同时报有图和无图成绩</span></div><div class="strip d"><span class="t">数据</span><span class="i">训练库 76,061 条，基准 340 题，10 类题型</span><span class="i">最好模型 52.2，外科医生 64.9，随机 14.6</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来、分成哪些题</h3><p>源数据是 SurgLaVi-β 的 3,148 个 YouTube 手术讲解视频转写，按术式主题在视频级 9:1 划分训练与验证。基准覆盖 8 个专科、69 种术式，普外占 48.8%。</p>
+<p>十类题分两组。感知类问片段里有什么、在做什么：实体存在、实体属性、器械与动作交互、动作描述、与术式无关的动作。推理类问为什么、接下来怎样：局部动作目的、安全操作、下一步预测、三事件排序、流程总结。前八类七选一，后两类开放。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。四类题示例、十类题占比、专科与主题分布、各题型片段时长。</figcaption></figure>
+<p>题目来源也划定了覆盖范围：<strong>讲解者没说的内容不会成为题目</strong>，教学视频里的病例也偏典型。</p></div><div class="card" id="s4"><h3><span class="num">4</span>四个构建阶段</h3><figure class="fig"><img src="images/page_005_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。转写锚定出题、多模型检索增强干扰项、盲测筛选、专家核验四个阶段。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>阶段</th><th>做什么</th><th>留下多少</th></tr></thead><tbody><tr><td>一：出题</td><td>10 对 gpt-5 生成器与验证器，每份转写调用 3 次</td><td>198,248 条，约 2 万美元</td></tr><tr><td>二：干扰项</td><td>bge-m3 检索风格示例，三个模型各出 6 个，混合抽取</td><td>每题 18 个候选</td></tr><tr><td>三：盲测</td><td>Qwen3-VL-8B 猜测器无图答 5 次，答对 3 次即删</td><td>训练 76,061；验证 6,677</td></tr><tr><td>四：核验</td><td>6 名外科医生，四项条件全过才保留</td><td>602 题中 340 题</td></tr></tbody></table></div>
+<p>阶段二解决的是表面线索：原始干扰项平均 4.4 个词，正确答案 6.2 个词，改写后干扰项 6.5 个词。但它压不住学得到的捷径，这正是阶段三存在的理由。</p></div><div class="card" id="s5"><h3><span class="num">5</span>盲测筛选为什么要用微调猜测器</h3><p>零样本模型只能发现“一眼看得出”的捷径。<strong>在题目和选项上训练过的模型，能学到零样本发现不了的规律</strong>。</p>
+<p>表 8 给出了差距：6 个干扰项的多模型混合，零样本猜测 0.277，盲微调猜测仍有 0.725，远高于随机 0.143。</p>
+<figure class="fig"><img src="images/page_018_fig_table_8_review.png" alt="Table 8" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 8。不同干扰项策略下现成模型与盲微调模型的无图准确率。</figcaption></figure>
+<p>训练集用 4 折交叉验证避免猜测器见过自己要打分的题。结果是可盲测的 161,667 条中删去 100,532 条（62.2%）。</p>
+<p>阈值为何取 3/5、为何查询 5 次，论文未说明，也没有敏感性分析。</p></div><div class="card" id="s6"><h3><span class="num">6</span>评测协议</h3><ul><li>每段最多 8 帧，模糊人脸、设备标识和屏幕叠加文字，防止模型读字作答。</li><li>选择题 7 个选项，随机 14.3%；排序题随机 16.7%；流程总结由 Claude Opus 4.8 依参考判分，与人类多数票一致 79.1%。</li><li>多模态增益 $\mathrm{MG} = S_v - S_{wv}$，即有图减无图准确率。</li><li>299 道计准确率题用自助法置信区间，两两比较用 McNemar 检验并做 Holm–Bonferroni 校正。</li></ul>
+<p>长时程片段中位 80.6 秒也只给 8 帧，帧数是否成为瓶颈论文未说明。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>模型</th><th>有图</th><th>无图</th><th>MG</th></tr></thead><tbody><tr><td>外科医生</td><td>64.9</td><td>—</td><td>—</td></tr><tr><td>Gemini 3.1 Pro</td><td>52.2</td><td>31.8</td><td>+20.4</td></tr><tr><td>SUREON-VLM</td><td>48.2</td><td>19.1</td><td>+29.1</td></tr><tr><td>GPT-5.1</td><td>46.8</td><td>25.8</td><td>+21.1</td></tr><tr><td>Qwen3VL-32B-Thinking</td><td>34.1</td><td>27.8</td><td>+6.3</td></tr><tr><td>MedGemma 1.5</td><td>10.7</td><td>11.0</td><td>−0.3</td></tr></tbody></table></div>
+<p><strong>外科医生显著高于所有模型，前三名之间不显著</strong>。两个开源医学模型接近随机，有图不比无图好。</p>
+<p>构建消融是最干净的证据：同一骨干用三阶段数据训练，MG 从 8.7 到 16.8 再到 29.1，样本从 176.6K 降到 76K。</p>
+<figure class="fig"><img src="images/page_008_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。阶段一、二、三干扰项训练出的模型在 SUREON 上的有图、无图准确率与多模态增益。</figcaption></figure>
+<p>加入推理数据后感知能力基本保住：Endoscapes-CVS 平均 78.5，Cholec80 片段级宏 F1 78.85；但 HeiChole 动作识别只有 14.5。</p><div class="strip d"><span class="t">数据</span><span class="i">MG：8.7 → 16.8 → 29.1</span><span class="i">训练样本 176.6K → 76K</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>基准里仍有语言可解成分</strong>：GPT-5.1 无图 25.8、Gemini 31.8，都明显高于随机。筛选只针对 Qwen 家族的捷径。</li><li><strong>训练与评测同源</strong>：SUREON-VLM 的训练库与基准走同一流程，MG 高也可能是学到了这套出题风格。论文没有在独立基准上检验。</li><li><strong>64.9 不是专家上限</strong>：每题一名医生、不匹配专科，自报有把握的只占 31.4%；核验双人一致率 70.3%。</li><li><strong>SUREON-VLM 的成绩有两个版本</strong>：表 3 为 48.2，表 19 的最终配置为 45.10，差异原因论文未说明。</li><li><strong>类别排名不可靠</strong>：每类只有 29 到 37 题，区间半宽平均 14.3 个点。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现与复用要注意什么</h3><ul><li>数据在 Hugging Face 需申请访问，许可 CC BY-NC-SA 4.0；只含问答与时间窗，视频要按原始来源自行获取。</li><li>阶段一依赖闭源 gpt-5，精确重建需要该版本可用。</li><li>评测自己的模型时同时报有图、无图与 MG，并按论文的模糊和抽帧设置预处理。</li><li>自建手术问答数据时，盲测猜测器至少包含一个在答案分布上微调过的版本。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>自动出题的手术问答必须做无图检查，否则六成以上的题可能不靠画面</div><div>MG 应成为手术视觉语言模型评测的标配</div><div>前三名差异不显著，SUREON 适合区分大差距而非细排名</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>把视觉依赖作为构建时的硬约束，并公开每阶段的删除量</li><li>盲测加入微调猜测器，并用未参与筛选的 Gemma 做了交叉检查</li><li>统计报告完整：自助法区间、McNemar 检验与多重比较校正</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>猜测器单一家族，训练与评测同源，独立验证缺失</li><li>人类基线不匹配专科，只有一人作答</li><li>表 3 与表 19 的 SUREON-VLM 成绩不一致未解释</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>换用其他家族猜测器重新筛选，被删除的题有多少重叠</li><li>联合改写题干而不只是干扰项，能否减少删题</li><li>在未剪辑的真实术中视频上，SUREON 分数与临床判断是否相关</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 317f9a4c</span><span class="s">7.7 分</span></div><p>第 1 轮自评：四阶段构建、盲测一致性公式、评测协议、表 3/4/5/8/19 主结果与消融都在，深度分析指出猜测器同源、训练评测同源和人类基线下界问题。D6=7：复用建议没有说明阈值与重复次数如何取。D7=7：小节未编号。D9=6：研究问题末尾缺核心观点速览，多数小节直接罗列事实、数字后缺含义、节末无过渡。H3 尚未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>按 insight pass 三轮补齐知识点、细节问答与对中心论断的质疑</li><li>在研究问题末尾加核心观点速览</li><li>各节开头写清本节要回答的问题，节末加过渡</li><li>主要数字后补一句含义</li><li>数字核对并处理派生数字</li><li>核对表 3 与表 19 数字不一致的表述</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 1a09a300 · 文稿 0496440e</span><span class="s">8.5 分</span></div><p>第 2 轮自评：补了核心观点速览、各节开头的问题与节末过渡、关键数字后的含义；insight pass 的 6 项修订全部写入笔记与报告，阈值敏感性、帧数上限、表 3 与表 19 不一致三处写为论文未说明。数字核对无未匹配项，图像表中的数字在例外文件中注明来源。仍不能修的限制：表 3 主表裁剪混入正文只能保留占位并转写，表 18 显著性矩阵未插图；笔记小节按固定名称未编号，编号只在报告中。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-07</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

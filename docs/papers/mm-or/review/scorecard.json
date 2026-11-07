@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "b25e60569ef1cb4db5071a2c14b3b4bbf5a6e88f16bde75c830877368ba056c9",
+      "note_snapshot": "review_rounds/round1_MM_OR_A_Large_Multimodal_Operating_Room_Dataset_for_Semantic_Understanding_of_High_Intensity_Surgical_Environments.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 8,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.6,
+      "verdict": "第 1 轮原版流程笔记（模型自评）。证据链完整，主表、增强消融、长尾分组和分割与下游结果都在，机制流程四步清楚。D5=7：与 EgoExo4D 等通用多模态数据集的对比只有一句。D6=7：缺少数据下载后的具体核对项。D9=6：多数小节开头没有本节问题，部分数字后缺少意义，小节结尾没有过渡。H3 尚未做数字核对。",
+      "fixes": [
+        "各小节开头补本节问题、数字后补意义、小节结尾补过渡",
+        "用 lint_report.py --mode note 做数字核对并登记推导值",
+        "Insight Pass 挑战轮：核对模态递增是否被方差淹没、tail 增益是否来自联合训练、真值分割无收益的含义",
+        "把一致性、参与者人数、划分差额、基线是否用前作数据统一写成 论文未说明",
+        "补与 EgoExo4D 的定位对比"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "24b5acf321b77e6b10b4b3c01e4f018a0835049aa702756b33a11fece8466933",
+      "note_snapshot": "review_rounds/round2_MM_OR_A_Large_Multimodal_Operating_Room_Dataset_for_Semantic_Understanding_of_High_Intensity_Surgical_Environments.md",
+      "report_sha256": "e231261082a080fdcf0131724db6537606c739c3f8cb1eeee9b5fcd6cd1bbc3b",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第 2 轮自评（模型自我评审，非独立评分）。Insight Pass 三轮完成，6 条修订与 6 个论文未说明缺口已写入笔记与报告；笔记与报告数字核对无未匹配项，推导值与文本抽取丢失的三个表格单元格登记在 number_exceptions.json。新增 EgoExo4D 定位、各节开头问题与结尾过渡、真实度只在人员行为层面的分析，并指出音频与转写一步下降、联合训练在部分分割设定下降、Table 6 之和与总数不符、短片段 22 与 20 不一致。无法修复的限制：Table 4、5、7、8、9 无可用裁剪，保留占位并以文字或 Markdown 表转写；一致性、参与者人数、方差、基线训练数据、下游类别数均为论文未说明。D2 未到 9：图像池化器与分割编码器的结构细节论文描述有限。",
+      "fixes": []
+    }
+  ]
+}

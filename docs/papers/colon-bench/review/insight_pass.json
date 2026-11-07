@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "REAL-COLON", "plain": "60 段全程结肠镜视频的公开数据集，只有人工息肉框，是本文全部视频来源和唯一的质量参照。", "where": "sec:methodology", "needed_for": "理解为何质量评估只覆盖息肉"},
+  {"term": "EdgeTAM", "plain": "可用框提示、向后传播掩码的轻量视频分割跟踪器。", "where": "sec:methodology", "needed_for": "理解掩码如何生成以及分割评测为何主要比较框质量"},
+  {"term": "OV-VOS", "plain": "开放词汇视频目标分割：给出类别文字，在视频里分割对应目标。", "where": "sec:introduction", "needed_for": "理解 SAM 3 与 MLLM 加跟踪器的对比"},
+  {"term": "替代标签", "plain": "用另一份只含息肉的人工框来近似评估多类自动标注的质量。", "where": "sec:methodology", "needed_for": "判断 F1 51.8 能说明什么"},
+  {"term": "盲测准确率", "plain": "只给题面不给视频时模型答选择题的准确率，衡量文字捷径和先验。", "where": "sec:methodology", "needed_for": "判断 VQA 中段模型是否真在看视频"},
+  {"term": "有框提示与无提示", "plain": "前者视频叠加病灶框且只含病灶窗口，后者用原始帧并加入无病灶窗口。", "where": "sec:methodology", "needed_for": "理解两档 VQA 的差异来源"},
+  {"term": "阳性类 F1", "plain": "只按有病灶类计算的精度与召回的调和平均，全判阳性时约等于 51。", "where": "sec:model-4", "needed_for": "识别分类中的全判阳性与全判阴性退化"}
+ ],
+ "detail_questions": [
+  {"question": "医生拒绝 11.6% 能否当作标注一致性？", "answer": "不能。医生只看到两轮过滤后的 597 个窗口，且只做接受或拒绝，没有独立标注。", "evidence": ["sec:methodology", "sec:references"], "status": "resolved"},
+  {"question": "非息肉类别的标注精度是多少？", "answer": "论文未说明，只用息肉替代标签做质量控制。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "为什么跟踪后召回下降 17.2？", "answer": "跟踪只把有框的帧算作阳性，框跟丢或未覆盖的病灶帧被删。", "evidence": ["sec:references"], "status": "resolved"},
+  {"question": "Qwen 大模型分类准确率约 65% 意味着什么？", "answer": "518/790 是阴性片段占比，这些模型召回接近 0，等于全判阴性。", "evidence": ["sec:model-4", "sec:model"], "status": "resolved"},
+  {"question": "分割评测是 272 还是 264 个视频？", "answer": "正文与表 11 写 272，表 9 与 A.3 写分割 264 片段，论文未说明两者关系。", "evidence": ["sec:model", "sec:model-3", "sec:references"], "status": "not_stated"},
+  {"question": "图中的 Gemini 3.5 Flash 从哪里来？", "answer": "图 10、11、13、14 有这一模型，任何表格都没有，论文未说明。", "evidence": ["sec:model-5"], "status": "not_stated"},
+  {"question": "评测片段如何选取，Colon-ViCLIP 训练是否与评测隔离？", "answer": "论文未说明划分方式。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "表 14 的 3 帧结果为何与表 11 不同？", "answer": "Gemini 3 Flash 49.0 对 48.3，Seed 1.6 13.0 对 12.6，论文未说明是否为两次运行。", "evidence": ["sec:model-6", "sec:model-3"], "status": "not_stated"},
+  {"question": "GPT-5.2/5.4 没有视频接口，VQA 怎么做？", "answer": "正文说 GPT 系列只评分割，但表中有其 VQA 与分类结果，输入方式论文未说明。", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "盲测 44.6% 的剩余优势来自什么？", "answer": "作者归因于病灶类型分布偏斜，但没有给出多数类基线来验证。", "evidence": ["sec:references"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "前沿 MLLM 定位能力远超 SAM 3", "alternative": "真值由 Gemini-3-flash 画框经 EdgeTAM 传播得到，Gemini 加 EdgeTAM 的被测流程在复现标注过程；SAM 3 走文本提示，输入条件不同。", "separating_evidence": "在独立人工标注的子集上重算分割排名，或给 SAM 3 同样的框提示。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "智能体流程得到高质量标注", "alternative": "精度提高主要靠删掉难例和短窗口，召回降到 48.6，质量提升以覆盖率为代价。", "separating_evidence": "非息肉类别的独立人工复核，以及被删窗口中真病灶的比例。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "Colon-Skill 免训练提升 MLLM", "alternative": "技能从同一批题的错题中蒸馏，提升可能来自对本基准题目分布的拟合。", "separating_evidence": "在留出题目或新视频上评测。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "视频比单帧更重要", "alternative": "只有部分模型受益，Gemini 系单帧几乎不掉，说明多数题目可由单帧回答。", "separating_evidence": "按是否含时间推理拆分题目后的视频与单帧对比。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览，写明同源偏差边界",
+  "任务拆分节补 272/264 不一致与划分方式未说明",
+  "VQA 细表补 Gemini 3.5 Flash 只在图中出现",
+  "Colon-Skill 节标明测试集泄漏",
+  "消融节把“多数题不需要时间推理”标为推断",
+  "深度分析补与 EndoBench、REAL-COLON 的定位",
+  "局限节集中列出全部论文未说明项"
+ ]
+}

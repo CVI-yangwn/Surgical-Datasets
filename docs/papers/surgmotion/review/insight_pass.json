@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "V-JEPA", "plain": "视频联合嵌入预测架构：遮住一部分时空块，让模型预测被遮块在教师编码器里的特征，而不是像素。", "where": "sec:related-work", "needed_for": "理解 SurgMotion 改了什么、没改什么"},
+  {"term": "管状词元", "plain": "同一 16×16 空间位置跨全部帧拼成的一个词元，掩码按整根管子遮。", "where": "sec:methodology", "needed_for": "运动分数和 Top-K 的计算单位"},
+  {"term": "EMA 教师", "plain": "参数为学生参数指数滑动平均的编码器，给出停梯度目标，防止平凡解。", "where": "sec:methodology", "needed_for": "三项损失的目标从哪来"},
+  {"term": "表征坍塌", "plain": "所有输入映射到几乎相同的特征，损失很低但特征无用。", "where": "sec:methodology", "needed_for": "SFDR 的动机"},
+  {"term": "注意力探测", "plain": "冻结骨干，只训练一个交叉注意力小头做下游任务，用来衡量特征本身的质量。", "where": "sec:experiments", "needed_for": "判断结果比较的是什么"},
+  {"term": "Jaccard 与 Edit 类时序指标", "plain": "Jaccard 衡量预测阶段段与真值段的重叠，比逐帧准确率更惩罚碎片化。", "where": "sec:model", "needed_for": "解释工作流表中 Jaccard 差距大于准确率差距"},
+  {"term": "AP-IVT", "plain": "器械、动词、目标三者同时正确的平均精度，是三元组识别最难的指标。", "where": "sec:model-4", "needed_for": "39.54 这个摘要数字的含义"},
+  {"term": "分布外息肉集", "plain": "训练只用 Kvasir 与 CVC-ClinicDB，在另外三个采集中心不同的数据集上测试。", "where": "sec:model-6", "needed_for": "泛化论点"}
+ ],
+ "detail_questions": [
+  {"question": "三个损失各贡献多少？", "answer": "论文没有任何消融表。", "evidence": ["sec:experiments", "sec:model"], "status": "not_stated"},
+  {"question": "下游测试视频是否出现在预训练语料里？", "answer": "表 1 来源含 PitVis、Cholec80、M2CAI-2016、AutoLaparo、EgoSurgery、OphNet、PmLR50、AVOS、JIGSAWS，与 9 个下游集同名；是否只用训练划分预训练，论文未说明。", "evidence": ["sec:methodology", "sec:experiments"], "status": "not_stated"},
+  {"question": "表 1 各行之和是否等于 3,658 小时？", "answer": "12 行小时数相加约 3,707.7，视频数相加 45,817，均与正文 3,658 小时、45,757 个视频不符；差异原因论文未说明。", "evidence": ["sec:methodology", "sec:introduction"], "status": "not_stated"},
+  {"question": "50 个来源具体是哪些？", "answer": "表 1 只点名 15 个公开数据集，其余来自网络与机构视频，清单论文未说明。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "16 组探测超参在哪个划分上选最好？", "answer": "只说报告最好结果，选择用的划分论文未说明。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "σ0 取多少？", "answer": "公式给出铰链阈值但没有给数值。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "骨干规模多大？", "answer": "正文未写；图 1(c) 标注 SurgMotion 约 1.01B 参数。", "evidence": ["sec:introduction"], "status": "partly"},
+  {"question": "表 5 与表 6 中 EndoMamba 为何数字相同？", "answer": "两表 EndoMamba 行同为 58.45、36.23、31.55、22.86、23.54、20.05，疑似复制错误，论文未解释。", "evidence": ["sec:model-4", "sec:model-5"], "status": "not_stated"},
+  {"question": "17 个基准怎么数？", "answer": "按表 2 至表 9 逐集计数为 19 个（8+3+1+1+5+1），与摘要的 17 不一致，论文未说明口径。", "evidence": ["sec:abstract", "sec:experiments"], "status": "not_stated"},
+  {"question": "AVOS 上多个基线为何同为 48.34 / 8.15？", "answer": "表 5 中 VideoMAE-G、EndoViT、GSViT、EndoSSL、EndoFM、Selfsupsurg 六个模型完全相同，像是退化到多数类，论文未讨论。", "evidence": ["sec:model-4"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "潜空间运动预测优于像素重建", "alternative": "优势来自 3,658 小时多专科数据和 64 帧输入，换成同数据训练的 VideoMAE 也能接近。", "separating_evidence": "同数据同帧长下对比像素目标与潜空间目标。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "运动加权提升了动词识别", "alternative": "AP-V 提升 3.8 点与 AP-I 提升 4.4 点幅度相近，说明是整体特征更好，而非运动特有。", "separating_evidence": "去掉运动加权后看 AP-V 是否单独下降。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "数据越大下游越好", "alternative": "图 1(c) 的散点混合了不同结构与目标，相关性可能由模型差异造成。", "separating_evidence": "同一模型在 SurgMotion-15M 子集上的规模扫描。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "SurgMotion 在 8 个工作流集上全部领先", "alternative": "下游视频可能已在预训练中被见过，冻结特征相当于记住了这些视频。", "separating_evidence": "与预训练严格去重的测试集结果。", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览",
+  "数据节写出表 1 合计与正文不一致、50 个来源只点名 15 个",
+  "深度分析逐个列出与预训练同名的下游数据集",
+  "关键结果标注表 5/表 6 EndoMamba 同值与 AVOS 多基线同值",
+  "指出 17 个基准与逐集计数 19 不一致",
+  "把 σ0、探测选模划分、各损失贡献写成 论文未说明",
+  "新增相对已有工作新在哪里一节"
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "MCQ 与 OV 协议", "plain": "MCQ 让模型从给定选项中选答案,OV 让模型自由作答且回答中必须含真值关键词才算对。", "where": "sec:results", "needed_for": "Table 2 中 SurgVLM 与基线的协议不同,比较是否公平"},
+  {"term": "arena score", "plain": "6 个数据集主指标各归一化到 0 到 100 后求和,满分 600。", "where": "sec:results", "needed_for": "排行榜的总分含义"},
+  {"term": "CVS 关键安全视野", "plain": "胆囊切除中判断能否安全夹闭胆囊管的三条二分类标准。", "where": "sec:results", "needed_for": "推理层的唯一任务"},
+  {"term": "平衡准确率", "plain": "每类的敏感度与特异度取平均,能抵消类别不平衡。", "where": "sec:datasets", "needed_for": "判断 CVS 结果是否接近随机"},
+  {"term": "手术三元组", "plain": "一帧中器械、动作、目标三者组成的组合标签。", "where": "sec:results", "needed_for": "理解 CholecT50 的三元组准确率与 mAP"},
+  {"term": "LoRA 与冻结微调", "plain": "LoRA 只训练插入的低秩矩阵,冻结微调只训视觉融合适配器,都比全量微调更新更少参数。", "where": "sec:models", "needed_for": "规模结论是否混淆了微调方式"},
+  {"term": "M-RoPE", "plain": "把位置拆成时间、行、列三个分量分别做旋转位置编码。", "where": "sec:models", "needed_for": "理解模型结构沿用 Qwen2.5-VL"},
+  {"term": "域内评测", "plain": "评测数据与训练数据来自同一批数据集和标签体系。", "where": "sec:datasets", "needed_for": "判断泛化结论的边界"}
+ ],
+ "detail_questions": [
+  {"question": "SurgVLM-DB 到底有多少帧?", "answer": "摘要与 Table 1 为 1.81M(1810K),2.1 节写 1.181M,论文没有解释差异。", "evidence": ["sec:abstract", "sec:dataset", "sec:results"], "status": "partly"},
+  {"question": "每个 Bench 数据集评测多少样本?", "answer": "附录称从官方测试集随机抽 1000 帧;但 2.2 节写 Endoscape2023 用 255 帧,CVS 准确率都是 1/255 的整数倍。", "evidence": ["sec:datasets", "sec:results", "sec:model-5"], "status": "resolved"},
+  {"question": "基线是否也做了 OV 评测?", "answer": "没有,所有基线只用 MCQ,OV 只评了 SurgVLM。", "evidence": ["sec:results"], "status": "resolved"},
+  {"question": "Table 2 中 336.21 是 MCQ 还是 OV?", "answer": "Table 2 标为 MCQ,正文一处写为 OV,另一处的表述自相矛盾。", "evidence": ["sec:model"], "status": "partly"},
+  {"question": "可解释答案用什么生成,有无人工核查?", "answer": "论文只说检索手术知识做语义扩写,没有说明生成模型、模板或核查比例。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "训练超参数与数据混合比例是多少?", "answer": "论文未给出学习率、轮数、批次、LoRA 秩、任务混合比例和算力。", "evidence": ["sec:models"], "status": "not_stated"},
+  {"question": "arena 的归一化怎么做,每个数据集取哪个指标?", "answer": "论文只说归一化到 0 到 100,没有给出公式和取用的指标。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "测试帧与训练帧是否按视频去重?", "answer": "附录称沿用官方划分,但没有说明是否做了视频级去重;部分来源测试集为 0。", "evidence": ["sec:datasets"], "status": "not_stated"},
+  {"question": "为什么 72B MCQ 在 EndoVis2018-VQA 上高于 OV?", "answer": "Table 4 中 75.02 对 63.46,但 BLEU-4 等文本指标 OV 更高;论文没有解释。", "evidence": ["sec:model-4"], "status": "partly"},
+  {"question": "7B 的视觉编码器是 SIGLIP2 还是与其他规模相同?", "answer": "Table 2 写 SIGLIP2,Table S1 三个规模的视觉编码器配置相同,论文未解释。", "evidence": ["sec:model", "sec:models"], "status": "partly"},
+  {"question": "GPT-4o 的 CVS 平均准确率为何只有 6.67?", "answer": "Figure 4 显示 GPT-4o 在 CVS 与三元组上拒答,拒答很可能被记为错误。", "evidence": ["sec:dataset-2", "sec:model-5"], "status": "partly"},
+  {"question": "LRSP-VQA 贡献了多少样本?", "answer": "附录列出 23 个数据集的明细,但没有单列 LRSP-VQA 的帧数与对话数。", "evidence": ["sec:models", "sec:datasets"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "SurgVLM 在全部任务上超过主流商用模型", "alternative": "优势来自评测数据与训练数据同源,以及闭源模型的拒答,而不是更强的手术理解", "separating_evidence": "在未进入训练库的数据集上零样本测试,并单独统计拒答率", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "定位呈现规模律,识别在 30B 附近饱和", "alternative": "差异来自全量、冻结、LoRA 三种微调方式,以及 72B 底座原有的定位能力", "separating_evidence": "固定规模比较三种微调方式,或三种规模用同一微调方式", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "四模块数据构建流程提升效果", "alternative": "只要把标签改成问答格式并微调就能获得大部分收益", "separating_evidence": "逐个去掉模块的消融", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "SurgVLM 能做 CVS 推理", "alternative": "模型主要回答多数类,平均准确率高来自类别不平衡", "separating_evidence": "平衡准确率显著高于 50", "in_paper": true, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览,先给结论再给边界",
+  "评测集小节写明 CVS 实际只有 255 帧",
+  "关键结果补写 72B MCQ 与 OV 在 EndoVis2018-VQA 上 75.02 对 63.46 的反差",
+  "把解释文本生成方式、超参数、arena 归一化、测试帧去重、LRSP-VQA 规模统一写成 论文未说明 并说明影响",
+  "深度分析补写拒答率未统计对闭源模型分数的影响"
+ ]
+}

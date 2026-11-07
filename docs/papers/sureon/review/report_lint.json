@@ -1,0 +1,24 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "/ssd3/yangwennuo/code/MNL/Surgical-Datasets/DeepPaperNote_output/手术数据集/SUREON_A_Benchmark_and_Vision_Language_Model_for_Surgical_Reasoning/reading_report.md",
+  "mode": "report",
+  "report_sha256": "0496440e127584c9200bb58f1904b8e124450ae5482fc0fd82db422b9d981a9c",
+  "number_exceptions": {
+    "176": "176.6K（摘要与表 4 的阶段一训练样本数）与 176,593（表 6），lint 按整数切分时未匹配",
+    "2027": "项目页与 Hugging Face 数据卡标注的 WACV 2027 录用信息",
+    "262": "表 12 拒绝总数（图像表，文本抽取丢失数值）",
+    "335": "表 1 中 SUREON 基准的片段数（图像表）",
+    "520": "表 9 Fold 3 视频数（图像表）",
+    "587": "表 9 Fold 0 视频数（图像表）",
+    "602": "表 12 审核总数（图像表）",
+    "793": "表 1 中 SurgAtlas 的 793.2K 问答（文本抽取为 793.2K ✓）"
+  },
+  "section_count": 9,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

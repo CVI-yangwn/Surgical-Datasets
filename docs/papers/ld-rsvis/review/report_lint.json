@@ -1,0 +1,27 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/LD_RSVIS_A_Large_Scale_and_Diverse_Benchmark_for_Referring_Surgical_Video_Instrument_Segmentation/reading_report.md",
+  "mode": "report",
+  "report_sha256": "65fff22ddb796e7a06ec427a0e78269f562333dc456acb339b50f397fbbe6d20",
+  "number_exceptions": {
+    "0.5": "推导值：表 7 IoU 加权 37.4 减门控 36.9",
+    "1.2": "推导值：表 11 Ref18 J&F FlowRVS 81.8 减 ReSurgSAM2 80.6",
+    "1.5": "推导值：表 11 Ref17 J&F FlowRVS 79.2 减 ReSurgSAM2 77.7",
+    "10.8": "推导值：表 3 单目标 J&F FlowRVS 38.8 减 ReSurgSAM2 28.0",
+    "130": "表 1 UniPVOS 视频数（PDF 第 3 页表格图像，文本抽取未带出该单元格）",
+    "14.4": "推导值：表 3 无目标 J&F Cascade-RSVIS 30.6 减 FlowRVS 16.2",
+    "2.4": "推导值：表 6 全部特征 37.4 减仅词特征 35.0",
+    "20.3": "推导值：表 3 无目标 J&F Cascade-RSVIS 30.6 减 ReferFormer 10.3",
+    "300": "约数：平均视频长度 307.5 帧取整",
+    "308": "表 1 LD-RSVIS 平均视频长度（PDF 第 3 页表格图像），正文统计为 307.5",
+    "59": "推导值：测试集单目标 6,573 / 11,166 约 59%"
+  },
+  "section_count": 10,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}
