@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "9a122b7aaf71e21109b2a1956e166dae1cb50baa23f32d588dfa52600dd272d0",
+      "note_snapshot": "review_rounds/round1_SurgXBench_Explainable_Vision_Language_Model_Benchmark_for_Surgery.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 7,
+        "D9": 5
+      },
+      "overall": 7.5,
+      "verdict": "第 1 轮原版流程笔记(自评)。图 3、图 4 转写表、AA/AC/RAS 公式、相机运动校正四步都在,正文与图的矛盾已指出。D5=7:定位表只有三行,没有说明与 EndoBench 等问答基准测的东西不同。D7=7:Figure 7 到 9 集中堆在深度分析末尾,离引用它们的段落太远。D8=7:局部 RAS、全局 RAS 等术语首次出现时未解释;研究问题里 A/B 编号未在后文持续对应。D9=5:研究问题没有核心观点速览,各节开头没有点出本节要回答的问题,数字后多数缺意义说明,小节之间没有过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各节开头写本节要回答的问题,小节末尾加过渡",
+        "把 Figure 7、8、9 移到引用它们的段落旁",
+        "在关键结果里把每个发现对应回 A-i、A-ii、B-i、B-ii",
+        "用 lint_report.py --mode note 做数字核对并登记推导值和图内读数",
+        "深度分析补上 grasper 高 F1 与类别先验、框面积随机基线的推导"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "a1f60ecb768107bafaa6b5a134905e09b7c352d64070bd57b0193d389890e200",
+      "note_snapshot": "review_rounds/round2_SurgXBench_Explainable_Vision_Language_Model_Benchmark_for_Surgery.md",
+      "report_sha256": "6652766629bb5e80a6e6b89b3cab2c92e9053f285144112d57616bfcf09a9672",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 9,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮(自评)。加入核心观点速览、各节开头问题与过渡,关键结果逐项对应 A-i、A-ii、B-i、B-ii;Figure 7 到 9 移到引用段落旁;数字核对通过,图内读数与推导值登记在 number_exceptions.json。D5=7 未能再提高:论文本身只和 Rau 等一项工作比较,没有给出可对照的数字,定位表只能说明差别而无法量化。不可修复的局限:框面积随机基线、随机遮挡对照、RAS 口径、运动掩码核验都是论文未说明,笔记已写明各自限制;Figure 2 与附录表 2 的裁剪不可用,保留占位并用文字和表格转写。",
+      "fixes": []
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "c7d508477086cf84778d768a2858e2015bcf9040a0da4bf7fffb95b082963eec",
+      "note_snapshot": "review_rounds/round1_SurgVidLM_Towards_Multi_grained_Surgical_Video_Understanding_with_Large_Language_Model.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第一轮笔记证据链与数字齐全,表格完整,并核对了已发布 JSON。不足:研究问题没有核心观点速览;多处数字后缺少含义说明;基线是否拿到同一片段这一关键疑点只在深度分析里出现;数字尚未跑号码核对,含外部核查数字;D9 叙事衔接弱。",
+      "fixes": [
+        "在研究问题末尾补核心观点速览",
+        "各节开头先写问题再给答案,数字后补一句含义",
+        "把基线输入、MFA 结构等未说明项统一写成论文未说明并说明影响",
+        "跑 lint_report --mode note,外部核查与推导数字列入例外文件",
+        "节末补过渡句"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "7b0386f0950cd2abe64372280790a0b017a05b9596e6cbfde254c319352fb885",
+      "note_snapshot": "review_rounds/round2_SurgVidLM_Towards_Multi_grained_Surgical_Video_Understanding_with_Large_Language_Model.md",
+      "report_sha256": "be27c1526b7f00ee50e1b5916d32e90e496d2d0a15e219f01685c5650f405242",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮补了核心观点速览、节首问题与节末过渡,把基线输入、片段来源、MFA 结构、人工核验、表 II 合并方式统一写为论文未说明,并列出三种替代解释与区分实验;号码核对无未匹配项,外部核查与推导数字均列入例外文件。无法修复的限制:补充材料未随 arXiv 发布,各任务条数与提示词无法核对;GPT-4 打分无法复核。",
+      "fixes": []
+    }
+  ]
+}

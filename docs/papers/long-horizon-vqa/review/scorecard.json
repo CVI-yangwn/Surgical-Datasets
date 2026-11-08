@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "6b24016050f8a6952abba380b50c756ff7d529a1b6ce2d687907fc0875615760",
+      "note_snapshot": "review_rounds/round1_SurgLQA_Scalable_Long_Horizon_Surgical_Video_Question_Answering.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.8,
+      "verdict": "第一轮：结构与证据链完整，主表数字齐全；定位部分只与 SurgViVQA 和通用视频大模型对比，缺少对长视频压缩类方法的说明；数字尚未做逐项核对；部分小节结尾缺少过渡。",
+      "fixes": [
+        "做 Insight Pass 三轮并把结论写回笔记",
+        "逐项核对笔记中的数字，列出推导数字的例外",
+        "补强与长视频词元压缩方法的定位",
+        "检查每节开头是否点明问题、数字后是否有解释、节末是否有过渡",
+        "撰写 reading_report.md"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "365a45c6de9fc096edbf01c61ecfecfe6ea7642c7e4f87ca324dbe1767c5de35",
+      "note_snapshot": "review_rounds/round2_SurgLQA_Scalable_Long_Horizon_Surgical_Video_Question_Answering.md",
+      "report_sha256": "964f0f6c2260c7792a73d922ea94cdd126d5634cfc18096cd8dacb6b3c76ccb4",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第二轮：Insight Pass 补出图 5 基线已强于微调 Qwen3VL、图 6 数据集不明、缺随机选策略对照三处证据缺口，并写回笔记与报告；数字核对全部匹配，五个推导数字列入例外。无法修复的限制：论文未给 Colon-LQA 规模与划分、超参数和消融数字，消融数值只能目测；评分为模型自评。",
+      "fixes": []
+    }
+  ]
+}

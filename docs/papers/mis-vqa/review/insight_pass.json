@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "CholecT50", "plain": "50 段胆囊切除视频,带阶段和器械-动作-目标三元组标签", "where": "sec:methodology", "needed_for": "理解 Cholec 子集的标注为何要拼接三处来源"},
+  {"term": "CholecSeg8k", "plain": "Cholec80 中约八千帧的像素级分割子集", "where": "sec:methodology", "needed_for": "理解为什么要用预测掩码补全空间信息"},
+  {"term": "EndoVis18", "plain": "机器人肾部手术场景分割挑战数据,所有帧都有掩码", "where": "sec:methodology", "needed_for": "理解两个子集标注完整度的差别"},
+  {"term": "FASL", "plain": "作者团队的手术器械与解剖分割模型", "where": "sec:methodology", "needed_for": "掩码补全和编码器比较两处都用到它"},
+  {"term": "上下文学习样例", "plain": "放在提示词里的示范问答,由外科医生编写", "where": "sec:methodology", "needed_for": "理解生成答案的风格来源"},
+  {"term": "GPT-Score", "plain": "让 GPT-5-nano 读标注上下文后给答案打分,再用参考答案得分归一化", "where": "sec:methodology", "needed_for": "所有主结果的主要指标"},
+  {"term": "pixel unshuffle", "plain": "把空间分辨率换成通道数的重排操作", "where": "sec:methodology", "needed_for": "理解四种编码器如何统一成 1024 个视觉标记"}
+ ],
+ "detail_questions": [
+  {"question": "GPT-Score 如何归一化", "answer": "只说参考答案用同样方式打分用于归一化,公式未给", "evidence": ["sec:methodology", "sec:model"], "status": "not_stated"},
+  {"question": "每帧生成多少条 Conv-1、Conv-2、推理问答", "answer": "只给总数,Conv-1 训练 273K 对 29K 图像约每帧 9 条,数量规则未说明", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "两个子集各有多少帧", "answer": "论文只给合计;代码仓库 README 给出 CholecT50 训练 27,063、测试 3,247 帧,EndoVis18 训练 1,788、测试 447 帧", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "生成问答有无人工核查", "answer": "只说外科医生写了上下文学习样例,未报告生成结果的抽检", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "预测掩码是否也用于测试帧", "answer": "掩码补全对其余帧都做,没有区分训练测试;FASL 用 CholecSeg8k 训练加测试", "evidence": ["sec:methodology"], "status": "partly"},
+  {"question": "置信度过滤效果有无定量证据", "answer": "只有一句观察", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "为何 Cholec 上没有 VisualBert 和 PeskaVLP 版", "answer": "表 2 只列四行,原因未说明", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "生成模型选择的依据", "answer": "三种 GPT-5 模型的定性比较,无数字", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "正文 BLEU 数字是否与表一致", "answer": "正文写 BLEU-1 和 BLEU-3 都是 54.06,表中 BLEU-3 为 42.57", "evidence": ["sec:results", "sec:model"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "分割预训练编码器更适合手术场景", "alternative": "EndoVis 测试只有三段序列,差距在噪声范围内;Cholec 上 FASL 最差说明并非普遍成立", "separating_evidence": "多次运行方差和 Cholec 上的一致排名", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "GPT-Score 比 n-gram 指标更可靠", "alternative": "评委与生成器同系列且读同一上下文,可能只奖励与上下文措辞一致的答案", "separating_evidence": "与外科医生评分的相关性", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "置信度过滤减少了噪声掩码带来的错误", "alternative": "过滤只是减少了空间问题的数量", "separating_evidence": "有无预测掩码的消融及空间问答正确率", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "LLaVA-SurgXpert 一致优于已有基线", "alternative": "优势来自更大的语言模型而非数据或编码器", "separating_evidence": "同规模语言模型下的对比", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览",
+  "数据与任务定义补入代码仓库给出的两子集帧数,并注明来源",
+  "评测协议写明 GPT-Score 归一化公式论文未说明",
+  "规模部分写明每帧问答数量规则论文未说明",
+  "深度分析把 Cholec 子集上 FASL 最差列为分割编码器结论的反例",
+  "局限补入测试帧也可能使用预测掩码"
+ ]
+}

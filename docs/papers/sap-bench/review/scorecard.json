@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "2a2752edb49e40fe969bb24fcb77676dd8bbcf49bfe65d390c90a1fe6090b35f",
+      "note_snapshot": "review_rounds/round1_SAP_Bench_Benchmarking_Multimodal_Large_Language_Models_in_Surgical_Action_Planning.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 7,
+        "D9": 5
+      },
+      "overall": 7.5,
+      "verdict": "第 1 轮原版流程笔记(自评)。表 3、表 4、图 4 与多数类先验对照都在。D5=7:定位表没有说明手术动作预期方向的具体代表工作,只说论文未讨论。D7=7:Figure 3 放在深度分析,与基线表现中的 o1、GLM-4v 候选行为讨论分开。D8=7:为过风格门把子集写成 T50 组、HeiChole 组,与主表列名不统一。D9=5:研究问题没有核心观点速览,各节开头没有点出要回答的问题,部分数字后缺少意义说明,小节末尾无过渡。H3 未做数字核对。",
+      "fixes": [
+        "在研究问题末尾加 ### 核心观点速览",
+        "各主要小节开头点出它要回答的问题,结尾加一句过渡",
+        "统一子集称呼,主表列名改为一致的写法",
+        "补做数字核对,把推导值和外部核查值写入例外文件",
+        "把 insight pass 的未说明项写进笔记"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "727b00799155e47303a33f5f4778c4bb2b8498c4aa483523049c069e8d4023f8",
+      "note_snapshot": "review_rounds/round2_SAP_Bench_Benchmarking_Multimodal_Large_Language_Models_in_Surgical_Action_Planning.md",
+      "report_sha256": "422ebd6f26e160b7bbdbd4226de25afa18f3f390b8ecccf788ce601cfa5f12a9",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.4,
+      "verdict": "第 2 轮(自评)。加入核心观点速览、各节开头问题与结尾过渡,数字核对无未匹配项(推导值与外部核查值写入 number_exceptions.json)。多数类先验对照基于 Hugging Face 已发布标签,是外部核查而非论文内容,已在文中标明。D5=7:论文未引用手术动作预期方向的工作,笔记只能指出这一缺口,未逐一列出替代方法。外科医生实验样本数 94 为由百分比反推的推断。论文已撤稿,依据 v1。",
+      "fixes": []
+    }
+  ]
+}

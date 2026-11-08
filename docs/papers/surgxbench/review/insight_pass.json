@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "零样本评测", "plain": "模型不在目标数据上训练,直接用提示词做分类。", "where": "sec:model", "needed_for": "理解为何 F1 普遍很低"},
+  {"term": "梯度热图", "plain": "对预测分数求特征图梯度,加权得到每个位置对预测的贡献。", "where": "sec:related-work", "needed_for": "理解 AA、AC、RAS 的输入"},
+  {"term": "AA 与 AC", "plain": "前 20% 注意力像素落在预测类别框内或任意器械框内的比例。", "where": "sec:related-work", "needed_for": "解读图 3 的 b 到 d 面板"},
+  {"term": "RAS", "plain": "注意力落在运动掩码与器械框并集里的比例,分局部和全局两种。", "where": "sec:related-work", "needed_for": "解读图 4 左图"},
+  {"term": "相机运动校正", "plain": "把相机平移、俯仰、缩放、旋转拟合成全局光流后从总光流中减掉。", "where": "sec:supplementary-material", "needed_for": "理解运动掩码为何能代表交互区域"},
+  {"term": "IVT、IV、IT", "plain": "三元组三项全对、器械和动作对、器械和目标对。", "where": "sec:model", "needed_for": "解读图 4 右图的分档"},
+  {"term": "CLEANN", "plain": "用注意力做条件独立检验,找出直接导致某个输出词元的输入词元。", "where": "sec:supplementary-material", "needed_for": "解读图 5 与附录表 2"}
+ ],
+ "detail_questions": [
+  {"question": "三元组评测为何只用两个视频?", "answer": "局部 RAS 需要器械框,CholecT45 只有 VID42、VID43 有框,共 5,957 帧。", "evidence": ["sec:dataset", "sec:model"], "status": "resolved"},
+  {"question": "τ=0.8 是保留前 20% 还是前 80%?", "answer": "附录说保留前 20%;正文公式写 1-τ 分位数,方向相反。", "evidence": ["sec:related-work", "sec:supplementary-material"], "status": "partly"},
+  {"question": "对比模型怎么决定预测了哪些器械?", "answer": "相似度超过第 90 百分位即算预测;三元组取前 5。", "evidence": ["sec:supplementary-material"], "status": "resolved"},
+  {"question": "正文 PeskaVLP 的 bipolar 0.7899、irrigator 0.7962 与图 3 是否一致?", "answer": "不一致,图中两格为 0.21 和 0.11;只有 hook 0.7410 对得上。", "evidence": ["sec:results", "sec:model"], "status": "resolved"},
+  {"question": "BLIP grasper F1 最高是因为识别准吗?", "answer": "图 7 显示召回接近 1、精度约 0.6,更像几乎每帧都预测抓钳。", "evidence": ["sec:method"], "status": "resolved"},
+  {"question": "各类器械框平均占多大面积,随机热图的 AA 期望是多少?", "answer": "论文未说明,无法判断低分是否低于随机。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "遮挡实验有没有随机区域遮挡的对照?", "answer": "论文未说明对照,只报告 SurgVLP 的 28.2% 与 9.87。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "47.5% 和 22.1% 是局部还是全局 RAS,中位数还是均值?", "answer": "论文未说明,从图 4 左图看接近完全匹配档中位线。", "evidence": ["sec:results"], "status": "not_stated"},
+  {"question": "附录表 2 的 CLEANN 结果是否支持文本主导?", "answer": "六个词元中五个视觉主导,只有 cutting 文本主导 77.6%;两行比例和超过 1。", "evidence": ["sec:method", "sec:supplementary-material"], "status": "resolved"},
+  {"question": "是否发布了生成好的运动掩码或新标注?", "answer": "论文未说明发布数据;仓库只给生成脚本。", "evidence": ["sec:abstract", "sec:dataset"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "手术模型答对但注意力不在器械上,说明依赖背景捷径", "alternative": "残差网络主干的梯度热图分辨率低、更弥散,低 AA 来自热图方法而不是模型行为", "separating_evidence": "同一热图方法在同一主干上比较通用与手术模型", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "遮挡高注意力区域使 28.2% 帧失去匹配,证明依赖背景", "alternative": "任何大面积涂黑都使输入分布外,预测随之改变", "separating_evidence": "同面积随机遮挡与遮挡器械框的对照", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "通用模型能定位器械但缺领域知识", "alternative": "标本袋等大框天然得高 AA,高对齐来自框面积", "separating_evidence": "按框面积归一化或给出均匀热图基线", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "LLaVA 决策主要依赖文本", "alternative": "注意力权重偏向文本是自回归模型的常态,不等于因果依赖", "separating_evidence": "CLEANN 因果比例;表中五个词元为视觉主导", "in_paper": true, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在研究问题末尾加核心观点速览并写明三处证据缺口",
+  "把框面积随机基线、遮挡对照、RAS 口径三处写成论文未说明并说明限制",
+  "关键结果各小节标出对应的 A-i、A-ii、B-i、B-ii 问题",
+  "深度分析加入热图方法与主干混淆的替代解释",
+  "把 LLaVA 文本主导结论降为部分支持,依据附录表 2"
+ ]
+}

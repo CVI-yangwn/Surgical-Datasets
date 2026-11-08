@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgXBench: Explainable Vision-Language Model Benchmark for Surgery</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>手术视觉语言模型可解释性基准:答对了,但看的是不是器械</h1>
+<div class="sub">SurgXBench: Explainable Vision-Language Model Benchmark for Surgery</div>
+<div class="meta">Jiajun Cheng、Xianwu Zhao、Shan Lin 等,亚利桑那州立大学、英特尔实验室、杜克大学等 | arXiv 2505.10764,v4,2026-06-25;项目主页标注 WACV 2026 接收</div>
+<div><span class="chip">基准论文</span><span class="tag">手术视觉语言模型</span><span class="tag">可解释性</span><span class="tag">器械分类</span><span class="tag">动作三元组</span><span class="tag">基准</span></div>
+<div class="one">本文在 Cholec80BBox 和 CholecT45 上零样本评测六个视觉语言模型,用热图与因果图量化注意力是否落在器械和交互区域,发现手术模型分类更准而注意力更偏离器械;但缺少随机基线和遮挡对照,这一结论还没排除热图方法和框面积的影响。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2505.10764" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgxbench/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">8 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术视觉语言模型的准确率已经被评测过,但没人检查它答对时看的是不是器械本身。</strong> 此前唯一的手术基准由 Rau 等人完成,结论是手术模型表现差,器械识别精度在零样本和 5 样本下都低于 60%,但它只报告标准指标。</p>
+<p>作者把问题拆成两组:答对时注意力是否落在临床相关区域(A-i),是否存在没看对区域却答对的巧合(A-ii);答错时是看错了区域(B-i),还是看对了却认不出(B-ii)。</p>
+<figure class="fig"><img src="images/page_002_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。同一句抓钳提示下,SurgVLP 分数最高(1.000),热图大片落在两把抓钳的框外。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">缺口在"为什么错",而不是"错多少"。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的做法是在标准指标旁边,再量一量模型答对时注意力落在哪里。</p>
+<ul><li>指标:AA、AC 衡量前 20% 注意力像素落在器械框内的比例;RAS 把运动区域也算进参考区域。</li><li>数据:不采集新数据,用 Cholec80BBox 的 5 个视频和 CholecT45 的两个带框视频。</li><li>结果:PeskaVLP 电钩 F1 0.7410,TP_AA 只有 6.6%;遮挡 SurgVLP 高注意力区域后 28.2% 的帧失去正确三元组。</li></ul>
+<p><strong>边界:没有框面积的随机基线,没有随机遮挡对照,热图方法随主干不同。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">六个模型:三个通用(CLIP、BLIP、LLaVA),三个手术(SurgVLP、HecVL、PeskaVLP)</span><span class="i">三元组评测只用 5,957 帧,来自两个视频</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据与任务</h3><p>两个数据集都来自胆囊切除术。Cholec80BBox 有 5 个视频、51.7K 帧和器械框,用于七类器械分类;CholecT45 有 45 个视频、90.5K 帧和帧级三元组,但只有 VID42、VID43 带框,所以三元组评测只用这两个视频。</p>
+<figure class="fig"><img src="images/page_005_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。三个手术模型都是对比学习、用手术视频训练;LLaVA 是生成式模型。</figcaption></figure>
+<p><strong>本文没有发布新数据。</strong> 新增的只有光流自动生成的运动掩码,仓库给的是生成脚本而不是掩码文件。</p>
+<p>下一节看三个指标怎么算。</p></div><div class="card" id="s4"><h3><span class="num">4</span>指标与交互区域</h3><p>对比模型的相似度超过第 90 百分位即算预测,三元组取前 5。热图取最高的 20% 像素,论文设 τ=0.8:</p>
+<p>$$AA=\frac{|\mathcal{A}_\tau\cap\mathcal{G}_{\hat c}|}{|\mathcal{A}_\tau|},\qquad AC=\frac{|\mathcal{A}_\tau\cap\mathcal{G}_{all}|}{|\mathcal{A}_\tau|}$$</p>
+<p>动作发生在器械与组织接触处,单靠器械框不够。作者用 RAFT 光流估计相邻帧运动,减去相机平移、俯仰、缩放、旋转的拟合流,再取阈值 γ=0.8 得到运动掩码。</p>
+<div class="ph"><b>Figure 2 交互区域提取流程</b><br>建议位置：指标与交互区域<br>放置原因：它是 RAS 指标参考区域的来源。<br>当前状态：保留占位；自动视觉质量检查拒绝了该裁剪。</div>
+<p><strong>运动掩码没有人工核验,它是否真对应交互区域,论文未说明。</strong></p></div><div class="card" id="s5"><h3><span class="num">5</span>器械分类:准确与对位的背离</h3><figure class="fig"><img src="images/page_006_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。F1 与三种注意力对齐指标。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>模型</th><th>标本袋 F1</th><th>标本袋 TP_AC</th><th>电钩 F1</th><th>电钩 TP_AA</th></tr></thead><tbody><tr><td>BLIP</td><td>0.10</td><td>66.9</td><td>0.00</td><td>无真阳性</td></tr><tr><td>PeskaVLP</td><td>0.55</td><td>36.9</td><td>0.74</td><td>6.6</td></tr></tbody></table></div>
+<p><strong>手术模型 F1 更高,注意力对齐更低。</strong> 作者据此回答 A-i 与 B-ii。但抓钳一列例外:BLIP 抓钳 F1 0.74 最高,图 7 显示它召回接近 1.0、精度约 0.6,更像几乎每帧都预测抓钳。</p>
+<figure class="fig"><img src="images/page_015_fig_figure_7_review.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。精度、召回分解。</figcaption></figure>
+<p>正文写 PeskaVLP 双极电凝 F1 为 0.7899、冲洗器为 0.7962,图中对应格子是 0.21 和 0.11,只有电钩一致。</p><div class="strip d"><span class="t">数据</span><span class="i">BLIP 标本袋 TP_AC 66.9%,抓钳 TP_AC 32.1%</span><span class="i">PeskaVLP 电钩 TP_AC 7.6%</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>三元组与遮挡</h3><figure class="fig"><img src="images/page_006_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。左为 RAS 箱线图,右为匹配档比例。</figcaption></figure>
+<p>CLIP 的器械-动作匹配 59.1%,三项全对只有 1.4%;LLaVA 分别是 48.9% 和 0.0%。PeskaVLP 三项全对 20.8% 领先。<strong>通用模型能猜器械和动作,答不对目标组织。</strong></p>
+<figure class="fig"><img src="images/page_007_fig_figure_6_review.png" alt="Figure 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 6。SurgVLP 遮挡样例。</figcaption></figure>
+<p>遮挡 SurgVLP 高注意力区域后,28.2% 原本完全匹配的帧失去匹配,剩余匹配的相似度平均降 9.87。论文未说明同面积随机遮挡的对照结果,所以这还不能和"任意涂黑都扰乱预测"区分。</p></div><div class="card" id="s7"><h3><span class="num">7</span>LLaVA 的因果图</h3><figure class="fig"><img src="images/page_007_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。LLaVA 的因果图样例。</figcaption></figure>
+<p>注意力法下六个子词词元的文本占比都在 0.913 以上;CLEANN 下只有 cutting 文本主导(77.6%),其余五个视觉主导。<strong>附录说两种方法都检测到文本依赖,表中数字不支持。</strong></p></div><div class="card" id="s8"><h3><span class="num">8</span>深入分析</h3><ul><li><strong>框面积</strong>:标本袋框大,各模型 TP_AC 最低也有 19.4%;各类框面积比例论文未说明,无法给出随机基线。</li><li><strong>热图方法</strong>:手术模型都是残差网络主干,用梯度热图;CLIP 是视觉变换器,用注意力回传。对齐差有多少来自方法差异,论文未分开。</li><li><strong>样本</strong>:三元组只来自两台手术,单次运行,没有置信区间。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>准确率之外报告"答对时注意力在不在目标框内",能发现靠背景答对的模型。</div><div>光流减相机运动可以低成本生成交互区域,但需要人工抽检。</div><div>本文没有新数据;CholecT45 需向 CAMMA 申请,Cholec80BBox 的框标注下载渠道论文未给出。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>把可解释性做成可算的指标,而不只放热图样例。</li><li>按匹配档拆分三元组结果,区分器械、动作、目标三处失败。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>缺随机基线、随机遮挡对照和阈值敏感性分析。</li><li>正文数字与图 3 不一致;附录表 2 的结论与数字相反。</li><li>只覆盖胆囊切除术和两项任务。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>用同一热图方法、同一主干比较,手术模型的对齐差距还在吗?</li><li>随机遮挡同面积区域时,SurgVLP 丢失率是多少?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 9a122b7a</span><span class="s">7.5 分</span></div><p>第 1 轮原版流程笔记(自评)。图 3、图 4 转写表、AA/AC/RAS 公式、相机运动校正四步都在,正文与图的矛盾已指出。D5=7:定位表只有三行,没有说明与 EndoBench 等问答基准测的东西不同。D7=7:Figure 7 到 9 集中堆在深度分析末尾,离引用它们的段落太远。D8=7:局部 RAS、全局 RAS 等术语首次出现时未解释;研究问题里 A/B 编号未在后文持续对应。D9=5:研究问题没有核心观点速览,各节开头没有点出本节要回答的问题,数字后多数缺意义说明,小节之间没有过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>7</b></span><span>D9 <b>5</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加 ### 核心观点速览</li><li>各节开头写本节要回答的问题,小节末尾加过渡</li><li>把 Figure 7、8、9 移到引用它们的段落旁</li><li>在关键结果里把每个发现对应回 A-i、A-ii、B-i、B-ii</li><li>用 lint_report.py --mode note 做数字核对并登记推导值和图内读数</li><li>深度分析补上 grasper 高 F1 与类别先验、框面积随机基线的推导</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 a1f60ecb · 文稿 66527666</span><span class="s">8.5 分</span></div><p>第 2 轮(自评)。加入核心观点速览、各节开头问题与过渡,关键结果逐项对应 A-i、A-ii、B-i、B-ii;Figure 7 到 9 移到引用段落旁;数字核对通过,图内读数与推导值登记在 number_exceptions.json。D5=7 未能再提高:论文本身只和 Rau 等一项工作比较,没有给出可对照的数字,定位表只能说明差别而无法量化。不可修复的局限:框面积随机基线、随机遮挡对照、RAS 口径、运动掩码核验都是论文未说明,笔记已写明各自限制;Figure 2 与附录表 2 的裁剪不可用,保留占位并用文字和表格转写。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>9</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

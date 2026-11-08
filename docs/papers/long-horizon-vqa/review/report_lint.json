@@ -1,0 +1,21 @@
+{
+  "status": "ok",
+  "script": "lint_report.py",
+  "report": "DeepPaperNote_output/手术数据集/SurgLQA_Scalable_Long_Horizon_Surgical_Video_Question_Answering/reading_report.md",
+  "mode": "report",
+  "report_sha256": "964f0f6c2260c7792a73d922ea94cdd126d5634cfc18096cd8dacb6b3c76ccb4",
+  "number_exceptions": {
+    "10.50": "表 1 模板内 BLEU-4 差值：74.37 - 63.87",
+    "3.21": "表 1 模板内 K-ACC 差值：66.67 - 63.46",
+    "12.55": "表 1 模板外 K-ACC 差值：65.73 - 53.18",
+    "11.96": "表 2 模板外 K-ACC 差值：78.93 - 66.97",
+    "150": "图 6 横轴刻度 150 帧（图中刻度文字未进入抽取文本）"
+  },
+  "section_count": 8,
+  "unmatched_numbers": [],
+  "issues": [],
+  "long_paragraphs": [],
+  "passes_concision": true,
+  "passes_structure": true,
+  "passes_number_grounding": true
+}

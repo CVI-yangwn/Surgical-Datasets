@@ -1,0 +1,17 @@
+{
+ "1505": "外部核查:Hugging Face gkw0010/SVU-31K svu-31k-full-video-train.json.json 条数(2026-11-08 下载)",
+ "377": "外部核查:svu-31k-full-video-test.json.json 条数",
+ "22766": "外部核查:svu-31k-video-clip-train.json.json 条数",
+ "6004": "外部核查:svu-31k-video-clip-test.json.json 条数",
+ "28770": "推导值:片段问答训练 22766 加测试 6004",
+ "600": "约数:论文 29.4K 减已发布 28770,约 630 条",
+ "248": "外部核查:片段测试集涉及的不同视频数",
+ "4200": "外部核查:片段测试集 tag=Visual Perception Reasoning 条数",
+ "1400": "外部核查:片段测试集 tag=video clip description 条数",
+ "404": "外部核查:片段测试集 tag=Visual Temporal Reasoning 条数",
+ "2006": "外部核查:片段问答中结束时间码不大于起始时间码的条数",
+ "389": "外部核查:异常时间码示例 [389, -1]",
+ "157": "外部核查:test_data.zip 大小 156652582272 字节,约 157 GB",
+ "826": "外部核查:trainvideo_part1-3.zip 合计 825508040776 字节,约 826 GB",
+ "3.03": "推导值:表 I 感知推理 ROUGE-L 37.51 减 34.48"
+}

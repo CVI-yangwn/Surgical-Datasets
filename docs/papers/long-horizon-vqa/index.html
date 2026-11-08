@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgLQA: Scalable Long-Horizon Surgical Video Question Answering</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>先问事件在哪、再在那里加密采样的结肠镜长视频问答方法，附一个拼接出的 Colon-LQA 评测集</h1>
+<div class="sub">SurgLQA: Scalable Long-Horizon Surgical Video Question Answering</div>
+<div class="meta">Diandian Guo, Xikai Yang, Ruiyang Li, Jialun Pei, Pheng-Ann Heng（香港中文大学） | arXiv 2605.17915 预印本，项目页称已被 MICCAI 2026 接收</div>
+<div><span class="chip">AI 方法</span><span class="tag">手术视频问答</span><span class="tag">长视频</span><span class="tag">结肠镜</span><span class="tag">时间定位</span><span class="tag">词元压缩</span></div>
+<div class="one">SurgLQA 用带时间戳和掩码检索损失的压缩表示装下整段视频，再按问题先定位区间、选采样分布并重采样，在约 34 秒的拼接结肠镜问答集 Colon-LQA 上全面超过微调后的通用视频大模型，但数据规模与划分未交代，Colon-LQA 也尚未公开。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 9 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2605.17915" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/long-horizon-vqa/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">8 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术问答把自然语言和手术视频连起来，可以回答“现在在冲洗吗”“NBI 灯开着吗”这类问题。<strong>问题在于，已有工作几乎都停留在单张图像或几秒的短片段。</strong></p>
+<p>长视频带来两个难点。关键事件稀疏而短暂，均匀稀疏采样容易漏掉它；把所有帧都编码，词元量又会随时长失控。</p>
+<p>作者想同时解决“怎么装下长视频”和“怎么在长视频里找到与问题相关的那几帧”。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>做法是把一次推理拆成两步：先用压缩后的全视频回答“事件在哪”，再在那里加密采样回答“事件是什么”。</strong></p>
+<ul><li>表示（FTC）：3D 卷积压缩视觉词元，每段前面插入写有秒数的文本词元，掩码检索损失约束压缩不丢细节。</li><li>取证（TMS）：模型先输出时间区间，BERT 指导器为每个区间挑一种采样分布，重采样后再作答。</li><li>结果：Colon-LQA 模板内 BLEU-4 为 74.37，最强微调基线 Qwen3VL 为 63.87。</li></ul>
+<p><strong>边界：</strong> 视频只有约 34 秒，只有结肠镜，没有方差，数据还没公开。</p>
+<p>先看评测数据，因为“长时程”这个词要放在数据实际有多长的背景下理解。</p><div class="strip h"><span class="t">亮点</span><span class="i">时间戳文本与视觉词元交错，让模型能输出秒级区间</span><span class="i">不同问题偏好不同采样分布，图 3 给出了直接证据</span></div><div class="strip d"><span class="t">数据</span><span class="i">Colon-LQA 每个长视频约 34 秒</span><span class="i">语言骨干 Qwen3 2B，LoRA 秩 8</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据：拼出来的长视频</h3><p>Colon-LQA 把连续的结肠镜短片段按时间顺序首尾相接，再把各片段的问答对合并到同一个长视频样本里。另一个评测集 REAL-Colon-VQA 是已有的短片段基准。</p>
+<p><strong>论文给出的唯一规模信息是每个长视频约 34 秒。</strong> 样本数、问答对数、训练测试划分、问题类型分布，论文未说明，所以无法判断评测是否足够大、两套数据之间有没有片段重叠。</p>
+<p>问题有 11 类，包括染色、冲洗、遮挡、NBI 光源、器械等，多是是非题。评测分模板内与模板外：后者把问题换了说法，检验模型是否只记住了措辞。</p>
+<p>数据是拼接出来的，下一节看模型如何在这样的输入里取证。</p></div><div class="card" id="s4"><h3><span class="num">4</span>FTC：压缩但保留时间</h3><figure class="fig"><img src="images/page_003_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 2。上半部分是 TMS 的定位、选策略、重采样循环，下半部分是 FTC 的压缩与检索损失。</figcaption></figure>
+<p>视频先切成三维块，经多层 3D 卷积压缩。<strong>每个时间单元前插入“timestamp: t seconds”的文本词元</strong>，语言模型读到它就知道这段画面在何时。</p>
+<p>为防止压缩只留下粗信息，训练时遮住部分压缩词元，让一个轻量检索器回推压缩前的特征：</p>
+<p>$$\mathcal{L}_{\mathrm{ret}}=\sum_{i\in\mathcal{M}}\big\|[g(\mathrm{Mask}(Z_{\mathrm{FTC}}))]_i-z^{(1)}_i\big\|_2^2.$$</p>
+<p>块大小、层数、压缩率和掩码比例，论文未说明。</p></div><div class="card" id="s5"><h3><span class="num">5</span>TMS：先定位，再按问题采样</h3><figure class="fig"><img src="images/page_005_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 3。11 类问题在均匀采样减高斯采样后的得分差分布。</figcaption></figure>
+<p><strong>图 3 是这套设计的依据：不同问题偏好不同分布。</strong> 流体、器械类问题在高斯采样下更好，NBI、照明类问题在均匀采样下更好。</p>
+<p>推理时，模型先按追加指令输出事件可能发生的区间，取中心建窗口；BERT 指导器在高斯、均匀、密集、U 形中挑一种，在窗口内重采样，再送回模型作答。总损失是问答损失、检索损失和策略交叉熵的加权和，权重和指导器的标签来源论文未说明。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_006_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。Colon-LQA 上十个系统的模板内与模板外结果。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>模型</th><th>模板内 BLEU-4</th><th>模板内 K-ACC</th><th>模板外 K-ACC</th></tr></thead><tbody><tr><td>SurgViVQA</td><td>52.46</td><td>54.63</td><td>46.94</td></tr><tr><td>VideoLLaMA3</td><td>60.17</td><td>61.64</td><td>51.06</td></tr><tr><td>Qwen3VL</td><td>63.87</td><td>63.46</td><td>53.18</td></tr><tr><td>SurgLQA</td><td>74.37</td><td>66.67</td><td>65.73</td></tr></tbody></table></div>
+<p>SurgLQA 八列全部第一。<strong>换了问法之后，关键词准确率的优势反而更大</strong>：模板外 K-ACC 比 Qwen3VL 高 12.55，模板内只高 3.21。REAL-Colon-VQA 上它同样八列第一，模板内 BLEU-4 为 87.69。</p>
+<figure class="fig"><img src="images/page_008_fig_fig_5_review.png" alt="Fig 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 5。左为逐步加入组件的消融，右为采样策略的消融。</figcaption></figure>
+<p>消融只有图。<strong>未定义的 Baseline 自身 BLEU-4 约 69，已经高于微调 Qwen3VL 的 63.87。</strong> 我的判断：主表上的 BLEU 优势有一大半在加模块之前就已存在，K-ACC 从约 59 到 66.67 的提升更能代表两个模块的作用。</p>
+<p>数字说明“好多少”，下一节讨论它们不能说明什么。</p><div class="strip d"><span class="t">数据</span><span class="i">模板内 BLEU-4：74.37 对 63.87</span><span class="i">模板外 K-ACC：65.73 对 53.18</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>结果没说什么</h3><figure class="fig"><img src="images/page_008_fig_fig_6_review.png" alt="Fig 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig. 6。帧数从 50 增至 300 时的显存、单视频耗时与 K-ACC。</figcaption></figure>
+<ul><li><strong>不能说明实时可用。</strong> 300 帧时单视频约 24 秒，而视频本身约 34 秒；50 帧时 SurgLQA 约 8 秒，比 Qwen 的约 5 秒还慢。节省的主要是显存。</li><li><strong>不能说明真正的长时程能力。</strong> 34 秒远短于动机里的数十分钟到数小时；拼接接缝还可能帮模型定位片段。</li><li><strong>不能确认是选对了分布。</strong> 没有随机选策略的对照，增益可能只来自在窗口内加密采样。</li><li><strong>图 6 的数据集不明。</strong> 50 帧时 K-ACC 约 0.80，与表 1 的 66.67 对不上；图例中 Qwen 的规模也未说明。</li></ul>
+<p>这些空白决定了复现时要先查什么。</p></div><div class="card" id="s8"><h3><span class="num">8</span>数据能否获取</h3><p>作者仓库公开，但只放出了 Qwen3-VL 2B 的微调代码。<strong>说明文档写明训练数据和模型权重不放入仓库，路线图中长视频数据集与标注仍未完成。</strong> Hugging Face 上也搜不到对应数据集。</p>
+<p>想复用 Colon-LQA，目前只能按论文思路自己从短片段拼接，或等待作者发布。</p></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>时间戳文本与视觉词元交错是低成本的显式时间编码，可以直接移植</div><div>先问区间、再在区间内加密采样的推理不需要改模型结构</div><div>34 秒的拼接视频结果不能代表完整手术长视频</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>图 3 用数据说明了多策略采样的必要性</li><li>模板外设置检验了措辞泛化，SurgLQA 在这一设置下优势更明显</li><li>图 6 同时给出了显存、耗时和准确率三条曲线</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>Colon-LQA 的规模、划分与问题分布都未交代</li><li>没有方差，消融只给图，Baseline 未定义</li><li>实时部署说法与耗时曲线矛盾</li><li>数据、方法代码和权重都未公开</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>指导器的策略标签是怎样生成的</li><li>去掉检索损失或时间戳词元各自损失多少</li><li>在数十分钟的真实手术视频上，区间定位还准不准</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 6b240160</span><span class="s">7.8 分</span></div><p>第一轮：结构与证据链完整，主表数字齐全；定位部分只与 SurgViVQA 和通用视频大模型对比，缺少对长视频压缩类方法的说明；数字尚未做逐项核对；部分小节结尾缺少过渡。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>做 Insight Pass 三轮并把结论写回笔记</li><li>逐项核对笔记中的数字，列出推导数字的例外</li><li>补强与长视频词元压缩方法的定位</li><li>检查每节开头是否点明问题、数字后是否有解释、节末是否有过渡</li><li>撰写 reading_report.md</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 365a45c6 · 文稿 964f0f6c</span><span class="s">8.2 分</span></div><p>第二轮：Insight Pass 补出图 5 基线已强于微调 Qwen3VL、图 6 数据集不明、缺随机选策略对照三处证据缺口，并写回笔记与报告；数字核对全部匹配，五个推导数字列入例外。无法修复的限制：论文未给 Colon-LQA 规模与划分、超参数和消融数字，消融数值只能目测；评分为模型自评。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

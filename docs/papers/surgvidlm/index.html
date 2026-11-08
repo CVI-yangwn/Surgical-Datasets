@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgVidLM: Towards Multi-grained Surgical Video Understanding with Large Language Model</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>先看全片、再按时间码放大片段的手术视频大模型,附 3 万条 GPT-4 生成的视频问答 SVU-31K</h1>
+<div class="sub">SurgVidLM: Towards Multi-grained Surgical Video Understanding with Large Language Model</div>
+<div class="meta">Guankun Wang、Junyi Wang、Wenjin Mo、Long Bai 等,香港中文大学、慕尼黑工业大学、斯特拉斯堡大学等 | arXiv 2506.17873,v1 2025-06-22,本文据 v3 阅读</div>
+<div><span class="chip">方法论文(附数据集)</span><span class="tag">手术视频</span><span class="tag">视频大模型</span><span class="tag">指令微调</span><span class="tag">多粒度理解</span><span class="tag">数据集</span></div>
+<div class="one">SurgVidLM 在 Qwen2-VL-7B 上先每秒 1 帧看全片生成描述,再按标注时间码在片段内每秒 2 帧采样并做高低频交叉注意力,用 GPT-4 从 1882 个讲解视频生成的 SVU-31K 训练后细粒度指标全面领先同规模基线,但片段位置来自标注,问答与评分都依赖 GPT-4。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 5 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2506.17873" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgvidlm/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>外科医生关心"这一步之后做什么、为什么这么做",答案往往藏在视频的某个短片段里。</strong> 图像级手术大模型只看单帧;通用视频大模型受显存限制,对整段视频稀疏抽帧,短时操作容易被跳过。</p>
+<p>数据也是瓶颈。LLaVA-Surg 的 Surg-QA 有 102K 视频问答对但未公开,Surgical-LLaVA 用图像级标注微调。论文要同时补数据和模型两块。</p><div class="strip h"><span class="t">亮点</span><span class="i">问题不在于模型不会看视频,而在于看全片时帧太稀、看片段时缺全局。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li>数据:1882 个讲解视频,用自带的关键步骤时间码切片,由 GPT-4 生成 1.8K 个全视频问答和 29.4K 个片段问答。</li><li>推理:第一阶段每秒 1 帧看全片并写描述;第二阶段按时间码在片段内每秒 2 帧采样,并把第一阶段描述当背景文本。</li><li>融合:多频融合注意力 MFA 让片段词元从全片词元中取回上下文。</li><li>结果:细粒度任务全部指标领先微调后的基线,全视频描述与基线持平。</li></ul>
+<p><strong>边界:片段时间码由标注给出,基线是否拿到同一片段论文未说明。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">1882 个视频,1.8K 全视频问答,29.4K 片段问答</span><span class="i">感知推理 ROUGE-L 37.51 对微调 Qwen2-VL 34.48</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p><strong>多粒度监督来自讲解视频自带的结构。</strong> 每个视频有摘要和带时间码的关键步骤,按关键步骤切片。讲者画面和幻灯片用 ResNet-50 过滤:帧级准确率 94%,片段中至少 80% 的帧判为手术才保留。音频用 Whisper 转写,再由 GPT-4 纠错。</p>
+<p>这样得到摘要、关键步骤、讲解三级文本。GPT-4 用关键步骤重组摘要,把讲解细节并入关键步骤,再生成问答:全视频描述、片段描述、时序推理(下一步、前置步骤)和感知推理(因果、注意事项、回忆)。</p>
+<figure class="fig"><img src="images/page_003_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。SVU-31K 构建流程:检索预处理、三级文本、GPT-4 知识增强、多粒度问答。</figcaption></figure>
+<p><strong>已发布数据核查:</strong> 全视频问答 1505 条训练、377 条测试;片段问答 22766 条训练、6004 条测试,比论文的 29.4K 少约 600 条;按视频划分,训练测试不重叠。测试片段中感知推理 4200 条,时序推理只有 404 条。</p>
+<p>接下来看模型怎么用这些时间码。</p><div class="strip h"><span class="t">亮点</span><span class="i">片段边界来自视频作者的标注,问答和参考答案来自 GPT-4。</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>两阶段推理与 MFA</h3><p><strong>核心矛盾是显存:全片高频太贵,全片低频丢细节。</strong> 两阶段把这两件事分开:</p>
+<ol><li>第一阶段:每秒 1 帧抽全片,沿用 Qwen2-VL 原结构生成描述 A1。</li><li>第二阶段:按问题对应的时间码在片段内每秒 2 帧采样得到高频词元,提示词要求以 A1 为背景回答问题。</li><li>MFA 融合后送入大语言模型生成答案。</li></ol>
+<p>$$E(X_C, X_F) = \mathrm{softmax}\left(\frac{X_C X_F^{T}}{\sqrt{d}}\right) X_F,\quad X_{fuse} = X_C + E(X_C, X_F)$$</p>
+<p>$X_C$ 是片段高频词元,作查询;$X_F$ 是全片低频词元,作键和值。每个片段词元按相似度取回全局上下文,再加回自身。MFA 是否有可学习投影论文未说明。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。SurgVidLM 结构:下方第一阶段看全片,上方第二阶段按时间码放大片段并经 MFA 融合。</figcaption></figure></div><div class="card" id="s5"><h3><span class="num">5</span>训练怎么做</h3><ul><li>从 Qwen2-VL-7B-Instruct 初始化,视觉编码器全程冻结。</li><li>第一阶段只用全视频问答做 LoRA 微调,批大小 4,约 3 小时。</li><li>第二阶段用片段问答训练大语言模型和 MFA,批大小 16,约 15 小时。</li><li>AdamW,学习率 $1\times10^{-4}$,1 个 epoch,224×224,6 张 H100。</li></ul>
+<p>训练成本不高,一个实验室规模的集群就能复现。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><div class="tbl"><table><thead><tr><th>任务</th><th>微调 Qwen2-VL</th><th>微调 Qwen2.5-VL</th><th>SurgVidLM</th></tr></thead><tbody><tr><td>全视频描述 CU</td><td>2.69</td><td>2.76</td><td>2.69</td></tr><tr><td>片段描述 CU</td><td>1.98</td><td>2.66</td><td>3.06</td></tr><tr><td>时序推理 ROUGE-L</td><td>29.76</td><td>20.63</td><td>31.58</td></tr><tr><td>感知推理 ROUGE-L</td><td>34.48</td><td>33.34</td><td>37.51</td></tr></tbody></table></div>
+<p><strong>细粒度 12 项指标全部最高,全视频描述与微调 Qwen2-VL 完全相同。</strong> 后者说明第一阶段没有方法增益,增益全在片段任务上。</p>
+<p>正文增益与表格部分不符:感知推理 ROUGE-L 按表应为 3.03,正文写 4.03;片段描述的 CI、DO、TU 增益在表中找不到对应差值。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。两个细粒度推理样例,SurgVidLM 答出 Denonvilliers 筋膜和直肠系膜切除的理由。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">时序推理 BLEU-4 10.10,CIDEr 3.83</span><span class="i">零样本基线描述分多在 1 到 2.5 之间(满分 5)</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>消融拆开了什么</h3><div class="tbl"><table><thead><tr><th>配置</th><th>CU</th><th>ROUGE-L</th></tr></thead><tbody><tr><td>两者都无</td><td>1.98</td><td>33.06</td></tr><tr><td>仅 StageFocus</td><td>3.04</td><td>36.95</td></tr><tr><td>两者都有</td><td>3.06</td><td>36.97</td></tr></tbody></table></div>
+<p><strong>增益几乎都来自 StageFocus,MFA 主要提升描述细节。</strong> 但 StageFocus 同时带来了标注时间码、片段高频帧和背景文本三样东西,消融没有拆开。</p>
+<p>采样频率从 0.5 到 2 fps 持续上升,4 fps 在 CI、TU、BLEU-4、ROUGE-L 上反而更高。作者以成本为由选 2 fps,但不同帧率下的显存和时延论文未说明。</p></div><div class="card" id="s8"><h3><span class="num">8</span>为什么有效:三种替代解释</h3><p><strong>分数高不等于学会了细粒度推理。</strong> 下面三种更简单的解释论文都没有排除:</p>
+<div class="tbl"><table><thead><tr><th>替代解释</th><th>区分实验</th></tr></thead><tbody><tr><td>标注时间码直接指向答案</td><td>给基线同一片段,或改用预测片段</td></tr><tr><td>背景文本与参考答案词汇重叠</td><td>只给背景文本,不给高频帧</td></tr><tr><td>GPT-4 偏好 GPT-4 风格的回答</td><td>外科医生人工评分</td></tr></tbody></table></div>
+<p>我的判断是,第一种解释的权重最大:片段问答本来就是按该关键步骤文本生成的,时间码等于告诉模型去哪里找答案。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用要注意什么</h3><ul><li>数据在 Hugging Face 公开、无需申请,但视频很大:测试集约 157 GB,训练视频三个分卷约 826 GB。</li><li>代码仓库仍写训练集"接收后公开",以 Hugging Face 实际文件为准。</li><li>有 2006 条片段的结束时间码不大于起始值,使用前要处理。</li><li>对比 SurgVidLM 时给基线同样的片段时间码。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>SVU-31K 是少数公开、按视频划分、同时有全视频和片段级问答的手术视频指令数据。</div><div>"先全片、再按时间码放大片段"在 7B 模型上能显著提高片段级指标,但收益与标注时间码绑定。</div><div>正文增益数字要以表格为准。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>数据与权重都已公开,训练脚本完整。</li><li>用讲解视频自带的时间码与字幕构造多粒度监督,成本低、可扩展。</li><li>对照组包括同数据微调的基线,而不只是零样本模型。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>片段位置来自标注,模型不会自己定位。</li><li>问答生成与描述评分都用 GPT-4,没有人工核验或人工评分。</li><li>单次运行无方差,正文与表格数字有出入,补充材料未随 arXiv 发布。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>用预测片段代替标注时间码后性能掉多少?</li><li>只给背景文本、不给高频帧时结果如何?</li><li>外科医生评分与 GPT-4 评分的排序是否一致?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 c7d50847</span><span class="s">7.4 分</span></div><p>第一轮笔记证据链与数字齐全,表格完整,并核对了已发布 JSON。不足:研究问题没有核心观点速览;多处数字后缺少含义说明;基线是否拿到同一片段这一关键疑点只在深度分析里出现;数字尚未跑号码核对,含外部核查数字;D9 叙事衔接弱。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾补核心观点速览</li><li>各节开头先写问题再给答案,数字后补一句含义</li><li>把基线输入、MFA 结构等未说明项统一写成论文未说明并说明影响</li><li>跑 lint_report --mode note,外部核查与推导数字列入例外文件</li><li>节末补过渡句</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 7b0386f0 · 文稿 be27c152</span><span class="s">8.5 分</span></div><p>第二轮补了核心观点速览、节首问题与节末过渡,把基线输入、片段来源、MFA 结构、人工核验、表 II 合并方式统一写为论文未说明,并列出三种替代解释与区分实验;号码核对无未匹配项,外部核查与推导数字均列入例外文件。无法修复的限制:补充材料未随 arXiv 发布,各任务条数与提示词无法核对;GPT-4 打分无法复核。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

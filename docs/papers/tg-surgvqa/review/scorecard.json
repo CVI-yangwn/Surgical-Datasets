@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "9bf64a1f476814e3035770fce68f4139693ac3f094fe9e0c250f48783f8667c6",
+      "note_snapshot": "review_rounds/round1_SurgViVQA_Temporally_Grounded_Video_Question_Answering_for_Surgical_Scene_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 8,
+        "D5": 7,
+        "D6": 8,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.8,
+      "verdict": "第一轮:证据链与数字完整,主表、分层表、两项消融都已转写并指出与作者结论不符之处。D5 定位偏弱:没有逐项说明相对 SurgicalGPT、PitVQA、通用视频 VLM 和各数据集新在哪里。D7、D9 偏弱:研究问题缺少核心观点速览,多数小节没有开头点题和结尾过渡。H3 尚未跑数字核查。",
+      "fixes": [
+        "在研究问题末尾加入 ### 核心观点速览,给出想法、三步做法、主结果及其边界",
+        "各节开头加一句说明本节回答什么,结尾加过渡句",
+        "增加与 SurgicalGPT、PitVQA、InternVL3+LoRA 及四个数据集的定位对比",
+        "把 insight pass 的论文未说明项写入正文",
+        "跑 lint_report --mode note 数字核查并登记推导值"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "58a37c34bfeea656d833446d2cf0842e596387d312aeb303622f119f3af9e406",
+      "note_snapshot": "review_rounds/round2_SurgViVQA_Temporally_Grounded_Video_Question_Answering_for_Surgical_Scene_Understanding.md",
+      "report_sha256": "d5fd684baacf901ce7d84aab7226ddd12fde8186fc04c15e425542f3596a124d",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮:加入核心观点速览、各节点题与过渡、与已有方法和数据集的定位表,insight pass 的论文未说明项已写入笔记与报告;笔记与报告数字核查无未匹配项(推导值和外部核查值登记在 number_exceptions.json)。无法修复的限制:论文没有单帧对照、多数类基线和分层题数,增益来源只能标为未分开;REAL-Colon 原始帧的下载条件因 figshare 返回 403 未能核实。",
+      "fixes": []
+    }
+  ]
+}

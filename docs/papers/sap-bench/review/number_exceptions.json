@@ -1,0 +1,17 @@
+{
+ "10.48550": "DOI 前缀,来自元数据 10.48550/arxiv.2506.07196",
+ "2026": "外部核查日期 2026-11-08",
+ "17.41": "推导值:表 3 HeiChole GPT-4o Top-1 Sample-R 76.61 减 Sample-S 59.20",
+ "18.82": "推导值:表 3 CholecT50 GLM-4v Top-1 Sample-R 36.84 减 Sample-S 18.02",
+ "60": "约数:表 3 HeiChole Top-1 Sample-S 最高 59.20,全部低于 60",
+ "67,056": "表 2 解剖 1 FPS 帧数,正文写作 67, 056",
+ "229": "外部核查:Hugging Face cholec50_input.jsonl 中 Tissue Retraction 标签 229 条(2026-11-08 下载)",
+ "255": "外部核查:cholec50_input.jsonl 中 Dissection 标签 255 条",
+ "291": "外部核查:heichole_input.jsonl 中 Dissection 标签 291 条",
+ "37.56": "推导值:255/679",
+ "61.52": "推导值:291/473",
+ "76.96": "推导值:(291+41+32)/473,含 Tissueretration 拼写变体",
+ "83.8": "推导值:(255+229+85)/679",
+ "449": "外部核查:cholec50.zip 448939104 字节,约 449 MB",
+ "553": "外部核查:heichole.zip 552583010 字节,约 553 MB"
+}

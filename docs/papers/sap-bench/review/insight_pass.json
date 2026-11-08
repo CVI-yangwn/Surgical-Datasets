@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "当前帧", "plain": "下一动作片段起点前一帧,是模型看到的唯一画面", "where": "sec:approach", "needed_for": "理解任务是单帧分类而非多步规划"},
+  {"term": "Sample-S", "plain": "预测与下一动作完全一致才算对的样本级准确率", "where": "sec:experiment", "needed_for": "与多数类先验比较"},
+  {"term": "Sample-R", "plain": "预测等于下一动作或再下一个动作都算对", "where": "sec:experiment", "needed_for": "解释放宽后普遍涨分"},
+  {"term": "Video-S/Video-R", "plain": "先在每个病例内算准确率再对病例取平均", "where": "sec:experiment", "needed_for": "判断病例级指标升降是否有意义"},
+  {"term": "Top-k", "plain": "真值落在模型前 k 个候选里即算对,五类中 k=3 覆盖六成类别", "where": "sec:experiment", "needed_for": "解释 GLM-4v 前三最高"},
+  {"term": "多数类先验", "plain": "不看图恒答最常见类别得到的准确率", "where": "sec:approach", "needed_for": "判断模型是否超过类别先验"},
+  {"term": "2+1 规则", "plain": "胆囊管和胆囊动脉在患者侧夹两个、胆囊侧夹一个", "where": "sec:approach", "needed_for": "理解提示中偏向夹闭的补充询问"}
+ ],
+ "detail_questions": [
+  {"question": "实验到底输入了视觉历史吗", "answer": "没有,只输入单张当前帧,理由是单图能力、计算和实时性", "evidence": ["sec:approach"], "status": "resolved"},
+  {"question": "第三个来源数据集是什么", "answer": "正文说三个数据集但只列出 CholecT50 和 HeiChole", "evidence": ["sec:approach"], "status": "not_stated"},
+  {"question": "1226 个片段为何只得到 1152 个当前帧", "answer": "论文未说明丢弃规则", "evidence": ["sec:approach"], "status": "not_stated"},
+  {"question": "标注者是谁、有无一致性统计", "answer": "只说人工复核,人数、资质、一致性论文未说明", "evidence": ["sec:approach"], "status": "not_stated"},
+  {"question": "论文是否给了随机或多数类基线", "answer": "没有给出任何先验基线", "evidence": ["sec:experiment", "sec:results"], "status": "resolved"},
+  {"question": "模型版本和解码参数是什么", "answer": "只说用 8 块 A800,版本、温度、调用方式论文未说明", "evidence": ["sec:experiment"], "status": "not_stated"},
+  {"question": "外科医生实验的样本数", "answer": "正文写 64 个样本、50 个视频;图 4 百分比都可写成整数除以 94", "evidence": ["sec:model"], "status": "partly"},
+  {"question": "GPT-4o 去掉系统提示的最大降幅 8.85 来自哪里", "answer": "表 4 中对应值为 -6.33,8.85 不在表中", "evidence": ["sec:model", "sec:model-2"], "status": "resolved"},
+  {"question": "Sample-R 中再下一个动作如何确定,病例末尾样本怎么处理", "answer": "论文未说明样本排序与边界处理", "evidence": ["sec:experiment"], "status": "not_stated"},
+  {"question": "无效或不足三个候选的输出如何计分", "answer": "论文未说明;GLM-4v 的百分比无法由整数除以样本数得到", "evidence": ["sec:model"], "status": "not_stated"},
+  {"question": "消融的基础版本是否就是表 3 设置", "answer": "论文只给差值,未说明基础分", "evidence": ["sec:model-2"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "当前 MLLM 在下一动作预测上存在明显差距,o1 与 GPT-4o 最好", "alternative": "分数主要反映模型输出与标签分布的匹配,恒答解剖就能达到同等或更高水平", "separating_evidence": "随机、多数类和纯文本输入基线", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "系统提示注入领域知识对性能必要", "alternative": "提示改变的是模型偏好的类别,而非视觉理解;方向因模型而异", "separating_evidence": "各变体的绝对分数和每类召回率,更多模型", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "视频真值只是多种合理选择之一,模型与医生更一致", "alternative": "甲或乙参照同时接受两个答案,分数上升来自真值变宽", "separating_evidence": "医生间一致率、医生与视频动作一致率、单答案参照下的随机基线", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "研究问题末尾加核心观点速览,写明结论边界是未超过多数类先验",
+  "外科医生实验补上 64 与 94 的矛盾和单模型限制",
+  "评测协议小节写入 Sample-R 边界处理和无效输出计分论文未说明",
+  "消融小节写明基础分未给出、方向因模型而异",
+  "局限补充第三个来源数据集与片段到当前帧的丢弃规则论文未说明"
+ ]
+}

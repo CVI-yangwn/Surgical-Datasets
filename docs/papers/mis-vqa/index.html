@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>MIS-VQA: An Annotation-Driven Surgical Vision-Language Dataset for Complex Surgical Understanding</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>把已有手术标注写成文字,让大模型照着出题的手术视觉问答数据集</h1>
+<div class="sub">MIS-VQA: An Annotation-Driven Surgical Vision-Language Dataset for Complex Surgical Understanding</div>
+<div class="meta">Mohamed Hamdy、Iheb Zouari 等,卡塔尔大学、哈马德医疗集团 | arXiv 2610.34210,v1,2026-10-25;代码仓库标注为 MICAD 2026</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术视觉问答</span><span class="tag">视觉语言数据集</span><span class="tag">胆囊切除</span><span class="tag">机器人手术</span><span class="tag">数据生成</span></div>
+<div class="one">MIS-VQA 把 EndoVis18 与 CholecT50 的已有标注写成文本上下文,由 GPT-5-mini 生成 33K 帧上的 849K 条问答和描述;对照模型在推理题上最高 81.92,但生成答案没有人工抽检,评委分也没有与人工评分校准。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 9 条，其中 5 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2610.34210" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/mis-vqa/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术画面里的空间关系和流程状态很难由人逐帧写成文字,所以已有手术问答数据大多靠模板凑短答案。</strong> 阶段识别、分割、三元组识别这些单任务模型已经成熟,但它们不能用自然语言对话。</p>
+<p>作者列出已有数据的四个缺口:问题多为短事实或分类题;Cholec 系列只有 CholecSeg8k 有掩码,所以 Cholec80-VQA、Surg-396K 没有空间监督;模板出题让语言单一;简述和详述两类描述监督不齐全。</p>
+<p>下一节看论文怎样补这些缺口。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口在监督的深度和结构,而不只是规模。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的做法是:先把已有标注写成文字,再让大模型照着文字"看图出题"。</p>
+<ul><li>数据:EndoVis18 与 CholecT50 两个来源,共 33K 帧、849K 条问答和描述。</li><li>五种回答类型:简述、详述、单事实问答 Conv-1、多事实组合问答 Conv-2、复杂推理。</li><li>关键做法:CholecT50 缺掩码的帧用 FASL 预测补全,置信度高于 0.9 才用,并在提示词里标明来源。</li><li>结果:换用 SAM 编码器的对照模型在胆囊切除子集推理题上评委分 81.92 最高;对话题上 EndoChat 仍然领先。</li></ul>
+<p><strong>边界:生成答案没有人工抽检,评委分没有与人工评分校准,置信度过滤没有消融。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">849K 样本,训练 751K、测试 97K</span><span class="i">掩码置信度阈值 0.9</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>标注怎样变成文字</h3><p>两个来源的标注完整度差别很大。EndoVis18 每帧都有分割掩码和器械-组织交互标签,直接按规则转写。CholecT50 的标注拼自三处:阶段和三元组来自 CholecT50,器械存在来自 Cholec80,掩码只在 CholecSeg8k 子集里有。</p>
+<p>缺掩码的帧用 FASL 预测,FASL 在完整 CholecSeg8k(训练加测试)上训练。置信度低于 0.9 时不写空间信息。提示词会告诉生成模型空间信息来自真值还是预测。</p>
+<figure class="fig"><img src="images/page_002_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。左栏为上下文抽取,中栏为系统提示加上下文学习样例驱动大模型生成问答,右栏为对照模型结构。</figcaption></figure>
+<p><strong>作者只用一句观察说明过滤减少了噪声,没有去掉预测掩码的消融。</strong></p>
+<p>下一节看文字怎样变成问答。</p><div class="strip h"><span class="t">亮点</span><span class="i">胆囊切除子集的空间信息多半来自模型预测,不是人工真值。</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>文字怎样变成问答</h3><p>上下文、按类型设计的系统提示、外科医生写的示范样例一起交给 GPT-5-mini,要求它"像直接看图一样"出题。作者在一个子集上比较了 GPT-5、GPT-5-mini、GPT-5-nano,认为 GPT-5 太啰嗦、GPT-5-nano 有时笼统,选了 GPT-5-mini;比较是定性的。</p>
+<p>取帧规则:1 fps 下阶段、器械或三元组任一变化即取样,最长间隔 5 秒,长静止段补中点帧。引用了不存在器械的三元组会被删掉。</p>
+<figure class="fig"><img src="images/page_004_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。上半部分为系统提示与示范样例节选,下半部分把同一帧在四个已有数据集与本数据集中的样本放在一起对比。</figcaption></figure>
+<p>每帧生成几条对话题和推理题,论文未说明。Conv-1 训练样本 273K 对应 29K 帧,平均约每帧 9 条。</p>
+<p>下一节看规模和划分。</p></div><div class="card" id="s5"><h3><span class="num">5</span>规模与划分</h3><div class="tbl"><table><thead><tr><th>类型</th><th>训练样本</th><th>测试样本</th></tr></thead><tbody><tr><td>Concise</td><td>29K</td><td>3.7K</td></tr><tr><td>Detailed</td><td>29K</td><td>3.7K</td></tr><tr><td>Conv-1</td><td>273K</td><td>35K</td></tr><tr><td>Conv-2</td><td>251K</td><td>32K</td></tr><tr><td>Reasoning</td><td>170K</td><td>22K</td></tr><tr><td>合计</td><td>751K</td><td>97K</td></tr></tbody></table></div>
+<p>划分按视频:EndoVis18 测试序列 1、5、16,沿用 EndoVis-VQA;CholecT50 测试视频 5、12、26、27、31,沿用 Cholec80-VQA 的测试交集。</p>
+<p>代码仓库首页给出 CholecT50 训练 27,063 帧、测试 3,247 帧,EndoVis18 训练 1,788 帧、测试 447 帧。<strong>胆囊切除子集约占九成,两个子集的结论分量不对等。</strong></p>
+<p>下一节看评测怎样打分。</p><div class="strip d"><span class="t">数据</span><span class="i">EndoVis18 测试帧 447,只来自三段序列</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>对照模型与评分</h3><p>LLaVA-SurgXpert 固定投影层和 Vicuna 语言模型,只换编码器:CLIP、SAM、FASL、PeskaVLP。四种编码器的输出都重排成 1024 个视觉标记。训练分两段:先只训投影层 2 轮,学习率 1e-3;再联合训投影层和低秩适配器 1 轮,学习率 2e-5。</p>
+<p>指标有 BLEU、CIDEr、METEOR、余弦相似度,以及评委分 GPT-Score。评委 GPT-5-nano 读取同一份标注上下文给答案打分,再用参考答案的得分归一化。<strong>归一化公式论文未说明。</strong></p>
+<p>下一节看结果。</p></div><div class="card" id="s7"><h3><span class="num">7</span>结果说了什么</h3><figure class="fig"><img src="images/page_006_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。左侧为与已有手术问答数据集的对比,右侧为本数据集各回答类型的规模。</figcaption></figure>
+<p>表 1 中 MIS-VQA 是唯一同时有空间监督、描述和推理的数据集,但样本数少于 SSG-VQA 的 960K,术式只有两种。</p>
+<p>表 2 的评委分要点:</p>
+<div class="tbl"><table><thead><tr><th>子集</th><th>题型</th><th>最好</th><th>分数</th></tr></thead><tbody><tr><td>EndoVis</td><td>Conv-1</td><td>SAM 版</td><td>62.51</td></tr><tr><td>EndoVis</td><td>Reasoning</td><td>FASL 版</td><td>78.47</td></tr><tr><td>Cholec</td><td>Conv-1</td><td>EndoChat</td><td>73.15</td></tr><tr><td>Cholec</td><td>Reasoning</td><td>SAM 版</td><td>81.92</td></tr></tbody></table></div>
+<ul><li>内镜机器人子集上,第一名都是两个分割编码器之一。</li><li>胆囊切除子集上,对话题 EndoChat 最好,FASL 版在五类评委分上都是对照模型中最低的。</li><li>PeskaVLP 版在内镜机器人子集上排最后,单事实问答 55.29 低于 VisualBert 的 59.37。</li></ul>
+<p>下一节看这些分数测到了什么。</p><div class="strip h"><span class="t">亮点</span><span class="i">"分割编码器更好"只在占一成的内镜机器人子集成立。</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>分数测到了什么</h3><p>答案来自标注上下文,所以数据集测的是"能否从图像恢复出标注里的信息并说出来"。标注里没有的内容,模型说对了也得不到分。</p>
+<p>评委与生成器同属 GPT-5 系列,读的是同一份上下文。作者用 EndoChat 的 BLEU-1 54.06 最高而评委分 60.95 偏低,论证评委分更可靠;但没有与人工评分比较,<strong>这只说明两类指标不一致,不说明哪个对。</strong></p>
+<p>内镜机器人推理题上 FASL 版 78.47 对 SAM 版 78.44,差 0.03,没有方差,这样的排名不稳定。</p>
+<p>下一节列出使用前要核对的事项。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用要注意什么</h3><ul><li>数据在 Hugging Face 上门控发布:填姓名、单位并勾选非商用、已申请图像两项条款后可下载,许可 CC BY-NC-SA 4.0。</li><li>数据只含文本,图像要分别向 CAMMA 和 EndoVis 2018 挑战网站申请。</li><li>测试帧的空间上下文也可能来自 FASL 预测,而 FASL 用 CholecSeg8k 全部数据训练,要先确认其中是否含测试视频。</li><li>正文把两个 BLEU 值写成同一个 54.06,表 2 中 BLEU-3 为 42.57,引用时以表为准。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>用已有标注生成问答,比模板自然,比人工描述便宜,但正确性取决于标注和生成模型。</div><div>胆囊切除子集约占九成,其空间信息多来自预测掩码。</div><div>主结果用的评委分没有人工校准。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>五种回答类型在同一帧上都有,能分开比较感知和推理。</li><li>按视频划分,沿用旧基准的测试视频,便于横向比较。</li><li>数据、代码和训练命令都已公开。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>没有人工抽检生成答案,也没有统计幻觉比例。</li><li>置信度过滤、掩码补全都没有消融。</li><li>结果只跑一次,子集间结论相反却没有分析。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>人工抽检一批生成答案,错误率是多少?</li><li>评委分与外科医生评分的相关性多高?</li><li>去掉预测掩码后,空间题的结果如何变化?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 faf60a15</span><span class="s">7.4 分</span></div><p>首轮笔记证据链完整,表 1、表 2 数字已转写;但研究问题缺核心观点速览,各节开头缺问题、结尾缺过渡;GPT-Score 归一化方式、Conv-1 与 Conv-2 的生成规则、两个子集的帧数等细节没有逐项写明论文未说明;数据开放情况未与代码仓库和 Hugging Face 卡片核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>研究问题末尾加 ### 核心观点速览</li><li>每节开头写本节回答的问题,结尾加过渡句</li><li>补写论文未说明的细节:GPT-Score 归一化公式、Conv-1/Conv-2 生成数量规则、两子集各自规模</li><li>用代码仓库与 Hugging Face 卡片核对数据开放方式和帧数</li><li>对分割编码器更好与 GPT-Score 更可靠两条主张写明替代解释</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 ffa8f0b9 · 文稿 96523261</span><span class="s">8.3 分</span></div><p>第二轮补上核心观点速览、各节开头问题与结尾过渡,写明 GPT-Score 归一化公式和每帧问答数量规则论文未说明,补入代码仓库给出的两子集帧数,把胆囊切除子集上 FASL 最差列为分割编码器结论的反例,并说明评委与生成器同源的问题。无法修复的限制:论文本身没有人工抽检、掩码消融和方差,这些只能作为局限列出;Table 2 自动裁剪失败,保留占位并转写数字。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

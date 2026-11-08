@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "模板内/模板外评测", "plain": "模板内测试题与训练题措辞相同,模板外把同一题改写成另一种问法,答案不变。", "where": "sec:methodology", "needed_for": "鲁棒性主张"},
+  {"term": "K-ACC 关键词准确率", "plain": "生成答案里是否出现正确的手术或解剖关键词。", "where": "sec:results-2", "needed_for": "判断事实正确性,区别于 BLEU 等句式重合"},
+  {"term": "管状掩码", "plain": "同一空间位置在所有时刻一起被遮住,模型不能从相邻帧抄回内容。", "where": "sec:methodology", "needed_for": "选 VideoMAE 的理由"},
+  {"term": "LoRA", "plain": "冻结大模型权重,只训练插入的低秩矩阵。", "where": "sec:methodology", "needed_for": "SurgViVQA 与 InternVL3+LoRA 的比较"},
+  {"term": "片段分配规则", "plain": "条件在 8 帧中的多数帧持续存在时才把题目分给该片段。", "where": "sec:methodology", "needed_for": "片段标签是否反映时间一致"},
+  {"term": "运动类/静态类", "plain": "需要跨帧证据才能答的题与单帧可答的题。", "where": "sec:model-3", "needed_for": "时序建模是否真有帮助"},
+  {"term": "λ 关键词权重", "plain": "关键词词元的损失乘以 λ,λ=1 即普通 BCE。", "where": "sec:model-3", "needed_for": "Table 5 解读"}
+ ],
+ "detail_questions": [
+  {"question": "主表 SurgViVQA 是否用了关键词加权?", "answer": "Table 2 数字与 Table 5 中 λ=1 一行一致,主结果未用加权。", "evidence": ["sec:model-2", "sec:model-4"], "status": "resolved"},
+  {"question": "约 9% 的增益是怎么算的?", "answer": "62.80-54.13=8.67,48.27-40.35=7.92,作者四舍五入为约 9%。", "evidence": ["sec:model", "sec:model-2"], "status": "resolved"},
+  {"question": "训练测试按什么划分?", "answer": "论文只给 4450/750 条数;按视频还是随机划分论文未说明,GitHub 代码按视频 5 对 1 划分。", "evidence": ["sec:dataset"], "status": "partly"},
+  {"question": "运动类和静态类各有多少测试题?", "answer": "论文未说明。", "evidence": ["sec:model-3"], "status": "not_stated"},
+  {"question": "Qwen 用的哪个型号、多大?", "answer": "论文只写 Qwen,未说明型号。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "LoRA 秩和批大小是多少?", "answer": "论文未说明。", "evidence": ["sec:dataset"], "status": "not_stated"},
+  {"question": "标注员一致性如何?", "answer": "只说第三名标注员处理分歧,一致性指标论文未说明。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "Table 4 为什么只在 EndoVis18-VQA 上做、没有 K-ACC?", "answer": "论文未说明原因。", "evidence": ["sec:model-3"], "status": "not_stated"},
+  {"question": "EndoVis18 模板外 K-ACC 为何掉到 9.23 和 0.99?", "answer": "作者只解释为该数据集问题是静态的,没有解释模板外崩溃。", "evidence": ["sec:model-4"], "status": "partly"},
+  {"question": "K-ACC 的关键词怎样确定?", "answer": "正文只定义含义,具体提取方式论文未说明;代码有 keywords_extraction.py。", "evidence": ["sec:results-2"], "status": "not_stated"},
+  {"question": "是否有多数类或纯文本基线?", "answer": "没有。", "evidence": ["sec:model"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "时序建模带来了相对 PitVQA 的提升", "alternative": "增益来自更强的 VideoMAE/BLIP 编码器而非多帧信息", "separating_evidence": "同一 SurgViVQA 只输入 1 帧的对照", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "视频模型在运动类题上占优", "alternative": "运动类题答案分布单一,模型猜对多数类即可", "separating_evidence": "运动类题的多数类基线与题数", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "专用架构比 LoRA 微调的视频 VLM 更均衡", "alternative": "专用小模型只是更好地拟合了模板化答案句式", "separating_evidence": "K-ACC 对比;EndoVis18 上 InternVL3+LoRA 的 K-ACC 70.31 高于 48.27", "in_paper": true, "verdict": "partly_supported"},
+  {"claim": "对问题改写更鲁棒", "alternative": "20 种固定改写仍被训练分布覆盖,题面一旦真正变化就失效", "separating_evidence": "EndoVis18 模板外 K-ACC 9.23 与 0.99,低于零样本 Qwen2.5-VL 的 46.90", "in_paper": true, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾加入核心观点速览,并写明鲁棒性主张只在结肠镜数据的语言指标上成立",
+  "深度分析加入相对 SurgicalGPT、PitVQA、InternVL3+LoRA 和四个数据集的定位小节",
+  "关键实现细节与局限写明 Qwen 型号、LoRA 秩、批大小、运动类题数、一致性、关键词提取方式均为论文未说明",
+  "数据与任务定义写明训练测试划分方式论文未说明,代码按视频划分",
+  "时序编码器消融补充论文未说明为何只在 EndoVis18-VQA 上做",
+  "各节开头点题、结尾加过渡句"
+ ]
+}

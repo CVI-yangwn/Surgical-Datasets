@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "faf60a15bfc85b110b794af24fdc34db303c38da87609fa0a43fa02a79904919",
+      "note_snapshot": "review_rounds/round1_MIS_VQA_An_Annotation_Driven_Surgical_Vision_Language_Dataset_for_Complex_Surgical_Understanding.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "首轮笔记证据链完整,表 1、表 2 数字已转写;但研究问题缺核心观点速览,各节开头缺问题、结尾缺过渡;GPT-Score 归一化方式、Conv-1 与 Conv-2 的生成规则、两个子集的帧数等细节没有逐项写明论文未说明;数据开放情况未与代码仓库和 Hugging Face 卡片核对。",
+      "fixes": [
+        "研究问题末尾加 ### 核心观点速览",
+        "每节开头写本节回答的问题,结尾加过渡句",
+        "补写论文未说明的细节:GPT-Score 归一化公式、Conv-1/Conv-2 生成数量规则、两子集各自规模",
+        "用代码仓库与 Hugging Face 卡片核对数据开放方式和帧数",
+        "对分割编码器更好与 GPT-Score 更可靠两条主张写明替代解释"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "ffa8f0b953399a15a25b20aeec586589f1a02fa5996e7da57115faf3757943f1",
+      "note_snapshot": "review_rounds/round2_MIS_VQA_An_Annotation_Driven_Surgical_Vision_Language_Dataset_for_Complex_Surgical_Understanding.md",
+      "report_sha256": "96523261cc31b54e8ee50ec4cc011a4a3aace29ca0293a70b69dd1a38f69508b",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "第二轮补上核心观点速览、各节开头问题与结尾过渡,写明 GPT-Score 归一化公式和每帧问答数量规则论文未说明,补入代码仓库给出的两子集帧数,把胆囊切除子集上 FASL 最差列为分割编码器结论的反例,并说明评委与生成器同源的问题。无法修复的限制:论文本身没有人工抽检、掩码消融和方差,这些只能作为局限列出;Table 2 自动裁剪失败,保留占位并转写数字。",
+      "fixes": []
+    }
+  ]
+}

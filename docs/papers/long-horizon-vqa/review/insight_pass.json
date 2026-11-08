@@ -1,0 +1,33 @@
+{
+ "knowledge_points": [
+  {"term": "模板内与模板外", "plain": "测试问题是否沿用训练时的问句模板，模板外用来检验模型是否只记住措辞。", "where": "sec:experiments", "needed_for": "模板外 BLEU-4 减半的解读"},
+  {"term": "K-ACC", "plain": "答案中关键词是否答对的比例，比 BLEU 更接近答对与否。", "where": "sec:experiments", "needed_for": "SurgLQA 在模板外的优势"},
+  {"term": "时间戳词元交错", "plain": "在每段视觉词元前插入写有秒数的文本词元，让语言模型直接读到时间。", "where": "sec:methodology", "needed_for": "TMS 能输出秒级区间"},
+  {"term": "掩码检索损失", "plain": "遮住部分压缩词元，要求检索器还原压缩前特征，逼压缩保留细节。", "where": "sec:methodology", "needed_for": "FTC 的保真论点"},
+  {"term": "策略指导器", "plain": "BERT 分类器，按窗口和问题在高斯、均匀、密集、U 形中选采样分布。", "where": "sec:methodology", "needed_for": "图 5 右的多策略结论"},
+  {"term": "拼接长视频", "plain": "把连续短片段首尾相接并合并问答对，得到更长的样本。", "where": "sec:experiments", "needed_for": "对长时程说法的判断"}
+ ],
+ "detail_questions": [
+  {"question": "Colon-LQA 有多少样本、如何划分", "answer": "只给出每个长视频约 34 秒，样本数和划分未给出。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "指导器的监督标签从何而来", "answer": "只说用交叉熵在 K 个策略上训练，标签来源未说明。", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "块大小、层数、窗口半宽和损失系数是多少", "answer": "均未给出。", "evidence": ["sec:methodology", "sec:experiments"], "status": "not_stated"},
+  {"question": "图 5 的 Baseline 是什么", "answer": "正文没有定义；柱状图上 Baseline 的 BLEU-4 约 69，已高于表 1 中微调 Qwen3VL 的 63.87，而 K-ACC 约 59 低于它的 63.46。", "evidence": ["sec:model-2", "sec:model"], "status": "partly"},
+  {"question": "图 6 的 K-ACC 在哪个数据集上测得", "answer": "未说明；50 帧时 SurgLQA 约 0.80，与表 1 的 66.67 不符，更接近表 2 的 79.60。", "evidence": ["sec:model-2"], "status": "not_stated"},
+  {"question": "图 6 中的 Qwen 是哪个模型、多大", "answer": "图例只写 Qwen，规模与是否微调未说明。", "evidence": ["sec:model-2"], "status": "not_stated"},
+  {"question": "基线是否用同样帧数", "answer": "只说统一了划分、分辨率和指标，帧数未提。", "evidence": ["sec:experiments"], "status": "partly"},
+  {"question": "实时部署是否有证据", "answer": "只有图 6 的耗时曲线，300 帧约 24 秒一视频，没有临床测试。", "evidence": ["sec:discussion", "sec:model-2"], "status": "resolved"},
+  {"question": "数据是否已公开", "answer": "仓库路线图中数据集与标注未勾选，说明文档称数据与权重不放入仓库。", "evidence": ["sec:preamble"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "SurgLQA 的主表优势来自 FTC 与 TMS", "alternative": "优势主要来自 SigLIP2 加 Qwen3 2B 的骨干组合与自家训练配方，两个模块只贡献了一部分。", "separating_evidence": "同骨干同配方、不加两模块的基线在表 1 上的数字。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "多策略选择优于单一策略", "alternative": "增益来自重采样本身提高了有效帧密度，而非选对了分布。", "separating_evidence": "在同帧数下比较随机选策略与指导器选策略。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "方法擅长长时程推理", "alternative": "34 秒的拼接视频可借接缝定位片段，并不需要真正的长程推理。", "separating_evidence": "在未经拼接的长手术视频上评测。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "低延迟适合术中实时使用", "alternative": "节省的是显存，耗时在低帧数时反而更高。", "separating_evidence": "端到端延迟与视频时长之比的测量。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "在关键结果中指出图 5 的 Baseline 未定义，且其 BLEU-4 约 69 已高于微调 Qwen3VL 的 63.87，说明主表对 Qwen3VL 的 BLEU 优势大半在加模块之前就已存在",
+  "在深度分析中指出图 6 的 K-ACC 数值与表 1 不符，评测数据集未说明，图例中的 Qwen 规模也未说明",
+  "在深度分析中补一段骨干与配方作为替代解释，以及缺少随机选策略对照",
+  "在比较定位中补充与通用长视频压缩方法的区别"
+ ]
+}

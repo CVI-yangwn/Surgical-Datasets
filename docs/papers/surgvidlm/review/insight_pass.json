@@ -1,0 +1,35 @@
+{
+"knowledge_points": [
+{"term":"视频大模型(Vid-LLM)","plain":"把视频帧编码成视觉词元再交给大语言模型生成文字的模型","where":"sec:introduction","needed_for":"理解低频采样为何丢细节"},
+{"term":"关键步骤时间码","plain":"讲解视频自带的步骤名与起止秒数,用来切片段","where":"sec:methodology","needed_for":"第二阶段如何找到片段"},
+{"term":"StageFocus","plain":"先看全片生成描述,再按时间码放大片段回答问题的两阶段推理","where":"sec:abstract-2","needed_for":"表 II 第二行的增益"},
+{"term":"MFA","plain":"高频片段词元查询低频全片词元,把取回的上下文加回自身","where":"sec:abstract-2","needed_for":"表 II 第三行的增益"},
+{"term":"GPT-4 打分","plain":"让 GPT-4 按 1 到 5 分评价描述的正确性、细节、上下文和时间理解","where":"sec:experiments","needed_for":"表 I 描述列的含义"},
+{"term":"BLEU-4、ROUGE-L 等","plain":"按与参考答案的词重叠打分的文本指标","where":"sec:experiments","needed_for":"推理列为何对背景文本敏感"},
+{"term":"LoRA","plain":"只训练低秩增量矩阵的参数高效微调","where":"sec:abstract-2","needed_for":"训练成本与复现"}
+],
+"detail_questions": [
+{"question":"基线是否拿到与 SurgVidLM 相同的片段?","answer":"论文只说 SurgVidLM 在第二阶段获得时间码,基线的输入方式没有交代","evidence":["sec:experiments","sec:abstract-2"],"status":"not_stated"},
+{"question":"真实使用时片段时间码从哪里来?","answer":"训练与测试都用标注时间码,模型不做定位,推理时来源没有交代","evidence":["sec:abstract-2"],"status":"not_stated"},
+{"question":"为什么全视频描述与微调 Qwen2-VL 完全相同?","answer":"第一阶段沿用 Qwen2-VL 结构并只用全视频问答训练,与微调基线几乎是同一设置","evidence":["sec:abstract-2","sec:model"],"status":"partly"},
+{"question":"正文增益与表 I 是否一致?","answer":"时序四项与感知前三项一致;感知 ROUGE-L 应为 3.03 而正文写 4.03;片段描述只有 CU 一致","evidence":["sec:experiments","sec:model","sec:model-2"],"status":"resolved"},
+{"question":"MFA 有没有可学习投影、几个头?","answer":"公式只写了缩放点积与残差,结构细节没有给出","evidence":["sec:abstract-2"],"status":"not_stated"},
+{"question":"为什么选 2 fps?","answer":"作者以成本折中为由,但 4 fps 四项指标更高,且没有报告成本数字","evidence":["sec:model-2"],"status":"partly"},
+{"question":"问答有没有人工核验?","answer":"只写 GPT-4 生成与纠错,没有人工抽检比例","evidence":["sec:methodology","sec:abstract-2"],"status":"not_stated"},
+{"question":"训练测试如何划分?","answer":"论文放在补充材料;已发布文件按视频划分,训练测试视频不重叠","evidence":["sec:abstract-2"],"status":"partly"},
+{"question":"表 II 推理列是时序还是感知?","answer":"只有一列细粒度视觉推理,合并方式没有说明","evidence":["sec:model-2"],"status":"not_stated"},
+{"question":"第二阶段训练用的 A1 是真值还是模型输出?","answer":"论文写为第一阶段答案;代码仓库说明训练时用第一阶段模型对训练视频的推理结果","evidence":["sec:abstract-2"],"status":"partly"}
+],
+"challenges": [
+{"claim":"StageFocus 与 MFA 带来细粒度理解提升","alternative":"提升主要来自标注时间码直接指向答案所在片段,以及 A1 文本中与参考答案重叠的词汇","separating_evidence":"给基线同一片段;只给 A1 不给高频帧;用预测片段代替标注时间码","in_paper":false,"verdict":"not_separated"},
+{"claim":"MFA 能把局部细节与全局上下文结合","alternative":"MFA 只是多了一层可训练参数,推理指标几乎不变","separating_evidence":"表 II 第二与第三行,以及参数量对齐的直接拼接对照","in_paper":false,"verdict":"partly_supported"},
+{"claim":"SurgVidLM 的回答更符合临床","alternative":"GPT-4 评 GPT-4 生成的参考答案,偏好与参考答案措辞接近的回答","separating_evidence":"外科医生人工评分","in_paper":false,"verdict":"not_separated"}
+],
+"revisions": [
+"研究问题末尾新增核心观点速览,写清时间码来自标注这一边界",
+"关键结果中写明基线输入方式论文未说明,并说明这影响比较公平性",
+"把 MFA 结构细节、问答人工核验、表 II 推理列合并方式统一写为论文未说明",
+"深度分析增加三种替代解释及区分实验",
+"写出正文 ROUGE-L 增益按表应为 3.03"
+]
+}

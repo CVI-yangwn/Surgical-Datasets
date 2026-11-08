@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgViVQA: Temporally-Grounded Video Question Answering for Surgical Scene Understanding</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>结肠镜视频问答:从单帧换成 8 帧短片段,能否答对"内镜在前进还是后退"</h1>
+<div class="sub">SurgViVQA: Temporally-Grounded Video Question Answering for Surgical Scene Understanding</div>
+<div class="meta">Mauro Orazio Drago、Luca Carlini 等,米兰理工大学、IRCCS Humanitas、伦敦大学学院、曼彻斯特大学 | arXiv 2511.03325,v3,2026-04-23;代码仓库称已发表于 IJCARS</div>
+<div><span class="chip">方法论文附新数据集</span><span class="tag">手术视频问答</span><span class="tag">结肠镜</span><span class="tag">时序建模</span><span class="tag">数据集</span><span class="tag">视频编码器</span></div>
+<div class="one">作者在 REAL-Colon 的 6 段结肠镜录像上做出 5200 条与 8 帧片段绑定的问答 REAL-Colon-VQA,并用 VideoMAE 加 LoRA 微调的小语言模型 SurgViVQA 作答;运动类题上视频模型约 82 到 83 而图像模型 42.00,但在 EndoVis18-VQA 上它的关键词准确率不如微调的 InternVL3,改写题上几乎失效。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 7 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2511.03325" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/tg-surgvqa/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术问答模型至今都只看一帧,而"内镜在前进还是后退""病灶往哪漂"这类问题必须跨帧才能回答。</strong> SurgicalGPT 和 PitVQA 都是单帧图像加 GPT-2 解码器。</p>
+<p>数据集也一样。EndoVis18-VQA、PitVQA、Kvasir-VQA、SSG-VQA 多数没有时间标注,测试题与训练题措辞几乎相同,模型可能只靠题面就能答对。</p>
+<p>作者还想知道:用 LoRA 微调一个通用视频大模型是否就够了。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口有两层:模型只看单帧,数据集的题面又太模板化。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文的做法分三步:</p>
+<ul><li>数据:在 6 段结肠镜录像上逐帧标注,生成 5200 条与约 0.93 秒片段绑定的问答,每题有模板题和改写题两种问法、长短两种答案。</li><li>模型:VideoMAE 视频编码器经 BLIP 交叉注意力与问题融合,再由 LoRA 微调的 GPT-2 或 Qwen 生成答案。</li><li>评测:与两个图像基线、四个零样本大模型、一个 LoRA 微调的 InternVL3 比较,再按运动类与静态类分层。</li></ul>
+<p><strong>主结果:结肠镜数据上关键词准确率从 PitVQA 的 54.13 提到 62.80。边界:EndoVis18-VQA 上不如微调的 InternVL3(48.27 对 70.31),改写题上降到 9.23。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">5200 条问答,训练 4450,测试 750,20 类问题 6 个领域</span><span class="i">8 帧,每 4 帧取 1 帧,约 0.93 秒</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据是怎么做的</h3><p>REAL-Colon 是公开的真实结肠镜视频数据集,病灶部位、大小、病理来自临床核实标签。作者在其上逐帧补标内镜运动、器械、可见度、遮挡、冲洗和照明模式,由两名非临床标注员完成,内镜专家监督,第三人裁决分歧。标注一致性指标,论文未说明。</p>
+<p>片段规则有两条:</p>
+<ul><li>30 fps 视频每 4 帧取 1 帧,取 8 帧。</li><li>条件在多数帧持续存在,才把题目分给该片段。</li></ul>
+<figure class="fig"><img src="images/page_006_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。两条样本:每条有 8 帧片段、模板题与改写题、长答案与短答案。</figcaption></figure>
+<p>题目分布偏向操作记录(46.15%)和运动(31.73%),尺寸与诊断各只有 2.88%。训练测试按视频还是随机划分,论文未说明;GitHub 代码用前 5 段录像训练、第 6 段测试。</p>
+<p>下一节看模型结构。</p><div class="strip h"><span class="t">亮点</span><span class="i">多数帧持续规则让片段标签反映一段时间的状态,而不是某一帧的偶然状态。</span><span class="i">测试集只来自 1 段录像。</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>模型怎样把 8 帧和问题变成答案</h3><p>SurgViVQA 分三步:</p>
+<ol><li>VideoMAE 把 8 帧切成时空立方体词元,训练时按管状方式掩码,即同一位置的所有时刻一起遮住,迫使模型从语义上下文而不是相邻帧推断。</li><li>问题经 BLIP 交叉注意力文本编码器,每个问题词元对全部视频特征做注意力。</li><li>融合结果送入冻结的 GPT-2 或 Qwen,只训练 LoRA 适配器,自回归生成答案。</li></ol>
+<figure class="fig"><img src="images/page_004_fig_fig_1_review.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。SurgViVQA 结构:管状掩码视频编码器、跨模态文本编码器、带 LoRA 层的冻结 LLM。</figcaption></figure>
+<p>训练 60 轮,学习率 $2\times10^{-7}$。可选的关键词加权损失把答案中关键词词元的损失乘以 λ:</p>
+<p>$$\mathcal{L}_{WBCE}=\frac{1}{N}\sum_{i=1}^{N} w_i\,\mathrm{BCE}(y_i,\hat{y}_i),\quad w_i=\lambda\ (i\in K),\ 1\ (\text{其他})$$</p>
+<p>Qwen 的型号、LoRA 秩、批大小,论文未说明,这使 Qwen 版本为何不稳定无法追查。</p>
+<p>下一节看主结果。</p></div><div class="card" id="s5"><h3><span class="num">5</span>主结果说了什么</h3><p>关键词准确率 K-ACC 看答案里有没有正确术语;BLEU-4、METEOR 看措辞与参考答案的重合。</p>
+<div class="tbl"><table><thead><tr><th>数据集与设置</th><th>PitVQA</th><th>InternVL3 + LoRA</th><th>SurgViVQA GPT-2</th></tr></thead><tbody><tr><td>结肠镜 模板内 K-ACC</td><td>54.13</td><td>59.07</td><td>62.80</td></tr><tr><td>结肠镜 模板外 K-ACC</td><td>42.93</td><td>51.77</td><td>47.73</td></tr><tr><td>肾切除 模板内 K-ACC</td><td>40.35</td><td>70.31</td><td>48.27</td></tr><tr><td>肾切除 模板外 K-ACC</td><td>9.73</td><td>56.42</td><td>9.23</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_008_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。两个数据集上全部模型在模板内与模板外的四项指标。</figcaption></figure>
+<p><strong>相对图像基线,SurgViVQA 在模板内确实更好,但相对微调的 InternVL3,它只在结肠镜模板内更好。</strong> 作者"更均衡"的说法依赖 BLEU-4 等句式指标。零样本 InternVL3 的结肠镜模板内 K-ACC 是 68.67,全表最高,BLEU-4 却只有 7.13,说明它答对了关键词,只是措辞不同。</p>
+<p>改写题上 Qwen 版本在肾切除数据上 K-ACC 0.99,几乎完全失效,零样本 Qwen2.5-VL 反而有 46.90。</p>
+<p>下一节看最能说明时序作用的分层结果。</p><div class="strip h"><span class="t">亮点</span><span class="i">句式指标高不等于事实对;以 K-ACC 看,专用架构没有全面胜过微调的通用视频模型。</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>视频输入到底帮了哪类题</h3><div class="tbl"><table><thead><tr><th>模型</th><th>运动类 K-ACC</th><th>静态类 K-ACC</th></tr></thead><tbody><tr><td>PitVQA(图像)</td><td>42.00</td><td>58.55</td></tr><tr><td>InternVL3(视频)</td><td>82.00</td><td>63.82</td></tr><tr><td>SurgViVQA Qwen</td><td>83.00</td><td>51.27</td></tr><tr><td>SurgViVQA GPT-2</td><td>62.50</td><td>62.91</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_009_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。结肠镜模板内 K-ACC 按运动类与静态类分层。</figcaption></figure>
+<p><strong>运动类题上视频模型比图像模型高约 40 个点,这是全文最清楚的时序证据。</strong> 但同一架构换解码器后运动类相差约 20 个点,GPT-2 版本运动类与静态类几乎一样,所以收益不全来自视频编码器。两类题各有多少道、多数类基线是多少,论文未说明。</p>
+<p>下一节看两项消融。</p></div><div class="card" id="s7"><h3><span class="num">7</span>两项消融</h3><p>时序编码器(肾切除数据,模板内,同一 GPT-2):</p>
+<div class="tbl"><table><thead><tr><th>编码器</th><th>BLEU-4</th><th>METEOR</th></tr></thead><tbody><tr><td>X-CLIP</td><td>78.81</td><td>86.79</td></tr><tr><td>TimeSformer</td><td>81.02</td><td>83.02</td></tr><tr><td>VideoMamba</td><td>84.47</td><td>85.64</td></tr><tr><td>VideoMAE</td><td>84.94</td><td>86.08</td></tr></tbody></table></div>
+<figure class="fig"><img src="images/page_010_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。五种时序编码器接 GPT-2 的语言指标。</figcaption></figure>
+<p>VideoMAE 的 BLEU-4 最高,但只比 VideoMamba 高 0.47,METEOR 还低于 X-CLIP。这张表没有 K-ACC,也没有在结肠镜数据上做,原因论文未说明。</p>
+<p>关键词加权:λ=10 相对 λ=1,模板内 K-ACC 从 48.27 到 49.03,模板外从 9.23 到 11.47。主表数字与 λ=1 一致,说明主结果没用加权。</p>
+<figure class="fig"><img src="images/page_010_fig_table_5_review.png" alt="Table 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 5。不同 λ 下 SurgViVQA GPT-2 在肾切除数据上的全部指标。</figcaption></figure>
+<p>下一节讨论结果没有说明的部分。</p><div class="strip d"><span class="t">数据</span><span class="i">编码器之间 BLEU-4 最大差 6.67(84.94 对 78.27)</span><span class="i">λ=50 时模板外 BLEU-4 降到 12.38</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>没有分开多帧信息和更强编码器。</strong> SurgViVQA 相对 PitVQA 同时换了视觉编码器、文本编码器和解码器适配方式,没有"同一模型只输入 1 帧"的对照。</li><li><strong>没有简单基线。</strong> 我统计 GitHub 标注:模板内只有 20 种固定问句,短答案为 no 的 2004 条、yes 的 1296 条。多数类或纯文本基线可能已经不低。</li><li><strong>"对改写更鲁棒"不成立于关键词层面。</strong> 改写题只有 20 种固定改写,肾切除数据上 K-ACC 降到个位数。</li><li><strong>单一测试录像。</strong> 结论只在 1 段录像上测过,没有方差。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>数据能不能拿到,复现要注意什么</h3><ul><li>问答标注在 GitHub 仓库 madratak/SurgViVQA 公开,两份文件各 5200 行,含帧编号、问题、类别、长短答案;仓库说明写 18 类,文件里实际是 20 类。</li><li>标注不含图像,帧要从 REAL-Colon 原始数据自行抽取;我访问 figshare 页面时返回 403,未能确认下载条件。</li><li>id 字段只有 3750 个不同值,应以视频编号加帧编号作主键。</li><li>模型权重在 Hugging Face 公开。</li><li>K-ACC 依赖关键词提取脚本,与其他论文比较前要统一关键词表。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>8 帧短片段在运动类题上明显胜过单帧,这一点证据清楚。</div><div>专用小模型的优势主要在句式指标上,按关键词准确率并不全面领先。</div><div>REAL-Colon-VQA 标注公开、视频需另取,题面只有 20 种,适合做时序探针,不适合单独证明语言泛化。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>运动类与静态类分层报告,直接回答"视频帮了什么"。</li><li>同一题提供模板题与改写题,能测题面依赖。</li><li>标注、代码、权重都已公开。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>只有 6 段录像、1 种术式,测试集 1 段录像。</li><li>缺少单帧对照、多数类基线和纯文本基线。</li><li>编码器消融只在肾切除数据上做,没有 K-ACC。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>SurgViVQA 只输入 1 帧时,运动类 K-ACC 会掉多少?</li><li>6 段录像留一交叉验证,结果方差有多大?</li><li>为什么同一架构下 Qwen 与 GPT-2 在运动类题上相差约 20 个点?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 9bf64a1f</span><span class="s">7.8 分</span></div><p>第一轮:证据链与数字完整,主表、分层表、两项消融都已转写并指出与作者结论不符之处。D5 定位偏弱:没有逐项说明相对 SurgicalGPT、PitVQA、通用视频 VLM 和各数据集新在哪里。D7、D9 偏弱:研究问题缺少核心观点速览,多数小节没有开头点题和结尾过渡。H3 尚未跑数字核查。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾加入 ### 核心观点速览,给出想法、三步做法、主结果及其边界</li><li>各节开头加一句说明本节回答什么,结尾加过渡句</li><li>增加与 SurgicalGPT、PitVQA、InternVL3+LoRA 及四个数据集的定位对比</li><li>把 insight pass 的论文未说明项写入正文</li><li>跑 lint_report --mode note 数字核查并登记推导值</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 58a37c34 · 文稿 d5fd684b</span><span class="s">8.5 分</span></div><p>第二轮:加入核心观点速览、各节点题与过渡、与已有方法和数据集的定位表,insight pass 的论文未说明项已写入笔记与报告;笔记与报告数字核查无未匹配项(推导值和外部核查值登记在 number_exceptions.json)。无法修复的限制:论文没有单帧对照、多数类基线和分层题数,增益来源只能标为未分开;REAL-Colon 原始帧的下载条件因 figshare 返回 403 未能核实。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

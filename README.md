@@ -4,8 +4,8 @@
 
 **手术视频与内镜公开数据集整理 · 附中文论文精读**
 
-[![Papers](https://img.shields.io/badge/精读论文-59-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
-[![Datasets](https://img.shields.io/badge/数据集-59-8b5cf6)](#-数据集总览)
+[![Papers](https://img.shields.io/badge/精读论文-65-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
+[![Datasets](https://img.shields.io/badge/数据集-65-8b5cf6)](#-数据集总览)
 [![Reading](https://img.shields.io/badge/在线阅读-GitHub%20Pages-b84fa3)](https://cvi-yangwn.github.io/Surgical-Datasets/)
 
 [📚 在线阅读全部精读](https://cvi-yangwn.github.io/Surgical-Datasets/) · [📊 数据集总览](#-数据集总览) · [🔍 精读是怎么做的](#-精读是怎么做的)
@@ -33,11 +33,12 @@
 </details>
 
 <details open>
-<summary><b>🔬 内镜 Endoscopic</b>（6 篇）</summary>
+<summary><b>🔬 内镜 Endoscopic</b>（7 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
 | **Colon-Bench** | 用大模型漏斗加医生把关做出的 14 类结肠镜病灶视频基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/colon-bench/) · [📝 笔记](docs/papers/colon-bench/note.md) |
+| **REAL-Colon-VQA（SurgViVQA）** | 结肠镜视频问答:从单帧换成 8 帧短片段,能否答对"内镜在前进还是后退 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/tg-surgvqa/) · [📝 笔记](docs/papers/tg-surgvqa/note.md) |
 | **EndoBench** | 用 6,832 道选择题量一量大模型离内镜医师有多远 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endobench/) · [📝 笔记](docs/papers/endobench/note.md) |
 | **Kvasir-SEG** | 给 1000 张结肠镜息肉图补上像素级掩码：Kvasir-SEG 数据集说明 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/kvasir-seg/) · [📝 笔记](docs/papers/kvasir-seg/note.md) |
 | **PolypGen** | 六家医院的结肠镜息肉数据：PolypGen 能测出多少跨中心泛化差距 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/polypgen/) · [📝 笔记](docs/papers/polypgen/note.md) |
@@ -88,7 +89,7 @@
 </details>
 
 <details open>
-<summary><b>💬 多模态与问答 Multimodal</b>（9 篇）</summary>
+<summary><b>💬 多模态与问答 Multimodal</b>（12 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
@@ -97,6 +98,9 @@
 | **SurgVLM** | 把 23 个公开手术数据集改写成问答对话,微调 Qwen2.5-VL 并组建 6 项评测 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvlm/) · [📝 笔记](docs/papers/surgvlm/note.md) |
 | **SUREON** | 删掉“不看视频也能答对”的题之后，手术视觉推理还剩多难 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sureon/) · [📝 笔记](docs/papers/sureon/note.md) |
 | **SurgCoT** | 手术视频链式推理基准:把一道题拆成三级子问题,看大模型在哪一步掉链子 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgcot/) · [📝 笔记](docs/papers/surgcot/note.md) |
+| **SurgVidLM（SVU-31K）** | 先看全片、再按时间码放大片段的手术视频大模型,附 3 万条 GPT-4 生成的视频问答 SVU-31K | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvidlm/) · [📝 笔记](docs/papers/surgvidlm/note.md) |
+| **MIS-VQA** | 把已有手术标注写成文字,让大模型照着出题的手术视觉问答数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mis-vqa/) · [📝 笔记](docs/papers/mis-vqa/note.md) |
+| **SAP-Bench（已撤稿）** | 看一张术中画面,猜下一个手术动作:多模态大模型的胆囊切除下一动作预测基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sap-bench/) · [📝 笔记](docs/papers/sap-bench/note.md) |
 | **SSG-VQA** | 用场景图自动出题的手术视觉问答数据集 SSG-VQA 及其参考模型 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ssg-vqa/) · [📝 笔记](docs/papers/ssg-vqa/note.md) |
 | **SurgBench** | 把 16 个手术视频来源统一切片,做成预训练集加 72 个标签的分类评测集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgbench/) · [📝 笔记](docs/papers/surgbench/note.md) |
 | **SurgAtlas** | 从 YouTube 收集 15,291 个开放与微创手术视频，自动生成四层文本标注，并首次给开放手术建立推理评测 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgatlas/) · [📝 笔记](docs/papers/surgatlas/note.md) |
@@ -117,10 +121,12 @@
 </details>
 
 <details open>
-<summary><b>🕒 尚未公开 Not yet</b>（9 篇）</summary>
+<summary><b>🕒 尚未公开 Not yet</b>（11 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
+| **Colon-LQA（SurgLQA）** | 先问事件在哪、再在那里加密采样的结肠镜长视频问答方法，附一个拼接出的 Colon-LQA 评测集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/long-horizon-vqa/) · [📝 笔记](docs/papers/long-horizon-vqa/note.md) |
+| **SurgXBench** | 手术视觉语言模型可解释性基准:答对了,但看的是不是器械 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgxbench/) · [📝 笔记](docs/papers/surgxbench/note.md) |
 | **SurgMotion-15M** | 在 3,658 小时多专科手术视频上做潜空间运动预测的视频基础模型 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgmotion/) · [📝 笔记](docs/papers/surgmotion/note.md) |
 | **LD-RSVIS** | 支持无目标、单目标、多目标表达的大规模手术视频器械指代分割基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ld-rsvis/) · [📝 笔记](docs/papers/ld-rsvis/note.md) |
 | **SurgSkill-Bench** | 一份把手术视频、六维 OSATS 评分和专家评语放在一起的技能评估小基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgskill-bench/) · [📝 笔记](docs/papers/surgskill-bench/note.md) |
@@ -157,6 +163,7 @@
 | 数据集 | 年份 | 论文 | 数据 | 任务 | 规模 | 来源 | 精读 |
 | :-- | :--: | :--: | :--: | :-- | :-- | :-- | :--: |
 | Colon-Bench | 2026 | [arXiv](https://arxiv.org/abs/2603.25645) | [🤗](https://huggingface.co/datasets/ajhamdi/colon-bench) | 结肠镜病灶检测 / 开放词汇分割 / 视频问答 | 528 个视频窗口（46 万帧，14 类病灶） | REAL-Colon 全程结肠镜录像 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/colon-bench/) |
+| REAL-Colon-VQA（SurgViVQA） | 2025 | [arXiv](https://arxiv.org/abs/2511.03325) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/madratak/SurgViVQA/tree/main/REAL-Colon-VQA_annotations) | 结肠镜短片段视频问答 | 5,200 条 8 帧片段问答 | REAL-Colon 6 段结肠镜录像 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/tg-surgvqa/) |
 | EndoBench | 2025 | [arXiv](https://arxiv.org/abs/2505.23601) | [🤗](https://huggingface.co/datasets/Saint-lsy/EndoBench) | 多模态大模型视觉问答评测 |  |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endobench/) |
 | Kvasir-SEG | 2019 | [arXiv](https://arxiv.org/abs/1911.07069) | [链接](https://datasets.simula.no/kvasir-seg/) | 息肉分割 |  |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/kvasir-seg/) |
 | PolypGen | 2021 | [arXiv](https://arxiv.org/abs/2106.04463) | [链接](https://doi.org/10.7303/syn26376615) | 息肉检测与分割（跨中心泛化） | 超过 300 名患者 | 六个中心 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/polypgen/) |
@@ -207,6 +214,9 @@
 | SurgVLM | 2025 | [arXiv](https://arxiv.org/abs/2506.02555) | [🤗](https://huggingface.co/datasets/SurgSigma/SurgSigma-DB) | 手术视觉语言指令微调与多任务评测 | 181 万帧、779 万段对话（部分公开） | 23 个公开数据集改写 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvlm/) |
 | SUREON | 2026 | [arXiv](https://arxiv.org/abs/2603.06570) | [🤗](https://huggingface.co/datasets/aleperez24/sureon) | 手术视频推理问答 | 76,061 条训练问答 + 340 题基准 | YouTube 手术讲解视频 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sureon/) |
 | SurgCoT | 2026 | [arXiv](https://arxiv.org/abs/2604.20319) | [🤗](https://huggingface.co/datasets/wanggui/SurgCoT) | 链式时空推理问答 | 2,841 个视频（19,345 个主问题） | 公开平台、10 个开源数据集与临床档案 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgcot/) |
+| SurgVidLM（SVU-31K） | 2025 | [arXiv](https://arxiv.org/abs/2506.17873) | [🤗](https://huggingface.co/datasets/gkw0010/SVU-31K) | 多粒度手术视频指令问答 | 1,882 个视频（约 3.1 万条问答） | YouTube 与 WebSurg 机器人手术讲解 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvidlm/) |
+| MIS-VQA | 2026 | [arXiv](https://arxiv.org/abs/2610.34210) | [🤗](https://huggingface.co/datasets/M-Hamdy/MIS-VQA) | 手术视觉问答 / 场景描述 / 复杂推理 | 84.9 万问答（3.3 万帧） | EndoVis18 与 CholecT50 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mis-vqa/) |
+| SAP-Bench（已撤稿） | 2025 | [arXiv](https://arxiv.org/abs/2506.07196v1) | [🤗](https://huggingface.co/datasets/SAPbench/SAPBench) | 下一手术动作预测（多模态大模型评测） | 1,152 帧（74 台手术） | CholecT50 与 HeiChole 重标 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sap-bench/) |
 | SSG-VQA | 2024 | [arXiv](https://arxiv.org/abs/2312.10251) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/CAMMA-public/SSG-VQA) | 基于场景图的手术视觉问答 | 96 万问答（2.5 万场景） | CholecT45 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ssg-vqa/) |
 | SurgBench | 2025 | [arXiv](https://arxiv.org/abs/2506.07603) | [🤗](https://huggingface.co/datasets/JianhuiWei/SurgBench_NIPS25) | 手术视频基础模型预训练与多任务评测 | 5300 万帧（22 种术式） | 16 个来源整合 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgbench/) |
 | SurgAtlas | 2026 | [arXiv](https://arxiv.org/abs/2606.25905) | [🤗](https://huggingface.co/datasets/filbel/SurgAtlas) | 手术视频-语言预训练与推理问答 | 15,291 个视频（2,391 小时） | YouTube | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgatlas/) |
