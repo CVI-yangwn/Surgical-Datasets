@@ -1,0 +1,35 @@
+{
+ "knowledge_points": [
+  {"term": "手术阶段识别", "plain": "把整台手术的每一帧归入消毒、切开、缝合这类高层阶段。", "where": "sec:introduction", "needed_for": "理解数据集的标签和指标"},
+  {"term": "第一人称视频", "plain": "由佩戴在主刀头上的相机拍摄，视野跟随医生头部移动。", "where": "sec:introduction", "needed_for": "理解注视信号从何而来"},
+  {"term": "宏平均 Jaccard", "plain": "每个阶段单独算预测与真值的交并比，再对 9 个阶段等权平均。", "where": "sec:methods-2", "needed_for": "解释为何少数类对总分影响大"},
+  {"term": "掩码自编码器", "plain": "遮住输入的大部分视频块，训练模型重建它们，以此学习表示。", "where": "sec:introduction", "needed_for": "理解 GGMAE 只改了哪一步"},
+  {"term": "时空立方体嵌入", "plain": "把视频按 2 帧乘 16×16 像素切成小立方块，每块映射成一个向量。", "where": "sec:approach", "needed_for": "理解注视累加的单位"},
+  {"term": "温度 τ", "plain": "softmax 中的缩放系数，越小越集中在注视最强的块。", "where": "sec:approach", "needed_for": "解读 Table 3(c)"},
+  {"term": "管状掩码", "plain": "VideoMAE 的做法，同一空间位置在所有时间上一起遮住。", "where": "sec:methods-2", "needed_for": "解读 Table 2 和 Table 3(a)"}
+ ],
+ "detail_questions": [
+  {"question": "训练、验证、测试分别多少段视频，与总数是否一致？", "answer": "正文写 14、2、5，合计 21，与 20 段视频矛盾。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "超参数搜索用的是哪个划分？", "answer": "只说用网格搜索或逐步调参，没有说明是在验证集还是测试集上。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "注视热图的高斯宽度是多少？", "answer": "只说在真实注视点放一个高斯，未给标准差。", "evidence": ["sec:experiments"], "status": "not_stated"},
+  {"question": "10 种术式分别是什么？", "answer": "论文未列出术式名称及各术式的视频数。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "去标识化剔除了多少帧？", "answer": "只给出处理前 28 小时、处理后 15 小时，0.5 fps 下采样本身也会减少帧数，剔除个人信息帧的数量未给出。", "evidence": ["sec:introduction"], "status": "partly"},
+  {"question": "注视是否在推理时需要？", "answer": "不需要，注视只用于预训练选择掩码，微调接 MLP 头做分类。", "evidence": ["sec:approach", "sec:experiments"], "status": "resolved"},
+  {"question": "GGMAE 在所有指标上都最好吗？", "answer": "Jaccard 和召回率最高，精确率 51.7 低于 VideoMAE V2 的 54.2 和 SurgMAE 的 52.2。", "evidence": ["sec:methods-2"], "status": "resolved"},
+  {"question": "Table 1 的对比是否控制了骨干？", "answer": "没有，基线用 AlexNet、ResNet-50、Inception v3，GGMAE 用 ViT-S；Table 2 才是同骨干比较。", "evidence": ["sec:methods"], "status": "resolved"},
+  {"question": "结果是否有多次运行或方差？", "answer": "所有表格只给单个数字，没有方差。", "evidence": ["sec:methods", "sec:methods-2"], "status": "not_stated"},
+  {"question": "数据如何获取？", "answer": "论文说在项目页发布；项目 GitHub 要求填写 Google 表单申请，许可 CC BY-NC-SA 4.0。", "evidence": ["sec:preamble"], "status": "partly"}
+ ],
+ "challenges": [
+  {"claim": "注视作为语义先验带来提升", "alternative": "注视区域与手术灯照亮的区域高度重合，提升可能只是避开了全黑区域，按亮度挑掩码也能做到。", "separating_evidence": "加一个按像素亮度或显著性挑掩码的对照。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "GGMAE 优于已有阶段识别方法", "alternative": "优势可能来自 ViT-S 骨干与 MAE 预训练，而非注视。", "separating_evidence": "Table 2 同骨干对比与 Table 3(a) 掩码消融。", "in_paper": true, "verdict": "partly_supported"},
+  {"claim": "τ=0.5、掩码率 0.90 是最优设置", "alternative": "如果在测试集上选超参数，最优点是对 5 段测试视频的过拟合。", "separating_evidence": "在验证集上选择并报告测试集结果，或多次运行给方差。", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "研究问题末尾增加核心观点速览，写明 33.9 的绝对水平与精确率不占优",
+  "注视先验小节明确写出亮度对照缺失，并标为推断",
+  "局限中把划分矛盾、高斯宽度、术式名称、超参数搜索所用划分、方差统一写成论文未说明",
+  "Table 2 后写明 GGMAE 的优势来自召回率，精确率低于两个对手",
+  "Table 1 后强调骨干不同，只有 Table 2 是同骨干对比"
+ ]
+}

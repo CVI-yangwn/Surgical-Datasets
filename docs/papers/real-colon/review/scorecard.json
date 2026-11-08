@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "3b0f4391e16c711a4478a2a798ff08ce050a7da0f8f8e849e36455ba5e435a5a",
+      "note_snapshot": "review_rounds/round1_REAL_Colon_A_dataset_for_developing_real_world_AI_applications_in_colonoscopy.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.7,
+      "verdict": "第 1 轮：证据链和表格转录完整，已指出表 4 与表 5 不一致。D5 定位表只列四个对象，未说明 Colon-Bench 的依赖关系依据；D6 复用建议缺少按队列留出评测的具体做法；D9 部分小节缺少开头的问题和结尾过渡；H3 数字尚未逐一核对。",
+      "fixes": [
+        "数字核对：用 lint_report --mode note 检查所有数字，派生数字写入例外文件",
+        "深度分析各小节开头补一句问题，关键结果小节补过渡",
+        "把 Insight Pass 中 论文未说明 的项（fps、裁剪尺寸、未切除息肉）写入正文并说明影响",
+        "我的笔记补充按队列留出评测的建议",
+        "核对 2.4% 等自算数字的表述并标明是推断"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "9eeacca3731b2b331362d37f864dc50147a712853f484c2639c14ed75e613c55",
+      "note_snapshot": "review_rounds/round2_REAL_Colon_A_dataset_for_developing_real_world_AI_applications_in_colonoscopy.md",
+      "report_sha256": "de6d8317cbc004231ad63da9cd4858ffe805d31ea642429283739d0173ef8c16",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第 2 轮：数字核对通过（派生数字与 PDF 表格单元格列入例外文件并注明来源）；补充训练量混杂、分辨率与早期检测无法分离、论文未说明项及其影响、按队列留出建议。无法修复的限制：Figure 6 与 Table 3 自动裁图身份不符，保留占位并转录数值；Table 5 无裁图候选；技术验证本身只有一个模型，笔记只能指出而不能补足。",
+      "fixes": []
+    }
+  ]
+}

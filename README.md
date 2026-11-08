@@ -4,8 +4,8 @@
 
 **手术视频与内镜公开数据集整理 · 附中文论文精读**
 
-[![Papers](https://img.shields.io/badge/精读论文-65-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
-[![Datasets](https://img.shields.io/badge/数据集-65-8b5cf6)](#-数据集总览)
+[![Papers](https://img.shields.io/badge/精读论文-71-4f5bd5)](https://cvi-yangwn.github.io/Surgical-Datasets/)
+[![Datasets](https://img.shields.io/badge/数据集-71-8b5cf6)](#-数据集总览)
 [![Reading](https://img.shields.io/badge/在线阅读-GitHub%20Pages-b84fa3)](https://cvi-yangwn.github.io/Surgical-Datasets/)
 
 [📚 在线阅读全部精读](https://cvi-yangwn.github.io/Surgical-Datasets/) · [📊 数据集总览](#-数据集总览) · [🔍 精读是怎么做的](#-精读是怎么做的)
@@ -33,12 +33,13 @@
 </details>
 
 <details open>
-<summary><b>🔬 内镜 Endoscopic</b>（7 篇）</summary>
+<summary><b>🔬 内镜 Endoscopic</b>（8 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
 | **Colon-Bench** | 用大模型漏斗加医生把关做出的 14 类结肠镜病灶视频基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/colon-bench/) · [📝 笔记](docs/papers/colon-bench/note.md) |
 | **REAL-Colon-VQA（SurgViVQA）** | 结肠镜视频问答:从单帧换成 8 帧短片段,能否答对"内镜在前进还是后退 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/tg-surgvqa/) · [📝 笔记](docs/papers/tg-surgvqa/note.md) |
+| **REAL-Colon** | 60 段全程未剪辑结肠镜视频与逐帧息肉框的公开数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/real-colon/) · [📝 笔记](docs/papers/real-colon/note.md) |
 | **EndoBench** | 用 6,832 道选择题量一量大模型离内镜医师有多远 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endobench/) · [📝 笔记](docs/papers/endobench/note.md) |
 | **Kvasir-SEG** | 给 1000 张结肠镜息肉图补上像素级掩码：Kvasir-SEG 数据集说明 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/kvasir-seg/) · [📝 笔记](docs/papers/kvasir-seg/note.md) |
 | **PolypGen** | 六家医院的结肠镜息肉数据：PolypGen 能测出多少跨中心泛化差距 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/polypgen/) · [📝 笔记](docs/papers/polypgen/note.md) |
@@ -72,11 +73,13 @@
 </details>
 
 <details open>
-<summary><b>🤖 机器人手术 Robotic</b>（9 篇）</summary>
+<summary><b>🤖 机器人手术 Robotic</b>（11 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
 | **JIGSAWS** | 达芬奇机器人台架任务的运动学、立体视频与手势、技能标注：JIGSAWS 数据集说明 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/jigsaws/) · [📝 笔记](docs/papers/jigsaws/note.md) |
+| **SurgPose** | 用紫外荧光漆给 da Vinci 器械关节自动打点的姿态估计数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgpose/) · [📝 笔记](docs/papers/surgpose/note.md) |
+| **VL-SurgPT** | 给手术跟踪点打上"被烟雾挡住""被器械挡住"的标签:在体点跟踪数据集与文本引导基线 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/vl-surgpt/) · [📝 笔记](docs/papers/vl-surgpt/note.md) |
 | **EndoVis 2017** | 给机器人手术器械分割建一个可信的考场：EndoVis 2017 挑战赛总结 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2017/) · [📝 笔记](docs/papers/endovis2017/note.md) |
 | **EndoVis 2018** | 从只分割器械到分割整个手术画面:EndoVis 2018 猪肾手术场景分割挑战 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2018/) · [📝 笔记](docs/papers/endovis2018/note.md) |
 | **SCARED** | 用结构光给猪尸体内镜视频配上深度真值：SCARED 挑战赛报告 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/scared/) · [📝 笔记](docs/papers/scared/note.md) |
@@ -89,7 +92,7 @@
 </details>
 
 <details open>
-<summary><b>💬 多模态与问答 Multimodal</b>（12 篇）</summary>
+<summary><b>💬 多模态与问答 Multimodal</b>（13 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
@@ -101,6 +104,7 @@
 | **SurgVidLM（SVU-31K）** | 先看全片、再按时间码放大片段的手术视频大模型,附 3 万条 GPT-4 生成的视频问答 SVU-31K | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvidlm/) · [📝 笔记](docs/papers/surgvidlm/note.md) |
 | **MIS-VQA** | 把已有手术标注写成文字,让大模型照着出题的手术视觉问答数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mis-vqa/) · [📝 笔记](docs/papers/mis-vqa/note.md) |
 | **SAP-Bench（已撤稿）** | 看一张术中画面,猜下一个手术动作:多模态大模型的胆囊切除下一动作预测基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sap-bench/) · [📝 笔记](docs/papers/sap-bench/note.md) |
+| **SurgLaVi** | 用大模型自动切分、过滤和改写手术讲解视频,做出 24 万对三层视频-字幕数据 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surglavi/) · [📝 笔记](docs/papers/surglavi/note.md) |
 | **SSG-VQA** | 用场景图自动出题的手术视觉问答数据集 SSG-VQA 及其参考模型 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ssg-vqa/) · [📝 笔记](docs/papers/ssg-vqa/note.md) |
 | **SurgBench** | 把 16 个手术视频来源统一切片,做成预训练集加 72 个标签的分类评测集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgbench/) · [📝 笔记](docs/papers/surgbench/note.md) |
 | **SurgAtlas** | 从 YouTube 收集 15,291 个开放与微创手术视频，自动生成四层文本标注，并首次给开放手术建立推理评测 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgatlas/) · [📝 笔记](docs/papers/surgatlas/note.md) |
@@ -109,22 +113,24 @@
 </details>
 
 <details open>
-<summary><b>🏥 手术室 Operating room</b>（4 篇）</summary>
+<summary><b>🏥 手术室 Operating room</b>（5 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
 | **MVOR** | 真实介入手术室里的多视角彩色加深度人体姿态数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mvor/) · [📝 笔记](docs/papers/mvor/note.md) |
 | **4D-OR** | 把手术室画成一张图：首个公开的 4D 手术室语义场景图数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/4d-or/) · [📝 笔记](docs/papers/4d-or/note.md) |
 | **MM-OR** | 不止看画面：首个支持多模态场景图生成的大规模手术室数据集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mm-or/) · [📝 笔记](docs/papers/mm-or/note.md) |
+| **EgoSurgery-Phase** | 主刀头戴眼动相机拍下的开放手术阶段数据集，以及用注视引导掩码的视频预训练 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egosurgery-phase/) · [📝 笔记](docs/papers/egosurgery-phase/note.md) |
 | **EgoExOR** | 让手术室里的每个人戴上眼镜：自我视角加天花板视角的同步数据集与场景图基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egoexor/) · [📝 笔记](docs/papers/egoexor/note.md) |
 
 </details>
 
 <details open>
-<summary><b>🕒 尚未公开 Not yet</b>（11 篇）</summary>
+<summary><b>🕒 尚未公开 Not yet</b>（12 篇）</summary>
 
 | 数据集 | 一句话 | 阅读 |
 | :-- | :-- | :-- |
+| **MultiBypass-4C-T40** | MultiBypass-4C-T40：四中心胃旁路手术动作三元组数据集与跨中心基准 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/multibypass-4c-t40/) · [📝 笔记](docs/papers/multibypass-4c-t40/note.md) |
 | **Colon-LQA（SurgLQA）** | 先问事件在哪、再在那里加密采样的结肠镜长视频问答方法，附一个拼接出的 Colon-LQA 评测集 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/long-horizon-vqa/) · [📝 笔记](docs/papers/long-horizon-vqa/note.md) |
 | **SurgXBench** | 手术视觉语言模型可解释性基准:答对了,但看的是不是器械 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgxbench/) · [📝 笔记](docs/papers/surgxbench/note.md) |
 | **SurgMotion-15M** | 在 3,658 小时多专科手术视频上做潜空间运动预测的视频基础模型 | [🌐 网页](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgmotion/) · [📝 笔记](docs/papers/surgmotion/note.md) |
@@ -164,6 +170,7 @@
 | :-- | :--: | :--: | :--: | :-- | :-- | :-- | :--: |
 | Colon-Bench | 2026 | [arXiv](https://arxiv.org/abs/2603.25645) | [🤗](https://huggingface.co/datasets/ajhamdi/colon-bench) | 结肠镜病灶检测 / 开放词汇分割 / 视频问答 | 528 个视频窗口（46 万帧，14 类病灶） | REAL-Colon 全程结肠镜录像 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/colon-bench/) |
 | REAL-Colon-VQA（SurgViVQA） | 2025 | [arXiv](https://arxiv.org/abs/2511.03325) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/madratak/SurgViVQA/tree/main/REAL-Colon-VQA_annotations) | 结肠镜短片段视频问答 | 5,200 条 8 帧片段问答 | REAL-Colon 6 段结肠镜录像 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/tg-surgvqa/) |
+| REAL-Colon | 2024 | [arXiv](https://arxiv.org/abs/2403.02163) | [figshare](https://plus.figshare.com/articles/media/REAL-colon_dataset/22202866) | 结肠镜息肉逐帧检测 | 60 段全程视频（270 万帧） | 四国六中心临床研究录像 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/real-colon/) |
 | EndoBench | 2025 | [arXiv](https://arxiv.org/abs/2505.23601) | [🤗](https://huggingface.co/datasets/Saint-lsy/EndoBench) | 多模态大模型视觉问答评测 |  |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endobench/) |
 | Kvasir-SEG | 2019 | [arXiv](https://arxiv.org/abs/1911.07069) | [链接](https://datasets.simula.no/kvasir-seg/) | 息肉分割 |  |  | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/kvasir-seg/) |
 | PolypGen | 2021 | [arXiv](https://arxiv.org/abs/2106.04463) | [链接](https://doi.org/10.7303/syn26376615) | 息肉检测与分割（跨中心泛化） | 超过 300 名患者 | 六个中心 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/polypgen/) |
@@ -196,6 +203,8 @@
 | 数据集 | 年份 | 论文 | 数据 | 任务 | 规模 | 来源 | 精读 |
 | :-- | :--: | :--: | :--: | :-- | :-- | :-- | :--: |
 | JIGSAWS | 2014 | [论文](https://cirl.lcsr.jhu.edu/wp-content/uploads/dlm_uploads/2014/09/JIGSAWS.pdf) | [链接](https://cirl.lcsr.jhu.edu/research/hmm/datasets/jigsaws_release/) | 手势识别 / 技能评估 | 103 个试次（8 名医生） | 达芬奇台架任务 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/jigsaws/) |
+| SurgPose | 2025 | [arXiv](https://arxiv.org/abs/2502.11534) | [链接](https://zenodo.org/records/15278516) | 器械关节关键点姿态估计与跟踪 | 约 12 万个器械实例（6 类） | 达芬奇 IS1200 + dVRK，离体组织 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgpose/) |
+| VL-SurgPT | 2025 | [arXiv](https://arxiv.org/abs/2511.12026) | [🤗](https://huggingface.co/datasets/zhourulin88888/VL-SurgPT) | 组织点与器械点跟踪 + 点状态分类 | 908 个在体片段 | 深圳市人民医院达芬奇 Xi 胃肠手术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/vl-surgpt/) |
 | EndoVis 2017 | 2019 | [arXiv](https://arxiv.org/abs/1902.06426) | [链接](https://endovissub2017-roboticinstrumentsegmentation.grand-challenge.org) | 器械分割 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2017/) |
 | EndoVis 2018 | 2020 | [arXiv](https://arxiv.org/abs/2001.11190) | [链接](https://endovissub2018-roboticscenesegmentation.grand-challenge.org) | 手术场景分割 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/endovis2018/) |
 | SCARED | 2021 | [arXiv](https://arxiv.org/abs/2101.01133) | [链接](https://endovissub2019-scared.grand-challenge.org/) | 双目匹配与三维重建 |  | MICCAI 挑战赛 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/scared/) |
@@ -217,6 +226,7 @@
 | SurgVidLM（SVU-31K） | 2025 | [arXiv](https://arxiv.org/abs/2506.17873) | [🤗](https://huggingface.co/datasets/gkw0010/SVU-31K) | 多粒度手术视频指令问答 | 1,882 个视频（约 3.1 万条问答） | YouTube 与 WebSurg 机器人手术讲解 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgvidlm/) |
 | MIS-VQA | 2026 | [arXiv](https://arxiv.org/abs/2610.34210) | [🤗](https://huggingface.co/datasets/M-Hamdy/MIS-VQA) | 手术视觉问答 / 场景描述 / 复杂推理 | 84.9 万问答（3.3 万帧） | EndoVis18 与 CholecT50 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mis-vqa/) |
 | SAP-Bench（已撤稿） | 2025 | [arXiv](https://arxiv.org/abs/2506.07196v1) | [🤗](https://huggingface.co/datasets/SAPbench/SAPBench) | 下一手术动作预测（多模态大模型评测） | 1,152 帧（74 台手术） | CholecT50 与 HeiChole 重标 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/sap-bench/) |
+| SurgLaVi | 2025 | [arXiv](https://arxiv.org/abs/2509.10555) | [🤗](https://huggingface.co/datasets/aleperez24/SurgLaVi) | 手术视频-文本预训练 | 24 万对片段-字幕（β 版 11.3 万对公开） | YouTube 讲解视频 + 机构档案 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surglavi/) |
 | SSG-VQA | 2024 | [arXiv](https://arxiv.org/abs/2312.10251) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/CAMMA-public/SSG-VQA) | 基于场景图的手术视觉问答 | 96 万问答（2.5 万场景） | CholecT45 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/ssg-vqa/) |
 | SurgBench | 2025 | [arXiv](https://arxiv.org/abs/2506.07603) | [🤗](https://huggingface.co/datasets/JianhuiWei/SurgBench_NIPS25) | 手术视频基础模型预训练与多任务评测 | 5300 万帧（22 种术式） | 16 个来源整合 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgbench/) |
 | SurgAtlas | 2026 | [arXiv](https://arxiv.org/abs/2606.25905) | [🤗](https://huggingface.co/datasets/filbel/SurgAtlas) | 手术视频-语言预训练与推理问答 | 15,291 个视频（2,391 小时） | YouTube | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/surgatlas/) |
@@ -229,6 +239,7 @@
 | MVOR | 2018 | [arXiv](https://arxiv.org/abs/1808.08180) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/CAMMA-public/MVOR) | 手术室人员检测与 2D/3D 姿态估计 | 732 个多视角帧 | 斯特拉斯堡大学附属医院介入手术室 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mvor/) |
 | 4D-OR | 2022 | [arXiv](https://arxiv.org/abs/2203.11937) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/egeozsoy/4D-OR) | 手术室语义场景图 / 3D 位姿 / 临床角色 | 10 台手术（6734 帧） | 模拟全膝关节置换 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/4d-or/) |
 | MM-OR | 2025 | [arXiv](https://arxiv.org/abs/2503.02579) | [链接](https://forms.gle/kj47QXEcraQdGidg6) | 手术室多模态场景图 / 全景分割 / 动作预测 | 17 台完整录制（约 500GB） | 模拟机器人膝关节置换 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/mm-or/) |
+| EgoSurgery-Phase | 2024 | [arXiv](https://arxiv.org/abs/2405.19644) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/Fujiry0/EgoSurgery) | 开放手术阶段识别（头戴相机 + 注视） | 20 段视频（15 小时） | 庆应义塾大学医院 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egosurgery-phase/) |
 | EgoExOR | 2025 | [arXiv](https://arxiv.org/abs/2505.24287) | [<img src="https://github.githubassets.com/favicons/favicon.svg" width="16">](https://github.com/ardamamur/EgoExOR) | 手术室场景图生成（第一人称 + 外部视角） | 94 分钟（84,553 帧） | 模拟脊柱手术 | [✅](https://cvi-yangwn.github.io/Surgical-Datasets/papers/egoexor/) |
 
 ---

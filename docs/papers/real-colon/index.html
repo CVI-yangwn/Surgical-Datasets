@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>REAL-Colon: A dataset for developing real-world AI applications in colonoscopy</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>60 段全程未剪辑结肠镜视频与逐帧息肉框的公开数据集</h1>
+<div class="sub">REAL-Colon: A dataset for developing real-world AI applications in colonoscopy</div>
+<div class="meta">Carlo Biffi 等；Cosmo Intelligent Medical Devices 与意大利、奥地利、日本的五家医疗机构 | arXiv 2403.02163（v1，2024-03-04）；正式版发表于 Scientific Data</div>
+<div><span class="chip">数据集</span><span class="tag">结肠镜</span><span class="tag">息肉检测</span><span class="tag">全程视频</span><span class="tag">多中心</span><span class="tag">病理标签</span></div>
+<div class="one">从四个队列 368 段录像中筛出 60 段全程结肠镜视频，逐帧标注 132 个切除病灶的 351,264 个框并附病理，公开后第一次能在整场检查上测误报，但技术验证只有一个弱检测器。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2403.02163" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/real-colon/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>结肠镜发现并切除息肉能降低结直肠癌风险，但检查质量依赖医生的技术和注意力，漏诊常见。AI 辅助检测（CADe）已在随机试验中减少漏检。</p>
+<p><strong>问题在于学术界能用的数据。</strong> 大公司有大量私有录像，公开数据却多是静态图或剪辑片段，常被降采样，来源中心少。真实检查中 80% 到 90% 的帧不含息肉，公开集要么剪掉这些阴性帧，要么只留一小部分。</p>
+<p>后果是学术模型大多逐帧训练、逐帧评测，看不到整场检查里的误报。作者想公开一份多中心、原生分辨率、全程未剪辑、带病理的视频数据，把这块缺口补上。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li><strong>做法</strong>：四个队列 368 段录像，按罚分规则每队列选 15 段；1920x1080 采集，转高质量 JPEG；十名标注员从切除时刻倒序逐帧画框，再与病理报告核对。</li><li><strong>产物</strong>：2,757,723 帧、351,264 个框、132 个切除病灶，87.6% 帧为阴性；附视频级和病灶级元数据表，约 1 TB，按知识共享署名协议公开下载。</li><li><strong>验证</strong>：现成 SSD 在 12 段测试视频上最佳 AP 0.216、误报率 0.054；只用阳性帧训练 AP 0.165；息肉出现后第 1 秒 AP 只有 0.138。</li><li><strong>边界</strong>：筛选剔除了难例；验证只有一个模型、一次训练、21 个测试病灶；两张表的同一行数字不一致。</li></ul>
+<p>下面先看数据来自哪里，再看它是怎样筛选和标注的。</p><div class="strip h"><span class="t">亮点</span><span class="i">第一次公开了含全部阴性帧的全程结肠镜视频</span><span class="i">同一病灶跨消失有唯一 ID，可以研究跟踪与重识别</span></div><div class="strip d"><span class="t">数据</span><span class="i">60 段视频，四个队列各 15 段</span><span class="i">2,757,723 帧，87.6% 阴性</span><span class="i">132 个切除病灶，19 个病理不是息肉</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据来自哪里</h3><p>四个队列性质不同：001 是 GI Genius 美国注册随机试验中的三家美国中心，002 是意大利单中心前瞻性研究，003 和 004 是奥地利和日本医院的科研采集。纳入 40 岁以上的筛查、随访或症状就诊患者，排除结直肠癌、炎症性肠病、结肠切除史、急诊和抗血栓治疗者。</p>
+<figure class="fig"><img src="images/page_002_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。公开息肉检测数据集对比：规模、分辨率、标注类型、多息肉帧和非息肉帧。</figcaption></figure>
+<p>最接近的是 SUN：158,690 帧、病理完整，但是剪辑片段，没有多息肉帧。REAL-Colon 帧数多一个数量级，<strong>增量主要来自阴性帧</strong>。</p>
+<figure class="fig"><img src="images/page_005_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。患者层面的性别、年龄、每例息肉数、肠道准备评分、内镜品牌和检查时长分布。</figcaption></figure>
+<p>平均年龄 64.6±10.7 岁，14 段视频没有息肉。<strong>肠道准备评分全在 6 到 9 分</strong>，Olympus 占 88.3%。这是一批干净、以单一品牌为主的检查。</p>
+<figure class="fig"><img src="images/page_006_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。病灶层面的组织学、大小和部位分布。</figcaption></figure>
+<p>腺瘤 55 个、增生性息肉 54 个，19 个切除物病理上不是息肉。大小以 1 到 3 毫米为主，10 毫米以上只有 3 个，锯齿状病变只有 3 个。腺瘤与非腺瘤够做二分类，大息肉和锯齿状病变太少。</p></div><div class="card" id="s4"><h3><span class="num">4</span>怎样从录像变成标注数据</h3><figure class="fig"><img src="images/page_004_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。从 368 段录像中挑出 60 段的两阶段罚分与人工选择流程。</figcaption></figure>
+<ol><li><strong>录制与转帧</strong>：专业录像机以 4:2:2 色度采样、10 位色深录 1920x1080 隔行信号，ProRes 压缩，再用 ffmpeg 转 JPEG，质量参数设为 1。</li><li><strong>匿名化与筛选</strong>：剪除屏幕病历信息、裁剪到内镜视野；按罚分排序，高罚 -6（腔内起始、吻合口、病理不清），中罚 -4（缺腔外画面、肠段不全、非息肉切除），低罚 -2（息肉可见超过 10 分钟、同时切除）。最终入选视频最高罚分 -4。</li><li><strong>倒序逐帧画框</strong>：从息肉被完全切除的那一帧往回追到首次出现，同一病灶跨帧共享 ID，每周与专家开会修正。</li><li><strong>病理核对</strong>：每个病灶与电子病例报告表逐一对应。</li></ol>
+<p><strong>罚分规则优先剔除让视频与病理对不上的情况</strong>，标签因此可信，代价是难例被系统性移出。倒序标注让标注员在息肉还小还远时就能框出它，这是后面能评测早期检测的前提。</p>
+<p>数据有了，接下来看作者怎样验证它能用。</p><div class="strip h"><span class="t">亮点</span><span class="i">倒序标注保住了早期帧</span><span class="i">筛选换来可信的病理对应，也带来偏差</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>验证协议</h3><p>技术验证用英伟达示例代码库中现成的 SSD。每个队列前 10、中 2、后 3 段分别作训练、验证、测试，共 40、8、12 段。输入 300x300，批大小 96，COCO 默认增广，一块 V100。</p>
+<p>指标是 COCO 的 AP、AP50、AP75，加两个逐视频帧级指标：误报率是阴性帧中出现预测框的比例，检出率是阳性帧中至少有一个预测框的比例。测试集是 12 段视频的全部 591,647 帧。</p>
+<p>变量有两个：每个病灶取多少阳性帧，每段视频取多少比例的阴性帧。</p></div><div class="card" id="s6"><h3><span class="num">6</span>数据统计说了什么</h3><figure class="fig"><img src="images/page_007_fig_figure_4_review.png" alt="Figure 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 4。每帧框数分布和每个息肉的框数分布。</figcaption></figure>
+<p>342,109 帧有框，其中含两个以上框的极少。每个息肉平均可见 1 分 15 秒，最长超过 12 分钟。</p>
+<figure class="fig"><img src="images/page_008_fig_figure_5_review.png" alt="Figure 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 5。1 秒消失阈值下每个息肉的轨迹段数，以及轨迹段总数随阈值的变化。</figcaption></figure>
+<p><strong>132 个息肉中只有 10 个连续出现</strong>，其余都会短暂消失；阈值放到 15 秒仍有超过 100 段。实时系统需要重识别，而不是每次消失都从头开始。</p>
+<p>图 6 显示息肉刚出现时框都很小、散布各处，之后被移到画面中央并变大。仅凭框面积估计毫米大小不可行。</p></div><div class="card" id="s7"><h3><span class="num">7</span>检测结果说了什么</h3><div class="tbl"><table><thead><tr><th>训练设置</th><th>AP</th><th>FPR</th><th>TPR</th></tr></thead><tbody><tr><td>每病灶 100 帧，无阴性</td><td>0.107</td><td>0.123</td><td>0.463</td></tr><tr><td>全部阳性，无阴性</td><td>0.165</td><td>0.080</td><td>0.495</td></tr><tr><td>全部阳性，1% 阴性</td><td>0.190</td><td>0.058</td><td>0.434</td></tr><tr><td>全部阳性，10% 阴性</td><td>0.178</td><td>0.083</td><td>0.454</td></tr><tr><td>全部阳性，全部阴性</td><td>0.216</td><td>0.054</td><td>0.505</td></tr></tbody></table></div>
+<p>同一息肉的更多重复帧有用，全部阴性帧最好。但中间段不单调：10% 阴性帧的 AP 低于 5% 的 0.193，误报率还高于不加阴性帧。<strong>可靠的只有两端的对比。</strong></p>
+<figure class="fig"><img src="images/page_009_fig_table_4_review.png" alt="Table 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 4。最佳模型在测试集不同病灶子集上的 AP 与 AR。</figcaption></figure>
+<p>腺瘤 AP 0.427，非腺瘤 0.145；小息肉 0.347，非小息肉 0.120。但非小息肉只有 4 个测试病灶，分组差距可能由个别病灶决定。</p>
+<p>息肉出现后前 1 秒 AP 0.138，前 3 秒 0.179。<strong>表 5 全部行 AP 为 0.217，表 4 全部行为 0.277</strong>，同一模型同一批帧，论文未说明原因。</p>
+<figure class="fig"><img src="images/page_010_fig_figure_7_review.png" alt="Figure 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 7。最佳模型的漏检（小而远、水泡遮挡、蓝光、过曝）与误报（污渍模糊、残渣、未充气黏膜、暗区）示例。</figcaption></figure><div class="strip d"><span class="t">数据</span><span class="i">最佳 AP 0.216，FPR 0.054，TPR 0.505</span><span class="i">前 1 秒 AP 0.138</span><span class="i">测试集 12 段视频、21 个病灶</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>为什么有用，又缺在哪里</h3><p><strong>它第一次让整场检查的误报可以测。</strong> 表 3 中误报率与 AP 不同步，例如 1% 阴性帧时误报率很低、检出率却最低，说明两者要分开报告。</p>
+<p>验证没有用上全分辨率：输入缩到 300x300，漏检又集中在小而远的息肉。早期检测难，可能部分来自早期框小加上缩放，两者没有分开。阴性帧的收益也混入了训练量增加，最后一行训练图像约为只用阳性帧时的 7.8 倍，论文没有固定训练量的对照。</p>
+<p>筛选让它成了“干净的真实世界”：没有高罚视频，肠道准备差和复杂多发切除基本缺席。只标切除病灶，论文未说明可见但未切除的息肉是否标注；若没标，误报率会被高估。</p></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li>论文未说明裁剪后的帧尺寸、各视频帧率、小息肉阈值、标注员间一致性。</li><li>论文未说明表 4 与表 5 全部行不一致的原因。</li><li>跟踪、表征、尺寸估计都没有基线，只有统计动机。</li><li>每个设置只训练一次，没有方差，分组结论不具统计意义。</li><li>划分是队列内顺序切分，测的是同中心泛化，不是跨中心泛化。</li></ul></div><div class="card" id="s10"><h3><span class="num">10</span>复用前要注意什么</h3><ul><li>数据在 Figshare+ 直接下载，约 1 TB，官方提示可能需要数天；Hugging Face 上只有第三方再打包版本。</li><li>论文称标注是 COCO 格式，官方仓库样例是 VOC 风格 XML，用仓库脚本转换。</li><li>三位作者是 AI 医疗器械公司员工，001 队列来自该公司产品的注册试验。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>全程视频加阴性帧，让误报率第一次可以在公开数据上测</div><div>倒序逐帧标注保住了早期帧和跨消失的病灶 ID</div><div>技术验证只是弱基线示例，表 4 与表 5 不一致</div><div>筛选偏向干净检查与单一品牌</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>规模、分辨率和全程录制在公开数据中领先</li><li>每个病灶有病理、大小和部位，并与病例报告核对</li><li>许可宽松，下载和统计代码开源</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>技术验证只有一个 300x300 的 SSD 和一次训练</li><li>测试病灶只有 21 个，分组结论不稳</li><li>表格数字和格式说明存在不一致</li><li>没有分割掩码，没有跟踪基线</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>按队列留出测试时，误报率和 AP 下降多少</li><li>可见但未切除的息肉是否被当作阴性</li><li>高分辨率输入和时序模型能把前 1 秒 AP 提升多少</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 3b0f4391</span><span class="s">7.7 分</span></div><p>第 1 轮：证据链和表格转录完整，已指出表 4 与表 5 不一致。D5 定位表只列四个对象，未说明 Colon-Bench 的依赖关系依据；D6 复用建议缺少按队列留出评测的具体做法；D9 部分小节缺少开头的问题和结尾过渡；H3 数字尚未逐一核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>数字核对：用 lint_report --mode note 检查所有数字，派生数字写入例外文件</li><li>深度分析各小节开头补一句问题，关键结果小节补过渡</li><li>把 Insight Pass 中 论文未说明 的项（fps、裁剪尺寸、未切除息肉）写入正文并说明影响</li><li>我的笔记补充按队列留出评测的建议</li><li>核对 2.4% 等自算数字的表述并标明是推断</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 9eeacca3 · 文稿 de6d8317</span><span class="s">8.5 分</span></div><p>第 2 轮：数字核对通过（派生数字与 PDF 表格单元格列入例外文件并注明来源）；补充训练量混杂、分辨率与早期检测无法分离、论文未说明项及其影响、按队列留出建议。无法修复的限制：Figure 6 与 Table 3 自动裁图身份不符，保留占位并转录数值；Table 5 无裁图候选；技术验证本身只有一个模型，笔记只能指出而不能补足。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

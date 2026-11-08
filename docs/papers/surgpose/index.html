@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgPose: a Dataset for Articulated Robotic Surgical Tool Pose Estimation and Tracking</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>用紫外荧光漆给 da Vinci 器械关节自动打点的姿态估计数据集</h1>
+<div class="sub">SurgPose: a Dataset for Articulated Robotic Surgical Tool Pose Estimation and Tracking</div>
+<div class="meta">Zijian Wu、Adam Schmidt 等,不列颠哥伦比亚大学、Intuitive Surgical、伍斯特理工学院、约翰斯·霍普金斯大学 | arXiv 2502.11534,v1,2025-02-17;ICRA 2025 录用</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术器械姿态估计</span><span class="tag">关键点检测</span><span class="tag">机器人手术</span><span class="tag">dVRK</span><span class="tag">立体内镜</span></div>
+<div class="one">SurgPose 让同一段机器人运动在紫外黑光和白光下各跑一遍,用荧光点自动得到约 120K 个器械实例的 7 点关键点,并附立体图像和运动学;三个人体姿态基线在换背景的验证集上 mAP 为 53.6 到 66.2,作者承认存在严重过拟合。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.3</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2502.11534" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surgpose/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>da Vinci 的运动学读数不准,而能直接从图像估计器械关节姿态的公开数据又很少。</strong> 线缆柔性和齿隙让刚体运动学偏离真实位置,把器械投影到画面还要做繁琐的手眼标定。</p>
+<p>视觉方法需要大量关键点真值,但人工逐帧点击费时易错。已有数据要么只标一个点(EndoVis15),要么只有 1.85K 帧(Du 等),要么用可见点阵再做图像修复(SurgRIPE),要么是非机器人器械(PhaKIR)。</p>
+<p>下一节看论文怎么低成本取得这种真值。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口是带关节语义的机器人器械关键点真值,而且要便宜地大量获取。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>做法是让同一段机器人运动跑两遍:一遍在紫外黑光下拍荧光点当标注,一遍在白光下拍正常画面当图像。</strong></p>
+<ul><li>在器械关节涂透明的红色紫外反应漆,白光下几乎看不见。</li><li>dVRK 驱动两个操作臂沿离线生成的闭合轨迹运动,两遍可重复。</li><li>SAMv2 在荧光视频上追踪每个点,人工复核每帧。</li><li>标定立体内镜加 RAFT 给参考深度,可把 2D 点提升到 3D。</li></ul>
+<p>结果是 30 条轨迹、约 120K 个实例、6 类器械,每实例 7 个关键点。<strong>边界:全部是离体组织、固定内镜、器械不互相遮挡。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">约 80K 训练实例,约 40K 验证实例</span><span class="i">每条轨迹 1001 步,约 7 分钟,986×1400</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>标记怎样做到看不见</h3><p>作者对漆有两条要求:涂漆前后器械外观差异尽量小,黑光下荧光要亮到能用简单方法提取。按 LUV 的建议选漆器型紫外漆,试了红绿两色,红色更透明,最终选红色。漆用丙酮可擦除。</p>
+<figure class="fig"><img src="images/page_006_fig_fig_6_review.png" alt="Fig 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 6。自上而下依次为涂漆前、涂漆后、两者差分、紫外光下的画面,每列一种器械。</figcaption></figure>
+<p>差分图在涂漆处没有明显亮斑,边缘的差异来自涂漆时器械被碰动。定量上,作者在每个关键点周围取 40×40 灰度图块,算 GLCM 的不相似度和相关性,有无标记的图块交错,判别分析和聚类都分不开。</p>
+<p><strong>但这只说明两个手工纹理特征看不出标记。</strong> 图中只画了一种器械的图块,作者也承认涂漆过量时肉眼可见。</p><div class="strip h"><span class="t">亮点</span><span class="i">不可见性的证据较弱:没有测深度网络能否检测标记。</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>运动怎样做到可重复</h3><p>两遍拍摄的前提是运动完全一致。作者手动拖动操作臂圈出矩形工作空间,在其中随机取点,用周期三次插值样条连成闭合曲线,插值成 1000 步;关节 4 到 7 用周期正弦轨迹。每一步先改关节、再移动末端,记录关节角和末端 6D 位姿,拍左右帧。</p>
+<p>装置是第一代 da Vinci IS1200 加 dVRK,两盏 365nm 50W 紫外灯,内镜全程固定。两个操作臂工作空间不重叠。</p>
+<p><strong>论文没有测量两遍之间器械位置的偏差,</strong> 而线缆柔性恰恰是作者开头说运动学不准的原因,所以标注精度的上限未知。</p></div><div class="card" id="s5"><h3><span class="num">5</span>关键点怎样自动取出</h3><p>直接阈值分割荧光点得不到语义编号,荧光强度也随姿态变化。作者在荧光视频首帧对每个点给提示,让 SAMv2 把掩码传播到整段,掩码中心即关键点。白光视频上再用 SAMv2 分割整个器械,掩码面积用作评测的尺度。</p>
+<figure class="fig"><img src="images/page_001_fig_fig_1_review_repair1.png" alt="Fig 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 1。中间为同一场景在 UV 光与白光下的画面;四角为语义关键点、关节状态与运动学、立体深度、6 类器械。</figcaption></figure>
+<p>人工修正平均每段 2.1±1.6 次,每段 1 到 10 分钟。这是流程省力的证据,但论文没有给关键点相对人工标注的像素误差。</p><div class="strip d"><span class="t">数据</span><span class="i">每段视频人工修正 2.1±1.6 次</span></div></div><div class="card" id="s6"><h3><span class="num">6</span>数据长什么样</h3><div class="tbl"><table><thead><tr><th>器械</th><th>训练实例</th><th>验证实例</th></tr></thead><tbody><tr><td>大持针器</td><td>32K</td><td>12K</td></tr><tr><td>大号持针器</td><td>12K</td><td>4K</td></tr><tr><td>显微镊</td><td>6K</td><td>8K</td></tr><tr><td>弯剪</td><td>6K</td><td>4K</td></tr><tr><td>DeBakey 镊</td><td>12K</td><td>4K</td></tr><tr><td>Prograsp 镊</td><td>12K</td><td>8K</td></tr></tbody></table></div>
+<p><strong>训练集背景是鸡胗和猪肝、灯光 100%,验证集是鸡腿肉和牛肉、灯光 50%。</strong> 所以验证集测的是跨背景泛化。</p>
+<p>数据在 Zenodo 公开,CC-BY-4.0,共 34 个文件夹;代码仓库把前 20 个定为训练,与论文"30 条轨迹"不一致。关键点 6、7 只在少数帧有,视频要按 30 FPS 抽帧才对得上标签。运动学是 dVRK 原始读数,未补偿。</p></div><div class="card" id="s7"><h3><span class="num">7</span>基线结果说了什么</h3><div class="tbl"><table><thead><tr><th>方法</th><th>mAP</th><th>推理延迟(ms)</th></tr></thead><tbody><tr><td>YOLOv8</td><td>63.3±1.23</td><td>16.4</td></tr><tr><td>ViTPose</td><td>53.6±1.06</td><td>7.7</td></tr><tr><td>DeepLabCut</td><td>66.2±2.01</td><td>194.8</td></tr></tbody></table></div>
+<p>评测用 COCO 的 OKS,尺度取器械分割面积,mAP 取阈值 0.5:0.05:0.95 的平均。DeepLabCut 最准但最慢,作者归因于全尺寸输入;另两种能实时运行。最高与最低相差 12.6 个点。</p>
+<p><strong>这些分数混合了定位能力和跨背景泛化。</strong> 论文没给同背景测试分数,也没说明 ± 的来源、训练轮数、输入尺寸和测速硬件。</p></div><div class="card" id="s8"><h3><span class="num">8</span>它真正测到了什么</h3><p>我的判断:SurgPose 测的是固定视角、离体背景、器械不遮挡、随机平滑运动下的关节定位。它不测烟雾、出血、组织遮挡、器械互挡和内镜运动。</p>
+<p>60K 帧来自 30 条连续轨迹,相邻帧几乎重复,有效样本量远小于帧数。按帧随机划分会造成泄漏,应按轨迹划分。</p>
+<p>作者在局限中说基线换背景后严重过拟合,单靠 SurgPose 难以训练出临床可用模型,建议用于小样本学习、无监督学习和基础模型微调的评测。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用要注意什么</h3><ul><li>按 30 FPS 抽帧,只依赖 1 到 5 号关键点。</li><li>自己划一个同背景测试集,与跨背景结果分开报告。</li><li>把运动学当相对量或辅助输入,不当 3D 真值。</li><li>RAFT 深度只是参考,论文没有给误差。</li><li>立体标定:论文写 OpenCV,代码仓库写 MATLAB,使用仓库提供的标定文件。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>紫外荧光漆加双光照重放,可以为任何可重复运动的机器人低成本取得视觉关键点真值。</div><div>SurgPose 是目前机器人器械关键点数据里规模最大、附带立体和运动学的一个,但场景单一。</div><div>表 III 的分数是跨背景分数,不能当作同分布定位精度。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>标注不靠人工点击,标记又近似不可见,避免了可见标记带来的捷径。</li><li>每帧同步提供立体、运动学、关节状态和器械掩码。</li><li>数据以 CC-BY-4.0 公开,附采集、标注和深度估计代码。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>不可见性只用两个 GLCM 特征检验,没有用深度网络检验。</li><li>两遍重放误差、关键点像素误差、深度误差均未报告。</li><li>基线训练细节缺失,没有同背景对照,过拟合程度无法量化。</li><li>公开文件夹数与论文轨迹数不一致。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>在白光图像上训练的分类器能否检测出紫外标记?</li><li>同背景测试的 mAP 是多少?</li><li>两遍重放之间器械位置差多少像素?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 16d09b2b</span><span class="s">7.7 分</span></div><p>第一轮笔记结构完整、数字齐全、边界清楚;叙事上部分小节缺开场问题和结尾过渡,数字检查尚未运行,复用建议还可更具体。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>运行笔记数字检查并登记派生数字</li><li>各技术小节开头补一句该节回答的问题,结尾补过渡</li><li>核对 Fig 5 只画一种器械等细节并写入</li><li>把挑战轮发现写入深度分析与局限</li><li>补数据实际可获取方式与多数类分布对评测的影响</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 cdb6c082 · 文稿 5ef4781a</span><span class="s">8.3 分</span></div><p>笔记与报告覆盖问题、采集、标注、验证、基线和局限,数字全部可追溯(派生值与外部核查值已登记)。无法修复的限制:论文缺基线训练细节、重放误差、标注误差和同背景测试,只能如实标为论文未说明;Fig 2 到 Fig 5 自动裁剪被视觉质量门拒绝,保留占位。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

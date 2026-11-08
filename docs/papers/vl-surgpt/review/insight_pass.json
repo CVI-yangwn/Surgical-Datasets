@@ -1,0 +1,39 @@
+{
+ "knowledge_points": [
+  {"term": "点跟踪", "plain": "给定首帧上的若干查询点,在后续每帧输出它们的坐标和是否可见。", "where": "sec:introduction", "needed_for": "理解两个子集的任务定义"},
+  {"term": "ICG 荧光标记", "plain": "吲哚菁绿在达芬奇荧光模式下发光,可直接看到标记点位置。", "where": "sec:introduction", "needed_for": "理解为什么只有首末帧有可靠真值"},
+  {"term": "AJ", "plain": "同时考虑位置和可见性的命中率,对 2 到 32 像素五个阈值取平均。", "where": "sec:dataset-2", "needed_for": "解读表 1 与表 2"},
+  {"term": "位置准确率", "plain": "可见点中预测落在真值若干像素以内的比例,对五个阈值取平均。", "where": "sec:dataset-2", "needed_for": "解读表 5"},
+  {"term": "EPE", "plain": "末帧预测点与荧光真值的距离,单位像素。", "where": "sec:dataset-2", "needed_for": "判断哪个指标对应荧光真值"},
+  {"term": "Track-On", "plain": "带记忆的在线 Transformer 点跟踪器,本文冻结它作主干。", "where": "sec:introduction", "needed_for": "理解 TG-SurgPT 只学残差修正"},
+  {"term": "残差修正", "plain": "不改主干输出,只额外预测一个偏移量加到初始坐标上。", "where": "sec:introduction", "needed_for": "理解增益幅度和上限"},
+  {"term": "点状态", "plain": "从 9 个词的封闭词表里给每个点选一个可见性或干扰类别。", "where": "sec:introduction", "needed_for": "判断所谓文本信息的实际含量"}
+ ],
+ "detail_questions": [
+  {"question": "器械子集是 154 段还是 307 段?", "answer": "正文与表 3 为 154 段、1,108 标注帧;补充材料表 4 为 307 段、2,232 帧、1,029 个查询点;论文未解释差异。", "evidence": ["sec:introduction", "sec:supplementary-material", "sec:dataset-2"], "status": "partly"},
+  {"question": "基线是否在本数据上微调?", "answer": "全部用原作者默认参数;只有 Track-On 在消融中有微调版本。", "evidence": ["sec:method", "sec:dataset-2", "sec:methods"], "status": "resolved"},
+  {"question": "文本单独贡献多少?", "answer": "同为短片段微调,组织 AJ 61.09 到 62.88,器械 47.48 到 49.52。", "evidence": ["sec:methods"], "status": "resolved"},
+  {"question": "无文本变体是否保留状态预测头和状态损失?", "answer": "论文未说明。", "evidence": ["sec:methods", "sec:introduction"], "status": "not_stated"},
+  {"question": "训练测试是否按手术隔离?", "answer": "只说按场景和器械类型分层 4:1,未说明是否按手术或患者。", "evidence": ["sec:method"], "status": "not_stated"},
+  {"question": "损失权重和训练超参是多少?", "answer": "论文未说明。", "evidence": ["sec:introduction", "sec:dataset-2"], "status": "not_stated"},
+  {"question": "指标在哪个分辨率下计算?", "answer": "输入缩放到 720×480,但定义中写假设 256×256,实际计算口径未说明。", "evidence": ["sec:dataset-2", "sec:method"], "status": "not_stated"},
+  {"question": "两名医生的标注一致性如何?", "answer": "论文未说明。", "evidence": ["sec:introduction"], "status": "not_stated"},
+  {"question": "表 5 的 Track-On 是否微调?", "answer": "其均值行 66.27 与 13.79 与表 1 未微调版本一致。", "evidence": ["sec:methods-2", "sec:method"], "status": "resolved"},
+  {"question": "表 3 的标记方式与正文是否一致?", "answer": "表 3 写 IR,正文写 ICG 在紫外荧光模式下显影。", "evidence": ["sec:dataset-2", "sec:introduction"], "status": "resolved"},
+  {"question": "用真值状态推理时上限是多少?", "answer": "论文未说明。", "evidence": ["sec:methods"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "文本引导显著提升跟踪", "alternative": "增益来自额外的状态分类监督和新增参数,与语言语义无关;9 词封闭词表等价于类别标签。", "separating_evidence": "保留状态头但不送文本的对照,或用可学习类别嵌入替换 CLIP 文本", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "TG-SurgPT 全面超过基线", "alternative": "领先主要来自在本数据上训练,而基线未微调。", "separating_evidence": "所有基线在同一训练集上微调后的结果", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "文本在视觉最困难场景收益最大", "alternative": "各场景差异在单次运行噪声范围内;烟雾场景最容易说明场景标签不等于难度。", "separating_evidence": "多次运行的方差和按逐点状态而非场景统计的误差", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "首个大规模视觉语言手术点跟踪数据集", "alternative": "规模不是最大;语言部分只是分类标签。", "separating_evidence": "表 3 的点数和帧数对比", "in_paper": true, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "在消融小节写明无文本变体是否保留状态头论文未说明,增益无法与额外监督分离",
+  "在评测协议中补充划分是否按手术隔离论文未说明",
+  "在深度分析中把文本主张定为小而一致的提升,不归因于语言语义",
+  "在局限中加入标注一致性和训练超参论文未说明",
+  "在失败小节写明用真值状态推理的上限论文未说明",
+  "在关键结果中说明表 5 的 Track-On 为未微调版本"
+ ]
+}

@@ -1,0 +1,177 @@
+{
+ "knowledge_points": [
+  {
+   "term": "视觉-语言预训练",
+   "plain": "用成对的视频片段和文字做对比学习,让匹配的一对在嵌入空间里靠近。",
+   "where": "sec:introduction",
+   "needed_for": "理解为什么字幕质量决定表征质量"
+  },
+  {
+   "term": "词级时间戳",
+   "plain": "每个词在音频中的起止时间,用强制音素对齐得到。",
+   "where": "sec:related-work",
+   "needed_for": "分段后能精确截取视频"
+  },
+  {
+   "term": "粗/中/细三层",
+   "plain": "对应手术流程的阶段、步骤、任务,由 GPT-4o 按语义合并句子得到。",
+   "where": "sec:model-4",
+   "needed_for": "层级消融和混合批次"
+  },
+  {
+   "term": "零样本识别",
+   "plain": "不训练分类器,用类别描述文本的嵌入与视频嵌入的相似度直接分类。",
+   "where": "sec:dataset-2",
+   "needed_for": "表 2 的主结果"
+  },
+  {
+   "term": "逐视频宏平均 F1",
+   "plain": "先在每段视频内对各类求 F1 再平均,最后跨视频平均,避免长视频占优。",
+   "where": "sec:dataset-2",
+   "needed_for": "读懂标准差为什么很大"
+  },
+  {
+   "term": "CoOp",
+   "plain": "冻结编码器,只学习拼在类名前面的几个可训练文本标记。",
+   "where": "sec:appendix",
+   "needed_for": "图 9 第一行"
+  },
+  {
+   "term": "MS-TCN 与分段 F1",
+   "plain": "多阶段时序卷积头在整段视频上预测;分段 F1@k 按重叠阈值比较预测段与真值段。",
+   "where": "sec:model",
+   "needed_for": "表 3 的时间一致性结论"
+  },
+  {
+   "term": "动态采样步长",
+   "plain": "每个片段取固定帧数,步长随片段时长变化。",
+   "where": "sec:dataset",
+   "needed_for": "表 8 消融"
+  }
+ ],
+ "detail_questions": [
+  {
+   "question": "引言里的提升幅度用的是哪个指标、对比哪个模型?",
+   "answer": "混用。AutoLaparo +28、GraSP +25 是 F1 对 PeskaVLP;HeiChole +10.51 是准确率;Cholec80 +10 与准确率之差 9.86 吻合,F1 之差为 11.14;StrasBypass70 +11.14 是 F1 对 PeskaVLP,而 F1 最强基线是 HecVL 23.91。",
+   "evidence": [
+    "sec:introduction",
+    "sec:dataset-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "β 版在 Cholec80 上的提升有多大?",
+   "answer": "引言写 +0.3%,表 2 中 F1 为 39.42 对 PeskaVLP 39.39,差 0.03 个点。",
+   "evidence": [
+    "sec:introduction",
+    "sec:dataset-2"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "表 8 的提升幅度与正文一致吗?",
+   "answer": "不一致。正文写比步长 1 高 6.78 到 14.55、比步长 4 高 9.08 到 22.19;按表格,比步长 1 高 2.34 到 22.19,比步长 4 高 3.38 到 14.55。",
+   "evidence": [
+    "sec:model-3"
+   ],
+   "status": "resolved"
+  },
+  {
+   "question": "9,758 段源视频为什么只剩 5,317 段?",
+   "answer": "无解说视频在第一阶段丢弃,其余在片段级过滤后整段无保留。各环节丢弃多少段视频论文未说明。",
+   "evidence": [
+    "sec:related-work",
+    "sec:datasets"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "三层合用更好,是层级还是样本量?",
+   "answer": "论文没有等样本量对照,无法区分。",
+   "evidence": [
+    "sec:model-3"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "改写后的字幕是否经过人工质量评估?",
+   "answer": "只给了两条示例,没有错误率或人工评分。",
+   "evidence": [
+    "sec:model-4",
+    "sec:limitations"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "专科与术式弱标签准确率多少?",
+   "answer": "论文未说明。",
+   "evidence": [
+    "sec:dataset"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "零样本用的 16 帧窗口与线性探测的 32 帧为何不同?",
+   "answer": "线性探测按图 11 的时间窗口分析选 32 帧;零样本 16 帧与预训练帧数一致。",
+   "evidence": [
+    "sec:dataset-2",
+    "sec:results"
+   ],
+   "status": "partly"
+  },
+  {
+   "question": "有没有在 SurgLaVi 上训练已有复杂模型?",
+   "answer": "没有。",
+   "evidence": [
+    "sec:dataset-2",
+    "sec:conclusion"
+   ],
+   "status": "not_stated"
+  },
+  {
+   "question": "文本过滤的验证集由几人标注?",
+   "answer": "212 条字幕由一位手术数据科学专家标注。",
+   "evidence": [
+    "sec:model-4"
+   ],
+   "status": "resolved"
+  }
+ ],
+ "challenges": [
+  {
+   "claim": "数据质量比模型复杂度更关键",
+   "alternative": "提升来自时空注意力视频骨干和更大的批次,而不是数据。",
+   "separating_evidence": "同一模型在旧数据集上训练,或旧模型在本数据上训练。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "层级结构带来互补监督",
+   "alternative": "三层合用只是样本更多。",
+   "separating_evidence": "等样本量下比较单层与混合层。",
+   "in_paper": false,
+   "verdict": "not_separated"
+  },
+  {
+   "claim": "流水线三组件相互增强",
+   "alternative": "完整流水线的提升部分来自过滤后样本更干净且分布变化,单次训练差异也可能是噪声。",
+   "separating_evidence": "多种子方差和 MLSC+CE 组合。",
+   "in_paper": false,
+   "verdict": "partly_supported"
+  },
+  {
+   "claim": "β 子集已超过此前最好方法",
+   "alternative": "优势集中在 AutoLaparo、GraSP,Cholec80 只多 0.03,BernBypass70 更差。",
+   "separating_evidence": "逐基准看表 2。",
+   "in_paper": true,
+   "verdict": "partly_supported"
+  }
+ ],
+ "revisions": [
+  "研究问题末尾补核心观点速览",
+  "关键结果补引言增幅混用指标、β 版 Cholec80 只多 0.03 的说明",
+  "消融小节补表 8 正文与表格不一致",
+  "深度分析写明层级与样本量、数据与模型都未分开",
+  "局限补改写字幕无人工评估、弱标签准确率、源视频丢弃数论文未说明"
+ ]
+}

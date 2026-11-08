@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Bridging Vision and Language for Robust Context-Aware Surgical Point Tracking: The VL-SurgPT Dataset and Benchmark</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>给手术跟踪点打上"被烟雾挡住""被器械挡住"的标签:在体点跟踪数据集与文本引导基线</h1>
+<div class="sub">Bridging Vision and Language for Robust Context-Aware Surgical Point Tracking: The VL-SurgPT Dataset and Benchmark</div>
+<div class="meta">Rulin Zhou、Wenlong He、An Wang 等,香港中文大学、深圳市人民医院、深圳大学 | arXiv 2511.12026,v1,2025-11-15;AAAI 2026</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术点跟踪</span><span class="tag">在体数据</span><span class="tag">荧光标记</span><span class="tag">视觉语言</span><span class="tag">达芬奇手术</span></div>
+<div class="one">VL-SurgPT 用 20 台达芬奇胃肠手术做出 908 个带逐点状态标签的在体跟踪片段;在冻结 Track-On 上加文本引导修正的 TG-SurgPT 把组织 AJ 从 58.55 提到 62.88,但其中文本单独贡献约 2 个点,且与额外的状态监督没有分开。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 11 条，其中 6 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2511.12026" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/vl-surgpt/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">10 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术画面里的点常被烟雾、反光、器械和形变干扰,而现有数据集只告诉你点在哪,不告诉你点当时处在什么状态。</strong> 通用点跟踪器在 TAP-Vid 上表现很好,搬到手术视频上明显退化。</p>
+<p>已有手术跟踪数据集各缺一块:SuPer 是离体数据,SurgT 标的是框,STIR 只有首末端点,SurgPose 在实验室环境,SurgMotion 只有坐标。没有一个能告诉研究者"这个点是因为什么跟丢的"。</p>
+<p>作者的假设是:如果模型知道一个点此刻被什么干扰,就能更好地处理它。要检验这个假设,先要有带状态标签的数据。</p><div class="strip h"><span class="t">亮点</span><span class="i">缺口在标签类型:已有数据集只有坐标,没有逐点的干扰原因。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p>论文做了两件事:一个带逐点状态标签的在体数据集,和一个读状态标签的跟踪基线。</p>
+<ul><li>数据:908 个片段,组织 754 个(17,171 个可见点,5 种场景),器械 154 个(7 类器械),每个点带 9 种状态之一。</li><li>真值:吲哚菁绿(ICG)荧光给首末帧锚点,中间帧由 2 名医生按每秒 1 帧手标。</li><li>方法:冻结 Track-On 和 CLIP 文本编码器,先预测点状态,再用状态文本输出坐标修正量。</li><li>结果:组织 AJ 62.88、器械 AJ 49.52,四项精度指标第一,速度 9.72 fps。</li></ul>
+<p><strong>边界:基线没有在本数据上微调;文本的净增益约 2 个点,和额外的状态监督混在一起;只有一家医院、一种平台。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">908 个片段,其中组织 754 个、器械 154 个</span><span class="i">20 台手术约 33 小时视频,筛到 115 分钟</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>真值怎么在活体手术里拿到</h3><p>在体手术不能反复做同一个动作,所以作者只在每个短片段两端取荧光真值:</p>
+<ol><li>术前在器械尖端、关节、杆部涂 ICG,术中在组织表面点 2 到 4 个点。</li><li>切到荧光模式并保持静止,记录首帧坐标。</li><li>切回白光正常操作 5 到 10 秒。</li><li>再切到荧光模式,记录末帧坐标。</li></ol>
+<p>中间帧由两名医生按每秒 1 帧手标,同时给每个点打类型和状态标签。</p>
+<figure class="fig"><img src="images/page_003_fig_figure_2_review.png" alt="Figure 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 2。数据采集与标注流程:手术场景、荧光取真值三步、标注界面、中间帧标注,以及 9 种状态、7 类器械、5 种场景示例。</figcaption></figure>
+<p><strong>真值因此分两层。</strong> 末帧终点误差(EPE)对应荧光真值,可靠;AJ 和位置准确率在中间帧上算,反映的是与医生手标的一致程度。两名医生之间的一致性论文未说明。</p>
+<p>下一节看两个子集各有多少。</p><div class="strip h"><span class="t">亮点</span><span class="i">只有首末帧有荧光锚点,中间帧真值是人工判断。</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>两个子集与状态标签</h3><div class="tbl"><table><thead><tr><th>子集</th><th>片段</th><th>标注帧</th><th>可见标注点</th><th>组织方式</th></tr></thead><tbody><tr><td>组织</td><td>754</td><td>7,117</td><td>17,171</td><td>5 种场景</td></tr><tr><td>器械(正文)</td><td>154</td><td>1,108</td><td>7,427</td><td>7 类器械</td></tr><tr><td>器械(补充材料表 4)</td><td>307</td><td>2,232</td><td>7,427</td><td>7 类器械</td></tr></tbody></table></div>
+<p>器械子集有两套口径,论文没有解释。我的判断是表 4 按器械计数,一个片段里有两件器械就算两次。</p>
+<figure class="fig"><img src="images/page_001_fig_figure_1_review.png" alt="Figure 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 1。单个组织点和器械点的完整标签,以及两个子集的规模。</figcaption></figure>
+<p>状态从 9 个词的封闭词表中选:清晰、牵拉、反光、组织遮挡、烟雾遮挡、器械遮挡、出视野、外部遮挡、自遮挡。<strong>所以这里的"文本"本质上是分类标签,不是自由语言描述。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">组织烟雾遮挡占 24.5%,器械点约三分之一处于不利状态</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>TG-SurgPT 怎样用状态标签</h3><p>TG-SurgPT 是在冻结的 Track-On 上加的一个修正头:</p>
+<ol><li>Track-On 输出查询点特征、帧特征、粗匹配位置和初始坐标。</li><li>属性预测头从视觉特征预测点类型和点状态。</li><li>状态文字经冻结的 CLIP 文本编码器变成特征,与查询点特征做交叉注意力。</li><li>再经一层可变形注意力输出坐标修正量,加到初始坐标上。</li></ol>
+<figure class="fig"><img src="images/page_005_fig_figure_3_review.png" alt="Figure 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 3。TG-SurgPT 结构:冻结的 Track-On 与 CLIP 文本编码器、属性预测头、文本引导注意力。</figcaption></figure>
+<p>训练时用真值状态,推理时用模型自己预测的状态。损失是距离损失、轨迹平滑损失和状态分类损失三项之和,权重和训练超参论文未说明。</p>
+<p><strong>主干冻结,所以能用稀疏的真实标注训练;代价是只能在主干输出上做小幅修正。</strong></p>
+<p>下一节看这个修正换来了多少。</p></div><div class="card" id="s6"><h3><span class="num">6</span>主结果:谁在前面</h3><figure class="fig"><img src="images/page_006_fig_table_1_review.png" alt="Table 1" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 1。八个视觉基线与 TG-SurgPT 在两个子集上的四项指标和速度。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>方法</th><th>组织 AJ</th><th>组织 EPE</th><th>器械 AJ</th><th>速度</th></tr></thead><tbody><tr><td>RAFT</td><td>27.81</td><td>99.73</td><td>23.67</td><td>12.47</td></tr><tr><td>MFTIQ</td><td>61.52</td><td>19.81</td><td>46.56</td><td>0.71</td></tr><tr><td>Track-On</td><td>58.55</td><td>13.79</td><td>46.97</td><td>10.85</td></tr><tr><td>TG-SurgPT</td><td>62.88</td><td>11.02</td><td>49.52</td><td>9.72</td></tr></tbody></table></div>
+<ul><li>光流类方法 AJ 都低于 30,说明逐帧光流在手术跟踪上会累积漂移。</li><li>MFT 和 MFTIQ 精度高,但每秒只处理 1.42 和 0.71 帧。</li><li>TG-SurgPT 四项精度第一,但比 Track-On 慢。</li></ul>
+<p><strong>这张表的比较不对等:八个基线都用默认参数,没有在本数据上训练,而 TG-SurgPT 训练过。</strong></p><div class="strip d"><span class="t">数据</span><span class="i">组织 AJ 58.55 到 62.88,器械 AJ 46.97 到 49.52</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>消融:微调和文本各贡献多少</h3><figure class="fig"><img src="images/page_007_fig_table_2_review_repair1.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。是否微调、短或长片段、是否加文本的消融。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>设置</th><th>组织 AJ</th><th>器械 AJ</th></tr></thead><tbody><tr><td>Track-On 不微调</td><td>58.55</td><td>46.97</td></tr><tr><td>微调,短片段,无文本</td><td>61.09</td><td>47.48</td></tr><tr><td>微调,短片段,有文本</td><td>62.88</td><td>49.52</td></tr></tbody></table></div>
+<p><strong>这张表把总增益拆成两段。</strong> 组织上微调贡献 2.54、文本贡献 1.79;器械上微调只贡献 0.51,文本贡献 2.04。</p>
+<p>短片段(31 帧)普遍好于长片段(181 帧)。"无文本"变体是否仍保留状态预测头和状态损失,论文未说明。如果没保留,文本那一行同时多了一项监督,约 2 个点里有多少来自语言本身无法分开。</p>
+<p>下一节看哪些场景最难。</p><div class="strip h"><span class="t">亮点</span><span class="i">文本的净增益在两个子集上都约 2 个点。</span></div></div><div class="card" id="s8"><h3><span class="num">8</span>场景与状态:难在哪里</h3><figure class="fig"><img src="images/page_014_fig_table_5_review.png" alt="Table 5" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 5。MFT、Track-On、TG-SurgPT 在五种组织场景下的准确率和终点误差。</figcaption></figure>
+<p>TG-SurgPT 在五种场景的平均准确率都最高,但领先 MFT 只有 0.36 到 1.53 个点。差距主要体现在终点误差:器械遮挡下比 Track-On 低 3.70 像素,烟雾下只低 0.11。表 5 的 Track-On 是未微调版本,所以这里同样混着微调的增益。</p>
+<p>按九个方法的均值,组织形变最难,电灼烟雾反而最容易(58.62%)。作者解释为烟雾带来可用的时间模式,但没有实验检验。</p>
+<figure class="fig"><img src="images/page_015_fig_figure_9_review.png" alt="Figure 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Figure 9。五种组织场景下 MFT、微调 Track-On 与 TG-SurgPT 的定性对比。</figcaption></figure>
+<p>状态预测并不准:组织三种遮挡类别的准确率在 0.572 到 0.628,器械出视野只有 0.481,均值分别为 0.707 和 0.642。<strong>推理时喂给文本分支的状态约三成是错的。</strong> 改用真值状态能涨多少,论文未说明。</p><div class="strip d"><span class="t">数据</span><span class="i">状态分类均值:组织 0.707,器械 0.642</span></div></div><div class="card" id="s9"><h3><span class="num">9</span>结果没说什么</h3><ul><li>没说语言是增益来源。9 词封闭词表等价于类别标签,论文没有用可学习类别嵌入替换 CLIP 文本做对照。</li><li>没说 TG-SurgPT 优于所有方法。只有 Track-On 有微调对照,其他基线微调后差距多大未知。</li><li>没说结果稳定。全部单次运行,1 到 2 个点的差异没有方差支撑。</li><li>没说能推广。一家医院、达芬奇 Xi、四类胃肠根治术。</li></ul>
+<figure class="fig"><img src="images/page_011_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。与已有组织跟踪和器械关键点数据集的规模与标注层级对比。</figcaption></figure>
+<p>数据集也不是在所有维度上最大:组织总点数 17,171 少于 SurgMotion 和 SurgT,器械标注帧远少于离体的 SurgPose。它的独特之处是"在体、有状态标签、组织与器械兼有"。</p><div class="strip h"><span class="t">亮点</span><span class="i">能确认的是在冻结主干上加状态监督和修正头有小而一致的提升。</span></div></div><div class="card" id="s10"><h3><span class="num">10</span>复现与数据获取</h3><p>数据在 Hugging Face 公开(zhourulin88888/VL-SurgPT),非受限访问,共 908 个视频片段,目录结构与表 4 的五种场景一一对应。每个片段有坐标文件和状态文件。</p>
+<p>复现前要注意:</p>
+<ul><li>仓库没有许可证和训练测试划分文件,论文的 4:1 划分无法复现;划分是否按手术隔离论文未说明。</li><li>代码仓库已过期,训练超参论文未说明。</li><li>指标在哪个分辨率下计算论文未说明,与其他数据集比较前要统一。</li><li>抽查的状态文件中有一处拼写为 "Eternal Occlusion",使用前要清洗词表。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>把它当作带逐点干扰标签的在体短片段跟踪测试集来用。</div><div>文本引导的净增益约 2 个点,未与额外状态监督分离。</div><div>比较新方法时要同时报告微调后的视觉基线。</div><div>数据公开可下载,但没有官方划分和许可证。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>在体手术数据,首末帧有荧光真值。</li><li>逐点状态标签,可以按干扰类型拆分误差。</li><li>组织与器械同一协议。</li><li>消融把微调和文本两段增益分开报告。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>单中心、单平台、单一术式类别。</li><li>基线未微调,主表比较不对等。</li><li>器械规模两套口径,标记方式在表 3 与正文不一致。</li><li>训练细节和标注一致性论文未说明。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>推理时用真值状态,TG-SurgPT 的上限是多少?</li><li>用可学习类别嵌入替换 CLIP 文本,增益是否保留?</li><li>所有基线微调后与 TG-SurgPT 的差距还剩多少?</li><li>按手术划分训练测试后结果是否变化?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 baa0eb51</span><span class="s">7.8 分</span></div><p>第一轮:证据链与主张边界完整,微调与文本增益已拆分。数字尚未逐一核验(H3 unknown);部分小节缺少结尾过渡,我的笔记偏清单,复用建议可更具体;器械 EPE 偏高的推断需标明;烟雾场景最容易的替代解释需与数据对照。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>8</b></span><span>D5 <b>8</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>7</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>运行 Insight Pass 三轮并把挑战轮结论写回正文</li><li>对正文做数字核验,推导数写入例外清单</li><li>为数据与任务定义、关键结果等小节补结尾过渡</li><li>在我的笔记中按要复制、要检查、要避免三类重写复用建议</li><li>核对器械规模两套口径的推断措辞,标明为我的判断</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 bb07b305 · 文稿 af2c7d72</span><span class="s">8.5 分</span></div><p>第二轮:Insight Pass 的 6 条修订已写入正文,数字核验无未匹配项(推导值与表内数字列入例外清单)。主要限制无法在笔记内修复:训练超参、无文本变体是否保留状态头、划分是否按手术隔离、标注一致性论文均未说明;图 4、图 6 裁剪修复后仍含图注,图 5 无候选,保留占位。这是模型自评。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

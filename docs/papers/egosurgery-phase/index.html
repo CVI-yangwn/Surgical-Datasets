@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EgoSurgery-Phase: A Dataset of Surgical Phase Recognition from Egocentric Open Surgery Videos</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>主刀头戴眼动相机拍下的开放手术阶段数据集，以及用注视引导掩码的视频预训练</h1>
+<div class="sub">EgoSurgery-Phase: A Dataset of Surgical Phase Recognition from Egocentric Open Surgery Videos</div>
+<div class="meta">Ryo Fujii, Masashi Hatano, Hideo Saito, Hiroki Kajita（庆应义塾大学） | arXiv 2405.19644（v3），MICCAI 2024</div>
+<div><span class="chip">数据集论文</span><span class="tag">开放手术</span><span class="tag">第一人称视频</span><span class="tag">手术阶段识别</span><span class="tag">眼动注视</span><span class="tag">掩码自编码器</span></div>
+<div class="one">20 段真实开放手术的第一人称视频经去标识化得到 15 小时、9 阶段、带注视的数据集，注视引导掩码让 VideoMAE 的宏平均 Jaccard 到 33.9，但任务远未解决。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 5 条论文未说明</span><span class="tag">反向检验 3 条</span></div>
+<div><div class="score"><span class="v">8.2</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2405.19644" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/egosurgery-phase/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p>手术阶段识别是把一台手术逐帧归入消毒、切开、缝合这类阶段，是实时辅助和教学的基础。<strong>公开数据几乎全是腹腔镜手术</strong>，例如 Cholec80 和 AutoLaparo。</p>
+<p>开放手术难在两点。没有内镜，只能用外部或头戴相机；画面还会拍到患者、助手和护士的脸，隐私处理更麻烦。作者想补的就是这个空缺。</p>
+<p>下一节先给出全文的答案，再逐项展开。</p></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><ul><li>数据：20 段视频、10 种术式、8 位主刀，处理后 15 小时、27,694 帧，9 个阶段，附注视。</li><li>隐私代价：下采样到 0.5 fps 并剔除含个人信息的帧，原始 28 小时只剩 15 小时。</li><li>难度：分离和缝合约占 78% 的帧，最好结果的宏平均 Jaccard 只有 33.9。</li><li>方法：GGMAE 只改 VideoMAE 的掩码选择，按注视热图优先遮住医生看的区域。</li><li>边界：测试集 5 段视频、单次运行；注视的作用和避开灯光外黑区的作用没有分开。</li></ul><div class="strip h"><span class="t">亮点</span><span class="i">首个公开的真实开放手术阶段识别视频数据集（作者自述）</span><span class="i">注视只在预训练时使用，推理不需要眼动设备</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪里来</h3><p><strong>全部视频来自一家日本医院、主刀一个视角。</strong>主刀头戴 Tobii 眼动相机，原始 25 fps、1920 × 1080，单段 28 至 234 分钟，共 28 小时。录制获庆应义塾大学医学部伦理委员会批准，并取得书面知情同意。</p>
+<p>去标识化分三步：下采样到 0.5 fps，模糊患者面部，剔除含其他个人信息的帧。处理后平均每段 46 分钟、共 15 小时。剔除了多少帧、集中在哪些阶段，论文未说明。</p>
+<p>数据规模清楚了，接下来看标签本身有多不均衡。</p><div class="strip d"><span class="t">数据</span><span class="i">20 段视频，10 种术式，8 位主刀</span><span class="i">原始 28 小时，处理后 15 小时</span></div></div><div class="card" id="s4"><h3><span class="num">4</span>九个阶段与类别分布</h3><figure class="fig"><img src="images/page_004_fig_fig_3_review.png" alt="Fig 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 3。9 个阶段的帧数分布。</figcaption></figure>
+<p>专家外科医生逐帧标注 9 个阶段，共 27,694 帧。<strong>分离 12,210 帧、缝合 9,486 帧，合计约 78%</strong>；消毒只有 240 帧。所以论文用宏平均：每个阶段等权，少数类不会被淹没。</p>
+<p>划分写的是 14 段训练、2 段验证、5 段测试，合计 21 段，与 20 段视频对不上，论文未说明原因。</p>
+<p>标签是这样的，下面看作者如何利用注视。</p><div class="strip d"><span class="t">数据</span><span class="i">27,694 帧标注</span><span class="i">最大类 12,210 帧，最小类 240 帧</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>注视引导掩码怎么工作</h3><figure class="fig"><img src="images/page_003_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。RGB 图像、注视热图、随机掩码与注视引导掩码对比。</figcaption></figure>
+<p>掩码自编码器的做法是遮住大部分视频块再重建。随机掩码会把很多块落在手术灯照不到的全黑区域，重建它们几乎学不到东西。</p>
+<p>GGMAE 对每个视频块累加注视热图值，在每个时间索引上做带温度 τ 的 softmax，再按这个概率无放回采样 90% 的块遮住。<strong>τ 越小，掩码越集中在注视点。</strong>损失仍是被遮块的像素均方误差。</p>
+<figure class="fig"><img src="images/page_005_fig_fig_4_review.png" alt="Fig 4" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 4。GGMAE 总体结构。</figcaption></figure>
+<p>预训练 800 轮后接 MLP 头全量微调 100 轮，骨干 ViT-S，输入 10 帧、224 × 224。注视热图的高斯宽度论文未说明。</p>
+<p>机制讲完，看它在数据集上的结果。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_007_fig_table_2_review_repair1.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。同为 ViT-S 骨干的 MAE 类方法对比。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>方法</th><th>精确率</th><th>召回率</th><th>Jaccard</th></tr></thead><tbody><tr><td>NETE（此前最好）</td><td>43.7</td><td>35.2</td><td>27.5</td></tr><tr><td>VideoMAE</td><td>49.3</td><td>41.6</td><td>29.8</td></tr><tr><td>VideoMAE V2</td><td>54.2</td><td>43.2</td><td>30.8</td></tr><tr><td>GGMAE</td><td>51.7</td><td>45.6</td><td>33.9</td></tr></tbody></table></div>
+<p>GGMAE 的 Jaccard 比 NETE 高 6.4，比 VideoMAE V2 高 3.1。<strong>但它的精确率低于 VideoMAE V2，优势来自召回率。</strong>NETE 与 GGMAE 骨干不同，只有 MAE 类那几行是同骨干比较。</p>
+<p>结果之外，还要问这些提升有多可靠。</p><div class="strip d"><span class="t">数据</span><span class="i">GGMAE Jaccard 33.9</span><span class="i">同骨干随机掩码 30.6，管状掩码 29.8</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>消融与超参数敏感性</h3><figure class="fig"><img src="images/page_008_fig_table_3_review.png" alt="Table 3" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 3。掩码策略、掩码率与温度消融。</figcaption></figure>
+<p>同掩码率 0.90 下，注视引导比随机高 3.3。掩码率在 0.90 处最好，温度在 0.5 处最好；<strong>τ 降到 0.25 时 Jaccard 跌到 27.2，低于随机掩码</strong>，说明掩码过度集中反而有害。</p>
+<p>超参数用网格搜索确定，搜索用的是验证集还是测试集，论文未说明。所有结果都是单次运行，没有方差。</p>
+<p>这些缺口引出下一节的核心疑问。</p></div><div class="card" id="s8"><h3><span class="num">8</span>提升真的来自注视吗</h3><p>样例帧里，注视几乎总落在灯光照亮的术野。<strong>我的判断：按亮度或显著性挑掩码可能拿到相近的提升。</strong>论文没有这个对照，所以注视带来的语义和避开黑区两种解释无法区分。</p>
+<p>另外，测试集只有 5 段视频，消毒这类小类在测试集里帧数很少，单个阶段的误判会显著改变宏平均。</p>
+<p>最后看复现和使用时要核对什么。</p></div><div class="card" id="s9"><h3><span class="num">9</span>复现与使用前要核对什么</h3><ul><li>数据需填写项目页的 Google 表单申请，许可为非商业学术用途。</li><li>先拿到实际划分文件，正文的 14、2、5 与 20 段视频对不上。</li><li>同时报告逐阶段 Jaccard，避免宏平均掩盖小类。</li><li>10 种术式的名称与各自视频数论文未说明，跨术式泛化无法评估。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>开放手术第一人称阶段识别现在有了可申请的真实数据，但规模只有 20 段视频。</div><div>注视作为预训练掩码先验有效，部署时不需眼动设备。</div><div>最好结果 Jaccard 33.9，任务远未解决。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>真实临床数据，伦理审批与去标识化流程写明。</li><li>附带注视，这是腹腔镜数据集没有的信号。</li><li>方法改动小，消融覆盖掩码策略、掩码率和温度。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>划分数字自相矛盾，测试集小，单次运行。</li><li>缺少按亮度或显著性挑掩码的对照。</li><li>超参数搜索所用划分、高斯宽度、术式名称均未说明。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>注视引导与亮度引导掩码相比差多少？</li><li>在验证集上选超参数后，测试集结果是否保持？</li><li>加入时序模型后 GGMAE 表示能否继续提升？</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 3cfb4d69</span><span class="s">7.4 分</span></div><p>第 1 轮原版流程笔记（模型自评）。数据规模、阶段分布、三张结果表和注视掩码公式都在。D4=7：测试集调参风险和单次运行写了，但亮度显著性替代解释只在深度分析一句带过。D5=7：定位表较粗，没有说明 EgoSurgery-Tool 与本数据集的关系。D6=7：我的笔记缺少数据加载层面的提醒。D7=7：研究问题缺核心观点速览。D9=6：多数小节开头没有本节要回答的问题，数字后缺意义，小节结尾缺过渡。H3 未做数字核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>研究问题末尾补核心观点速览</li><li>用 lint_report.py --mode note 做数字核对并登记推导值（合计、倍数、占比、差值）</li><li>Insight Pass 挑战轮：核对注视与亮区重合、21 段与 20 段矛盾、测试集调参、精确率不占优</li><li>各小节开头补本节问题，数字后补意义，结尾补过渡</li><li>把高斯宽度、术式名称、剔除帧数、划分依据统一写成 论文未说明 并写明影响</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 c69e56d2 · 文稿 0c910791</span><span class="s">8.2 分</span></div><p>第 2 轮（模型自评）。补了核心观点速览、各节开头问题与过渡、数字核对（Fig 3 帧数来自图像，已登记例外）。挑战轮写明注视与亮区未分开、测试集调参风险、精确率不占优。D5=7：论文本身只对比阿腹腔镜数据集和 MAE 方法，没有与其他开放手术或第一人称数据集逐项比较，笔记无法补足。不可修复的限制：划分 14/2/5 与 20 段矛盾、高斯宽度、术式名称、超参数搜索所用划分论文均未说明。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>7</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

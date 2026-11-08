@@ -1,0 +1,36 @@
+{
+ "knowledge_points": [
+  {"term": "CADe 与 CADx", "plain": "前者在视频里提示息肉位置，后者判断息肉是腺瘤还是非腺瘤。", "where": "sec:abstract", "needed_for": "理解为何需要病理标签"},
+  {"term": "阴性帧", "plain": "不含任何息肉的帧，全程视频中占大多数。", "where": "sec:dataset-2", "needed_for": "误报率评测与表 3 的阴性帧消融"},
+  {"term": "BBPS", "plain": "波士顿肠道准备评分，0 到 9 分，越高肠道越干净。", "where": "sec:methods", "needed_for": "判断数据偏向干净检查"},
+  {"term": "罚分筛选", "plain": "按偏离理想录制条件的程度给视频扣分，扣分少的优先入选。", "where": "sec:methods", "needed_for": "筛选偏差的讨论"},
+  {"term": "轨迹段", "plain": "同一息肉连续出现的一段，消失超过阈值就开始新的一段。", "where": "sec:dataset-3", "needed_for": "跟踪与重识别的动机"},
+  {"term": "AP 与 AR", "plain": "COCO 口径在多个 IoU 阈值上平均的精度与召回。", "where": "sec:dataset-3", "needed_for": "表 3 到表 5"},
+  {"term": "逐视频 FPR 与 TPR", "plain": "阴性帧中出现预测框的比例，与阳性帧中有报警的比例。", "where": "sec:dataset-3", "needed_for": "整场检查误报的结论"}
+ ],
+ "detail_questions": [
+  {"question": "全部阴性帧时训练集多大，为何 AP 提升", "answer": "1794907 张，约为只用阳性帧的 7.8 倍；AP 从 0.165 到 0.216，FPR 从 0.080 到 0.054。", "evidence": ["sec:dataset-3"], "status": "resolved"},
+  {"question": "阴性帧比例的影响是否单调", "answer": "不单调：10% 时 AP 0.178 低于 5% 的 0.193，FPR 0.083 高于不加阴性帧。单次训练无方差。", "evidence": ["sec:dataset-3"], "status": "resolved"},
+  {"question": "表 4 与表 5 全部行为何 AP 不同", "answer": "同一模型同一 82,106 帧，AP 一为 0.277 一为 0.217，AR 同为 0.381；论文未说明原因。", "evidence": ["sec:dataset-3"], "status": "not_stated"},
+  {"question": "裁剪到内镜视野后的帧尺寸是多少", "answer": "论文只说采集 1920x1080 并裁剪到视野，未给裁剪后尺寸。", "evidence": ["sec:methods"], "status": "not_stated"},
+  {"question": "各视频帧率是多少", "answer": "元数据含 fps 字段，但论文正文未给数值。", "evidence": ["sec:methods", "sec:dataset-3"], "status": "not_stated"},
+  {"question": "未切除的可见息肉是否标注", "answer": "论文只描述从切除时刻倒推标注切除病灶，未说明未切除者。", "evidence": ["sec:dataset-3"], "status": "not_stated"},
+  {"question": "小息肉的阈值", "answer": "表 4 区分小与非小息肉，阈值论文未说明。", "evidence": ["sec:dataset-3"], "status": "not_stated"},
+  {"question": "数据划分是否按队列分层", "answer": "是，每个队列前 10、中 2、后 3 段，共 40、8、12 段。", "evidence": ["sec:dataset-3"], "status": "resolved"},
+  {"question": "标注员间一致性如何", "answer": "只说每周开会迭代修正，未报告一致性指标。", "evidence": ["sec:dataset-3"], "status": "not_stated"},
+  {"question": "最终入选视频的罚分范围", "answer": "最高罚分为 -4，没有任何高罚视频入选。", "evidence": ["sec:methods"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "阴性帧训练提升检测", "alternative": "提升来自训练图像总数和训练时长增加，而非阴性帧本身", "separating_evidence": "固定训练步数或图像总数下比较有无阴性帧", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "数据代表真实世界结肠镜", "alternative": "筛选后的 60 段偏向干净、单品牌、无复杂情况的检查", "separating_evidence": "报告 368 段候选的 BBPS 与品牌分布并与入选集对比", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "非小息肉与非腺瘤更难检测", "alternative": "分组只有 4 到 8 个测试病灶，差距由个别病灶决定", "separating_evidence": "按病灶报告结果或给置信区间", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "早期检测更难", "alternative": "早期帧本身框小，300x300 输入使小目标丢失，难度部分来自分辨率", "separating_evidence": "高分辨率输入下重测前 1 秒 AP", "in_paper": false, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "关键结果中注明阴性帧提升可能混入训练集规模和训练时长的影响",
+  "局限与深度分析写入 论文未说明 的帧尺寸、帧率、小息肉阈值、未切除息肉和一致性",
+  "深度分析补充早期检测难度与 300x300 输入之间无法分离",
+  "我的笔记补充按队列留出评测和多种子重复的建议",
+  "深度分析各小节开头补问题句、结尾补过渡"
+ ]
+}

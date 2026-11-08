@@ -1,0 +1,38 @@
+{
+ "knowledge_points": [
+  {"term": "手术动作三元组", "plain": "用 ⟨器械, 动作, 目标⟩ 描述一次器械与组织的交互。", "where": "sec:introduction", "needed_for": "整个数据集的标签定义"},
+  {"term": "RYGB", "plain": "Roux-en-Y 胃旁路，一种时间长、吻合和缝合多的腹腔镜减重手术。", "where": "sec:introduction", "needed_for": "理解为什么交互密集、动作相似"},
+  {"term": "动作顶点", "plain": "器械与组织接触最清楚的时刻，标注区间以它为中心前后约 3 秒。", "where": "sec:dataset-2", "needed_for": "理解标签为什么带时间区间、时序为什么重要"},
+  {"term": "逐视频 mAP", "plain": "先在每个视频内对每类算 AP，再在类别和视频上平均。", "where": "sec:experiments", "needed_for": "理解中心间类别缺失如何影响分数"},
+  {"term": "challenge 划分", "plain": "只用 C1、C2 训练，隐藏测试含 C3、C4 两个未见中心。", "where": "sec:dataset-2", "needed_for": "跨中心结论"},
+  {"term": "二部图与 GATv2", "plain": "器械节点与目标或动作节点两两相连，用带注意力的图层传递消息。", "where": "sec:methodology", "needed_for": "PIC 机制"},
+  {"term": "本体掩码", "plain": "只允许数据集中定义过的 85 种组合参与推理和监督。", "where": "sec:methodology", "needed_for": "TGR 机制和稀有类结果"},
+  {"term": "教师学生蒸馏", "plain": "冻结第一阶段模型当教师，按可信度加权指导学生。", "where": "sec:methodology", "needed_for": "SPIRIT-S 与 SPIRIT-TS 的区别"}
+ ],
+ "detail_questions": [
+  {"question": "每个中心有多少段视频？", "answer": "正文只给出总数 40 和各划分的视频数，隐藏测试每中心 5 段；各中心总数未给出。", "evidence": ["sec:dataset-2", "sec:method-3"], "status": "partly"},
+  {"question": "标注者间一致性是多少？", "answer": "论文只描述了培训、监督和仲裁流程，未报告一致性。", "evidence": ["sec:dataset-2"], "status": "not_stated"},
+  {"question": "数据集如何获取、什么许可证？", "answer": "摘要只写代码将公开于 GitHub 地址；数据发布方式和许可证未提及。", "evidence": ["sec:preamble", "sec:conclusion"], "status": "not_stated"},
+  {"question": "为什么 C2 不出现在按中心表中？", "answer": "C2 的视频已经包含在公开的 MultiBypass140 中。", "evidence": ["sec:method-3"], "status": "resolved"},
+  {"question": "各中心类别分布是否一致？", "answer": "不一致，表 A1 中许多类在某些中心为 0，例如 C4 没有持针器缝合胃小肠吻合口。", "evidence": ["sec:appendix"], "status": "resolved"},
+  {"question": "各损失项权重是多少？", "answer": "蒸馏头权重给出 0.2、0.4、1.6；监督损失的各头权重未给出。", "evidence": ["sec:experiments"], "status": "partly"},
+  {"question": "基线是否在本数据集上调参？", "answer": "表 A5 说明沿用原作者超参数；SPIRIT 按验证集调参。", "evidence": ["sec:model", "sec:experiments"], "status": "resolved"},
+  {"question": "没有时序时 SPIRIT 是否仍优于主干？", "answer": "单帧 SPIRIT-S 三元组 AP 41.9，低于单帧 DinoV3-L 的 42.5。", "evidence": ["sec:method-6", "sec:method-2"], "status": "resolved"},
+  {"question": "结果是否有多随机种子？", "answer": "论文未报告多随机种子，只有交叉验证三折标准差和一次配对检验。", "evidence": ["sec:method", "sec:method-8"], "status": "not_stated"},
+  {"question": "计算成本是多少？", "answer": "SPIRIT 为 103.21M 参数、487.47 GFLOPs、约 46.6 毫秒每样本。", "evidence": ["sec:method-8"], "status": "resolved"}
+ ],
+ "challenges": [
+  {"claim": "跨中心掉点主要是关系泛化问题", "alternative": "未见中心的三元组类别构成不同，部分训练常见类在测试中心缺失，分数下降来自标签分布而非视觉迁移。", "separating_evidence": "在类别分布对齐后的子集上比较各中心分数，或按每类分别比较中心间 AP。", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "SPIRIT 的关系建模优于基础模型", "alternative": "收益来自 dino.txt 文本塔初始化和本数据集上的调参，而基线沿用原作者超参数。", "separating_evidence": "去掉文本初始化的消融，以及在本数据集上同等调参的基线。", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "PIC 改善成对关系、TGR 改善三元组组合", "alternative": "两个模块作用相近，只要有任一关系结构就能得到类似收益。", "separating_evidence": "表 9 中去掉 PIC 与去掉 TGR 的成对分数和三元组分数。", "in_paper": true, "verdict": "partly_supported"},
+  {"claim": "SPIRIT-TS 的提升统计显著", "alternative": "9 个视频上的检验对少数视频敏感，且只对比了一个基线。", "separating_evidence": "更多视频或多随机种子下的检验。", "in_paper": true, "verdict": "partly_supported"}
+ ],
+ "revisions": [
+  "深度分析中加入中心间类别分布差异作为跨中心掉点的替代解释",
+  "方法收益一节拆出关系结构、时序、文本主干三个来源并注明文本初始化无消融",
+  "消融一节写明 PIC 与 TGR 的分工只是作者解释",
+  "局限中写明标注一致性、数据获取方式、多随机种子为论文未说明",
+  "数据来源写明每个中心视频数论文未说明",
+  "研究问题中补充与 CurConMix、MCIT-IG 等关系建模路线的定位"
+ ]
+}

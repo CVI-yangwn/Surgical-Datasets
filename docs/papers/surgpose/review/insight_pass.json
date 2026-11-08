@@ -1,0 +1,37 @@
+{
+ "output_language": "zh-CN",
+ "knowledge_points": [
+  {"term": "dVRK", "plain": "da Vinci 研究套件,让研究者用开源控制器直接驱动旧款 da Vinci 的操作臂并读出关节角与位姿", "where": "sec:methodology", "needed_for": "轨迹可重复执行与运动学记录"},
+  {"term": "PSM 与 ECM", "plain": "PSM 是夹持器械的患者侧操作臂,ECM 是持内镜的臂;本数据集只有两个 PSM 运动,ECM 固定", "where": "sec:methodology", "needed_for": "理解场景的局限:固定视角"},
+  {"term": "UV 反应漆", "plain": "白光下近似透明、在 365nm 黑光下发荧光的漆,用作看不见的标记", "where": "sec:methodology", "needed_for": "双光照取标注的整个思路"},
+  {"term": "SAMv2 点提示传播", "plain": "在首帧对每个荧光点点一下,模型把掩码沿视频追踪下去", "where": "sec:methodology", "needed_for": "标注效率 2.1±1.6 次修正"},
+  {"term": "GLCM", "plain": "灰度共生矩阵,统计相邻像素灰度组合的纹理特征,这里取不相似度和相关性两项", "where": "sec:methodology", "needed_for": "标记不可见的定量证据"},
+  {"term": "OKS 与 mAP", "plain": "OKS 把预测点和真值点的距离按目标尺度换成 0 到 1 的相似度,mAP 是多个 OKS 阈值下 AP 的平均", "where": "sec:method", "needed_for": "看懂表 III"},
+  {"term": "视差转深度", "plain": "校正后左右图同一点的横向偏移越大越近,深度等于焦距乘基线除以视差", "where": "sec:methodology", "needed_for": "2D 提升到 3D"}
+ ],
+ "detail_questions": [
+  {"question": "为什么选红色漆而不是绿色", "answer": "两者荧光都足够,红色质地更透明,白光下更不显眼", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "为什么不直接阈值分割荧光点", "answer": "阈值得不到关键点语义编号,且荧光强度随姿态和视频变化", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "两遍执行之间器械位置偏差多大", "answer": "论文只说要求轨迹闭合光滑以保证可重复,没有测量偏差", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "关键点标注的像素误差多大", "answer": "只报告人工修正次数和时间,没有与人工点击对比的误差", "evidence": ["sec:methodology"], "status": "not_stated"},
+  {"question": "训练集和验证集有什么不同", "answer": "背景从鸡胗和猪肝换成鸡腿肉和牛肉,手术灯亮度从 100% 降到 50%", "evidence": ["sec:methodology"], "status": "resolved"},
+  {"question": "基线的训练轮数、输入尺寸和测速硬件", "answer": "只给了架构和预训练权重,其余未写", "evidence": ["sec:methodology", "sec:method"], "status": "not_stated"},
+  {"question": "表 III 的 ± 是什么", "answer": "论文没有说明是多次训练、多条轨迹还是自助法的标准差", "evidence": ["sec:method"], "status": "not_stated"},
+  {"question": "GLCM 检验覆盖了多少器械", "answer": "共 12 对图像,但 Fig 5 只画了 Fig 6 第一列一种器械的图块", "evidence": ["sec:methodology"], "status": "partly"},
+  {"question": "过拟合有多严重", "answer": "作者说换背景严重过拟合,但没给训练集或同背景测试分数", "evidence": ["sec:method"], "status": "not_stated"},
+  {"question": "RAFT 深度的精度", "answer": "只称参考深度,未与真实深度比较", "evidence": ["sec:methodology"], "status": "not_stated"}
+ ],
+ "challenges": [
+  {"claim": "UV 标记在白光图像中不可见", "alternative": "两个手工纹理特征分不开,不代表有百万参数的检测网络分不开;模型可能借助细微光泽定位关键点", "separating_evidence": "在涂漆与未涂漆图块上训练 CNN 分类器,或在未涂漆器械视频上测试训练好的姿态模型", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "SurgPose 规模远大于已有数据集", "alternative": "60K 帧来自 30 条约 7 分钟的连续轨迹,相邻帧近乎重复,有效样本量接近轨迹数而不是帧数", "separating_evidence": "按轨迹抽样或降帧率后的学习曲线", "in_paper": false, "verdict": "partly_supported"},
+  {"claim": "基线结果证明数据集有用", "alternative": "分数主要反映跨背景泛化失败,而非关键点定位难度;三个方法排名可能随背景变化", "separating_evidence": "同背景留出测试集的 mAP 与跨背景 mAP 对比", "in_paper": false, "verdict": "not_separated"},
+  {"claim": "半自动流程保证标注准确", "alternative": "SAMv2 传播漂移和两遍运动不一致都会引入系统误差,修正次数少不等于误差小", "separating_evidence": "人工独立标注一批帧并计算像素误差", "in_paper": false, "verdict": "not_separated"}
+ ],
+ "revisions": [
+  "关键结果的标记小节写明 GLCM 只是两个手工特征、只画了一种器械",
+  "深度分析补帧间相关导致有效样本量远小于 120K 的推断,标为我的判断",
+  "基线小节写明 ± 来源、训练细节未说明,并把差距写成 12.6 个点",
+  "深度分析补同背景测试缺失使定位与泛化无法拆开",
+  "我的笔记补按轨迹而非按帧划分的建议"
+ ]
+}

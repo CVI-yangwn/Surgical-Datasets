@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SurgLaVi: Large-Scale Hierarchical Dataset for Surgical Vision-Language Representation Learning</title>
+<style>
+:root{--bg:#f7f7fb;--bg2:#fff;--card:#fff;--bd:#e3e3ef;--tx:#1d1d2b;--tx2:#4a4a63;--mut:#7a7a93;
+--ac:#5b5bd6;--ac2:#c04fa8;--ok:#1f9d63;--warn:#d98a00;--bad:#d64545;--hl:#eef0ff;--dt:#e9f7f1;
+--grad:linear-gradient(135deg,#5b5bd6,#8b5cf6,#c04fa8);--r:14px}
+[data-theme=dark]{--bg:#0b0b12;--bg2:#12121c;--card:#14141f;--bd:#262640;--tx:#f1f1fb;--tx2:#c4c4dc;--mut:#8a8aa8;
+--ac:#8b93ff;--ac2:#f472b6;--ok:#34d399;--warn:#fbbf24;--bad:#ff7b7b;--hl:#1a1b3a;--dt:#102a22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.85}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:54px;display:flex;align-items:center;gap:20px;padding:0 22px;
+background:color-mix(in srgb,var(--bg2) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);overflow-x:auto}
+.nav b{background:var(--grad);-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.nav a{color:var(--mut);font-size:.85em;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.on{color:var(--ac);border-color:var(--ac)}
+.nav .sp{flex:1}
+.nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:3px 12px;cursor:pointer;font-size:.8em}
+section.blk{padding:84px 0 24px}
+h2.sec{font-size:1.6em;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;margin-bottom:6px}
+.desc{color:var(--mut);font-size:.9em;margin-bottom:22px}
+.hero h1{font-size:2.1em;line-height:1.3;font-weight:900;margin-bottom:6px}
+.hero .sub{font-size:1.05em;color:var(--tx2);margin-bottom:14px}
+.meta{color:var(--mut);font-size:.88em;margin-bottom:10px}
+.chip{display:inline-block;background:var(--grad);color:#fff;border-radius:999px;padding:3px 14px;font-size:.8em;font-weight:600;margin-right:8px}
+.tag{display:inline-block;border:1px solid var(--bd);background:var(--card);color:var(--tx2);border-radius:999px;padding:2px 11px;font-size:.78em;margin:3px 5px 3px 0}
+.one{font-size:1.12em;margin:18px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--hl);border-radius:0 var(--r) var(--r) 0}
+.score{display:inline-flex;align-items:baseline;gap:8px;border:1px solid var(--bd);background:var(--card);border-radius:var(--r);padding:10px 18px;margin-top:6px}
+.score .v{font-size:1.9em;font-weight:900;color:var(--ac)}.score .l{color:var(--mut);font-size:.82em}
+a.src{color:var(--ac);text-decoration:none;font-size:.9em;margin-left:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:26px 28px;margin-bottom:24px}
+.card h3{font-size:1.2em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;font-size:.85em;flex:none}
+.card p{margin:10px 0;color:var(--tx2)}.card strong{color:var(--tx)}
+.card ul,.card ol{margin:10px 0 10px 1.4em;color:var(--tx2)}.card li{margin:4px 0}
+.card h4,.card h5{margin:16px 0 6px;font-size:1.02em}
+.card blockquote{border-left:3px solid var(--bd);padding:4px 14px;color:var(--mut);margin:10px 0}
+code{background:var(--hl);border-radius:5px;padding:1px 6px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre{background:var(--hl);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+.math{overflow-x:auto;margin:12px 0;text-align:center}
+.tbl{overflow-x:auto;margin:14px 0}table{border-collapse:collapse;width:100%;font-size:.88em}
+th,td{border:1px solid var(--bd);padding:6px 10px;text-align:left}th{background:var(--hl);color:var(--tx)}
+.fig{margin:16px 0;text-align:center}.fig img{max-width:100%;border:1px solid var(--bd);border-radius:10px;cursor:zoom-in;background:#fff}
+.fig figcaption{color:var(--mut);font-size:.82em;margin-top:6px}
+.ph{border:1px dashed var(--bd);border-radius:10px;padding:10px 14px;color:var(--mut);font-size:.88em;margin:12px 0}
+.strip{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:.88em;line-height:1.7}
+.strip.h{background:var(--hl)}.strip.d{background:var(--dt)}
+.strip .t{font-weight:700;margin-right:6px}.strip .i{display:inline-block;margin:2px 10px 2px 0}
+.strip.h .i::before{content:"\2022 ";color:var(--ac)}.strip.d .i::before{content:"\2022 ";color:var(--ok)}
+.take{display:grid;gap:10px}.take div{background:var(--hl);border-radius:10px;padding:10px 16px;color:var(--tx2)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;background:var(--card)}
+.box h4{margin-bottom:8px}.box.ok h4{color:var(--ok)}.box.bad h4{color:var(--bad)}.box.q h4{color:var(--warn)}
+.box ul{margin-left:1.2em;color:var(--tx2);font-size:.92em}.box li{margin:6px 0}
+.round{border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;background:var(--card);margin-bottom:12px}
+.round .h{display:flex;justify-content:space-between;font-weight:700}.round .s{color:var(--ac)}
+.round p{color:var(--tx2);font-size:.9em;margin-top:6px}.gates{font-size:.8em;color:var(--mut);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px;font-size:.8em;color:var(--mut)}
+.dims b{color:var(--tx)}
+.note{color:var(--mut);font-size:.82em;margin-top:8px}
+footer{text-align:center;color:var(--mut);font-size:.82em;padding:40px 0 60px}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:99;align-items:center;justify-content:center;cursor:zoom-out}
+#lb img{max-width:94vw;max-height:92vh;background:#fff;border-radius:8px}
+@media(max-width:640px){.hero h1{font-size:1.5em}.card{padding:18px}}
+@media print{.nav,#lb{display:none}section.blk{padding-top:20px}}
+</style></head><body>
+<nav class="nav"><b>图文解读</b><a href="#overview">概览</a><a href="#content">正文</a><a href="#takeaways">核心收获</a><a href="#analysis">批判分析</a><a href="#history">自查记录</a><span class="sp"></span><button id="tg" type="button"></button></nav>
+<div class="wrap">
+<section class="blk hero" id="overview"><h1>用大模型自动切分、过滤和改写手术讲解视频,做出 24 万对三层视频-字幕数据</h1>
+<div class="sub">SurgLaVi: Large-Scale Hierarchical Dataset for Surgical Vision-Language Representation Learning</div>
+<div class="meta">Alejandra Perez, Chinedu Nwoye, Ramtin Raji Kermani, Omid Mohareri, Muhammad Abdullah Jamal(Intuitive Surgical;安第斯大学 CinfonIA) | arXiv 2509.10555(v2);代码仓库标注 Medical Image Analysis 2026</div>
+<div><span class="chip">数据集论文</span><span class="tag">手术视频</span><span class="tag">视觉语言预训练</span><span class="tag">分层数据集</span><span class="tag">零样本识别</span></div>
+<div class="one">SurgLaVi 用转写、语义分段、双模态过滤和字幕改写,从 5,317 段讲解手术视频中自动生成 239,776 对三层片段-字幕,公开子集 112,757 对,简单双编码器在其上训练后零样本阶段识别多数基准领先。</div>
+<div><span class="tag">数字核对 全部在原文中找到</span><span class="tag">结构检查 通过</span><span class="tag">细节追问 10 条，其中 4 条论文未说明</span><span class="tag">反向检验 4 条</span></div>
+<div><div class="score"><span class="v">8.5</span><span class="l">/ 10 · 模型自评 · 2 轮</span></div><a class="src" href="https://arxiv.org/abs/2509.10555" target="_blank" rel="noopener">查看原文</a><a class="src" href="https://github.com/CVI-yangwn/Surgical-Datasets/blob/main/docs/papers/surglavi/note.md">精读笔记（Markdown）</a></div></section>
+<section class="blk" id="content"><h2 class="sec">图文解读</h2><div class="desc">9 个主题板块，按论文的论证顺序展开</div><div class="card" id="s1"><h3><span class="num">1</span>背景与动机</h3><p><strong>手术视频-语言预训练的瓶颈在数据。</strong> 这类方法把讲解视频切成片段,配上解说转写,用对比学习对齐视觉与语言,从而不靠专家逐帧标注就学到可迁移的表征。</p>
+<p>已有数据集有四个问题:按固定时长或启发式规则切片,常把一个完整操作切断;解说与画面错位,讲座里还夹着幻灯片;SVL 约 2.5 万对且只含腹腔镜,GenSurg+ 只有 1.7 万对;两者都不公开字幕。</p>
+<p>此前的改进(HecVL、PeskaVLP、VidLPRO)都在 SVL 上堆模型复杂度。作者反过来问:先把数据做大、做干净、做出层级,简单模型能否胜出。</p><div class="strip h"><span class="t">亮点</span><span class="i">作者认为瓶颈在数据而不是模型。</span></div></div><div class="card" id="s2"><h3><span class="num">2</span>核心观点速览</h3><p><strong>答案是让大模型按解说语义切片段、过滤、改写字幕。</strong> 数据质量上去后,一个 TimeSformer 加 BERT 的双编码器就能在零样本阶段识别上超过更复杂的模型。</p>
+<ul><li>数据:5,317 段视频、843 小时、239,776 对三层片段-字幕,217 种术式;公开子集 SurgLaVi-β 有 112,757 对。</li><li>结果:零样本阶段识别 F1 在 Cholec80、AutoLaparo、GraSP 上分别为 50.53、56.37、34.94。</li><li>边界:BernBypass70 和动作识别不领先;数据与模型的作用没有被对照实验分开;完整版含私有视频,未发布。</li></ul><div class="strip d"><span class="t">数据</span><span class="i">239,776 对(完整),112,757 对(公开)</span><span class="i">217 种术式,10 个专科</span></div></div><div class="card" id="s3"><h3><span class="num">3</span>数据从哪来</h3><p>视频来自三处:LEMON 提供的 3,110 段和 GenSurgery 提供的 4,172 段公开 YouTube 视频(去重 6,812 段),以及 2,945 段机构培训档案。没有解说的视频被丢弃,最终剩 5,317 段,各环节丢弃多少论文未说明。</p>
+<div class="tbl"><table><thead><tr><th>数据集</th><th>视频</th><th>对数(K)</th><th>平均时长(秒)</th><th>开源</th></tr></thead><tbody><tr><td>SVL</td><td>1,326</td><td>25.5</td><td>6.0</td><td>否</td></tr><tr><td>GenSurg+</td><td>1,800</td><td>17.0</td><td>45.0</td><td>字幕私有</td></tr><tr><td>SurgLaVi</td><td>5,317</td><td>239.8</td><td>28.6</td><td>部分</td></tr><tr><td>SurgLaVi-β</td><td>2,464</td><td>112.6</td><td>35.6</td><td>是</td></tr></tbody></table></div>
+<p><strong>公开子集是 GenSurg+ 的 6.6 倍。</strong> 术式标签由 GPT-4o 读取转写摘要给出,准确率论文未说明。</p>
+<figure class="fig"><img src="images/page_022_fig_fig_6_review_repair1.png" alt="Fig 6" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 6(附录)。手术分类体系:专科、主题、术式三环,扇区大小与术式数量成正比。</figcaption></figure>
+<p>下一节看这些视频怎样变成片段-字幕。</p></div><div class="card" id="s4"><h3><span class="num">4</span>四阶段构建流水线</h3><figure class="fig"><img src="images/page_003_fig_fig_2_review.png" alt="Fig 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 2。语音转写、分层语义分段与对齐、双模态过滤、上下文字幕改写。</figcaption></figure>
+<ol><li>转写:WhisperX 输出句级转写和毫秒级词级时间戳。</li><li>分段与对齐:每段视频调用一次 GPT-4o,把相邻句子合并为粗、中、细三层(对应阶段、步骤、任务),再用词级时间戳截取视频,段内的词拼成字幕。</li><li>过滤:细层片段取 24 帧,SigLIP 判为手术帧的超过一半才保留,上层片段按多数继承;GPT-4o 判断字幕是否描述画面。两者都通过才保留。</li><li>改写:GPT-4o 读当前字幕、同层前 5 条字幕、视频标题和术式,输出改写后的字幕。</li></ol>
+<p><strong>过滤器在小验证集上表现不错。</strong> 视觉过滤在 159 个片段上 F1 为 96.6,文本过滤在 212 条字幕上 F1 为 94.27。完整数据约 36% 的对被过滤掉。改写字幕没有人工评估。</p><div class="strip d"><span class="t">数据</span><span class="i">WhisperX v3 词错误率 5.48%</span><span class="i">未过滤 373,343 对,保留 239,776 对</span></div></div><div class="card" id="s5"><h3><span class="num">5</span>SurgCLIP 与评测协议</h3><p>SurgCLIP 是 ViT-B/16 的 TimeSformer 加 BERT-base,投影到 256 维,双向 InfoNCE 损失。两点设计和数据层级对应:每个批次混入三层样本;每个片段帧数固定、步长随时长变化。</p>
+<p>评测都用冻结特征:零样本(16 帧窗口与类别描述文本比相似度)、线性探测、CoOp 和 MS-TCN 时序探测。指标是逐视频准确率和宏平均 F1,标准差跨视频计算,没有多次预训练的方差。</p>
+<p>下一节看结果。</p></div><div class="card" id="s6"><h3><span class="num">6</span>结果说了什么</h3><figure class="fig"><img src="images/page_008_fig_table_2_review.png" alt="Table 2" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 2。七个模型在阶段、步骤、动作、三元组、器械识别上的零样本结果。</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>阶段 F1</th><th>PeskaVLP</th><th>β 版</th><th>完整版</th></tr></thead><tbody><tr><td>Cholec80</td><td>39.39</td><td>39.42</td><td>50.53</td></tr><tr><td>AutoLaparo</td><td>28.41</td><td>45.95</td><td>56.37</td></tr><tr><td>GraSP</td><td>9.86</td><td>27.98</td><td>34.94</td></tr><tr><td>BernBypass70</td><td>17.47</td><td>15.06</td><td>19.68</td></tr></tbody></table></div>
+<p><strong>优势集中在 AutoLaparo 和 GraSP。</strong> β 版在 Cholec80 上只比 PeskaVLP 多 0.03 个点;BernBypass70 准确率低于其余四个手术或医学模型;动作识别准确率 17.42 低于通用 CLIP 的 28.8。</p>
+<p>全量线性探测中,完整版 Cholec80 阶段 F1 为 80.46,高于 LEMON 的 74.47。与全监督专用模型相比,AutoLaparo 准确率 84.6% 接近 Surgformer 的 85.7%,作者总结平均仍差 7.4 个点。</p>
+<figure class="fig"><img src="images/page_010_fig_fig_9_review.png" alt="Fig 9" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Fig 9。CoOp、按类少样本、按视频比例三种线性探测范式的 F1 曲线。</figcaption></figure><div class="strip h"><span class="t">亮点</span><span class="i">每类 16 帧标注常好于标注一整段视频。</span></div></div><div class="card" id="s7"><h3><span class="num">7</span>消融说明了什么</h3><figure class="fig"><img src="images/page_014_fig_table_7_review.png" alt="Table 7" loading="lazy" onclick="openLightbox(this)"><figcaption>论文原图编号：Table 7。双模态过滤、多层语义分段、上下文改写三个组件的单独与组合效果。</figcaption></figure>
+<p><strong>单个组件常常低于基线,三者合用才最好。</strong> 只加分段时 AutoLaparo 从 46.10 降到 36.19;完整流水线在 Cholec80 上比基线高 14.64。表中缺分段加改写的组合。</p>
+<p>层级消融中三层合用 Cholec80 为 50.53,仅粗层为 32.34。动态步长比固定步长好,但按表格算,比步长 1 高 2.34 到 22.19 个点,与正文写的区间不符。</p>
+<p>下一节讨论这些数字能支持多强的结论。</p></div><div class="card" id="s8"><h3><span class="num">8</span>结果没说什么</h3><ul><li><strong>数据和模型同时换了。</strong> SurgCLIP 用时空注意力骨干,对照模型多用逐帧卷积骨干;没有交换数据和模型的对照,"数据比模型重要"只是间接证据。</li><li>三层合用的样本数是细层单独的 1.7 倍,层级和样本量的作用没有分开。</li><li>只评分类任务,没有检索、字幕生成或问答。</li><li>改写字幕的错误率、弱标签准确率论文未说明。</li></ul></div><div class="card" id="s9"><h3><span class="num">9</span>复现要注意什么</h3><ul><li>完整 SurgLaVi 含 2,945 段私有档案,主模型无法复现;可复现的是 β 版。</li><li>Hugging Face 和 GitHub 公开发布 β 数据库与转写(非门控),视频需用 yt-dlp 和 YouTube cookie 自行下载,链接失效会让可用数据减少。</li><li>数据库含 6,812 段源视频记录,其中 3,148 段有解说,保留原始字幕和过滤标记,可以复现消融版本。</li><li>许可写法不一致:数据卡元数据写 CC BY-SA 4.0,正文和仓库写带非商用条款的版本。</li></ul></div></section>
+<section class="blk" id="takeaways"><h2 class="sec">核心收获</h2><div class="desc">读完应该记住的几点</div><div class="take"><div>先拿词级时间戳,再让大模型按语义分段,比固定时长切片更干净。</div><div>公开子集 112,757 对是目前可直接用的最大手术视频-字幕数据之一。</div><div>结果优势集中在阶段识别,动作和三元组识别仍弱。</div></div></section>
+<section class="blk" id="analysis"><h2 class="sec">批判分析</h2><div class="desc">独立于作者叙述的评价</div><div class="grid3">
+<div class="box ok"><h4>优点</h4><ul><li>流水线全自动,每个过滤器都给了小规模验证。</li><li>评测协议全面:零样本、三种少样本探测、时序探测、与全监督模型对比。</li><li>公开子集带原始字幕和过滤标记。</li></ul></div><div class="box bad"><h4>不足</h4><ul><li>数据与模型、层级与样本量都没有分开。</li><li>改写字幕没有人工评估,消融只训练一次。</li><li>正文与表格有不一致(表 8 区间、β 版 Cholec80 增幅)。</li></ul></div><div class="box q"><h4>开放问题</h4><ul><li>在 β 子集上训练 PeskaVLP,差距还剩多少?</li><li>改写字幕引入了多少解说里没有的内容?</li><li>β 子集的 YouTube 视频现在还能下载到多少?</li></ul></div></div></section>
+<section class="blk" id="history"><h2 class="sec">自查记录</h2><div class="desc">第 1 轮评原流程生成的笔记，第 2 轮评多轮思考和叙事修改之后的笔记与文稿；第 1 轮在改动前记录，两轮都附当时笔记和文稿的哈希。分数是模型自评，不是外部评审</div><div class="round"><div class="h"><span>第 1 轮 · 原流程笔记 · 笔记 0d2add32</span><span class="s">7.4 分</span></div><p>第一轮:证据链、机制和数字完整;研究问题末尾缺核心观点速览;各节缺开头问题和结尾过渡;数字后多缺'说明什么';D4 边界散落在深度分析与局限,有几条未说明理由;定位只在研究问题提到,缺对 OphVL 与 LEMON 的明确比较;数字尚未逐条核对。</p><div class="dims"><span>D1 <b>8</b></span><span>D2 <b>8</b></span><span>D3 <b>8</b></span><span>D4 <b>7</b></span><span>D5 <b>7</b></span><span>D6 <b>7</b></span><span>D7 <b>7</b></span><span>D8 <b>8</b></span><span>D9 <b>6</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:unknown H4:pass</div><ul style="margin:8px 0 0 1.2em;font-size:.86em;color:var(--tx2)"><li>在研究问题末尾补核心观点速览</li><li>每节开头写清本节要回答的问题,结尾加过渡</li><li>关键数字后补一句含义</li><li>深度分析补与 OphVL、LEMON、HecVL/PeskaVLP 的定位</li><li>跑数字核对,派生数字写入例外文件</li><li>核对 Fig 1 中 F1 增益与表 2 是否一致</li><li>把未说明项统一写为论文未说明</li></ul></div><div class="round"><div class="h"><span>第 2 轮 · 叙事与多轮思考后 · 笔记 850d30c3 · 文稿 5bfbc189</span><span class="s">8.5 分</span></div><p>第二轮:补齐核心观点速览、各节开头问题与结尾过渡、与 OphVL/LEMON/HecVL/PeskaVLP 的定位;核对出引言增幅混用准确率与 F1、β 版 Cholec80 实际只多 0.03、表 8 正文区间与表格不符;数字核对全部通过。不可修复的限制:Table 3、5、8 与 Fig 11 无可用裁剪,保留占位并转写关键数字;数据与模型、层级与样本量的混淆是论文本身的限制。评分为模型自评。</p><div class="dims"><span>D1 <b>9</b></span><span>D2 <b>8</b></span><span>D3 <b>9</b></span><span>D4 <b>9</b></span><span>D5 <b>8</b></span><span>D6 <b>8</b></span><span>D7 <b>8</b></span><span>D8 <b>8</b></span><span>D9 <b>8</b></span></div><div class="gates">硬性检查 H1:pass H2:pass H3:pass H4:pass</div></div></section>
+</div><footer>由 DeepPaperNote 生成 | 2026-11-08</footer>
+<div id="lb"><img alt=""></div><script>
+function openLightbox(el){var b=document.getElementById('lb');b.querySelector('img').src=el.src;b.style.display='flex'}
+document.getElementById('lb').onclick=function(){this.style.display='none'};
+(function(){var s=localStorage.getItem('dpn-theme')||'light';document.documentElement.setAttribute('data-theme',s);
+var btn=document.getElementById('tg');function lab(){btn.textContent=document.documentElement.getAttribute('data-theme')=='dark'?'日间':'夜间'}
+lab();btn.onclick=function(){var n=document.documentElement.getAttribute('data-theme')=='dark'?'light':'dark';
+document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dpn-theme',n);lab()};
+var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){
+a.classList.toggle('on',a.getAttribute('href')=='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('section.blk').forEach(function(s){io.observe(s)})})();
+function dpnMath(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[
+{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}}
+
+window.addEventListener('load',function(){var B='https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+var c=document.createElement('link');c.rel='stylesheet';c.href=B+'katex.min.css';document.head.appendChild(c);
+var s=document.createElement('script');s.src=B+'katex.min.js';s.onload=function(){var a=document.createElement('script');
+a.src=B+'contrib/auto-render.min.js';a.onload=dpnMath;document.head.appendChild(a)};document.head.appendChild(s)});
+</script></body></html>

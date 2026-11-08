@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "16d09b2b8fe8d2f1bcf5be35c8066a831bf3ca1cfdb0c511e8c06dee9dcd95ba",
+      "note_snapshot": "review_rounds/round1_SurgPose_a_Dataset_for_Articulated_Robotic_Surgical_Tool_Pose_Estimation_and_Tracking.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.7,
+      "verdict": "第一轮笔记结构完整、数字齐全、边界清楚;叙事上部分小节缺开场问题和结尾过渡,数字检查尚未运行,复用建议还可更具体。",
+      "fixes": [
+        "运行笔记数字检查并登记派生数字",
+        "各技术小节开头补一句该节回答的问题,结尾补过渡",
+        "核对 Fig 5 只画一种器械等细节并写入",
+        "把挑战轮发现写入深度分析与局限",
+        "补数据实际可获取方式与多数类分布对评测的影响"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "cdb6c082516cfdca75b04c02147826f1bb4f984668d6d5b805301f2693b59648",
+      "note_snapshot": "review_rounds/round2_SurgPose_a_Dataset_for_Articulated_Robotic_Surgical_Tool_Pose_Estimation_and_Tracking.md",
+      "report_sha256": "5ef4781a220d8168148675529e44c452f3914b9fdfb919ebd5e1458b3da95a78",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 8,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.3,
+      "verdict": "笔记与报告覆盖问题、采集、标注、验证、基线和局限,数字全部可追溯(派生值与外部核查值已登记)。无法修复的限制:论文缺基线训练细节、重放误差、标注误差和同背景测试,只能如实标为论文未说明;Fig 2 到 Fig 5 自动裁剪被视觉质量门拒绝,保留占位。",
+      "fixes": []
+    }
+  ]
+}

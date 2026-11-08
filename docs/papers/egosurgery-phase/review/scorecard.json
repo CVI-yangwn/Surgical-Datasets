@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "3cfb4d69b7aae6f818b25f0cd1225fbd467deea6c01feb2c3b80446a5edae455",
+      "note_snapshot": "review_rounds/round1_EgoSurgery_Phase_A_Dataset_of_Surgical_Phase_Recognition_from_Egocentric_Open_Surgery_Videos.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第 1 轮原版流程笔记（模型自评）。数据规模、阶段分布、三张结果表和注视掩码公式都在。D4=7：测试集调参风险和单次运行写了，但亮度显著性替代解释只在深度分析一句带过。D5=7：定位表较粗，没有说明 EgoSurgery-Tool 与本数据集的关系。D6=7：我的笔记缺少数据加载层面的提醒。D7=7：研究问题缺核心观点速览。D9=6：多数小节开头没有本节要回答的问题，数字后缺意义，小节结尾缺过渡。H3 未做数字核对。",
+      "fixes": [
+        "研究问题末尾补核心观点速览",
+        "用 lint_report.py --mode note 做数字核对并登记推导值（合计、倍数、占比、差值）",
+        "Insight Pass 挑战轮：核对注视与亮区重合、21 段与 20 段矛盾、测试集调参、精确率不占优",
+        "各小节开头补本节问题，数字后补意义，结尾补过渡",
+        "把高斯宽度、术式名称、剔除帧数、划分依据统一写成 论文未说明 并写明影响"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "c69e56d22716d03a2e1f880dd3d699ae716d16c1c1f729f4c09a2b71659c2342",
+      "note_snapshot": "review_rounds/round2_EgoSurgery_Phase_A_Dataset_of_Surgical_Phase_Recognition_from_Egocentric_Open_Surgery_Videos.md",
+      "report_sha256": "0c9107914b1a878b9f14e8e521fb5c677f846ca04bd46a388370ac43258a3aa7",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 7,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.2,
+      "verdict": "第 2 轮（模型自评）。补了核心观点速览、各节开头问题与过渡、数字核对（Fig 3 帧数来自图像，已登记例外）。挑战轮写明注视与亮区未分开、测试集调参风险、精确率不占优。D5=7：论文本身只对比阿腹腔镜数据集和 MAE 方法，没有与其他开放手术或第一人称数据集逐项比较，笔记无法补足。不可修复的限制：划分 14/2/5 与 20 段矛盾、高斯宽度、术式名称、超参数搜索所用划分论文均未说明。",
+      "fixes": []
+    }
+  ]
+}

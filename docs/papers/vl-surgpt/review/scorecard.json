@@ -1,0 +1,70 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "baa0eb51008fe1df1ecf7a87f0289c7e323c6888bfea931258ead4220efb994b",
+      "note_snapshot": "review_rounds/round1_Bridging_Vision_and_Language_for_Robust_Context_Aware_Surgical_Point_Tracking_The_VL_SurgPT_Dataset_and_Benchmark.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 8,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.8,
+      "verdict": "第一轮:证据链与主张边界完整,微调与文本增益已拆分。数字尚未逐一核验(H3 unknown);部分小节缺少结尾过渡,我的笔记偏清单,复用建议可更具体;器械 EPE 偏高的推断需标明;烟雾场景最容易的替代解释需与数据对照。",
+      "fixes": [
+        "运行 Insight Pass 三轮并把挑战轮结论写回正文",
+        "对正文做数字核验,推导数写入例外清单",
+        "为数据与任务定义、关键结果等小节补结尾过渡",
+        "在我的笔记中按要复制、要检查、要避免三类重写复用建议",
+        "核对器械规模两套口径的推断措辞,标明为我的判断"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "bb07b3054c46bf80b99a5e3dc91d117676eebcb9bce275db082091b6f99120c5",
+      "note_snapshot": "review_rounds/round2_Bridging_Vision_and_Language_for_Robust_Context_Aware_Surgical_Point_Tracking_The_VL_SurgPT_Dataset_and_Benchmark.md",
+      "report_sha256": "af2c7d728051dcd269321a4664d2aa60101ab78844d9493d5c8cb96f77ad97e1",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮:Insight Pass 的 6 条修订已写入正文,数字核验无未匹配项(推导值与表内数字列入例外清单)。主要限制无法在笔记内修复:训练超参、无文本变体是否保留状态头、划分是否按手术隔离、标注一致性论文均未说明;图 4、图 6 裁剪修复后仍含图注,图 5 无候选,保留占位。这是模型自评。",
+      "fixes": []
+    }
+  ]
+}

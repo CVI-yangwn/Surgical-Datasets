@@ -1,0 +1,71 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "cb2be34cb584872ec9786aefad27bce8ca7a056c1cf1700e0574e2143c709d60",
+      "note_snapshot": "review_rounds/round1_SPIRIT_Spatio_temporal_Pairwise_Relational_Modeling_of_Instrument_Tissue_Interactions_for_Surgical_Action_Triplet_Recognition.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 8,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 7
+      },
+      "overall": 7.7,
+      "verdict": "第一轮笔记结构完整，主结果、按中心和消融数字齐全。定位只列了数据集表，未逐一对比方法路线；部分小节缺少开头问题和结尾过渡；数字核对尚未运行。",
+      "fixes": [
+        "运行 Insight Pass，补充对中心分布混淆和基线公平性的挑战",
+        "按叙事顺序给每个小节加开头问题与结尾过渡",
+        "为数字补上含义说明",
+        "运行数字核对并处理派生数",
+        "补充与 CurConMix、MCIT-IG 等关系建模路线的定位",
+        "撰写 reading_report.md"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "aa584f36e18690c3ff15b0cec108162e5bed84832cd6a50df8d505c5aea3c586",
+      "note_snapshot": "review_rounds/round2_SPIRIT_Spatio_temporal_Pairwise_Relational_Modeling_of_Instrument_Tissue_Interactions_for_Surgical_Action_Triplet_Recognition.md",
+      "report_sha256": "40930961286662a9924fcbfdd6bcbbf1392e4b3d91aa0d151e792c73b7738aa4",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮补充了 Insight Pass 的替代解释（中心间类别分布）、方法收益拆分、与 CurConMix 和 MCIT-IG 的定位，以及全部论文未说明项；数字核对通过，派生差值与 Table 1 图像数字列在例外文件中。无法修复的限制：数据未发布，结果无法复现；Table 6、8、12、13 的裁剪图未通过质检，保留占位，数字取自抽取文本。",
+      "fixes": []
+    }
+  ]
+}

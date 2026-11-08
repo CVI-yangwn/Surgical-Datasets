@@ -1,0 +1,72 @@
+{
+  "kind": "model_self_review",
+  "rubric": "references/report-scorecard.md",
+  "rounds": [
+    {
+      "round": 1,
+      "stage": "baseline",
+      "note_sha256": "0d2add32f0528ad1595a7fe2f74ffc07066db485cd993a1486adde994c816980",
+      "note_snapshot": "review_rounds/round1_SurgLaVi_Large_Scale_Hierarchical_Dataset_for_Surgical_Vision_Language_Representation_Learning.md",
+      "report_sha256": "",
+      "report_snapshot": "",
+      "changed_since_previous": false,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "unknown",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 8,
+        "D2": 8,
+        "D3": 8,
+        "D4": 7,
+        "D5": 7,
+        "D6": 7,
+        "D7": 7,
+        "D8": 8,
+        "D9": 6
+      },
+      "overall": 7.4,
+      "verdict": "第一轮:证据链、机制和数字完整;研究问题末尾缺核心观点速览;各节缺开头问题和结尾过渡;数字后多缺'说明什么';D4 边界散落在深度分析与局限,有几条未说明理由;定位只在研究问题提到,缺对 OphVL 与 LEMON 的明确比较;数字尚未逐条核对。",
+      "fixes": [
+        "在研究问题末尾补核心观点速览",
+        "每节开头写清本节要回答的问题,结尾加过渡",
+        "关键数字后补一句含义",
+        "深度分析补与 OphVL、LEMON、HecVL/PeskaVLP 的定位",
+        "跑数字核对,派生数字写入例外文件",
+        "核对 Fig 1 中 F1 增益与表 2 是否一致",
+        "把未说明项统一写为论文未说明"
+      ]
+    },
+    {
+      "round": 2,
+      "stage": "narrative_review",
+      "note_sha256": "850d30c3c576f427c24f0b015baf32e85ae266587436047abedeb2a72314f47f",
+      "note_snapshot": "review_rounds/round2_SurgLaVi_Large_Scale_Hierarchical_Dataset_for_Surgical_Vision_Language_Representation_Learning.md",
+      "report_sha256": "5bfbc189092bc620914971e83c57dbf115acc47ed76b38c1f1a36ec3b2da1063",
+      "report_snapshot": "review_rounds/round2_reading_report.md",
+      "changed_since_previous": true,
+      "hard_gates": {
+        "H1": "pass",
+        "H2": "pass",
+        "H3": "pass",
+        "H4": "pass"
+      },
+      "dimensions": {
+        "D1": 9,
+        "D2": 8,
+        "D3": 9,
+        "D4": 9,
+        "D5": 8,
+        "D6": 8,
+        "D7": 8,
+        "D8": 8,
+        "D9": 8
+      },
+      "overall": 8.5,
+      "verdict": "第二轮:补齐核心观点速览、各节开头问题与结尾过渡、与 OphVL/LEMON/HecVL/PeskaVLP 的定位;核对出引言增幅混用准确率与 F1、β 版 Cholec80 实际只多 0.03、表 8 正文区间与表格不符;数字核对全部通过。不可修复的限制:Table 3、5、8 与 Fig 11 无可用裁剪,保留占位并转写关键数字;数据与模型、层级与样本量的混淆是论文本身的限制。评分为模型自评。",
+      "fixes": []
+    }
+  ]
+}
